@@ -282,7 +282,9 @@ class Button extends StatelessWidget {
 
         return Center(
           child: Container(
+            color: getButtonBgColor(),
             child: Material(
+              color: getButtonBgColor(),
               child: InkWell(
                 splashColor: AppColors.splash,
                 onTap: isButtonDisabled() ? null : onPressed,
@@ -315,9 +317,7 @@ class Button extends StatelessWidget {
                   ),
                 ),
               ),
-              color: getButtonBgColor(),
             ),
-            color: getButtonBgColor(),
           ),
         );
 
