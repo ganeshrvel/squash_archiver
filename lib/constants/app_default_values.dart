@@ -1,0 +1,3 @@
+class AppDefaultValues {
+  AppDefaultValues._();
+}

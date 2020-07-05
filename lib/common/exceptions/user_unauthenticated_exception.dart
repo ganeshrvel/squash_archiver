@@ -1,0 +1,1 @@
+class UserUnauthenticatedException implements Exception {}
