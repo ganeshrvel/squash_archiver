@@ -57,7 +57,7 @@ class LightTheme {
   );
 
   static final ButtonThemeData _buttonTheme = ButtonThemeData(
-    splashColor: Colors.white10,
+    splashColor: AppColors.splash,
     buttonColor: AppColors.blue,
     textTheme: ButtonTextTheme.primary,
     disabledColor: AppColors.disabled,
