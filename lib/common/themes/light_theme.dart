@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:squash_archiver/common/themes/theme_helper.dart';
 import 'package:squash_archiver/constants/colors.dart';
 
 class LightTheme {
   static final TextTheme originalTextTheme = ThemeData.light().textTheme;
   static final IconThemeData originalIconTheme = ThemeData.light().iconTheme;
-  static final TextStyle originalBody1 = LightTheme.originalTextTheme.bodyText1;
+  static final TextStyle originalBody1 = GoogleFonts.roboto();
 
   static final MaterialColor _primarySwatch =
       hexColor2MaterialColor(color: AppColors.black);
@@ -20,7 +21,7 @@ class LightTheme {
     brightness: Brightness.light,
     iconTheme: IconThemeData(color: AppColors.black),
     actionsIconTheme: IconThemeData(color: AppColors.black),
-    textTheme: TextTheme(
+    textTheme: GoogleFonts.robotoTextTheme(originalTextTheme).copyWith(
       subtitle1: originalBody1.copyWith(
         fontSize: 18.0,
         fontWeight: FontWeight.w800,
@@ -74,10 +75,10 @@ class LightTheme {
     hintColor: _hintColor,
     indicatorColor: AppColors.blue,
     scaffoldBackgroundColor: _scaffoldBackgroundColor,
-    fontFamily: 'HKGrotesk',
+    fontFamily: 'Roboto',
     backgroundColor: AppColors.white,
     unselectedWidgetColor: AppColors.white,
-    textTheme: originalTextTheme.copyWith(
+    textTheme: GoogleFonts.robotoTextTheme(originalTextTheme).copyWith(
       headline1: originalBody1.copyWith(
         fontSize: 24.0,
         fontWeight: FontWeight.w800,
