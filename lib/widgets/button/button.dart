@@ -304,13 +304,14 @@ class Button extends StatelessWidget {
                       Padding(
                         padding: EdgeInsets.fromLTRB(
                           0,
-                          0,
+                          5,
                           0,
                           (iconButtonIconSize ?? 0) / 10,
                         ),
                         child: Textography(
                           getButtonText(),
                           variant: isNotNull(textVariant) ? textVariant : null,
+                          fontWeight: buttonStyle.fontWeight,
                         ),
                       )
                     ],

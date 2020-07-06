@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_icons/flutter_icons.dart';
 import 'package:squash_archiver/constants/colors.dart';
 import 'package:squash_archiver/widgets/button/button.dart';
 import 'package:squash_archiver/widgets/sliver/app_sliver_header.dart';
+import 'package:squash_archiver/widgets/text/textography.dart';
 
 class HomeToolbar extends StatelessWidget {
   Widget _buildToobarButtons(
@@ -19,8 +21,10 @@ class HomeToolbar extends StatelessWidget {
       buttonTextColor: ButtonColorTypes.BLACK,
       iconButtonIconSize: 40,
       textAutoCapitalize: false,
-      width: 70,
-      height: 70,
+      width: 80,
+      height: 80,
+      textVariant: TextVariants.caption,
+      fontWeight: FontWeight.w400,
     );
   }
 
@@ -40,7 +44,13 @@ class HomeToolbar extends StatelessWidget {
                 children: <Widget>[
                   _buildToobarButtons(
                     context,
-                    icon: Icons.add,
+                    icon: MaterialCommunityIcons.folder_zip_outline,
+                    label: 'Create',
+                    onPressed: () {},
+                  ),
+                  _buildToobarButtons(
+                    context,
+                    icon: MaterialCommunityIcons.file_plus_outline,
                     label: 'Add',
                     onPressed: () {},
                   ),
@@ -52,13 +62,13 @@ class HomeToolbar extends StatelessWidget {
                   ),
                   _buildToobarButtons(
                     context,
-                    icon: Icons.remove_red_eye,
+                    icon: MaterialCommunityIcons.file_eye_outline,
                     label: 'View',
                     onPressed: () {},
                   ),
                   _buildToobarButtons(
                     context,
-                    icon: Icons.check,
+                    icon: MaterialCommunityIcons.file_check_outline,
                     label: 'Test',
                     onPressed: () {},
                   ),
@@ -70,7 +80,7 @@ class HomeToolbar extends StatelessWidget {
                   ),
                   _buildToobarButtons(
                     context,
-                    icon: Icons.info,
+                    icon: Icons.info_outline,
                     label: 'Info',
                     onPressed: () {},
                   ),
@@ -79,8 +89,8 @@ class HomeToolbar extends StatelessWidget {
             ],
           ),
         ),
-        maximumExtent: 70,
-        minimumExtent: 70,
+        maximumExtent: 80,
+        minimumExtent: 80,
       ),
     );
   }

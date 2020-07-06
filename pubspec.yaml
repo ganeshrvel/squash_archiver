@@ -96,6 +96,9 @@ dependencies:
   # svg
   flutter_svg: 0.18.0
 
+  #icons
+  flutter_icons: ^1.1.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
