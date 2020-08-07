@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:squash_archiver/common/di/di.dart';
 import 'package:squash_archiver/common/helpers/navigation_helper.dart';
-import 'package:squash_archiver/features/home/ui/widgets/toolbar.dart';
 import 'package:mobx/mobx.dart';
+import 'package:squash_archiver/ffi/archiver_ffi/archiver_ffi.dart';
 import 'package:squash_archiver/widget_extends/sf_widget.dart';
+import 'package:squash_archiver/widgets/button/button.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key key}) : super(key: key);
@@ -13,6 +15,8 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends SfWidget<HomeScreen> {
   List<ReactionDisposer> _disposers;
+
+  ArchiverFfi get _archiverFfi => getIt<ArchiverFfi>();
 
   @override
   void didChangeDependencies() {
@@ -47,8 +51,8 @@ class _HomeScreenState extends SfWidget<HomeScreen> {
 
   void init() {}
 
-  Future<void> fetchApis() {
-    return Future.value();
+  Future<void> fetchApis() async {
+    Future.value();
   }
 
   @override
@@ -62,17 +66,26 @@ class _HomeScreenState extends SfWidget<HomeScreen> {
     super.dispose();
   }
 
+  void _testFfi() {}
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
         top: true,
-        child: CustomScrollView(
+        child: Center(
+          child: Button(
+            onPressed: () {
+              _archiverFfi.run();
+            },
+            text: 'FFI',
+          ),
+        ), /*CustomScrollView(
           physics: const ScrollPhysics(),
           slivers: <Widget>[
             HomeToolbar(),
           ],
-        ),
+        )*/
       ),
     );
   }

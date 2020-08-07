@@ -93,6 +93,9 @@ dependencies:
   # snackbar
   flushbar: ^1.10.0
 
+  # toast
+  fluttertoast: ^7.0.1+1
+
   # svg
   flutter_svg: 0.18.0
 
