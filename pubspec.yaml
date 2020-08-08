@@ -13,6 +13,9 @@ version: 0.0.1+0
 environment:
   sdk: ">=2.6.0 <3.0.0"
 
+dependency_overrides:
+  analyzer: '0.39.16'
+
 dependencies:
   flutter:
     sdk: flutter
@@ -104,6 +107,9 @@ dependencies:
 
   # fonts
   google_fonts: ^1.1.0
+
+  archiver_ffi:
+    path: ./packages/archiver_ffi
 
 dev_dependencies:
   flutter_test:

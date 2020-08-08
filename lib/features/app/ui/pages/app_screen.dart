@@ -5,10 +5,10 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:squash_archiver/common/di/di.dart';
 import 'package:squash_archiver/common/l10n/l10n.dart';
 import 'package:squash_archiver/common/l10n/l10n_helpers.dart';
+import 'package:squash_archiver/common/router/router.gr.dart' as router_gen;
 import 'package:squash_archiver/common/router/router_auth_guard.dart';
 import 'package:squash_archiver/common/themes/theme_helper.dart';
 import 'package:squash_archiver/features/app/ui/store/app_store.dart';
-import 'package:squash_archiver/common/router/router.gr.dart';
 import 'package:squash_archiver/constants/env.dart';
 import 'package:squash_archiver/constants/strings.dart';
 import 'package:squash_archiver/widgets/common_widget/custom_scroll_behavior.dart';
@@ -50,9 +50,9 @@ class AppScreen extends StatelessWidget {
             return ScrollConfiguration(
               behavior: const ScrollBehavior(),
               child: CustomScrollBehavior(
-                child: ExtendedNavigator<Router>(
-                  initialRoute: Routes.homeScreen,
-                  router: Router(),
+                child: ExtendedNavigator<router_gen.Router>(
+                  initialRoute: router_gen.Routes.homeScreen,
+                  router: router_gen.Router(),
                   guards: [
                     RouterAuthGuard(),
                   ],

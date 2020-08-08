@@ -1,9 +1,8 @@
 import 'dart:ffi';
 import 'dart:io';
 import 'dart:isolate';
+import 'package:archiver_ffi/constants/app_files.dart';
 import 'package:path/path.dart' as path;
-
-import 'package:squash_archiver/constants/app_files.dart';
 
 typedef StartWorkType = Void Function(Int64 port);
 typedef StartWorkFunc = void Function(int port);
@@ -44,9 +43,9 @@ class ArchiverFfi {
       interactiveCppRequests.close();
     });
 
-    for (var i = 0; i < 5;) {
+    /*for (var i = 0; i < 5;) {
       await Future.delayed(const Duration(seconds: 2));
       print('Dart: 2 seconds passed');
-    }
+    }*/
   }
 }

@@ -6,7 +6,7 @@
 
 import 'package:squash_archiver/services/analytics_service.dart';
 import 'package:squash_archiver/common/di/archiver_ffi_di.dart';
-import 'package:squash_archiver/ffi/archiver_ffi/archiver_ffi.dart';
+import 'package:archiver_ffi/archiver_ffi.dart';
 import 'package:squash_archiver/common/di/network_info_di.dart';
 import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:squash_archiver/utils/device_details/device_details.dart';

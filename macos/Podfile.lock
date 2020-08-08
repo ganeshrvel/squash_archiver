@@ -109,7 +109,7 @@ SPEC CHECKSUMS:
   Crashlytics: 540b7e5f5da5a042647227a5e3ac51d85eed06df
   Fabric: 706c8b8098fff96c33c0db69cbf81f9c551d0d74
   Firebase: fc4cbf6f1592636431821ef9a3c557e4dfd9f268
-  firebase_crashlytics: 506ecae75ea9ba82cce680c6901d492bdf7a92be
+  firebase_crashlytics: c77331a77761e41fc2225b2784c843ca8197b924
   FirebaseCore: feda061cb1ee6d8ad4824f4a4a8ffbcfe284f595
   FirebaseCoreDiagnostics: 4505e4d4009b1d93f605088ee7d7764d5f0d1c84
   FlutterMacOS: 15bea8a44d2fa024068daa0140371c020b4b6ff9

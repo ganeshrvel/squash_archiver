@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:squash_archiver/common/di/di.dart';
 import 'package:squash_archiver/common/helpers/navigation_helper.dart';
 import 'package:mobx/mobx.dart';
-import 'package:squash_archiver/ffi/archiver_ffi/archiver_ffi.dart';
 import 'package:squash_archiver/widget_extends/sf_widget.dart';
 import 'package:squash_archiver/widgets/button/button.dart';
+import 'package:archiver_ffi/archiver_ffi.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key key}) : super(key: key);

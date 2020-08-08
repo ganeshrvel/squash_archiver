@@ -27,9 +27,7 @@ class _SplashScreenState extends SfWidget<SplashScreen> {
   }
 
   void init() {
-    BackButtonInterceptor.add(
-      _handleBackButtonInterceptor,
-    );
+    BackButtonInterceptor.add(_handleBackButtonInterceptor);
 
     _splashScreenStore ??= SplashScreenStore();
   }
@@ -59,6 +57,7 @@ class _SplashScreenState extends SfWidget<SplashScreen> {
 
   bool _handleBackButtonInterceptor(
     bool stopDefaultButtonEvent,
+    RouteInfo routeInfo,
   ) {
     // allow back button
     return false;
