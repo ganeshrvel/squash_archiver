@@ -2,27 +2,25 @@ import 'dart:ffi';
 import 'dart:io';
 import 'dart:isolate';
 import 'package:archiver_ffi/constants/app_files.dart';
+import 'package:archiver_ffi/generated_bindings.dart';
 import 'package:path/path.dart' as path;
 
 typedef StartWorkType = Void Function(Int64 port);
 typedef StartWorkFunc = void Function(int port);
 
 class ArchiverFfi {
-  DynamicLibrary _dylib;
+  NativeLibrary _nativeLibrary;
 
   ArchiverFfi() {
-    _dylib = DynamicLibrary.open(path.join(Directory.current.path, '../../../',
+    final _dylib = DynamicLibrary.open(path.join(Directory.current.path,
         'native', 'archiver_lib', AppFiles.ARCHIVER_FFI_LIB));
-    //_dylib = DynamicLibrary.open(AppFiles.ARCHIVER_FFI_LIB); //todo
+    //final _dylib = DynamicLibrary.open(AppFiles.ARCHIVER_FFI_LIB); //todo
+
+    _nativeLibrary = NativeLibrary(_dylib);
   }
 
   Future<void> run() async {
-    final initializeApi = _dylib.lookupFunction<IntPtr Function(Pointer<Void>),
-        int Function(Pointer<Void>)>('InitializeDartApi');
-
-    if (initializeApi(NativeApi.initializeApiDLData) != 0) {
-      throw 'Failed to initialize Dart API';
-    }
+    _nativeLibrary.InitializeDartApi(NativeApi.initializeApiDLData);
 
     final interactiveCppRequests = ReceivePort();
 
@@ -32,20 +30,16 @@ class ArchiverFfi {
 
     final nativePort = interactiveCppRequests.sendPort.nativePort;
 
-    final startWork = _dylib
-        .lookup<NativeFunction<StartWorkType>>('StartWork')
-        .asFunction<StartWorkFunc>();
+    _nativeLibrary.StartWork(nativePort);
 
-    startWork(nativePort);
-
-    await Future.delayed(const Duration(seconds: 10), () {
+    Future.delayed(const Duration(seconds: 10), () {
       interactiveCppSub.cancel();
       interactiveCppRequests.close();
     });
 
-    /*for (var i = 0; i < 5;) {
+    while (true) {
       await Future.delayed(const Duration(seconds: 2));
       print('Dart: 2 seconds passed');
-    }*/
+    }
   }
 }
