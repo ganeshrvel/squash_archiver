@@ -25,6 +25,9 @@ class ArchiverFfi {
     final interactiveCppRequests = ReceivePort();
 
     final interactiveCppSub = interactiveCppRequests.listen((data) {
+
+      print(data);
+
       print('Received: ${data} from Go');
     });
 
