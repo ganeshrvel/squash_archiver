@@ -14,12 +14,15 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  ffigen: ^0.1.5
+  ffigen: #^0.1.5
+    git:
+      url: https://github.com/dart-lang/ffigen
 
 ffigen:
   output: './lib/generated/bindings.dart'
   headers:
-    - './native/archiver_lib/archiver_lib.h'
+    entry-points:
+      - './native/archiver_lib/archiver_lib.h'
   name: 'SquashArchiverLib'
   description: 'Docs for SquashArchiverLib'
 
