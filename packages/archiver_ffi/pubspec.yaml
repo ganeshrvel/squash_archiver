@@ -17,9 +17,11 @@ dev_dependencies:
   ffigen: ^0.1.5
 
 ffigen:
-  output: 'generated_bindings.dart'
+  output: './lib/generated/bindings.dart'
   headers:
     - './native/archiver_lib/archiver_lib.h'
+  name: 'SquashArchiverLib'
+  description: 'Docs for SquashArchiverLib'
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
