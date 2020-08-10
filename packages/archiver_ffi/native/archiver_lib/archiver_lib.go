@@ -46,4 +46,7 @@ func StopWork(port int64) {
 }
 
 // Unused
-func main() {}
+func main() {
+
+	dart_api_dl.SendToPort(1233, 1234)
+}

@@ -1,12 +1,22 @@
 import 'dart:ffi';
+import 'package:ffi/ffi.dart';
 import 'dart:io';
 import 'dart:isolate';
 import 'package:archiver_ffi/constants/app_files.dart';
 import 'package:archiver_ffi/generated/bindings.dart';
 import 'package:path/path.dart' as path;
 
-typedef StartWorkType = Void Function(Int64 port);
-typedef StartWorkFunc = void Function(int port);
+class Work extends Struct {
+  @Int64()
+  int a;
+
+  @Int64()
+  int b;
+
+  factory Work.allocate(int a, int b) => allocate<Work>().ref
+    ..a = a
+    ..b = b;
+}
 
 class ArchiverFfi {
   SquashArchiverLib _squashArchiverLib;
@@ -28,7 +38,9 @@ class ArchiverFfi {
 
       print(data);
 
-      print('Received: ${data} from Go');
+      /*final work = Pointer<Work>.fromAddress(data as int);
+      print(work.ref.a);
+      print(work.ref.b);*/
     });
 
     final nativePort = interactiveCppRequests.sendPort.nativePort;
