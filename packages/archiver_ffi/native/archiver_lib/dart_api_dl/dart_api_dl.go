@@ -14,14 +14,14 @@ import "unsafe"
 // }
 //
 //	typedef struct Work{
-//		int64_t a;
-//		int64_t b;
+//		char *name;
+//		int64_t age;
 //	}Work;
 //
 //	int64_t GetWork(void **ppWork) {
 //		Work *pWork= (Work *)malloc(sizeof(Work));
-//		pWork->a=16;
-//		pWork->b=15;
+//		pWork->name=strdup("name");
+//		pWork->age=15;
 //		*ppWork = pWork;
 //
 //		int64_t ptr = (int64_t)pWork;
@@ -32,11 +32,6 @@ import "C"
 
 func Init(api unsafe.Pointer) C.long {
 	return C.Dart_InitializeApiDL(api)
-}
-
-type Work struct {
-	a int64
-	b int64
 }
 
 func SendToPort(port int64, msg int64) {

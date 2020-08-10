@@ -7,15 +7,14 @@ import 'package:archiver_ffi/generated/bindings.dart';
 import 'package:path/path.dart' as path;
 
 class Work extends Struct {
-  @Int64()
-  int a;
+  Pointer<Utf8> name;
 
   @Int64()
-  int b;
+  int age;
 
-  factory Work.allocate(int a, int b) => allocate<Work>().ref
-    ..a = a
-    ..b = b;
+  factory Work.allocate(Pointer<Utf8> name, int age) => allocate<Work>().ref
+    ..name = name
+    ..age = age;
 }
 
 class ArchiverFfi {
@@ -36,8 +35,8 @@ class ArchiverFfi {
 
     final interactiveCppSub = interactiveCppRequests.listen((data) {
       final work = Pointer<Work>.fromAddress(data as int);
-      print(work.ref.a);
-      print(work.ref.b);
+      print(work.ref.name.ref.toString());
+      print(work.ref.age);
     });
 
     final nativePort = interactiveCppRequests.sendPort.nativePort;
