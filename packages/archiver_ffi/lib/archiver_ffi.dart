@@ -35,8 +35,6 @@ class ArchiverFfi {
     final interactiveCppRequests = ReceivePort();
 
     final interactiveCppSub = interactiveCppRequests.listen((data) {
-      //  print(data);
-
       final work = Pointer<Work>.fromAddress(data as int);
       print(work.ref.a);
       print(work.ref.b);
