@@ -38,8 +38,11 @@ class ArchiverFfi {
 
     final interactiveCppRequests = ReceivePort();
 
-    final interactiveCppSub = interactiveCppRequests.listen((data) {
-      final work = Pointer<Work>.fromAddress(data as int);
+    final interactiveCppSub = interactiveCppRequests.listen((address) {
+      final _address = address as int;
+
+      final work = Pointer<Work>.fromAddress(_address);
+
       print(work.ref.name.ref.toString());
       print(work.ref.age);
 
@@ -59,7 +62,9 @@ class ArchiverFfi {
         count += 1;
       }
 
-      free(work);
+      _squashArchiverLib.FreeWorkStructMemory(Pointer<Int64>.fromAddress(
+        _address,
+      ));
     });
 
     final nativePort = interactiveCppRequests.sendPort.nativePort;

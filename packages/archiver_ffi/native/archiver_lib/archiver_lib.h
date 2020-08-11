@@ -75,6 +75,8 @@ extern void StartWork(GoInt64 p0);
 
 extern void StopWork(GoInt64 p0);
 
+extern void FreeWorkStructMemory(GoInt64* p0);
+
 #ifdef __cplusplus
 }
 #endif

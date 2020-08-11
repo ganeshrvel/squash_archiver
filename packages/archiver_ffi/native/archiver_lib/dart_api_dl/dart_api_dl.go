@@ -7,6 +7,7 @@ import (
 
 // #include "stdlib.h"
 // #include "stdint.h"
+// #include "stdio.h"
 // #include "include/dart_api_dl.c"
 //
 // // Go does not allow calling C function pointers directly. So we are
@@ -22,7 +23,7 @@ import (
 //	}WorkStruct;
 //
 //	int64_t GetWork(void **ppWork, char* name, int64_t age, char** string_list) {
-//		WorkStruct *pWork= (WorkStruct *)malloc(sizeof(WorkStruct));
+//		WorkStruct *pWork = (WorkStruct *)malloc(sizeof(WorkStruct));
 //		pWork->name=name;
 //		pWork->age=age;
 //		pWork->string_list = string_list;
@@ -32,6 +33,13 @@ import (
 //		int64_t ptr = (int64_t)pWork;
 //
 //		return ptr;
+//	}
+//
+//	void clearWorkStructMemory(WorkStruct pWork) {
+//		free(&pWork.name);
+//		free(&pWork.age);
+//		free(&pWork.string_list);
+//		free(&pWork);
 //	}
 import "C"
 
@@ -51,4 +59,9 @@ func SendToPort(port int64, msg int64) {
 	*(*C.int64_t)(unsafe.Pointer(&obj.value[0])) = ptrAddr
 
 	C.GoDart_PostCObject(C.int64_t(port), &obj)
+}
+
+func FreeWorkStructMemory(pointer *int64) {
+	ptr := (*C.struct_WorkStruct)(unsafe.Pointer(pointer))
+	C.clearWorkStructMemory(*ptr);
 }

@@ -45,7 +45,12 @@ func StopWork(port int64) {
 	fmt.Println("Go: Stopped the Go work")
 }
 
+//export FreeWorkStructMemory
+func FreeWorkStructMemory(pointer *int64) {
+	dart_api_dl.FreeWorkStructMemory(pointer)
+}
+
 // Unused
 func main() {
-	 dart_api_dl.SendToPort(1233, 1234) 	// dummy call
+
 }
