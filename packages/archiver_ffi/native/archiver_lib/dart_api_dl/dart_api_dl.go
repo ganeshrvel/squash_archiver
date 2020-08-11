@@ -22,16 +22,11 @@ import (
 //		char ** string_list;
 //	}WorkStruct;
 //
-//	int64_t GetWork(void **ppWork, char* name, int64_t age, char* string_list) {
+//	int64_t GetWork(void **ppWork, char* name, int64_t age, char** string_list) {
 //		WorkStruct *pWork= (WorkStruct *)malloc(sizeof(WorkStruct));
 //		pWork->name=name;
 //		pWork->age=age;
-//		pWork->string_list= malloc( 2* sizeof(char*));
-//		pWork->string_list[0] = malloc( 5 * sizeof(char));
-//		pWork->string_list[0] = "item 3";
-//		pWork->string_list[1] = malloc( 5 * sizeof(char));
-//		pWork->string_list[1] = "item 4";
-//		pWork->string_list[2] = NULL;
+//		pWork->string_list = string_list;
 //
 //		*ppWork = pWork;
 //
@@ -55,27 +50,20 @@ func SendToPort(port int64, msg int64) {
 	var obj C.Dart_CObject
 	obj._type = C.Dart_CObject_kInt64
 
-	arr := []string{"Item1\u0000", "item2\u0000", "item3\u0000"}
-	ptr := unsafe.Pointer(&arr)
+	/*arr := []string{"Item1\u0000", "item2\u0000", "item3\u0000", "\u0000"}
+	ptr := unsafe.Pointer(&arr)*/
+
+	itemArr := []*C.char{C.CString("Item1"), C.CString("Item2"), C.CString("Item3")}
+	//ptr := unsafe.Pointer(&arr)
+	//ptr := unsafe.Pointer(&arr[0])
+
+	//	*(*C.char)(unsafe.Pointer(&arr));
 
 	var pwork unsafe.Pointer
-	ptrAddr := C.GetWork(&pwork, C.CString("Smith"), C.int64_t(26), (*C.char)(ptr))
+	ptrAddr := C.GetWork(&pwork, C.CString("Smith"), C.int64_t(26), &itemArr[0])
 
 	*(*C.int64_t)(unsafe.Pointer(&obj.value[0])) = ptrAddr
 
-	/*	work := *(*WorkStruct)(pwork)
-
-		println(work.string_list)*/
-
-	/*	c := []string{"may", "god"}
-		cc := (*[]C.CString)(unsafe.Pointer(&c))*/
-
-	//fmt.Println(cc)
-
-	//cfa := (*[6]float64)(unsafe.Pointer(&c))
-	//cfs := cfa[:]
-
 	C.GoDart_PostCObject(C.int64_t(port), &obj)
 
-	//defer C.free(pwork)
 }
