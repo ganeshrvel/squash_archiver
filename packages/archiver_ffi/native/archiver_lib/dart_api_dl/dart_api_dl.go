@@ -26,11 +26,12 @@ import (
 //		WorkStruct *pWork= (WorkStruct *)malloc(sizeof(WorkStruct));
 //		pWork->name=name;
 //		pWork->age=age;
-//		pWork->string_list= malloc( 1* sizeof(char*));
+//		pWork->string_list= malloc( 2* sizeof(char*));
 //		pWork->string_list[0] = malloc( 5 * sizeof(char));
 //		pWork->string_list[0] = "item 3";
 //		pWork->string_list[1] = malloc( 5 * sizeof(char));
 //		pWork->string_list[1] = "item 4";
+//		pWork->string_list[2] = NULL;
 //
 //		*ppWork = pWork;
 //

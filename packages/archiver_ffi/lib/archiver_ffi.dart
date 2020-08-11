@@ -47,8 +47,21 @@ class ArchiverFfi {
 
       final _string_list_ptr = work.ref.string_list;
 
-      print(_string_list_ptr.elementAt(0).value.ref.toString());
-      print(_string_list_ptr.elementAt(1).value.ref.toString());
+      var count = 0;
+
+      while (true) {
+        final _value = _string_list_ptr.elementAt(count).value;
+
+        if (_value.address == 0) {
+          break;
+        }
+
+        print(_value.ref.toString());
+
+        count += 1;
+      }
+
+      free(work);
     });
 
     final nativePort = interactiveCppRequests.sendPort.nativePort;
