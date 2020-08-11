@@ -1,4 +1,6 @@
+import 'dart:convert';
 import 'dart:ffi';
+import 'dart:typed_data';
 import 'package:ffi/ffi.dart';
 import 'dart:io';
 import 'dart:isolate';
@@ -12,9 +14,14 @@ class Work extends Struct {
   @Int64()
   int age;
 
-  factory Work.allocate(Pointer<Utf8> name, int age) => allocate<Work>().ref
-    ..name = name
-    ..age = age;
+  Pointer<Pointer<Utf8>> string_list;
+
+  factory Work.allocate(
+          Pointer<Utf8> name, int age, Pointer<Pointer<Utf8>> string_list) =>
+      allocate<Work>().ref
+        ..name = name
+        ..age = age
+        ..string_list = string_list;
 }
 
 class ArchiverFfi {
@@ -37,6 +44,11 @@ class ArchiverFfi {
       final work = Pointer<Work>.fromAddress(data as int);
       print(work.ref.name.ref.toString());
       print(work.ref.age);
+
+      final _string_list_ptr = work.ref.string_list;
+
+      print(_string_list_ptr.elementAt(0).value.ref.toString());
+      print(_string_list_ptr.elementAt(1).value.ref.toString());
     });
 
     final nativePort = interactiveCppRequests.sendPort.nativePort;
