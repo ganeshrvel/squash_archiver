@@ -13,41 +13,49 @@ func InitializeDartApi(api unsafe.Pointer) {
 	dart_api_dl.Init(api)
 }
 
-var quit = make(chan int64)
-
 //export StartWork
 func StartWork(port int64) {
-	fmt.Println("Go: Starting some asynchronous work")
+	fmt.Println("Go: Starting some 'Work' asynchronous work")
 
 	go func(port int64) {
 		var counter int64
 		for {
 			time.Sleep(2 * time.Second)
-			fmt.Println("GO: 2 seconds passed")
+			fmt.Println("GO: 2 'Work' seconds passed")
 			counter++
-			dart_api_dl.SendToPort(port, counter)
-
-			/*if counter > 3 {
-				quit <- 3
-			}*/
+			dart_api_dl.SendWorkToPort(port, counter)
 		}
 	}(port)
 
-	fmt.Println("Go: Returning to Dart")
-}
-
-//export StopWork
-func StopWork(port int64) {
-	fmt.Println("Go: Stopping some asynchronous work")
-
-	quit <- 3
-
-	fmt.Println("Go: Stopped the Go work")
+	fmt.Println("Go: Returning 'Work' to Dart")
 }
 
 //export FreeWorkStructMemory
 func FreeWorkStructMemory(pointer *int64) {
 	dart_api_dl.FreeWorkStructMemory(pointer)
+}
+
+//export StartUser
+func StartUser(port int64) {
+	fmt.Println("Go: Starting 'User' asynchronous call")
+
+	go func(port int64) {
+		var counter int64
+		for {
+			time.Sleep(3 * time.Second)
+			fmt.Println("GO: 2 'User' seconds passed")
+			counter++
+			dart_api_dl.SendUserToPort(port, counter)
+
+		}
+	}(port)
+
+	fmt.Println("Go: Returning 'User' to Dart")
+}
+
+//export FreeUserStructMemory
+func FreeUserStructMemory(pointer *int64) {
+	dart_api_dl.FreeUserStructMemory(pointer)
 }
 
 // Unused

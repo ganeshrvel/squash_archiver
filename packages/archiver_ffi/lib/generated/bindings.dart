@@ -37,18 +37,6 @@ class SquashArchiverLib {
 
   _dart_StartWork _StartWork;
 
-  void StopWork(
-    int p0,
-  ) {
-    _StopWork ??=
-        _dylib.lookupFunction<_c_StopWork, _dart_StopWork>('StopWork');
-    return _StopWork(
-      p0,
-    );
-  }
-
-  _dart_StopWork _StopWork;
-
   void FreeWorkStructMemory(
     ffi.Pointer<ffi.Int64> p0,
   ) {
@@ -60,6 +48,30 @@ class SquashArchiverLib {
   }
 
   _dart_FreeWorkStructMemory _FreeWorkStructMemory;
+
+  void StartUser(
+    int p0,
+  ) {
+    _StartUser ??=
+        _dylib.lookupFunction<_c_StartUser, _dart_StartUser>('StartUser');
+    return _StartUser(
+      p0,
+    );
+  }
+
+  _dart_StartUser _StartUser;
+
+  void FreeUserStructMemory(
+    ffi.Pointer<ffi.Int64> p0,
+  ) {
+    _FreeUserStructMemory ??= _dylib.lookupFunction<_c_FreeUserStructMemory,
+        _dart_FreeUserStructMemory>('FreeUserStructMemory');
+    return _FreeUserStructMemory(
+      p0,
+    );
+  }
+
+  _dart_FreeUserStructMemory _FreeUserStructMemory;
 }
 
 class __darwin_pthread_handler_rec extends ffi.Struct {
@@ -195,19 +207,27 @@ typedef _dart_StartWork = void Function(
   int p0,
 );
 
-typedef _c_StopWork = ffi.Void Function(
-  ffi.Int64 p0,
-);
-
-typedef _dart_StopWork = void Function(
-  int p0,
-);
-
 typedef _c_FreeWorkStructMemory = ffi.Void Function(
   ffi.Pointer<ffi.Int64> p0,
 );
 
 typedef _dart_FreeWorkStructMemory = void Function(
+  ffi.Pointer<ffi.Int64> p0,
+);
+
+typedef _c_StartUser = ffi.Void Function(
+  ffi.Int64 p0,
+);
+
+typedef _dart_StartUser = void Function(
+  int p0,
+);
+
+typedef _c_FreeUserStructMemory = ffi.Void Function(
+  ffi.Pointer<ffi.Int64> p0,
+);
+
+typedef _dart_FreeUserStructMemory = void Function(
   ffi.Pointer<ffi.Int64> p0,
 );
 

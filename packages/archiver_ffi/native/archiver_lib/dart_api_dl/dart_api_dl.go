@@ -41,20 +41,44 @@ import (
 //		free(&pWork.string_list);
 //		free(&pWork);
 //	}
+//
+//
+//	typedef struct UserStruct{
+//		char *email;
+//		int64_t id;
+//	}UserStruct;
+//
+//	int64_t GetUser(void **ppUser, char* email, int64_t id) {
+//		UserStruct *pUser = (UserStruct *)malloc(sizeof(UserStruct));
+//		pUser->email=email;
+//		pUser->id=id;
+//
+//		*ppUser = pUser;
+//
+//		int64_t ptr = (int64_t)pUser;
+//
+//		return ptr;
+//	}
+//
+//	void clearUserStructMemory(UserStruct pUser) {
+//		free(&pUser.email);
+//		free(&pUser.id);
+//		free(&pUser);
+//	}
 import "C"
 
 func Init(api unsafe.Pointer) C.long {
 	return C.Dart_InitializeApiDL(api)
 }
 
-func SendToPort(port int64, msg int64) {
+func SendWorkToPort(port int64, msg int64) {
 	var obj C.Dart_CObject
 	obj._type = C.Dart_CObject_kInt64
 
 	itemArr := []*C.char{C.CString("Item 1"), C.CString("Item 2"), C.CString("Item 3")}
 
 	var pwork unsafe.Pointer
-	ptrAddr := C.GetWork(&pwork, C.CString("Smith"), C.int64_t(26), &itemArr[0])
+	ptrAddr := C.GetWork(&pwork, C.CString("Smith"), C.int64_t(msg), &itemArr[0])
 
 	*(*C.int64_t)(unsafe.Pointer(&obj.value[0])) = ptrAddr
 
@@ -64,4 +88,22 @@ func SendToPort(port int64, msg int64) {
 func FreeWorkStructMemory(pointer *int64) {
 	ptr := (*C.struct_WorkStruct)(unsafe.Pointer(pointer))
 	C.clearWorkStructMemory(*ptr);
+}
+
+func SendUserToPort(port int64, msg int64) {
+	var obj C.Dart_CObject
+	obj._type = C.Dart_CObject_kInt64
+
+
+	var pUser unsafe.Pointer
+	ptrAddr := C.GetUser(&pUser, C.CString("jhon@doe.com"), C.int64_t(msg))
+
+	*(*C.int64_t)(unsafe.Pointer(&obj.value[0])) = ptrAddr
+
+	C.GoDart_PostCObject(C.int64_t(port), &obj)
+}
+
+func FreeUserStructMemory(pointer *int64) {
+	ptr := (*C.struct_UserStruct)(unsafe.Pointer(pointer))
+	C.clearUserStructMemory(*ptr);
 }

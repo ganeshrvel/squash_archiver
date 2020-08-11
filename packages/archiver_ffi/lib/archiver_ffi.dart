@@ -22,6 +22,19 @@ class Work extends Struct {
         ..string_list = string_list;
 }
 
+class User extends Struct {
+  Pointer<Utf8> email;
+
+  @Int64()
+  int id;
+
+  Pointer<Pointer<Utf8>> string_list;
+
+  factory User.allocate(Pointer<Utf8> email, int id) => allocate<User>().ref
+    ..email = email
+    ..id = id;
+}
+
 class ArchiverFfi {
   SquashArchiverLib _squashArchiverLib;
 
@@ -31,11 +44,10 @@ class ArchiverFfi {
     //final _dylib = DynamicLibrary.open(AppFiles.ARCHIVER_FFI_LIB); //todo
 
     _squashArchiverLib = SquashArchiverLib(_dylib);
+    _squashArchiverLib.InitializeDartApi(NativeApi.initializeApiDLData);
   }
 
-  Future<void> run() async {
-    _squashArchiverLib.InitializeDartApi(NativeApi.initializeApiDLData);
-
+  Future<void> getWorkData() async {
     final interactiveCppRequests = ReceivePort();
 
     final interactiveCppSub = interactiveCppRequests.listen((address) {
@@ -43,13 +55,18 @@ class ArchiverFfi {
 
       final work = Pointer<Work>.fromAddress(_address);
 
+      print('=======================');
+      print('user data');
+      print('name: ');
       print(work.ref.name.ref.toString());
+      print('age: ');
       print(work.ref.age);
 
       final _string_list_ptr = work.ref.string_list;
 
       var count = 0;
 
+      print('string_list: ');
       while (true) {
         final _value = _string_list_ptr.elementAt(count).value;
 
@@ -65,11 +82,52 @@ class ArchiverFfi {
       _squashArchiverLib.FreeWorkStructMemory(Pointer<Int64>.fromAddress(
         _address,
       ));
+
+      print('=======================');
     });
 
     final nativePort = interactiveCppRequests.sendPort.nativePort;
 
     _squashArchiverLib.StartWork(nativePort);
+
+    Future.delayed(const Duration(seconds: 20), () {
+      interactiveCppSub.cancel();
+      interactiveCppRequests.close();
+    });
+
+    while (true) {
+      await Future.delayed(const Duration(seconds: 2));
+      print('Dart: 2 seconds passed');
+    }
+  }
+
+  Future<void> getUserData() async {
+    _squashArchiverLib.InitializeDartApi(NativeApi.initializeApiDLData);
+
+    final interactiveCppRequests = ReceivePort();
+
+    final interactiveCppSub = interactiveCppRequests.listen((address) {
+      final _address = address as int;
+
+      final user = Pointer<User>.fromAddress(_address);
+
+      print('=======================');
+      print('user data');
+      print('email: ');
+      print(user.ref.email.ref.toString());
+      print('id: ');
+      print(user.ref.id);
+
+      _squashArchiverLib.FreeUserStructMemory(Pointer<Int64>.fromAddress(
+        _address,
+      ));
+
+      print('=======================');
+    });
+
+    final nativePort = interactiveCppRequests.sendPort.nativePort;
+
+    _squashArchiverLib.StartUser(nativePort);
 
     Future.delayed(const Duration(seconds: 10), () {
       interactiveCppSub.cancel();
