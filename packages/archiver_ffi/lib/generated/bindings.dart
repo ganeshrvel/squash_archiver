@@ -25,6 +25,18 @@ class SquashArchiverLib {
 
   _dart_InitializeDartApi _InitializeDartApi;
 
+  int CloseNativeDartPort(
+    int p0,
+  ) {
+    _CloseNativeDartPort ??= _dylib.lookupFunction<_c_CloseNativeDartPort,
+        _dart_CloseNativeDartPort>('CloseNativeDartPort');
+    return _CloseNativeDartPort(
+      p0,
+    );
+  }
+
+  _dart_CloseNativeDartPort _CloseNativeDartPort;
+
   void StartWork(
     int p0,
   ) {
@@ -197,6 +209,14 @@ typedef _c_InitializeDartApi = ffi.Void Function(
 
 typedef _dart_InitializeDartApi = void Function(
   ffi.Pointer<ffi.Void> p0,
+);
+
+typedef _c_CloseNativeDartPort = ffi.Uint8 Function(
+  ffi.Int64 p0,
+);
+
+typedef _dart_CloseNativeDartPort = int Function(
+  int p0,
 );
 
 typedef _c_StartWork = ffi.Void Function(

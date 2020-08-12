@@ -18,5 +18,5 @@ To generate the bindings
 
 To run
 ```shell
- dart ./lib/test_ffi.dart
+ /usr/local/Cellar/dart/2.9.1/bin/dart ./lib/test_ffi.dart
 ```

@@ -16,6 +16,10 @@ import (
 //   return Dart_PostCObject_DL(port, obj);
 // }
 //
+// bool GoDart_CloseNativePort(Dart_Port_DL port) {
+//   return Dart_CloseNativePort_DL(port);
+// }
+//
 //	typedef struct WorkStruct{
 //		char *name;
 //		int64_t age;
@@ -48,7 +52,7 @@ import (
 //		int64_t id;
 //	}UserStruct;
 //
-//	int64_t GetUser(void **ppUser, char* email, int64_t id) {
+//	int64_t GetUser(void **ppUser, char *email, int64_t id) {
 //		UserStruct *pUser = (UserStruct *)malloc(sizeof(UserStruct));
 //		pUser->email=email;
 //		pUser->id=id;
@@ -65,10 +69,17 @@ import (
 //		free(&pUser.id);
 //		free(&pUser);
 //	}
+//
 import "C"
 
 func Init(api unsafe.Pointer) C.long {
 	return C.Dart_InitializeApiDL(api)
+}
+
+func CloseNativePort(port int64) bool {
+	result := C.GoDart_CloseNativePort(C.int64_t(port))
+
+	return (bool)(result)
 }
 
 func SendWorkToPort(port int64, msg int64) {
@@ -87,13 +98,12 @@ func SendWorkToPort(port int64, msg int64) {
 
 func FreeWorkStructMemory(pointer *int64) {
 	ptr := (*C.struct_WorkStruct)(unsafe.Pointer(pointer))
-	C.clearWorkStructMemory(*ptr);
+	C.clearWorkStructMemory(*ptr)
 }
 
 func SendUserToPort(port int64, msg int64) {
 	var obj C.Dart_CObject
 	obj._type = C.Dart_CObject_kInt64
-
 
 	var pUser unsafe.Pointer
 	ptrAddr := C.GetUser(&pUser, C.CString("jhon@doe.com"), C.int64_t(msg))
@@ -105,5 +115,5 @@ func SendUserToPort(port int64, msg int64) {
 
 func FreeUserStructMemory(pointer *int64) {
 	ptr := (*C.struct_UserStruct)(unsafe.Pointer(pointer))
-	C.clearUserStructMemory(*ptr);
+	C.clearUserStructMemory(*ptr)
 }

@@ -50,6 +50,12 @@ class ArchiverFfi {
   Future<void> getWorkData() async {
     final interactiveCppRequests = ReceivePort();
 
+    final nativePort = interactiveCppRequests.sendPort.nativePort;
+
+    _squashArchiverLib.StartWork(nativePort);
+
+    var _isClosed = false;
+
     final interactiveCppSub = interactiveCppRequests.listen((address) {
       final _address = address as int;
 
@@ -86,18 +92,22 @@ class ArchiverFfi {
       print('=======================');
     });
 
-    final nativePort = interactiveCppRequests.sendPort.nativePort;
-
-    _squashArchiverLib.StartWork(nativePort);
-
-    Future.delayed(const Duration(seconds: 20), () {
+    Future.delayed(const Duration(seconds: 7), () {
       interactiveCppSub.cancel();
       interactiveCppRequests.close();
+      _squashArchiverLib.CloseNativeDartPort(nativePort);
+      print("Closing 'Work'");
+
+      _isClosed = true;
     });
 
     while (true) {
       await Future.delayed(const Duration(seconds: 2));
       print('Dart: 2 seconds passed');
+
+      if (_isClosed) {
+        break;
+      }
     }
   }
 

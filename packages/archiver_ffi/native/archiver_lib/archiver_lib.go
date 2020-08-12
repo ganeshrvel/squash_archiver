@@ -13,6 +13,11 @@ func InitializeDartApi(api unsafe.Pointer) {
 	dart_api_dl.Init(api)
 }
 
+//export CloseNativeDartPort
+func CloseNativeDartPort(port int64) bool {
+	return dart_api_dl.CloseNativePort(port)
+}
+
 //export StartWork
 func StartWork(port int64) {
 	fmt.Println("Go: Starting some 'Work' asynchronous work")

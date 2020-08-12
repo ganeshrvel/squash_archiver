@@ -76,7 +76,8 @@ class _HomeScreenState extends SfWidget<HomeScreen> {
         child: Center(
           child: Button(
             onPressed: () {
-              _archiverFfi.run();
+              _archiverFfi.getWorkData();
+              _archiverFfi.getUserData();
             },
             text: 'FFI',
           ),

@@ -71,6 +71,8 @@ extern "C" {
 
 extern void InitializeDartApi(void* p0);
 
+extern GoUint8 CloseNativeDartPort(GoInt64 p0);
+
 extern void StartWork(GoInt64 p0);
 
 extern void FreeWorkStructMemory(GoInt64* p0);
