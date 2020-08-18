@@ -62,7 +62,7 @@ class ArchiverFfi {
       final work = Pointer<Work>.fromAddress(_address);
 
       print('=======================');
-      print('user data');
+      print('WORK data');
       print('name: ');
       print(work.ref.name.ref.toString());
       print('age: ');
@@ -122,7 +122,7 @@ class ArchiverFfi {
       final user = Pointer<User>.fromAddress(_address);
 
       print('=======================');
-      print('user data');
+      print('USER data');
       print('email: ');
       print(user.ref.email.ref.toString());
       print('id: ');

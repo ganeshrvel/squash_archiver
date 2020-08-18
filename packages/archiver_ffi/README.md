@@ -18,5 +18,11 @@ To generate the bindings
 
 To run
 ```shell
- /usr/local/Cellar/dart/2.9.1/bin/dart ./lib/test_ffi.dart
+  "$HOME/Library/Application Support/fvm/current/bin/dart" ./lib/test_ffi.dart
+```
+
+shortcut
+```shell 
+flutter pub run ffigen && "$HOME/Library/Application Support/fvm/current/bin/dart" ./lib/test_ffi.dart
+
 ```

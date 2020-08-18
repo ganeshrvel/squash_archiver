@@ -3,7 +3,6 @@ package main
 import (
 	"./dart_api_dl"
 	"C"
-	"fmt"
 	"time"
 	"unsafe"
 )
@@ -20,19 +19,19 @@ func CloseNativeDartPort(port int64) bool {
 
 //export StartWork
 func StartWork(port int64) {
-	fmt.Println("Go: Starting some 'Work' asynchronous work")
+	//fmt.Println("Go: Starting some 'Work' asynchronous work")
 
 	go func(port int64) {
 		var counter int64
 		for {
 			time.Sleep(2 * time.Second)
-			fmt.Println("GO: 2 'Work' seconds passed")
+			//fmt.Println("GO: 2 'Work' seconds passed")
 			counter++
 			dart_api_dl.SendWorkToPort(port, counter)
 		}
 	}(port)
 
-	fmt.Println("Go: Returning 'Work' to Dart")
+	//fmt.Println("Go: Returning 'Work' to Dart")
 }
 
 //export FreeWorkStructMemory
@@ -42,20 +41,20 @@ func FreeWorkStructMemory(pointer *int64) {
 
 //export StartUser
 func StartUser(port int64) {
-	fmt.Println("Go: Starting 'User' asynchronous call")
+	//fmt.Println("Go: Starting 'User' asynchronous call")
 
 	go func(port int64) {
 		var counter int64
 		for {
 			time.Sleep(3 * time.Second)
-			fmt.Println("GO: 2 'User' seconds passed")
+			//fmt.Println("GO: 2 'User' seconds passed")
 			counter++
 			dart_api_dl.SendUserToPort(port, counter)
 
 		}
 	}(port)
 
-	fmt.Println("Go: Returning 'User' to Dart")
+	//fmt.Println("Go: Returning 'User' to Dart")
 }
 
 //export FreeUserStructMemory
