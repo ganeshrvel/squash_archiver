@@ -24,7 +24,7 @@ type commonArchive struct {
 
 type archiveManager interface {
 	list() ([]archiveFileinfo, error)
-	isEncryped() (bool, error)
+	isEncrypted() (bool, error)
 }
 
 type archiveFileinfo struct {

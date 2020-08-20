@@ -6,7 +6,7 @@ import (
 	"path/filepath"
 )
 
-func (arc zipArchive) isEncryped() (bool, error) {
+func (arc zipArchive) isEncrypted() (bool, error) {
 	_filename := arc.filename
 
 	reader, err := zip.OpenReader(_filename)
@@ -30,7 +30,7 @@ func (arc zipArchive) isEncryped() (bool, error) {
 	return false, err
 }
 
-func (arc commonArchive) isEncryped() (bool, error) {
+func (arc commonArchive) isEncrypted() (bool, error) {
 	return false, nil
 }
 
@@ -51,5 +51,5 @@ func isArchiveEncrypted(filename string) (bool, error) {
 		return false, fmt.Errorf("encryption check: file format not supported")
 	}
 
-	return arcObj.isEncryped()
+	return arcObj.isEncrypted()
 }
