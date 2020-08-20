@@ -9,7 +9,7 @@ import (
 func ListArchive() {
 	_home, _ := homedir.Dir()
 
-	ReadArchive(fmt.Sprintf("%s/Desktop/test.tar.gz", _home), "", "")
+	GetArchiveFileList(fmt.Sprintf("%s/Desktop/test.tar.gz", _home), "", "")
 }
 
 // Unused

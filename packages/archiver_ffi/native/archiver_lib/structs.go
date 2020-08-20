@@ -22,7 +22,7 @@ type CommonArchive struct {
 }
 
 type ArchiveManager interface {
-	read() ([]ArchiveFileinfo, error)
+	list() ([]ArchiveFileinfo, error)
 }
 
 type ArchiveFileinfo struct {

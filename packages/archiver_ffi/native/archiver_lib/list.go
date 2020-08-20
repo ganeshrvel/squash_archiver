@@ -11,9 +11,9 @@ import (
 	"strings"
 )
 
-// read zip archives
-// yeka package is used here to read encrypted zip files
-func (arc ZipArchive) read() ([]ArchiveFileinfo, error) {
+// list zip archives
+// yeka package is used here to list encrypted zip files
+func (arc ZipArchive) list() ([]ArchiveFileinfo, error) {
 	_filename := arc.filename
 	_searchPath := arc.searchPath
 	_password := arc.password
@@ -71,7 +71,7 @@ func (arc ZipArchive) read() ([]ArchiveFileinfo, error) {
 }
 
 // every other supported archives
-func (arc CommonArchive) read() ([]ArchiveFileinfo, error) {
+func (arc CommonArchive) list() ([]ArchiveFileinfo, error) {
 	_filename := arc.filename
 	_password := arc.password
 	_searchPath := arc.searchPath
@@ -260,7 +260,7 @@ func getFilteredFiles(fileInfo ArchiveFileinfo, searchPath string) (ok bool) {
 	return true
 }
 
-func ReadArchive(filename string, password string, searchPath string) {
+func GetArchiveFileList(filename string, password string, searchPath string) {
 	var arcObj ArchiveManager
 
 	ext := filepath.Ext(filename)
@@ -279,7 +279,7 @@ func ReadArchive(filename string, password string, searchPath string) {
 		break
 	}
 
-	result, err := arcObj.read()
+	result, err := arcObj.list()
 
 	if err != nil {
 		fmt.Println(err)
