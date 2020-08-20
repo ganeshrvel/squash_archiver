@@ -9,8 +9,9 @@ type listArchive struct {
 	filename   string
 	password   string
 	searchPath string
-	orderby    string
-	direction  string
+	orderby    string //TODO
+	direction  string //TODO
+	recursive  bool
 }
 
 type zipArchive struct {

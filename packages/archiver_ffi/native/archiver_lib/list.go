@@ -1,17 +1,18 @@
 package main
 
+// TODO proper error handling. Return error back to the callee
+
 import (
 	"archive/tar"
 	"fmt"
 	"github.com/mholt/archiver"
 	"github.com/nwaples/rardecode"
+	"github.com/thoas/go-funk"
 	"github.com/yeka/zip"
 	"io/ioutil"
 	"path/filepath"
 	"strings"
 )
-
-import "github.com/thoas/go-funk"
 
 // list zip archives
 // yeka package is used here to list encrypted zip files
@@ -233,7 +234,7 @@ func getArchiveFormat(arcFileObj *interface{}, password string) error {
 		break
 
 	default:
-		return fmt.Errorf("format does not support customization: %+v", arcFileObj)
+		return fmt.Errorf("format does not support customization")
 	}
 
 	return nil
@@ -261,12 +262,12 @@ func getFilteredFiles(fileInfo archiveFileinfo, searchPath string) (ok bool) {
 	return true
 }
 
-func GetArchiveFileList(filename string, password string, searchPath string) {
+func getArchiveFileList(filename string, password string, searchPath string) {
 	var arcObj archiveManager
 
 	ext := filepath.Ext(filename)
 
-	_baseArcObj := listArchive{filename: filename, password: password, searchPath: searchPath}
+	_baseArcObj := listArchive{filename: filename, password: password, searchPath: searchPath, recursive: true}
 
 	switch ext {
 	case ".zip":

@@ -9,7 +9,7 @@ import (
 func ListArchive() {
 	_home, _ := homedir.Dir()
 
-	GetArchiveFileList(fmt.Sprintf("%s/Desktop/test.tar.gz", _home), "", "phayes-geoPHP-6855624/")
+	getArchiveFileList(fmt.Sprintf("%s/Desktop/test.tar.gz", _home), "", "phayes-geoPHP-6855624/")
 }
 
 // Unused
