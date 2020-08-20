@@ -6,12 +6,12 @@ import (
 )
 
 type listArchive struct {
-	filename   string
-	password   string
+	filename          string
+	password          string
 	listDirectoryPath string
-	orderby    string //TODO
-	direction  string //TODO
-	recursive  bool
+	orderby           string //TODO
+	direction         string //TODO
+	recursive         bool
 }
 
 type zipArchive struct {
@@ -24,6 +24,7 @@ type commonArchive struct {
 
 type archiveManager interface {
 	list() ([]archiveFileinfo, error)
+	isEncryped() (bool, error)
 }
 
 type archiveFileinfo struct {
