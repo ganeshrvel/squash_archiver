@@ -5,7 +5,7 @@ import (
 	"time"
 )
 
-type baseArchive struct {
+type listArchive struct {
 	filename   string
 	password   string
 	searchPath string
@@ -13,19 +13,19 @@ type baseArchive struct {
 	direction  string
 }
 
-type ZipArchive struct {
-	baseArchive
+type zipArchive struct {
+	listArchive
 }
 
-type CommonArchive struct {
-	baseArchive
+type commonArchive struct {
+	listArchive
 }
 
-type ArchiveManager interface {
-	list() ([]ArchiveFileinfo, error)
+type archiveManager interface {
+	list() ([]archiveFileinfo, error)
 }
 
-type ArchiveFileinfo struct {
+type archiveFileinfo struct {
 	Mode     os.FileMode
 	Size     int64
 	IsDir    bool

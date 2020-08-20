@@ -15,7 +15,7 @@ import "github.com/thoas/go-funk"
 
 // list zip archives
 // yeka package is used here to list encrypted zip files
-func (arc ZipArchive) list() ([]ArchiveFileinfo, error) {
+func (arc zipArchive) list() ([]archiveFileinfo, error) {
 	_filename := arc.filename
 	_searchPath := arc.searchPath
 	_password := arc.password
@@ -31,7 +31,7 @@ func (arc ZipArchive) list() ([]ArchiveFileinfo, error) {
 		}
 	}()
 
-	var filteredPaths []ArchiveFileinfo
+	var filteredPaths []archiveFileinfo
 
 	for _, file := range reader.File {
 		if file.IsEncrypted() {
@@ -53,7 +53,7 @@ func (arc ZipArchive) list() ([]ArchiveFileinfo, error) {
 			fmt.Printf("%s\n", err)
 		}
 
-		fileInfo := ArchiveFileinfo{
+		fileInfo := archiveFileinfo{
 			Mode:     file.FileInfo().Mode(),
 			Size:     file.FileInfo().Size(),
 			IsDir:    file.FileInfo().IsDir(),
@@ -73,7 +73,7 @@ func (arc ZipArchive) list() ([]ArchiveFileinfo, error) {
 }
 
 // every other supported archives
-func (arc CommonArchive) list() ([]ArchiveFileinfo, error) {
+func (arc commonArchive) list() ([]archiveFileinfo, error) {
 	_filename := arc.filename
 	_password := arc.password
 	_searchPath := arc.searchPath
@@ -95,14 +95,14 @@ func (arc CommonArchive) list() ([]ArchiveFileinfo, error) {
 		return nil, fmt.Errorf("some error occured while reading the archive")
 	}
 
-	var filteredPaths []ArchiveFileinfo
+	var filteredPaths []archiveFileinfo
 
 	err = w.Walk(_filename, func(file archiver.File) error {
-		var fileInfo ArchiveFileinfo
+		var fileInfo archiveFileinfo
 
 		switch fileHeader := file.Header.(type) {
 		case *tar.Header:
-			fileInfo = ArchiveFileinfo{
+			fileInfo = archiveFileinfo{
 				Mode:     file.Mode(),
 				Size:     file.Size(),
 				IsDir:    file.IsDir(),
@@ -114,7 +114,7 @@ func (arc CommonArchive) list() ([]ArchiveFileinfo, error) {
 			break
 
 		case *rardecode.FileHeader:
-			fileInfo = ArchiveFileinfo{
+			fileInfo = archiveFileinfo{
 				Mode:     file.Mode(),
 				Size:     file.Size(),
 				IsDir:    file.IsDir(),
@@ -126,7 +126,7 @@ func (arc CommonArchive) list() ([]ArchiveFileinfo, error) {
 			break
 
 		default:
-			fileInfo = ArchiveFileinfo{
+			fileInfo = archiveFileinfo{
 				Mode:     file.Mode(),
 				Size:     file.Size(),
 				IsDir:    file.IsDir(),
@@ -239,7 +239,7 @@ func getArchiveFormat(arcFileObj *interface{}, password string) error {
 	return nil
 }
 
-func getFilteredFiles(fileInfo ArchiveFileinfo, searchPath string) (ok bool) {
+func getFilteredFiles(fileInfo archiveFileinfo, searchPath string) (ok bool) {
 	if funk.Contains(FileDenylist, fileInfo.Name) {
 		return false
 	}
@@ -262,20 +262,20 @@ func getFilteredFiles(fileInfo ArchiveFileinfo, searchPath string) (ok bool) {
 }
 
 func GetArchiveFileList(filename string, password string, searchPath string) {
-	var arcObj ArchiveManager
+	var arcObj archiveManager
 
 	ext := filepath.Ext(filename)
 
-	_baseArcObj := baseArchive{filename: filename, password: password, searchPath: searchPath}
+	_baseArcObj := listArchive{filename: filename, password: password, searchPath: searchPath}
 
 	switch ext {
 	case ".zip":
-		arcObj = ZipArchive{_baseArcObj}
+		arcObj = zipArchive{_baseArcObj}
 
 		break
 
 	default:
-		arcObj = CommonArchive{_baseArcObj}
+		arcObj = commonArchive{_baseArcObj}
 
 		break
 	}
