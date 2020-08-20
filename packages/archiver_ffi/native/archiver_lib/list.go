@@ -55,164 +55,7 @@ func pathExists(path string, searchPath string) bool {
 	return path != "" && strings.HasPrefix(searchPath, path)
 }
 
-// list zip archives
-// yeka package is used here to list encrypted zip files
-func (arc zipArchive) list() ([]archiveFileinfo, error) {
-	_filename := arc.filename
-	_listDirectoryPath := arc.listDirectoryPath
-	_password := arc.password
-	_recursive := arc.recursive
-
-	reader, err := zip.OpenReader(_filename)
-	if err != nil {
-		return nil, err
-	}
-
-	defer func() {
-		if err = reader.Close(); err != nil {
-			fmt.Printf("%s\n", err)
-		}
-	}()
-
-	var filteredPaths []archiveFileinfo
-	isListDirectoryPathExist := _listDirectoryPath == ""
-
-	for _, file := range reader.File {
-		if file.IsEncrypted() {
-			file.SetPassword(_password)
-		}
-
-		fileReader, err := file.Open()
-		if err != nil {
-			return nil, err
-		}
-
-		_, err = ioutil.ReadAll(fileReader)
-
-		if err != nil {
-			return nil, err
-		}
-
-		if err = fileReader.Close(); err != nil {
-			fmt.Printf("%s\n", err)
-		}
-
-		fileInfo := archiveFileinfo{
-			Mode:     file.FileInfo().Mode(),
-			Size:     file.FileInfo().Size(),
-			IsDir:    file.FileInfo().IsDir(),
-			ModTime:  file.FileInfo().ModTime(),
-			Name:     file.FileInfo().Name(),
-			FullPath: file.Name,
-		}
-
-		allowIncludeFile := getFilteredFiles(fileInfo, _listDirectoryPath, _recursive)
-
-		if allowIncludeFile {
-			filteredPaths = append(filteredPaths, fileInfo)
-		}
-
-		if !isListDirectoryPathExist && pathExists(_listDirectoryPath, fileInfo.FullPath) {
-			isListDirectoryPathExist = true
-		}
-	}
-
-	if !isListDirectoryPathExist {
-		return filteredPaths, fmt.Errorf("path not found to filter: %s", _listDirectoryPath)
-	}
-
-	return filteredPaths, err
-}
-
-// every other supported archives
-func (arc commonArchive) list() ([]archiveFileinfo, error) {
-	_filename := arc.filename
-	_password := arc.password
-	_listDirectoryPath := arc.listDirectoryPath
-	_recursive := arc.recursive
-
-	arcFileObj, err := archiver.ByExtension(_filename)
-
-	if err != nil {
-		return nil, err
-	}
-
-	err = getArchiveFormat(&arcFileObj, _password)
-
-	if err != nil {
-		return nil, err
-	}
-
-	var w, ok = arcFileObj.(archiver.Walker)
-	if !ok {
-		return nil, fmt.Errorf("some error occured while reading the archive")
-	}
-
-	var filteredPaths []archiveFileinfo
-	isListDirectoryPathExist := _listDirectoryPath == ""
-
-	err = w.Walk(_filename, func(file archiver.File) error {
-		var fileInfo archiveFileinfo
-
-		switch fileHeader := file.Header.(type) {
-		case *tar.Header:
-			fileInfo = archiveFileinfo{
-				Mode:     file.Mode(),
-				Size:     file.Size(),
-				IsDir:    file.IsDir(),
-				ModTime:  file.ModTime(),
-				Name:     file.Name(),
-				FullPath: fileHeader.Name,
-			}
-
-			break
-
-		case *rardecode.FileHeader:
-			fileInfo = archiveFileinfo{
-				Mode:     file.Mode(),
-				Size:     file.Size(),
-				IsDir:    file.IsDir(),
-				ModTime:  file.ModTime(),
-				Name:     file.Name(),
-				FullPath: fileHeader.Name,
-			}
-
-			break
-
-		default:
-			fileInfo = archiveFileinfo{
-				Mode:     file.Mode(),
-				Size:     file.Size(),
-				IsDir:    file.IsDir(),
-				ModTime:  file.ModTime(),
-				Name:     file.Name(),
-				FullPath: file.FileInfo.Name(),
-			}
-
-			break
-		}
-
-		allowIncludeFile := getFilteredFiles(fileInfo, _listDirectoryPath, _recursive)
-
-		if allowIncludeFile {
-			filteredPaths = append(filteredPaths, fileInfo)
-		}
-
-		if !isListDirectoryPathExist && pathExists(_listDirectoryPath, fileInfo.FullPath) {
-			isListDirectoryPathExist = true
-		}
-
-		return nil
-	})
-
-	if !isListDirectoryPathExist {
-		return filteredPaths, fmt.Errorf("path not found to filter: %s", _listDirectoryPath)
-	}
-
-	return filteredPaths, err
-}
-
-func getArchiveFormat(arcFileObj *interface{}, password string) error {
+func archiveFormat(arcFileObj *interface{}, password string) error {
 	const (
 		overwriteExisting      = false
 		mkdirAll               = false
@@ -301,7 +144,164 @@ func getArchiveFormat(arcFileObj *interface{}, password string) error {
 	return nil
 }
 
-func getArchiveFileList(filename string, password string, listDirectoryPath string, recursive bool) {
+// list zip archives
+// yeka package is used here to list encrypted zip files
+func (arc zipArchive) list() ([]archiveFileinfo, error) {
+	_filename := arc.filename
+	_listDirectoryPath := arc.listDirectoryPath
+	_password := arc.password
+	_recursive := arc.recursive
+
+	reader, err := zip.OpenReader(_filename)
+	if err != nil {
+		return nil, err
+	}
+
+	defer func() {
+		if err = reader.Close(); err != nil {
+			fmt.Printf("%v\n", err)
+		}
+	}()
+
+	var filteredPaths []archiveFileinfo
+	isListDirectoryPathExist := _listDirectoryPath == ""
+
+	for _, file := range reader.File {
+		if file.IsEncrypted() {
+			file.SetPassword(_password)
+		}
+
+		fileReader, err := file.Open()
+		if err != nil {
+			return nil, err
+		}
+
+		_, err = ioutil.ReadAll(fileReader)
+
+		if err != nil {
+			return nil, err
+		}
+
+		if err = fileReader.Close(); err != nil {
+			fmt.Printf("%+v\n", err)
+		}
+
+		fileInfo := archiveFileinfo{
+			Mode:     file.FileInfo().Mode(),
+			Size:     file.FileInfo().Size(),
+			IsDir:    file.FileInfo().IsDir(),
+			ModTime:  file.FileInfo().ModTime(),
+			Name:     file.FileInfo().Name(),
+			FullPath: file.Name,
+		}
+
+		allowIncludeFile := getFilteredFiles(fileInfo, _listDirectoryPath, _recursive)
+
+		if allowIncludeFile {
+			filteredPaths = append(filteredPaths, fileInfo)
+		}
+
+		if !isListDirectoryPathExist && pathExists(_listDirectoryPath, fileInfo.FullPath) {
+			isListDirectoryPathExist = true
+		}
+	}
+
+	if !isListDirectoryPathExist {
+		return filteredPaths, fmt.Errorf("path not found to filter: %s", _listDirectoryPath)
+	}
+
+	return filteredPaths, err
+}
+
+// every other supported archives
+func (arc commonArchive) list() ([]archiveFileinfo, error) {
+	_filename := arc.filename
+	_password := arc.password
+	_listDirectoryPath := arc.listDirectoryPath
+	_recursive := arc.recursive
+
+	arcFileObj, err := archiver.ByExtension(_filename)
+
+	if err != nil {
+		return nil, err
+	}
+
+	err = archiveFormat(&arcFileObj, _password)
+
+	if err != nil {
+		return nil, err
+	}
+
+	var w, ok = arcFileObj.(archiver.Walker)
+	if !ok {
+		return nil, fmt.Errorf("some error occured while reading the archive")
+	}
+
+	var filteredPaths []archiveFileinfo
+	isListDirectoryPathExist := _listDirectoryPath == ""
+
+	err = w.Walk(_filename, func(file archiver.File) error {
+		var fileInfo archiveFileinfo
+
+		switch fileHeader := file.Header.(type) {
+		case *tar.Header:
+			fileInfo = archiveFileinfo{
+				Mode:     file.Mode(),
+				Size:     file.Size(),
+				IsDir:    file.IsDir(),
+				ModTime:  file.ModTime(),
+				Name:     file.Name(),
+				FullPath: fileHeader.Name,
+			}
+
+			break
+
+		case *rardecode.FileHeader:
+			fileInfo = archiveFileinfo{
+				Mode:     file.Mode(),
+				Size:     file.Size(),
+				IsDir:    file.IsDir(),
+				ModTime:  file.ModTime(),
+				Name:     file.Name(),
+				FullPath: fileHeader.Name,
+			}
+
+			break
+
+		default:
+			fileInfo = archiveFileinfo{
+				Mode:     file.Mode(),
+				Size:     file.Size(),
+				IsDir:    file.IsDir(),
+				ModTime:  file.ModTime(),
+				Name:     file.Name(),
+				FullPath: file.FileInfo.Name(),
+			}
+
+			break
+		}
+
+		allowIncludeFile := getFilteredFiles(fileInfo, _listDirectoryPath, _recursive)
+
+		if allowIncludeFile {
+			filteredPaths = append(filteredPaths, fileInfo)
+		}
+
+		if !isListDirectoryPathExist && pathExists(_listDirectoryPath, fileInfo.FullPath) {
+			isListDirectoryPathExist = true
+		}
+
+		return nil
+	})
+
+	if !isListDirectoryPathExist {
+		return filteredPaths, fmt.Errorf("path not found to filter: %s", _listDirectoryPath)
+	}
+
+	return filteredPaths, err
+}
+
+func getArchiveFileList(filename string, password string, listDirectoryPath string, recursive bool) ([]archiveFileinfo, error) {
 	_listDirectoryPath := listDirectoryPath
 
 	var arcObj archiveManager
@@ -327,13 +327,5 @@ func getArchiveFileList(filename string, password string, listDirectoryPath stri
 		break
 	}
 
-	result, err := arcObj.list()
-
-	if err != nil {
-		fmt.Println(err)
-
-		return
-	}
-
-	fmt.Printf("%+v", result)
+	return arcObj.list()
 }
