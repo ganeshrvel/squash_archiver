@@ -33,7 +33,7 @@ func ListArchive() {
 func IsArchiveEncrypted() {
 	_home, _ := homedir.Dir()
 
-	filename := fmt.Sprintf("%s/Desktop/test.tar.gz", _home)
+	filename := fmt.Sprintf("%s/Desktop/test.enc.zip", _home)
 
 	if exist := fileExists(filename); !exist {
 		fmt.Printf("file does not exist %s\n", filename)
