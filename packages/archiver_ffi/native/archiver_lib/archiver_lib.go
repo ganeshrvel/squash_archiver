@@ -1,7 +1,7 @@
 package main
 
 import (
-	"./dart_api_dl"
+	"./inc/dart_api_dl"
 	"C"
 	"time"
 	"unsafe"
@@ -60,9 +60,4 @@ func StartUser(port int64) {
 //export FreeUserStructMemory
 func FreeUserStructMemory(pointer *int64) {
 	dart_api_dl.FreeUserStructMemory(pointer)
-}
-
-// Unused
-func main() {
-
 }

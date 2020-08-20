@@ -23,3 +23,10 @@ Open Xcode on macOS folder in the flutter project root
 cross compile to osx (Not required):
 CGO_ENABLED=1 GOOS=darwin go build -v -o squash_archiver_lib.dylib -buildmode=c-shared squash_archiver_lib.go
 ```
+
+
+Install Go mholt package (https://github.com/mholt/archiver/issues/195)
+```shell script
+cd $GOPATH
+go get github.com/pierrec/lz4 && cd $GOPATH/src/github.com/pierrec/lz4 && git fetch && git checkout v3.0.1
+```
