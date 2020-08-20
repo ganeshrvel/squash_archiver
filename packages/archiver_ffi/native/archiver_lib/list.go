@@ -11,6 +11,8 @@ import (
 	"strings"
 )
 
+import "github.com/thoas/go-funk"
+
 // list zip archives
 // yeka package is used here to list encrypted zip files
 func (arc ZipArchive) list() ([]ArchiveFileinfo, error) {
@@ -238,8 +240,7 @@ func getArchiveFormat(arcFileObj *interface{}, password string) error {
 }
 
 func getFilteredFiles(fileInfo ArchiveFileinfo, searchPath string) (ok bool) {
-
-	if fileInfo.Name == "pax_global_header" {
+	if funk.Contains(FileDenylist, fileInfo.Name) {
 		return false
 	}
 
