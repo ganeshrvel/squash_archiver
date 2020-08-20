@@ -8,7 +8,7 @@ import (
 type listArchive struct {
 	filename   string
 	password   string
-	searchPath string
+	listDirectoryPath string
 	orderby    string //TODO
 	direction  string //TODO
 	recursive  bool

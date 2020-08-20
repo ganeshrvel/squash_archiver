@@ -14,12 +14,54 @@ import (
 	"strings"
 )
 
+func getFilteredFiles(fileInfo archiveFileinfo, listDirectoryPath string, recursive bool) (include bool) {
+	if funk.Contains(FileDenylist, fileInfo.Name) {
+		return false
+	}
+
+	isInPath := strings.HasPrefix(fileInfo.FullPath, listDirectoryPath)
+
+	if isInPath {
+		// if recursive mode is true return all files and subdirectories under the filtered path
+		if recursive == true {
+			return true
+		}
+
+		// dont return the directory path if it's listDirectoryPath. This will make sure that only files and sub directories are returned
+		if listDirectoryPath == fileInfo.FullPath {
+			return false
+		}
+
+		slashSplitListDirectoryPath := strings.Split(listDirectoryPath, "/")
+		slashSplitListDirectoryPathLength := len(slashSplitListDirectoryPath)
+
+		slashSplitFullPath := strings.Split(fileInfo.FullPath, "/")
+		slashSplitFullPathLength := len(slashSplitFullPath)
+
+		// if directory allow an extra '/' to figure out the subdirectory
+		if fileInfo.IsDir && slashSplitFullPathLength < slashSplitListDirectoryPathLength+2 {
+			return true
+		}
+
+		if !fileInfo.IsDir && slashSplitFullPathLength < slashSplitListDirectoryPathLength+1 {
+			return true
+		}
+	}
+
+	return false
+}
+
+func pathExists(path string, searchPath string) bool {
+	return path != "" && strings.HasPrefix(searchPath, path)
+}
+
 // list zip archives
 // yeka package is used here to list encrypted zip files
 func (arc zipArchive) list() ([]archiveFileinfo, error) {
 	_filename := arc.filename
-	_searchPath := arc.searchPath
+	_listDirectoryPath := arc.listDirectoryPath
 	_password := arc.password
+	_recursive := arc.recursive
 
 	reader, err := zip.OpenReader(_filename)
 	if err != nil {
@@ -33,6 +75,7 @@ func (arc zipArchive) list() ([]archiveFileinfo, error) {
 	}()
 
 	var filteredPaths []archiveFileinfo
+	isListDirectoryPathExist := _listDirectoryPath == ""
 
 	for _, file := range reader.File {
 		if file.IsEncrypted() {
@@ -63,11 +106,19 @@ func (arc zipArchive) list() ([]archiveFileinfo, error) {
 			FullPath: file.Name,
 		}
 
-		allowIncludeFile := getFilteredFiles(fileInfo, _searchPath)
+		allowIncludeFile := getFilteredFiles(fileInfo, _listDirectoryPath, _recursive)
 
 		if allowIncludeFile {
 			filteredPaths = append(filteredPaths, fileInfo)
 		}
+
+		if !isListDirectoryPathExist && pathExists(_listDirectoryPath, fileInfo.FullPath) {
+			isListDirectoryPathExist = true
+		}
+	}
+
+	if !isListDirectoryPathExist {
+		return filteredPaths, fmt.Errorf("path not found to filter: %s", _listDirectoryPath)
 	}
 
 	return filteredPaths, err
@@ -77,7 +128,8 @@ func (arc zipArchive) list() ([]archiveFileinfo, error) {
 func (arc commonArchive) list() ([]archiveFileinfo, error) {
 	_filename := arc.filename
 	_password := arc.password
-	_searchPath := arc.searchPath
+	_listDirectoryPath := arc.listDirectoryPath
+	_recursive := arc.recursive
 
 	arcFileObj, err := archiver.ByExtension(_filename)
 
@@ -97,6 +149,7 @@ func (arc commonArchive) list() ([]archiveFileinfo, error) {
 	}
 
 	var filteredPaths []archiveFileinfo
+	isListDirectoryPathExist := _listDirectoryPath == ""
 
 	err = w.Walk(_filename, func(file archiver.File) error {
 		var fileInfo archiveFileinfo
@@ -139,14 +192,22 @@ func (arc commonArchive) list() ([]archiveFileinfo, error) {
 			break
 		}
 
-		allowIncludeFile := getFilteredFiles(fileInfo, _searchPath)
+		allowIncludeFile := getFilteredFiles(fileInfo, _listDirectoryPath, _recursive)
 
 		if allowIncludeFile {
 			filteredPaths = append(filteredPaths, fileInfo)
 		}
 
+		if !isListDirectoryPathExist && pathExists(_listDirectoryPath, fileInfo.FullPath) {
+			isListDirectoryPathExist = true
+		}
+
 		return nil
 	})
+
+	if !isListDirectoryPathExist {
+		return filteredPaths, fmt.Errorf("path not found to filter: %s", _listDirectoryPath)
+	}
 
 	return filteredPaths, err
 }
@@ -240,34 +301,19 @@ func getArchiveFormat(arcFileObj *interface{}, password string) error {
 	return nil
 }
 
-func getFilteredFiles(fileInfo archiveFileinfo, searchPath string) (ok bool) {
-	if funk.Contains(FileDenylist, fileInfo.Name) {
-		return false
-	}
+func getArchiveFileList(filename string, password string, listDirectoryPath string, recursive bool) {
+	_listDirectoryPath := listDirectoryPath
 
-	if searchPath != "" && searchPath != "/" {
-		if searchPath == fileInfo.FullPath {
-			return false
-		}
-
-		filteredPath := strings.HasPrefix(fileInfo.FullPath, searchPath)
-
-		if filteredPath {
-			return true
-		}
-
-		return false
-	}
-
-	return true
-}
-
-func getArchiveFileList(filename string, password string, searchPath string) {
 	var arcObj archiveManager
 
 	ext := filepath.Ext(filename)
 
-	_baseArcObj := listArchive{filename: filename, password: password, searchPath: searchPath, recursive: true}
+	// add a trailing slash to [listDirectoryPath] if missing
+	if _listDirectoryPath != "" && !strings.HasSuffix(_listDirectoryPath, "/") {
+		_listDirectoryPath = fmt.Sprintf("%s/", _listDirectoryPath)
+	}
+
+	_baseArcObj := listArchive{filename: filename, password: password, listDirectoryPath: _listDirectoryPath, recursive: recursive}
 
 	switch ext {
 	case ".zip":
@@ -289,5 +335,5 @@ func getArchiveFileList(filename string, password string, searchPath string) {
 		return
 	}
 
-	fmt.Println(result)
+	fmt.Printf("%+v", result)
 }
