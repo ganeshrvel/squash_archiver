@@ -30,20 +30,16 @@ func (arc ZipArchive) isEncrypted() (bool, error) {
 	return false, err
 }
 
-func (arc CommonArchive) isEncrypted() (bool, error) {
-	return false, nil
-}
-
 func isArchiveEncrypted(meta *ArchiveMeta) (bool, error) {
 	_meta := *meta
 
-	var arcObj ArchiveLister
+	var utilsObj ArchiveUtils
 
 	ext := filepath.Ext(_meta.filename)
 
 	switch ext {
 	case ".zip":
-		arcObj = ZipArchive{_meta, ArchiveList{}}
+		utilsObj = ZipArchive{_meta, ArchiveList{}}
 
 		break
 
@@ -51,5 +47,5 @@ func isArchiveEncrypted(meta *ArchiveMeta) (bool, error) {
 		return false, fmt.Errorf("encryption check: file format not supported")
 	}
 
-	return arcObj.isEncrypted()
+	return utilsObj.isEncrypted()
 }

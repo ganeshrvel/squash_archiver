@@ -22,7 +22,7 @@ type ArchiveList struct {
 	password          string
 	listDirectoryPath string
 	orderBy           ArchiveOrderBy
-	orderDir        ArchiveOrderDir
+	orderDir          ArchiveOrderDir
 	recursive         bool
 }
 
@@ -38,5 +38,8 @@ type CommonArchive struct {
 
 type ArchiveLister interface {
 	list() ([]ArchiveFileInfo, error)
+}
+
+type ArchiveUtils interface {
 	isEncrypted() (bool, error)
 }
