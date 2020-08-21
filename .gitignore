@@ -46,3 +46,5 @@ android/key.properties
 .gradle
 .android
 !vendors/.gitkeep
+archiver-test-mocks/
+!.gitkeep
