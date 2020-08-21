@@ -11,8 +11,56 @@ import (
 	"github.com/yeka/zip"
 	"io/ioutil"
 	"path/filepath"
+	"sort"
 	"strings"
 )
+
+func sortFiles(list []ArchiveFileInfo, orderBy ArchiveOrderBy, orderDir ArchiveOrderDir) []ArchiveFileInfo {
+	if orderDir == OrderDirNone {
+		return list
+	}
+
+	switch orderBy {
+	case OrderByFullPath:
+		sort.Slice(list, func(i, j int) bool {
+			if orderDir == OrderDirDesc {
+				return list[i].FullPath > list[j].FullPath
+			}
+
+			return list[i].FullPath < list[j].FullPath
+		})
+		break
+	case OrderByName:
+		sort.Slice(list, func(i, j int) bool {
+			if orderDir == OrderDirDesc {
+				return list[i].Name > list[j].Name
+			}
+
+			return list[i].Name < list[j].Name
+		})
+		break
+	case OrderByModTime:
+		sort.Slice(list, func(i, j int) bool {
+			if orderDir == OrderDirDesc {
+				return list[i].ModTime.After(list[j].ModTime)
+			}
+
+			return list[i].ModTime.Before(list[j].ModTime)
+		})
+		break
+	case OrderBySize:
+		sort.Slice(list, func(i, j int) bool {
+			if orderDir == OrderDirDesc {
+				return list[i].Size > list[j].Size
+			}
+
+			return list[i].Size < list[j].Size
+		})
+		break
+	}
+
+	return list
+}
 
 func getFilteredFiles(fileInfo ArchiveFileInfo, listDirectoryPath string, recursive bool) (include bool) {
 	if funk.Contains(FileDenylist, fileInfo.Name) {
@@ -151,6 +199,8 @@ func (arc ZipArchive) list() ([]ArchiveFileInfo, error) {
 	_listDirectoryPath := arc.listDirectoryPath
 	_password := arc.password
 	_recursive := arc.recursive
+	_orderBy := arc.orderBy
+	_orderDir := arc.orderDir
 
 	reader, err := zip.OpenReader(_filename)
 	if err != nil {
@@ -210,15 +260,19 @@ func (arc ZipArchive) list() ([]ArchiveFileInfo, error) {
 		return filteredPaths, fmt.Errorf("path not found to filter: %s", _listDirectoryPath)
 	}
 
-	return filteredPaths, err
+	sortedPaths := sortFiles(filteredPaths, _orderBy, _orderDir)
+
+	return sortedPaths, err
 }
 
-// every other supported archives
+// List common archives
 func (arc CommonArchive) list() ([]ArchiveFileInfo, error) {
 	_filename := arc.filename
 	_password := arc.password
 	_listDirectoryPath := arc.listDirectoryPath
 	_recursive := arc.recursive
+	_orderBy := arc.orderBy
+	_orderDir := arc.orderDir
 
 	arcFileObj, err := archiver.ByExtension(_filename)
 
@@ -298,7 +352,13 @@ func (arc CommonArchive) list() ([]ArchiveFileInfo, error) {
 		return filteredPaths, fmt.Errorf("path not found to filter: %s", _listDirectoryPath)
 	}
 
-	return filteredPaths, err
+	if arc.orderDir == OrderDirNone {
+		return filteredPaths, err
+	}
+
+	sortedPaths := sortFiles(filteredPaths, _orderBy, _orderDir)
+
+	return sortedPaths, err
 }
 
 func getArchiveFileList(meta *ArchiveMeta, list *ArchiveList) ([]ArchiveFileInfo, error) {

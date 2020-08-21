@@ -22,9 +22,9 @@ func ListArchive() {
 	_listObj := &ArchiveList{
 		password:          "",
 		listDirectoryPath: "phayes-geoPHP-6855624/",
-		recursive:         false,
-		orderby:           "",
-		orderByDir:        "",
+		recursive:         true,
+		orderBy:           OrderByName,
+		orderDir:          OrderDirAsc,
 	}
 
 	result, err := getArchiveFileList(_metaObj, _listObj)

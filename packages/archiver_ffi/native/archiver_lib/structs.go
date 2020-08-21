@@ -21,8 +21,8 @@ type ArchiveMeta struct {
 type ArchiveList struct {
 	password          string
 	listDirectoryPath string
-	orderby           ArchiveOrderBy
-	orderByDir        ArchiveOrderDirection
+	orderBy           ArchiveOrderBy
+	orderDir        ArchiveOrderDir
 	recursive         bool
 }
 

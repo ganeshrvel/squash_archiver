@@ -3,15 +3,16 @@ package main
 type ArchiveOrderBy string
 
 const (
-	OrderBySize     ArchiveOrderBy = "Size"
-	OrderByModTime  ArchiveOrderBy = "ModTime"
-	OrderByName     ArchiveOrderBy = "Name"
-	OrderByFullPath ArchiveOrderBy = "FullPath"
+	OrderBySize     ArchiveOrderBy = "size"
+	OrderByModTime  ArchiveOrderBy = "modTime"
+	OrderByName     ArchiveOrderBy = "name"
+	OrderByFullPath ArchiveOrderBy = "fullPath"
 )
 
-type ArchiveOrderDirection string
+type ArchiveOrderDir string
 
 const (
-	OrderDirAsc  ArchiveOrderDirection = "Asc"
-	OrderDirDesc ArchiveOrderDirection = "Desc"
+	OrderDirAsc  ArchiveOrderDir = "asc"
+	OrderDirDesc ArchiveOrderDir = "desc"
+	OrderDirNone ArchiveOrderDir = "none"
 )
