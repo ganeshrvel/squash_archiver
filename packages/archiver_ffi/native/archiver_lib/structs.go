@@ -5,6 +5,15 @@ import (
 	"time"
 )
 
+type ArchiveFileInfo struct {
+	Mode     os.FileMode
+	Size     int64
+	IsDir    bool
+	ModTime  time.Time
+	Name     string
+	FullPath string
+}
+
 type ArchiveMeta struct {
 	filename string
 }
@@ -12,31 +21,22 @@ type ArchiveMeta struct {
 type ArchiveList struct {
 	password          string
 	listDirectoryPath string
-	orderby           string //TODO
-	direction         string //TODO
+	orderby           ArchiveOrderBy
+	orderByDir        ArchiveOrderDirection
 	recursive         bool
 }
 
-type zipArchive struct {
+type ZipArchive struct {
 	ArchiveMeta
 	ArchiveList
 }
 
-type commonArchive struct {
+type CommonArchive struct {
 	ArchiveMeta
 	ArchiveList
 }
 
 type ArchiveLister interface {
-	list() ([]archiveFileinfo, error)
+	list() ([]ArchiveFileInfo, error)
 	isEncrypted() (bool, error)
-}
-
-type archiveFileinfo struct {
-	Mode     os.FileMode
-	Size     int64
-	IsDir    bool
-	ModTime  time.Time
-	Name     string
-	FullPath string
 }

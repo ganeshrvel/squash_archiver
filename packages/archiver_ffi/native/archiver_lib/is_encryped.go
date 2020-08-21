@@ -6,7 +6,7 @@ import (
 	"path/filepath"
 )
 
-func (arc zipArchive) isEncrypted() (bool, error) {
+func (arc ZipArchive) isEncrypted() (bool, error) {
 	_filename := arc.filename
 
 	reader, err := zip.OpenReader(_filename)
@@ -30,19 +30,20 @@ func (arc zipArchive) isEncrypted() (bool, error) {
 	return false, err
 }
 
-func (arc commonArchive) isEncrypted() (bool, error) {
+func (arc CommonArchive) isEncrypted() (bool, error) {
 	return false, nil
 }
 
-func isArchiveEncrypted(filename string) (bool, error) {
+func isArchiveEncrypted(meta *ArchiveMeta) (bool, error) {
+	_meta := *meta
+
 	var arcObj ArchiveLister
 
-	ext := filepath.Ext(filename)
-	_meta := ArchiveMeta{filename: filename}
+	ext := filepath.Ext(_meta.filename)
 
 	switch ext {
 	case ".zip":
-		arcObj = zipArchive{_meta, ArchiveList{}}
+		arcObj = ZipArchive{_meta, ArchiveList{}}
 
 		break
 

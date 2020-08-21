@@ -17,7 +17,17 @@ func ListArchive() {
 		return
 	}
 
-	result, err := getArchiveFileList(filename, "", "phayes-geoPHP-6855624/", true)
+	_metaObj := &ArchiveMeta{filename: filename}
+
+	_listObj := &ArchiveList{
+		password:          "",
+		listDirectoryPath: "phayes-geoPHP-6855624/",
+		recursive:         false,
+		orderby:           "",
+		orderByDir:        "",
+	}
+
+	result, err := getArchiveFileList(_metaObj, _listObj)
 
 	if err != nil {
 		fmt.Printf("Error occured: %+v\n", err)
@@ -41,7 +51,9 @@ func IsArchiveEncrypted() {
 		return
 	}
 
-	result, err := isArchiveEncrypted(filename)
+	_metaObj := &ArchiveMeta{filename: filename}
+
+	result, err := isArchiveEncrypted(_metaObj)
 
 	if err != nil {
 		fmt.Printf("Error occured: %+v\n", err)
@@ -55,6 +67,6 @@ func IsArchiveEncrypted() {
 
 // Unused
 func main() {
-	//ListArchive()
+	ListArchive()
 	//IsArchiveEncrypted()
 }
