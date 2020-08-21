@@ -68,18 +68,12 @@ typedef struct { void *data; GoInt len; GoInt cap; } GoSlice;
 extern "C" {
 #endif
 
-
-extern void InitializeDartApi(void* p0);
-
-extern GoUint8 CloseNativeDartPort(GoInt64 p0);
-
-extern void StartWork(GoInt64 p0);
-
-extern void FreeWorkStructMemory(GoInt64* p0);
-
-extern void StartUser(GoInt64 p0);
-
-extern void FreeUserStructMemory(GoInt64* p0);
+extern void InitializeDartApi(void* api);
+extern GoUint8 CloseNativeDartPort(GoInt64 port);
+extern void StartWork(GoInt64 port);
+extern void FreeWorkStructMemory(GoInt64* pointer);
+extern void StartUser(GoInt64 port);
+extern void FreeUserStructMemory(GoInt64* pointer);
 
 #ifdef __cplusplus
 }

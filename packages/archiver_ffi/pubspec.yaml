@@ -10,6 +10,8 @@ dependencies:
   flutter:
     sdk: flutter
 
+  ffi: ^0.1.3
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -22,7 +24,7 @@ ffigen:
   output: './lib/generated/bindings.dart'
   headers:
     entry-points:
-      - './native/archiver_lib/archiver_lib.h'
+      - './native/archiver_lib/build/archiver_lib.h'
   name: 'SquashArchiverLib'
   description: 'Docs for SquashArchiverLib'
 

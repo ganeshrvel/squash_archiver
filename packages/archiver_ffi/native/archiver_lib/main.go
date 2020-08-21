@@ -56,5 +56,5 @@ func IsArchiveEncrypted() {
 // Unused
 func main() {
 	//ListArchive()
-	IsArchiveEncrypted()
+	//IsArchiveEncrypted()
 }

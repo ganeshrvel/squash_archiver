@@ -35,15 +35,14 @@ func (arc commonArchive) isEncrypted() (bool, error) {
 }
 
 func isArchiveEncrypted(filename string) (bool, error) {
-	var arcObj archiveManager
+	var arcObj ArchiveLister
 
 	ext := filepath.Ext(filename)
-
-	_baseArcObj := listArchive{filename: filename}
+	_meta := ArchiveMeta{filename: filename}
 
 	switch ext {
 	case ".zip":
-		arcObj = zipArchive{_baseArcObj}
+		arcObj = zipArchive{_meta, ArchiveList{}}
 
 		break
 

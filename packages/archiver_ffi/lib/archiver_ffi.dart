@@ -39,9 +39,9 @@ class ArchiverFfi {
   SquashArchiverLib _squashArchiverLib;
 
   ArchiverFfi() {
-    final _dylib = DynamicLibrary.open(path.join(Directory.current.path,
-        'native', 'archiver_lib', AppFiles.ARCHIVER_FFI_LIB));
-    //final _dylib = DynamicLibrary.open(AppFiles.ARCHIVER_FFI_LIB); //todo
+/*    final _dylib = DynamicLibrary.open(path.join(Directory.current.path,
+        'native', 'archiver_lib', 'build', AppFiles.ARCHIVER_FFI_LIB));*/
+    final _dylib = DynamicLibrary.open(AppFiles.ARCHIVER_FFI_LIB); //todo
 
     _squashArchiverLib = SquashArchiverLib(_dylib);
     _squashArchiverLib.InitializeDartApi(NativeApi.initializeApiDLData);

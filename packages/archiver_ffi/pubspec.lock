@@ -58,7 +58,7 @@ packages:
     source: hosted
     version: "1.1.0-nullsafety"
   ffi:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: ffi
       url: "https://pub.dartlang.org"
@@ -69,10 +69,10 @@ packages:
     description:
       path: "."
       ref: HEAD
-      resolved-ref: "013b91e7845b21f4fc7220399a9a40707ba8470c"
+      resolved-ref: "2f5a24076c1e691d771108c550999ada81ea8751"
       url: "https://github.com/dart-lang/ffigen"
     source: git
-    version: "0.2.0-dev"
+    version: "0.2.3"
   flutter:
     dependency: "direct main"
     description: flutter

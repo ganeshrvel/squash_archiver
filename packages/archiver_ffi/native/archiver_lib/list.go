@@ -304,7 +304,7 @@ func (arc commonArchive) list() ([]archiveFileinfo, error) {
 func getArchiveFileList(filename string, password string, listDirectoryPath string, recursive bool) ([]archiveFileinfo, error) {
 	_listDirectoryPath := listDirectoryPath
 
-	var arcObj archiveManager
+	var arcObj ArchiveLister
 
 	ext := filepath.Ext(filename)
 
@@ -313,16 +313,18 @@ func getArchiveFileList(filename string, password string, listDirectoryPath stri
 		_listDirectoryPath = fmt.Sprintf("%s/", _listDirectoryPath)
 	}
 
-	_baseArcObj := listArchive{filename: filename, password: password, listDirectoryPath: _listDirectoryPath, recursive: recursive}
+	_meta := ArchiveMeta{filename: filename}
+	_listArcObj := ArchiveList{password: password, listDirectoryPath: _listDirectoryPath, recursive: recursive}
 
 	switch ext {
 	case ".zip":
-		arcObj = zipArchive{_baseArcObj}
+
+		arcObj = zipArchive{_meta, _listArcObj}
 
 		break
 
 	default:
-		arcObj = commonArchive{_baseArcObj}
+		arcObj = commonArchive{_meta, _listArcObj}
 
 		break
 	}

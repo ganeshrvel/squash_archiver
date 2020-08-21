@@ -61,3 +61,8 @@ func StartUser(port int64) {
 func FreeUserStructMemory(pointer *int64) {
 	dart_api_dl.FreeUserStructMemory(pointer)
 }
+
+/*func main() {
+
+}
+*/

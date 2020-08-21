@@ -5,8 +5,11 @@ import (
 	"time"
 )
 
-type listArchive struct {
-	filename          string
+type ArchiveMeta struct {
+	filename string
+}
+
+type ArchiveList struct {
 	password          string
 	listDirectoryPath string
 	orderby           string //TODO
@@ -15,14 +18,16 @@ type listArchive struct {
 }
 
 type zipArchive struct {
-	listArchive
+	ArchiveMeta
+	ArchiveList
 }
 
 type commonArchive struct {
-	listArchive
+	ArchiveMeta
+	ArchiveList
 }
 
-type archiveManager interface {
+type ArchiveLister interface {
 	list() ([]archiveFileinfo, error)
 	isEncrypted() (bool, error)
 }
