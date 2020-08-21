@@ -7,7 +7,7 @@ import (
 )
 
 func (arc ZipArchive) isEncrypted() (bool, error) {
-	_filename := arc.filename
+	_filename := arc.meta.filename
 
 	reader, err := zip.OpenReader(_filename)
 	if err != nil {
@@ -39,7 +39,7 @@ func isArchiveEncrypted(meta *ArchiveMeta) (bool, error) {
 
 	switch ext {
 	case ".zip":
-		utilsObj = ZipArchive{_meta, ArchiveList{}}
+		utilsObj = ZipArchive{meta: _meta}
 
 		break
 

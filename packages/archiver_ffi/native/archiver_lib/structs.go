@@ -18,7 +18,7 @@ type ArchiveMeta struct {
 	filename string
 }
 
-type ArchiveList struct {
+type ArchiveRead struct {
 	password          string
 	listDirectoryPath string
 	orderBy           ArchiveOrderBy
@@ -26,20 +26,30 @@ type ArchiveList struct {
 	recursive         bool
 }
 
+type ArchivePack struct {
+	password string
+}
+
 type ZipArchive struct {
-	ArchiveMeta
-	ArchiveList
+	meta ArchiveMeta
+	read ArchiveRead
+	pack ArchivePack
 }
 
 type CommonArchive struct {
-	ArchiveMeta
-	ArchiveList
+	meta ArchiveMeta
+	read ArchiveRead
+	pack ArchivePack
 }
 
-type ArchiveLister interface {
+type ArchiveReader interface {
 	list() ([]ArchiveFileInfo, error)
 }
 
 type ArchiveUtils interface {
 	isEncrypted() (bool, error)
+}
+
+type ArchivePacker interface {
+	pack()
 }

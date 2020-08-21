@@ -195,12 +195,12 @@ func archiveFormat(arcFileObj *interface{}, password string) error {
 // list zip archives
 // yeka package is used here to list encrypted zip files
 func (arc ZipArchive) list() ([]ArchiveFileInfo, error) {
-	_filename := arc.filename
-	_listDirectoryPath := arc.listDirectoryPath
-	_password := arc.password
-	_recursive := arc.recursive
-	_orderBy := arc.orderBy
-	_orderDir := arc.orderDir
+	_filename := arc.meta.filename
+	_listDirectoryPath := arc.read.listDirectoryPath
+	_password := arc.read.password
+	_recursive := arc.read.recursive
+	_orderBy := arc.read.orderBy
+	_orderDir := arc.read.orderDir
 
 	reader, err := zip.OpenReader(_filename)
 	if err != nil {
@@ -267,12 +267,12 @@ func (arc ZipArchive) list() ([]ArchiveFileInfo, error) {
 
 // List common archives
 func (arc CommonArchive) list() ([]ArchiveFileInfo, error) {
-	_filename := arc.filename
-	_password := arc.password
-	_listDirectoryPath := arc.listDirectoryPath
-	_recursive := arc.recursive
-	_orderBy := arc.orderBy
-	_orderDir := arc.orderDir
+	_filename := arc.meta.filename
+	_password := arc.read.password
+	_listDirectoryPath := arc.read.listDirectoryPath
+	_recursive := arc.read.recursive
+	_orderBy := arc.read.orderBy
+	_orderDir := arc.read.orderDir
 
 	arcFileObj, err := archiver.ByExtension(_filename)
 
@@ -352,7 +352,7 @@ func (arc CommonArchive) list() ([]ArchiveFileInfo, error) {
 		return filteredPaths, fmt.Errorf("path not found to filter: %s", _listDirectoryPath)
 	}
 
-	if arc.orderDir == OrderDirNone {
+	if arc.read.orderDir == OrderDirNone {
 		return filteredPaths, err
 	}
 
@@ -361,27 +361,27 @@ func (arc CommonArchive) list() ([]ArchiveFileInfo, error) {
 	return sortedPaths, err
 }
 
-func getArchiveFileList(meta *ArchiveMeta, list *ArchiveList) ([]ArchiveFileInfo, error) {
+func getArchiveFileList(meta *ArchiveMeta, read *ArchiveRead) ([]ArchiveFileInfo, error) {
 	_meta := *meta
-	_list := *list
+	_read := *read
 
-	var arcObj ArchiveLister
+	var arcObj ArchiveReader
 
 	ext := filepath.Ext(meta.filename)
 
 	// add a trailing slash to [listDirectoryPath] if missing
-	if _list.listDirectoryPath != "" && !strings.HasSuffix(_list.listDirectoryPath, "/") {
-		_list.listDirectoryPath = fmt.Sprintf("%s/", _list.listDirectoryPath)
+	if _read.listDirectoryPath != "" && !strings.HasSuffix(_read.listDirectoryPath, "/") {
+		_read.listDirectoryPath = fmt.Sprintf("%s/", _read.listDirectoryPath)
 	}
 
 	switch ext {
 	case ".zip":
-		arcObj = ZipArchive{_meta, _list}
+		arcObj = ZipArchive{meta: _meta, read: _read}
 
 		break
 
 	default:
-		arcObj = CommonArchive{_meta, _list}
+		arcObj = CommonArchive{meta: _meta, read: _read}
 
 		break
 	}

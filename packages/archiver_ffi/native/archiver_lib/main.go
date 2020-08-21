@@ -19,7 +19,7 @@ func ListArchive() {
 
 	_metaObj := &ArchiveMeta{filename: filename}
 
-	_listObj := &ArchiveList{
+	_listObj := &ArchiveRead{
 		password:          "",
 		listDirectoryPath: "phayes-geoPHP-6855624/",
 		recursive:         true,
