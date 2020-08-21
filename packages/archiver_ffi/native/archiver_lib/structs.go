@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/yeka/zip"
 	"os"
 	"time"
 )
@@ -27,19 +28,22 @@ type ArchiveRead struct {
 }
 
 type ArchivePack struct {
-	password string
+	password         string
+	fileList         []string
+	gitIgnorePattern string
+	encryptionMethod  zip.EncryptionMethod
 }
 
 type ZipArchive struct {
-	meta ArchiveMeta
-	read ArchiveRead
-	pack ArchivePack
+	meta ArchiveMeta // required
+	read ArchiveRead // required for listing files
+	pack ArchivePack // required for archiving files
 }
 
 type CommonArchive struct {
-	meta ArchiveMeta
-	read ArchiveRead
-	pack ArchivePack
+	meta ArchiveMeta // required
+	read ArchiveRead // required for listing files
+	pack ArchivePack // required for archiving files
 }
 
 type ArchiveReader interface {
@@ -51,5 +55,5 @@ type ArchiveUtils interface {
 }
 
 type ArchivePacker interface {
-	pack()
+	doPack() error
 }

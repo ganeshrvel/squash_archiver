@@ -2,14 +2,12 @@ package main
 
 import (
 	"fmt"
-	"github.com/mitchellh/go-homedir"
+	"github.com/yeka/zip"
 )
 
 //export ListArchive
 func ListArchive() {
-	_home, _ := homedir.Dir()
-
-	filename := fmt.Sprintf("%s/Desktop/test.zip", _home)
+	filename := getDesktopFiles("test.zip")
 
 	if exist := fileExists(filename); !exist {
 		fmt.Printf("file does not exist: %s\n", filename)
@@ -41,9 +39,7 @@ func ListArchive() {
 
 //export IsArchiveEncrypted
 func IsArchiveEncrypted() {
-	_home, _ := homedir.Dir()
-
-	filename := fmt.Sprintf("%s/Desktop/test.enc.zip", _home)
+	filename := getDesktopFiles("test.enc.zip")
 
 	if exist := fileExists(filename); !exist {
 		fmt.Printf("file does not exist %s\n", filename)
@@ -67,19 +63,19 @@ func IsArchiveEncrypted() {
 
 //export Pack
 func Pack() {
-	_home, _ := homedir.Dir()
-
-	filename := fmt.Sprintf("%s/Desktop/test.enc.zip", _home)
-
-	if exist := fileExists(filename); !exist {
-		fmt.Printf("file does not exist %s\n", filename)
-
-		return
-	}
+	filename := getDesktopFiles("test.pack.tar.gz")
+	path1 := getDesktopFiles("openmtp")
 
 	_metaObj := &ArchiveMeta{filename: filename}
 
-	result, err := isArchiveEncrypted(_metaObj)
+	_packObj := &ArchivePack{
+		password:         "",
+		fileList:         []string{path1},
+		gitIgnorePattern: "",
+		encryptionMethod: zip.StandardEncryption,
+	}
+
+	err := startPacking(_metaObj, _packObj)
 
 	if err != nil {
 		fmt.Printf("Error occured: %+v\n", err)
@@ -87,11 +83,12 @@ func Pack() {
 		return
 	}
 
-	fmt.Printf("Result: %+v\n", result)
+	fmt.Printf("Result: %+v\n", "Success")
 }
 
 // Unused
 func main() {
 	//ListArchive()
 	//IsArchiveEncrypted()
+	Pack()
 }
