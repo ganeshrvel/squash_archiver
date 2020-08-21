@@ -28,10 +28,11 @@ type ArchiveRead struct {
 }
 
 type ArchivePack struct {
-	password         string
-	fileList         []string
-	gitIgnorePattern string
+	password          string
+	fileList          []string
+	gitIgnorePattern  string
 	encryptionMethod  zip.EncryptionMethod
+	overwriteExisting bool
 }
 
 type ZipArchive struct {

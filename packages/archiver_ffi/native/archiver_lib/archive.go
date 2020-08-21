@@ -2,12 +2,11 @@ package main
 
 import (
 	"fmt"
-	"github.com/mholt/archiver"
+	"github.com/ganeshrvel/archiver"
 )
 
-func archiveFormat(arcFileObj *interface{}, password string) error {
+func archiveFormat(arcFileObj *interface{}, password string, overwriteExisting bool) error {
 	const (
-		overwriteExisting      = true
 		mkdirAll               = true
 		implicitTopLevelFolder = false
 		continueOnError        = true
@@ -47,7 +46,17 @@ func archiveFormat(arcFileObj *interface{}, password string) error {
 		break
 
 	case *archiver.TarBz2:
+		arcValues.Tar = tarObj
+		arcValues.CompressionLevel = compressionLevel
+
+		break
+
 	case *archiver.TarGz:
+		arcValues.Tar = tarObj
+		arcValues.CompressionLevel = compressionLevel
+
+		break
+
 	case *archiver.TarLz4:
 		arcValues.Tar = tarObj
 		arcValues.CompressionLevel = compressionLevel
@@ -55,7 +64,15 @@ func archiveFormat(arcFileObj *interface{}, password string) error {
 		break
 
 	case *archiver.TarSz:
+		arcValues.Tar = tarObj
+
+		break
+
 	case *archiver.TarXz:
+		arcValues.Tar = tarObj
+
+		break
+
 	case *archiver.TarZstd:
 		arcValues.Tar = tarObj
 
@@ -77,13 +94,26 @@ func archiveFormat(arcFileObj *interface{}, password string) error {
 		break
 
 	case *archiver.Bz2:
+		arcValues.CompressionLevel = compressionLevel
+
+		break
+
 	case *archiver.Lz4:
+		arcValues.CompressionLevel = compressionLevel
+
+		break
+
 	case *archiver.Gz:
 		arcValues.CompressionLevel = compressionLevel
 
 		break
+
 	case *archiver.Snappy:
+		break
+
 	case *archiver.Xz:
+		break
+
 	case *archiver.Zstd:
 		break
 

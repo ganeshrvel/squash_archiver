@@ -5,7 +5,7 @@ package main
 import (
 	"archive/tar"
 	"fmt"
-	"github.com/mholt/archiver"
+	"github.com/ganeshrvel/archiver"
 	"github.com/nwaples/rardecode"
 	"github.com/thoas/go-funk"
 	"github.com/yeka/zip"
@@ -184,6 +184,7 @@ func (arc CommonArchive) list() ([]ArchiveFileInfo, error) {
 	_recursive := arc.read.recursive
 	_orderBy := arc.read.orderBy
 	_orderDir := arc.read.orderDir
+	_overwriteExisting := arc.pack.overwriteExisting
 
 	arcFileObj, err := archiver.ByExtension(_filename)
 
@@ -191,7 +192,7 @@ func (arc CommonArchive) list() ([]ArchiveFileInfo, error) {
 		return nil, err
 	}
 
-	err = archiveFormat(&arcFileObj, _password)
+	err = archiveFormat(&arcFileObj, _password, _overwriteExisting)
 
 	if err != nil {
 		return nil, err
