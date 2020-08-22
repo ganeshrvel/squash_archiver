@@ -7,7 +7,7 @@ import (
 	"fmt"
 	"github.com/ganeshrvel/archiver"
 	"github.com/nwaples/rardecode"
-	"github.com/thoas/go-funk"
+	"github.com/wesovilabs/koazee"
 	"github.com/yeka/zip"
 	"io/ioutil"
 	"path/filepath"
@@ -63,7 +63,10 @@ func sortFiles(list []ArchiveFileInfo, orderBy ArchiveOrderBy, orderDir ArchiveO
 }
 
 func getFilteredFiles(fileInfo ArchiveFileInfo, listDirectoryPath string, recursive bool) (include bool) {
-	if funk.Contains(FileDenylist, fileInfo.Name) {
+	_koazeeStream := koazee.StreamOf(FileDenylist)
+
+	// match and exclude files in [FileDenylist]
+	if found, err := _koazeeStream.Contains(fileInfo.Name); err != nil || found {
 		return false
 	}
 
@@ -80,10 +83,10 @@ func getFilteredFiles(fileInfo ArchiveFileInfo, listDirectoryPath string, recurs
 			return false
 		}
 
-		slashSplitListDirectoryPath := strings.Split(listDirectoryPath, "/")
+		slashSplitListDirectoryPath := strings.Split(listDirectoryPath, PathSep)
 		slashSplitListDirectoryPathLength := len(slashSplitListDirectoryPath)
 
-		slashSplitFullPath := strings.Split(fileInfo.FullPath, "/")
+		slashSplitFullPath := strings.Split(fileInfo.FullPath, PathSep)
 		slashSplitFullPathLength := len(slashSplitFullPath)
 
 		// if directory allow an extra '/' to figure out the subdirectory
@@ -282,8 +285,8 @@ func getArchiveFileList(meta *ArchiveMeta, read *ArchiveRead) ([]ArchiveFileInfo
 	ext := filepath.Ext(meta.filename)
 
 	// add a trailing slash to [listDirectoryPath] if missing
-	if _read.listDirectoryPath != "" && !strings.HasSuffix(_read.listDirectoryPath, "/") {
-		_read.listDirectoryPath = fmt.Sprintf("%s/", _read.listDirectoryPath)
+	if _read.listDirectoryPath != "" && !strings.HasSuffix(_read.listDirectoryPath, PathSep) {
+		_read.listDirectoryPath = fmt.Sprintf("%s%s", _read.listDirectoryPath, PathSep)
 	}
 
 	switch ext {

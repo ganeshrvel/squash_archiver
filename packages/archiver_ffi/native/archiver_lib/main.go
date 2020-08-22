@@ -63,16 +63,17 @@ func IsArchiveEncrypted() {
 
 //export Pack
 func Pack() {
-	filename := getDesktopFiles("openmtp.pack.tar.gz")
-	path1 := getDesktopFiles("openmtp")
+	filename := getDesktopFiles("12345.pack.zip")
+	path1 := getDesktopFiles("test")
+	path2 := getDesktopFiles("openmtp/dll")
 
 	_metaObj := &ArchiveMeta{filename: filename}
 
 	_packObj := &ArchivePack{
-		password:         "",
-		fileList:         []string{path1},
-		gitIgnorePattern: "",
-		encryptionMethod: zip.StandardEncryption,
+		password:          "",
+		fileList:          []string{path1, path2},
+		gitIgnorePattern:  "",
+		encryptionMethod:  zip.StandardEncryption,
 		overwriteExisting: true,
 	}
 

@@ -2,13 +2,24 @@ package main
 
 import (
 	"fmt"
+	"github.com/wesovilabs/koazee"
 	"github.com/yeka/zip"
 	"io"
 	"os"
 	"path/filepath"
+	"strings"
 )
 
-func createZipFile(arc *ZipArchive, _fileList []string) error {
+func getArchiveFilesRelativePath(absFilepath string, commonParentPath string) string {
+	splittedFilepath := strings.Split(absFilepath, commonParentPath)
+
+	_koazeeStream := koazee.StreamOf(splittedFilepath)
+	lastItem := _koazeeStream.Last()
+
+	return lastItem.String()
+}
+
+func createZipFile(arc *ZipArchive, _fileList []string, commonParentPath string) error {
 	_filename := arc.meta.filename
 	_password := arc.pack.password
 	_encryptionMethod := arc.pack.encryptionMethod
@@ -22,28 +33,56 @@ func createZipFile(arc *ZipArchive, _fileList []string) error {
 
 	zipWriter := zip.NewWriter(newZipFile)
 
-	//todo _fileList[0]
-	err = filepath.Walk(_fileList[0], func(path string, info os.FileInfo, err error) error {
-		if err != nil {
-			return err
-		}
+	for _, item := range _fileList {
+		err = filepath.Walk(item, func(absFilepath string, info os.FileInfo, err error) error {
+			if err != nil {
+				return err
+			}
 
-		if info.IsDir() {
+			if info.IsDir() {
+				return nil
+			}
+
+			relativeFilePath := absFilepath
+
+			if commonParentPath != "" {
+				// if there is only one filepath in [_fileList]
+				if len(_fileList) < 2 && _fileList[0] == commonParentPath {
+					splittedFilepath := strings.Split(_fileList[0], PathSep)
+
+					_koazeeStream := koazee.StreamOf(splittedFilepath)
+					lastItem := _koazeeStream.Last()
+					lastPartOfFilename := lastItem.String()
+
+					// then the selected folder name should be the root directory in the archive
+					if isDir(_fileList[0]) {
+						archiveFilesRelativePath := getArchiveFilesRelativePath(absFilepath, commonParentPath)
+
+						relativeFilePath = fmt.Sprintf("%s%s", lastPartOfFilename, archiveFilesRelativePath)
+					} else {
+						// then the selected file should be in the root directory in the archive
+						relativeFilePath = lastPartOfFilename
+					}
+
+				} else {
+					relativeFilePath = getArchiveFilesRelativePath(absFilepath, commonParentPath)
+				}
+			}
+
+			if _password == "" {
+				if err := addFileToRegularZip(zipWriter, absFilepath, relativeFilePath); err != nil {
+					return err
+				}
+			} else {
+				if err := addFileToEncryptedZip(zipWriter, absFilepath, _password, _encryptionMethod); err != nil {
+					return err
+				}
+			}
+
 			return nil
-		}
+		})
 
-		if _password != "" {
-			if err = addFileToRegularZip(zipWriter, path); err != nil {
-				return err
-			}
-		} else {
-			if err = addFileToEncryptedZip(zipWriter, path, _password, _encryptionMethod); err != nil {
-				return err
-			}
-		}
-
-		return nil
-	})
+	}
 
 	defer func() {
 		if err := zipWriter.Close(); err != nil {
@@ -54,7 +93,7 @@ func createZipFile(arc *ZipArchive, _fileList []string) error {
 	return err
 }
 
-func addFileToRegularZip(zipWriter *zip.Writer, filename string) error {
+func addFileToRegularZip(zipWriter *zip.Writer, filename string, relativeFilename string) error {
 	fileToZip, err := os.Open(filename)
 
 	if err != nil {
@@ -77,7 +116,7 @@ func addFileToRegularZip(zipWriter *zip.Writer, filename string) error {
 		return err
 	}
 
-	header.Name = filename
+	header.Name = relativeFilename
 
 	// see http://golang.org/pkg/archive/zip/#pkg-constants
 	header.Method = zip.Deflate

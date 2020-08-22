@@ -10,14 +10,18 @@ import (
 )
 
 func (arc ZipArchive) doPack() error {
+	// TODO remove
 	start := time.Now()
 
 	_fileList := arc.pack.fileList
 
-	if err := createZipFile(&arc, _fileList); err != nil {
+	commonParentPath := getParentPath(os.PathSeparator, _fileList...)
+
+	if err := createZipFile(&arc, _fileList, commonParentPath); err != nil {
 		return err
 	}
 
+	// TODO remove
 	elapsed := time.Since(start)
 	log.Printf("time taken %s", elapsed)
 
@@ -25,6 +29,7 @@ func (arc ZipArchive) doPack() error {
 }
 
 func (arc CommonArchive) doPack() error {
+	// TODO remove
 	start := time.Now()
 
 	_filename := arc.meta.filename
@@ -65,6 +70,7 @@ func (arc CommonArchive) doPack() error {
 		return err
 	}
 
+	// TODO remove
 	elapsed := time.Since(start)
 	log.Printf("time taken %s", elapsed)
 
