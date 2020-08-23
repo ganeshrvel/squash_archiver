@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"github.com/ganeshrvel/archiver"
 	"github.com/nwaples/rardecode"
+	ignore "github.com/sabhiram/go-gitignore"
 	"github.com/wesovilabs/koazee"
 	"github.com/yeka/zip"
 	"io/ioutil"
@@ -63,10 +64,17 @@ func sortFiles(list []ArchiveFileInfo, orderBy ArchiveOrderBy, orderDir ArchiveO
 }
 
 func getFilteredFiles(fileInfo ArchiveFileInfo, listDirectoryPath string, recursive bool) (include bool) {
-	_koazeeStream := koazee.StreamOf(FileDenylist)
+	_koazeeStream := koazee.StreamOf(GlobalFileDenylist)
 
-	// match and exclude files in [FileDenylist]
+	// match and exclude files in [GlobalFileDenylist]
 	if found, err := _koazeeStream.Contains(fileInfo.Name); err != nil || found {
+		return false
+	}
+
+	// ignore the files if pattern matches
+	ignoreMatches, _ := ignore.CompileIgnoreLines(GlobalPatternDenylist...)
+
+	if ignoreMatches.MatchesPath(fileInfo.FullPath) {
 		return false
 	}
 
@@ -88,6 +96,10 @@ func getFilteredFiles(fileInfo ArchiveFileInfo, listDirectoryPath string, recurs
 
 		slashSplitFullPath := strings.Split(fileInfo.FullPath, PathSep)
 		slashSplitFullPathLength := len(slashSplitFullPath)
+
+		println("")
+		println(fileInfo.FullPath)
+		println(fileInfo.IsDir)
 
 		// if directory allow an extra '/' to figure out the subdirectory
 		if fileInfo.IsDir && slashSplitFullPathLength < slashSplitListDirectoryPathLength+2 {
