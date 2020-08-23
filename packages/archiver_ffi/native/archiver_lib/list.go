@@ -81,14 +81,14 @@ func getFilteredFiles(fileInfo ArchiveFileInfo, listDirectoryPath string, recurs
 	isInPath := strings.HasPrefix(fileInfo.FullPath, listDirectoryPath)
 
 	if isInPath {
-		// if recursive mode is true return all files and subdirectories under the filtered path
-		if recursive == true {
-			return true
-		}
-
 		// dont return the directory path if it's listDirectoryPath. This will make sure that only files and sub directories are returned
 		if listDirectoryPath == fileInfo.FullPath {
 			return false
+		}
+
+		// if recursive mode is true return all files and subdirectories under the filtered path
+		if recursive == true {
+			return true
 		}
 
 		slashSplitListDirectoryPath := strings.Split(listDirectoryPath, PathSep)
@@ -96,10 +96,6 @@ func getFilteredFiles(fileInfo ArchiveFileInfo, listDirectoryPath string, recurs
 
 		slashSplitFullPath := strings.Split(fileInfo.FullPath, PathSep)
 		slashSplitFullPathLength := len(slashSplitFullPath)
-
-		println("")
-		println(fileInfo.FullPath)
-		println(fileInfo.IsDir)
 
 		// if directory allow an extra '/' to figure out the subdirectory
 		if fileInfo.IsDir && slashSplitFullPathLength < slashSplitListDirectoryPathLength+2 {
