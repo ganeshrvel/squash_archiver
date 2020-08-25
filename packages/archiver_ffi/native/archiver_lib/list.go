@@ -23,13 +23,8 @@ func sortFiles(list []ArchiveFileInfo, orderBy ArchiveOrderBy, orderDir ArchiveO
 
 	switch orderBy {
 	case OrderByFullPath:
-		sort.Slice(list, func(i, j int) bool {
-			if orderDir == OrderDirDesc {
-				return list[i].FullPath > list[j].FullPath
-			}
+		sortPath(list, OrderDirDesc)
 
-			return list[i].FullPath < list[j].FullPath
-		})
 		break
 	case OrderByName:
 		sort.Slice(list, func(i, j int) bool {

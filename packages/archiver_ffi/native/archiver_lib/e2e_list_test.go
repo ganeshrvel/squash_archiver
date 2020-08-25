@@ -65,7 +65,7 @@ func TestArchiveListing(t *testing.T) {
 		filename := getTestMocksFile("mock_test_file1.zip")
 		_metaObj := &ArchiveMeta{filename: filename}
 
-		Convey("Incorrect listDirectoryPath - it should throw an error", func() {
+		/*Convey("Incorrect listDirectoryPath - it should throw an error", func() {
 
 			_listObj := &ArchiveRead{
 				password:          "",
@@ -83,7 +83,7 @@ func TestArchiveListing(t *testing.T) {
 		Convey("OrderByFullPath | Asc - it should not throw an error", func() {
 			_listObj := &ArchiveRead{
 				password:          "",
-				listDirectoryPath: "",
+				listDirectoryPath: "mock_dir1/",
 				recursive:         true,
 				orderBy:           OrderByFullPath,
 				orderDir:          OrderDirAsc,
@@ -226,11 +226,11 @@ func TestArchiveListing(t *testing.T) {
 
 			So(itemsArr, ShouldResemble, assertionArr)
 		})
-
+*/
 		Convey("listDirectoryPath='' | recursive=false - it should not throw an error", func() {
 			_listObj := &ArchiveRead{
 				password:          "",
-				listDirectoryPath: "",
+				listDirectoryPath: "mock_dir1/",
 				recursive:         false,
 				orderBy:           OrderByFullPath,
 				orderDir:          OrderDirDesc,
