@@ -97,7 +97,7 @@ func main() {
 	//IsArchiveEncrypted()
 	//Pack()
 
-	var splittedList []ArchiveFileInfo
+	var splittedList []filePathListSortInfo
 	/*	for _, x := range list {
 		splittedList_ = append(splittedList_, x.FullPath)
 	}*/
@@ -140,10 +140,10 @@ func main() {
 			pathSplitted = [2]string{filepath.Dir(x), ""}
 		}
 
-		splittedList = append(splittedList, ArchiveFileInfo{
+		splittedList = append(splittedList, filePathListSortInfo{
 			IsDir:        isDir,
 			FullPath:     x,
-			splittedPath: pathSplitted,
+			splittedPaths: pathSplitted,
 		})
 	}
 

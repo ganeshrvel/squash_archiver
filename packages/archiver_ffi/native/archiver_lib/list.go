@@ -7,7 +7,7 @@ import (
 	"fmt"
 	"github.com/ganeshrvel/archiver"
 	"github.com/nwaples/rardecode"
-	ignore "github.com/sabhiram/go-gitignore"
+	"github.com/sabhiram/go-gitignore"
 	"github.com/wesovilabs/koazee"
 	"github.com/yeka/zip"
 	"io/ioutil"
