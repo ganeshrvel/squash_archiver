@@ -31,7 +31,7 @@ func sortFiles(list []ArchiveFileInfo, orderBy ArchiveOrderBy, orderDir ArchiveO
 		// return sortPath(list, orderDir)
 
 	case OrderByName:
-		sort.Slice(list, func(i, j int) bool {
+		sort.SliceStable(list, func(i, j int) bool {
 			if orderDir == OrderDirDesc {
 				return list[i].Name > list[j].Name
 			}
@@ -40,7 +40,7 @@ func sortFiles(list []ArchiveFileInfo, orderBy ArchiveOrderBy, orderDir ArchiveO
 		})
 		break
 	case OrderByModTime:
-		sort.Slice(list, func(i, j int) bool {
+		sort.SliceStable(list, func(i, j int) bool {
 			if orderDir == OrderDirDesc {
 				return list[i].ModTime.After(list[j].ModTime)
 			}
@@ -49,7 +49,7 @@ func sortFiles(list []ArchiveFileInfo, orderBy ArchiveOrderBy, orderDir ArchiveO
 		})
 		break
 	case OrderBySize:
-		sort.Slice(list, func(i, j int) bool {
+		sort.SliceStable(list, func(i, j int) bool {
 			if orderDir == OrderDirDesc {
 				return list[i].Size > list[j].Size
 			}

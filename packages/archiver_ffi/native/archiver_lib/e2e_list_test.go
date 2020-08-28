@@ -362,4 +362,11 @@ func TestArchiveListing(t *testing.T) {
 
 		_testArchiveListing(_metaObj, "1234567", ListTestTypeEnc)
 	})
+
+	Convey("Archive Listing - tar.gz", t, func() {
+		filename := getTestMocksFile("mock_test_file1.tar.gz")
+		_metaObj := &ArchiveMeta{filename: filename}
+
+		_testArchiveListing(_metaObj, "", ListTestTypeMacNonEnc)
+	})
 }
