@@ -92,5 +92,5 @@ func Pack() {
 func main() {
 	//ListArchive()
 	//IsArchiveEncrypted()
-	Pack()
+	//Pack()
 }

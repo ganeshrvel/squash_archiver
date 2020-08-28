@@ -11,6 +11,7 @@ import (
 	"github.com/wesovilabs/koazee"
 	"github.com/yeka/zip"
 	"io/ioutil"
+	"log"
 	"path/filepath"
 	"sort"
 	"strings"
@@ -23,9 +24,12 @@ func sortFiles(list []ArchiveFileInfo, orderBy ArchiveOrderBy, orderDir ArchiveO
 
 	switch orderBy {
 	case OrderByFullPath:
-		sortPath(list, OrderDirDesc)
+		// todo filepath desc sorting is not implemented yet. the output might be incorrect
 
-		break
+		log.Panic("filepath desc sorting is not implemented yet. the output might be incorrect")
+
+		// return sortPath(list, orderDir)
+
 	case OrderByName:
 		sort.Slice(list, func(i, j int) bool {
 			if orderDir == OrderDirDesc {
@@ -131,6 +135,7 @@ func (arc ZipArchive) list() ([]ArchiveFileInfo, error) {
 	}()
 
 	var filteredPaths []ArchiveFileInfo
+
 	isListDirectoryPathExist := _listDirectoryPath == ""
 
 	for _, file := range reader.File {
@@ -210,6 +215,7 @@ func (arc CommonArchive) list() ([]ArchiveFileInfo, error) {
 	}
 
 	var filteredPaths []ArchiveFileInfo
+
 	isListDirectoryPathExist := _listDirectoryPath == ""
 
 	err = w.Walk(_filename, func(file archiver.File) error {

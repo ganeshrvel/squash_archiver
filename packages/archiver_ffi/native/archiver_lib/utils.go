@@ -6,8 +6,6 @@ import (
 	"github.com/mitchellh/go-homedir"
 	"os"
 	"path"
-	"sort"
-	"strings"
 )
 
 func fileExists(filename string) bool {
@@ -114,63 +112,4 @@ func isDir(name string) bool {
 		}
 	}
 	return false
-}
-
-func sortPath(list []ArchiveFileInfo, orderDir ArchiveOrderDir) {
-	var splittedList [][]string
-	for _, x := range list {
-		splittedList = append(splittedList, strings.Split(x.FullPath, PathSep))
-	}
-
-	_sortPath(&splittedList, orderDir, 0, 0, len(splittedList)-1)
-}
-
-func _sortPath(pathList *[][]string, orderDir ArchiveOrderDir, index int, start int, end int) {
-	_pathList := *pathList
-
-	_trimmedSlice := _pathList[start : end+1]
-
-	sort.Slice(_trimmedSlice, func(i, j int) bool {
-		if orderDir == OrderDirDesc {
-			return _trimmedSlice[i][index] > _trimmedSlice[j][index]
-		}
-
-		return _trimmedSlice[i][index] < _trimmedSlice[j][index]
-	})
-
-	var _buckets [][]int
-
-	var _currentDirectoryName string
-	var _lastInsertedBucketIndex = -1
-
-	for i := start; i <= end; i += 1 {
-		item := _pathList[i][index]
-
-		if _lastInsertedBucketIndex == -1 || item != _currentDirectoryName {
-			_currentDirectoryName = item
-
-			if _lastInsertedBucketIndex >= 0 && _lastInsertedBucketIndex < len(_buckets) {
-				_buckets[_lastInsertedBucketIndex] = append(_buckets[_lastInsertedBucketIndex], i-1)
-			}
-
-			_lastInsertedBucketIndex += 1
-
-			_buckets = append(_buckets, []int{i})
-		}
-
-		if i == end {
-			if len(_buckets[_lastInsertedBucketIndex]) < 2 {
-				_buckets[_lastInsertedBucketIndex] = append(_buckets[_lastInsertedBucketIndex], i)
-			}
-		}
-	}
-
-	if len(_buckets) > 0 {
-		for i := 0; i < len(_buckets); i += 1 {
-			if _buckets[i][0] != _buckets[i][1] {
-				_sortPath(pathList, orderDir, index+1, _buckets[i][0], _buckets[i][1])
-			}
-
-		}
-	}
 }

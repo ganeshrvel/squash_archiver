@@ -1,12 +1,19 @@
 package main
 
 import (
-	json "encoding/json"
 	"fmt"
 	. "github.com/smartystreets/goconvey/convey"
 	"log"
 	"os"
 	"testing"
+)
+
+type ListTestType string
+
+const (
+	ListTestTypeEnc       ListTestType = "enc"
+	ListTestTypeNonEnc    ListTestType = "non_enc"
+	ListTestTypeMacNonEnc ListTestType = "mac_non_enc"
 )
 
 func getTestMocksFile(filename string) string {
@@ -60,15 +67,12 @@ func getTestMocksBuildDir(filename string) string {
 	return resultPath
 }
 
-func TestArchiveListing(t *testing.T) {
-	Convey("Archive Listing - ZIP", t, func() {
-		filename := getTestMocksFile("mock_test_file1.zip")
-		_metaObj := &ArchiveMeta{filename: filename}
-
-		/*Convey("Incorrect listDirectoryPath - it should throw an error", func() {
+func _testArchiveListing(_metaObj *ArchiveMeta, password string, listTestType ListTestType) {
+	Convey("General tests", func() {
+		Convey("Incorrect listDirectoryPath - it should throw an error", func() {
 
 			_listObj := &ArchiveRead{
-				password:          "",
+				password:          password,
 				listDirectoryPath: "qwerty/",
 				recursive:         true,
 				orderBy:           OrderByName,
@@ -79,13 +83,15 @@ func TestArchiveListing(t *testing.T) {
 
 			So(err, ShouldBeError)
 		})
+	})
 
-		Convey("OrderByFullPath | Asc - it should not throw an error", func() {
+	Convey("OrderByName", func() {
+		Convey("Asc | recursive=false - it should not throw an error", func() {
 			_listObj := &ArchiveRead{
-				password:          "",
+				password:          password,
 				listDirectoryPath: "mock_dir1/",
-				recursive:         true,
-				orderBy:           OrderByFullPath,
+				recursive:         false,
+				orderBy:           OrderByName,
 				orderDir:          OrderDirAsc,
 			}
 
@@ -99,39 +105,14 @@ func TestArchiveListing(t *testing.T) {
 				itemsArr = append(itemsArr, item.FullPath)
 			}
 
-			assertionArr := []string{"mock_dir1/1/", "mock_dir1/1/a.txt", "mock_dir1/2/", "mock_dir1/2/b.txt", "mock_dir1/3/", "mock_dir1/3/2/", "mock_dir1/3/2/b.txt", "mock_dir1/3/b.txt", "mock_dir1/a.txt"}
+			assertionArr := []string{"mock_dir1/1/", "mock_dir1/2/", "mock_dir1/3/", "mock_dir1/a.txt"}
 
 			So(itemsArr, ShouldResemble, assertionArr)
 		})
 
-		Convey("OrderByFullPath | Desc - it should not throw an error", func() {
+		Convey("Desc | recursive=false | 1 - it should not throw an error", func() {
 			_listObj := &ArchiveRead{
-				password:          "",
-				listDirectoryPath: "mock_dir1/",
-				recursive:         true,
-				orderBy:           OrderByFullPath,
-				orderDir:          OrderDirDesc,
-			}
-
-			result, err := getArchiveFileList(_metaObj, _listObj)
-
-			So(err, ShouldBeNil)
-
-			var itemsArr []string
-
-			for _, item := range result {
-				itemsArr = append(itemsArr, item.FullPath)
-			}
-
-			assertionArr := []string{"mock_dir1/a.txt", "mock_dir1/3/b.txt", "mock_dir1/3/2/b.txt", "mock_dir1/3/2/", "mock_dir1/3/", "mock_dir1/2/b.txt", "mock_dir1/2/", "mock_dir1/1/a.txt", "mock_dir1/1/"}
-
-			So(itemsArr, ShouldResemble, assertionArr)
-		})
-
-		Convey("OrderByName | Desc | recursive=false - it should not throw an error", func() {
-
-			_listObj := &ArchiveRead{
-				password:          "",
+				password:          password,
 				listDirectoryPath: "mock_dir1/3/",
 				recursive:         false,
 				orderBy:           OrderByName,
@@ -153,13 +134,12 @@ func TestArchiveListing(t *testing.T) {
 			So(itemsArr, ShouldResemble, assertionArr)
 		})
 
-		Convey("OrderByFullPath | Desc | recursive=true - it should not throw an error", func() {
-
+		Convey("Desc | recursive=false | 2 - it should not throw an error", func() {
 			_listObj := &ArchiveRead{
-				password:          "",
+				password:          password,
 				listDirectoryPath: "mock_dir1/3",
-				recursive:         true,
-				orderBy:           OrderByFullPath,
+				recursive:         false,
+				orderBy:           OrderByName,
 				orderDir:          OrderDirDesc,
 			}
 
@@ -173,15 +153,14 @@ func TestArchiveListing(t *testing.T) {
 				itemsArr = append(itemsArr, item.FullPath)
 			}
 
-			assertionArr := []string{"mock_dir1/3/b.txt", "mock_dir1/3/2/b.txt", "mock_dir1/3/2/"}
+			assertionArr := []string{"mock_dir1/3/b.txt", "mock_dir1/3/2/"}
 
 			So(itemsArr, ShouldResemble, assertionArr)
 		})
 
-		Convey("OrderByName | Desc | recursive=true - it should not throw an error", func() {
-
+		Convey("Desc | recursive=true | 1 - it should not throw an error", func() {
 			_listObj := &ArchiveRead{
-				password:          "",
+				password:          password,
 				listDirectoryPath: "mock_dir1/3",
 				recursive:         true,
 				orderBy:           OrderByName,
@@ -202,37 +181,66 @@ func TestArchiveListing(t *testing.T) {
 
 			So(itemsArr, ShouldResemble, assertionArr)
 		})
+	})
 
-		Convey("listDirectoryPath='' | recursive=true - it should not throw an error", func() {
+	Convey("empty listDirectoryPath", func() {
+		// structure of archiving in macOS might be a bit different
+		if listTestType == ListTestTypeMacNonEnc {
+			Convey("recursive=true | Asc - it should not throw an error", func() {
+				_listObj := &ArchiveRead{
+					password:          password,
+					listDirectoryPath: "",
+					recursive:         true,
+					orderBy:           OrderByName,
+					orderDir:          OrderDirAsc,
+				}
+
+				result, err := getArchiveFileList(_metaObj, _listObj)
+
+				So(err, ShouldBeNil)
+
+				var itemsArr []string
+
+				for _, item := range result {
+					itemsArr = append(itemsArr, item.FullPath)
+				}
+
+				assertionArr := []string{"mock_dir1/1/", "mock_dir1/2/", "mock_dir1/3/2/", "mock_dir1/3/", "mock_dir1/a.txt", "mock_dir1/1/a.txt", "mock_dir1/3/b.txt", "mock_dir1/2/b.txt", "mock_dir1/3/2/b.txt", "mock_dir1/"}
+
+				So(itemsArr, ShouldResemble, assertionArr)
+			})
+		} else {
+			Convey("recursive=true | Asc - it should not throw an error", func() {
+				_listObj := &ArchiveRead{
+					password:          password,
+					listDirectoryPath: "",
+					recursive:         true,
+					orderBy:           OrderByName,
+					orderDir:          OrderDirAsc,
+				}
+
+				result, err := getArchiveFileList(_metaObj, _listObj)
+
+				So(err, ShouldBeNil)
+
+				var itemsArr []string
+
+				for _, item := range result {
+					itemsArr = append(itemsArr, item.FullPath)
+				}
+
+				assertionArr := []string{"mock_dir1/1/", "mock_dir1/3/2/", "mock_dir1/2/", "mock_dir1/3/", "mock_dir1/a.txt", "mock_dir1/1/a.txt", "mock_dir1/3/b.txt", "mock_dir1/3/2/b.txt", "mock_dir1/2/b.txt", "mock_dir1/"}
+
+				So(itemsArr, ShouldResemble, assertionArr)
+			})
+		}
+
+		Convey("recursive=false | Desc - it should not throw an error", func() {
 			_listObj := &ArchiveRead{
-				password:          "",
+				password:          password,
 				listDirectoryPath: "",
-				recursive:         true,
-				orderBy:           OrderByFullPath,
-				orderDir:          OrderDirDesc,
-			}
-
-			result, err := getArchiveFileList(_metaObj, _listObj)
-
-			So(err, ShouldBeNil)
-
-			var itemsArr []string
-
-			for _, item := range result {
-				itemsArr = append(itemsArr, item.FullPath)
-			}
-
-			assertionArr := []string{"mock_dir1/a.txt", "mock_dir1/3/b.txt", "mock_dir1/3/2/b.txt", "mock_dir1/3/2/", "mock_dir1/3/", "mock_dir1/2/b.txt", "mock_dir1/2/", "mock_dir1/1/a.txt", "mock_dir1/1/", "mock_dir1/"}
-
-			So(itemsArr, ShouldResemble, assertionArr)
-		})
-*/
-		Convey("listDirectoryPath='' | recursive=false - it should not throw an error", func() {
-			_listObj := &ArchiveRead{
-				password:          "",
-				listDirectoryPath: "mock_dir1/",
 				recursive:         false,
-				orderBy:           OrderByFullPath,
+				orderBy:           OrderByName,
 				orderDir:          OrderDirDesc,
 			}
 
@@ -251,10 +259,107 @@ func TestArchiveListing(t *testing.T) {
 			So(itemsArr, ShouldResemble, assertionArr)
 		})
 	})
+
+	// todo sorting by filepath isnt fully implemented
+	//Convey("OrderByFullPath", func() {
+	//	Convey("Asc | recursive=true | 1 - it should not throw an error", func() {
+	//		_listObj := &ArchiveRead{
+	//			password:          password,
+	//			listDirectoryPath: "mock_dir1/",
+	//			recursive:         true,
+	//			orderBy:           OrderByFullPath,
+	//			orderDir:          OrderDirAsc,
+	//		}
+	//
+	//		result, err := getArchiveFileList(_metaObj, _listObj)
+	//
+	//		So(err, ShouldBeNil)
+	//
+	//		var itemsArr []string
+	//
+	//		for _, item := range result {
+	//			itemsArr = append(itemsArr, item.FullPath)
+	//		}
+	//
+	//		assertionArr := []string{"mock_dir1/a.txt", "mock_dir1/1/", "mock_dir1/1/a.txt", "mock_dir1/2/", "mock_dir1/2/b.txt", "mock_dir1/3/", "mock_dir1/3/2/", "mock_dir1/3/2/b.txt", "mock_dir1/3/b.txt"}
+	//
+	//		So(itemsArr, ShouldResemble, assertionArr)
+	//	})
+	//
+	//	Convey("Asc | recursive=true | 2 - it should not throw an error", func() {
+	//
+	//		_listObj := &ArchiveRead{
+	//			password:          password,
+	//			listDirectoryPath: "mock_dir1/3",
+	//			recursive:         true,
+	//			orderBy:           OrderByFullPath,
+	//			orderDir:          OrderDirAsc,
+	//		}
+	//
+	//		result, err := getArchiveFileList(_metaObj, _listObj)
+	//
+	//		So(err, ShouldBeNil)
+	//
+	//		var itemsArr []string
+	//
+	//		for _, item := range result {
+	//			itemsArr = append(itemsArr, item.FullPath)
+	//		}
+	//
+	//		pretty.Println("\n", itemsArr)
+	//
+	//		assertionArr := []string{"mock_dir1/3/2/", "mock_dir1/3/2/b.txt", "mock_dir1/3/b.txt"}
+	//
+	//		So(itemsArr, ShouldResemble, assertionArr)
+	//	})
+	//
+	//	Convey("Desc - it should not throw an error", func() {
+	//		_listObj := &ArchiveRead{
+	//			password:          password,
+	//			listDirectoryPath: "mock_dir1/",
+	//			recursive:         true,
+	//			orderBy:           OrderByFullPath,
+	//			orderDir:          OrderDirDesc,
+	//		}
+	//
+	//		result, err := getArchiveFileList(_metaObj, _listObj)
+	//
+	//		So(err, ShouldBeNil)
+	//
+	//		var itemsArr []string
+	//
+	//		for _, item := range result {
+	//			itemsArr = append(itemsArr, item.FullPath)
+	//		}
+	//
+	//		assertionArr := []string{"mock_dir1/a.txt", "mock_dir1/3/b.txt", "mock_dir1/3/2/b.txt", "mock_dir1/3/2/", "mock_dir1/3/", "mock_dir1/2/b.txt", "mock_dir1/2/", "mock_dir1/1/a.txt", "mock_dir1/1/"}
+	//
+	//		So(itemsArr, ShouldResemble, assertionArr)
+	//	})
+	//
+	//})
+
 }
 
-func sliceToJson(arr *[]string) {
-	encjson, _ := json.Marshal(arr)
-	fmt.Printf("\n")
-	fmt.Println(string(encjson))
+func TestArchiveListing(t *testing.T) {
+	Convey("macOS Compressed Archive Listing - ZIP", t, func() {
+		filename := getTestMocksFile("mock_mac_test_file1.zip")
+		_metaObj := &ArchiveMeta{filename: filename}
+
+		_testArchiveListing(_metaObj, "", ListTestTypeMacNonEnc)
+	})
+
+	Convey("Archive Listing - ZIP", t, func() {
+		filename := getTestMocksFile("mock_test_file1.zip")
+		_metaObj := &ArchiveMeta{filename: filename}
+
+		_testArchiveListing(_metaObj, "", ListTestTypeNonEnc)
+	})
+
+	Convey("Archive Listing - Encrypted ZIP", t, func() {
+		filename := getTestMocksFile("mock_enc_test_file1.zip")
+		_metaObj := &ArchiveMeta{filename: filename}
+
+		_testArchiveListing(_metaObj, "1234567", ListTestTypeEnc)
+	})
 }

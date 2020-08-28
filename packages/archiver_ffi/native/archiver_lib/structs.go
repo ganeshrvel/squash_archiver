@@ -35,6 +35,16 @@ type ArchivePack struct {
 	overwriteExisting bool
 }
 
+type filePathListSortInfo struct {
+	pathSplitted []string
+	isDir        bool
+	Mode         os.FileMode
+	Size         int64
+	ModTime      time.Time
+	Name         string
+	FullPath     string
+}
+
 type ZipArchive struct {
 	meta ArchiveMeta // required
 	read ArchiveRead // required for listing files
