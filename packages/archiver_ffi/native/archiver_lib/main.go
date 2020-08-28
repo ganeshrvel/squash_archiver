@@ -129,23 +129,6 @@ func main() {
 		"/A/W/X/Y/file1.txt",
 		"/A/B/file2.txt"}
 
-	/*	for _, x := range __splittedList {
-
-		isDir := !strings.HasSuffix(x, ".txt")
-		var pathSplitted [2]string
-
-		if !isDir {
-			pathSplitted = [2]string{filepath.Dir(x), filepath.Base(x)}
-		} else {
-			pathSplitted = [2]string{x, ""}
-		}
-
-		splittedList = append(splittedList, filePathListSortInfo{
-			pathSplitted: pathSplitted,
-			isDir:        isDir,
-		})
-	}*/
-
 	for _, x := range list {
 		isDir := !strings.HasSuffix(x, ".txt")
 
@@ -164,7 +147,7 @@ func main() {
 		})
 	}
 
-	_sortPath(&splittedList, OrderDirAsc, 0, 0, len(splittedList)-1)
+	_sortPath(&splittedList, OrderDirDesc)
 
 	var sortedPath []string
 

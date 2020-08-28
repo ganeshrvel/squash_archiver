@@ -11,7 +11,6 @@ import (
 	"github.com/wesovilabs/koazee"
 	"github.com/yeka/zip"
 	"io/ioutil"
-	"log"
 	"path/filepath"
 	"sort"
 	"strings"
@@ -24,11 +23,7 @@ func sortFiles(list []ArchiveFileInfo, orderBy ArchiveOrderBy, orderDir ArchiveO
 
 	switch orderBy {
 	case OrderByFullPath:
-		// todo filepath desc sorting is not implemented yet. the output might be incorrect
-
-		log.Panic("filepath desc sorting is not implemented yet. the output might be incorrect")
-
-		// return sortPath(list, orderDir)
+		return sortPath(list, orderDir)
 
 	case OrderByName:
 		sort.SliceStable(list, func(i, j int) bool {

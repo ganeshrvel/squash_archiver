@@ -36,7 +36,7 @@ func sortPath(list []ArchiveFileInfo, orderDir ArchiveOrderDir) []ArchiveFileInf
 	return resultList
 }
 
-func _sortPath(pathList *[]ArchiveFileInfo, orderDir ArchiveOrderDir, index int, start int, end int) {
+func _sortPath(pathList *[]ArchiveFileInfo, orderDir ArchiveOrderDir) {
 	_pathList := *pathList
 
 	sort.SliceStable(_pathList, func(i, j int) bool {
@@ -49,14 +49,16 @@ func _sortPath(pathList *[]ArchiveFileInfo, orderDir ArchiveOrderDir, index int,
 
 	count := 0
 	for count < len(_pathList)-1 {
-
 		var bucket = [2]int{count, len(_pathList)}
 
 		for k, _ := range _pathList[count:] {
+			if orderDir == OrderDirDesc && count+k >= len(_pathList)-1 {
+				break
+			}
+
 			if _pathList[count+k].splittedPath[0] != _pathList[count+k+1].splittedPath[0] {
 
 				bucket[1] = count + k - 1
-
 				count = count + k
 
 				break
