@@ -1,17 +1,16 @@
 package main
 
 import (
+	"path/filepath"
 	"sort"
-	"strings"
 )
 
-// todo sorting by filepath isnt fully implemented
 func sortPath(list []ArchiveFileInfo, orderDir ArchiveOrderDir) []ArchiveFileInfo {
 	var splittedList []filePathListSortInfo
 
 	for _, x := range list {
 		splittedList = append(splittedList, filePathListSortInfo{
-			pathSplitted: strings.Split(x.FullPath, PathSep),
+			pathSplitted: [2]string{filepath.Dir(x.FullPath), filepath.Base(x.FullPath)},
 			isDir:        x.IsDir,
 			Mode:         x.Mode,
 			Size:         x.Size,
@@ -20,8 +19,6 @@ func sortPath(list []ArchiveFileInfo, orderDir ArchiveOrderDir) []ArchiveFileInf
 			FullPath:     x.FullPath,
 		})
 	}
-
-	_sortPath(&splittedList, orderDir, 0, 0, len(splittedList)-1)
 
 	var resultList []ArchiveFileInfo
 
@@ -39,85 +36,44 @@ func sortPath(list []ArchiveFileInfo, orderDir ArchiveOrderDir) []ArchiveFileInf
 	return resultList
 }
 
-func _sortPath(pathList *[]filePathListSortInfo, orderDir ArchiveOrderDir, index int, start int, end int) {
+func _sortPath(pathList *[]ArchiveFileInfo, orderDir ArchiveOrderDir, index int, start int, end int) {
 	_pathList := *pathList
 
-	_trimmedSlice := _pathList[start : end+1]
-
-	sort.SliceStable(_trimmedSlice, func(i, j int) bool {
+	sort.SliceStable(_pathList, func(i, j int) bool {
 		if orderDir == OrderDirDesc {
-			return processFilepathSorting(&_trimmedSlice, j, i, index)
+			return _pathList[i].splittedPath[0] > _pathList[j].splittedPath[0]
 		}
 
-		return processFilepathSorting(&_trimmedSlice, i, j, index)
+		return _pathList[i].splittedPath[0] < _pathList[j].splittedPath[0]
 	})
 
-	var _buckets [][]int
+	count := 0
+	for count < len(_pathList)-1 {
 
-	var _currentDirectoryName string
-	var _lastInsertedBucketIndex = -1
+		var bucket = [2]int{count, len(_pathList)}
 
-	for i := start; i <= end; i += 1 {
-		item := _pathList[i].pathSplitted[index]
+		for k, _ := range _pathList[count:] {
+			if _pathList[count+k].splittedPath[0] != _pathList[count+k+1].splittedPath[0] {
 
-		if _lastInsertedBucketIndex == -1 || item != _currentDirectoryName {
-			_currentDirectoryName = item
+				bucket[1] = count + k - 1
 
-			if _lastInsertedBucketIndex >= 0 && bucketSliceIndexExist(_buckets, _lastInsertedBucketIndex) {
-				_buckets[_lastInsertedBucketIndex] = append(_buckets[_lastInsertedBucketIndex], i-1)
-			}
+				count = count + k
 
-			_lastInsertedBucketIndex += 1
-
-			_buckets = append(_buckets, []int{i})
-		}
-
-		if i == end && bucketSliceIndexExist(_buckets, _lastInsertedBucketIndex) && len(_buckets[_lastInsertedBucketIndex]) < 2 {
-			_buckets[_lastInsertedBucketIndex] = append(_buckets[_lastInsertedBucketIndex], i)
-		}
-	}
-
-	if len(_buckets) > 0 {
-		for i := 0; i < len(_buckets); i += 1 {
-			if _buckets[i][0] != _buckets[i][1] {
-				_sortPath(pathList, orderDir, index+1, _buckets[i][0], _buckets[i][1])
+				break
 			}
 
 		}
+
+		trimmedPathList := _pathList[bucket[0] : bucket[1]+2]
+
+		sort.SliceStable(trimmedPathList, func(i, j int) bool {
+			if orderDir == OrderDirDesc {
+				return trimmedPathList[i].splittedPath[1] > trimmedPathList[j].splittedPath[1]
+			}
+
+			return trimmedPathList[i].splittedPath[1] < trimmedPathList[j].splittedPath[1]
+		})
+
+		count += 1
 	}
-}
-
-func processFilepathSorting(pathList *[]filePathListSortInfo, i, j, index int) bool {
-	_pathList := *pathList
-
-	// if the last index of the splitted path list is empty and if it's a directory then bring it to the top
-	if !filePathSliceIndexExist(_pathList[i], index+1) && (_pathList[i].isDir && _pathList[i].pathSplitted[index] == "" || _pathList[j].isDir && _pathList[j].pathSplitted[index] == "") {
-
-		return _pathList[i].pathSplitted[index] < _pathList[j].pathSplitted[index]
-	}
-
-	// if the path is a directory then sort it
-	if _pathList[i].isDir && _pathList[j].isDir || !_pathList[i].isDir && !_pathList[j].isDir {
-		return _pathList[i].pathSplitted[index] < _pathList[j].pathSplitted[index]
-	}
-
-	// if the next index of the splitted path list exists then sort it
-	if filePathSliceIndexExist(_pathList[i], index+1) {
-		return _pathList[i].pathSplitted[index] < _pathList[j].pathSplitted[index]
-	}
-
-	// if the comparison is between a file and directory then return false always as file should come on top
-	if _pathList[i].isDir && !_pathList[j].isDir {
-		return false
-	}
-
-	return true
-}
-
-func filePathSliceIndexExist(s filePathListSortInfo, x int) bool {
-	return len(s.pathSplitted) > x
-}
-
-func bucketSliceIndexExist(s [][]int, x int) bool {
-	return len(s) > x
 }

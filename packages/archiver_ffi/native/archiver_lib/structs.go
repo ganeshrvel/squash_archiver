@@ -7,12 +7,13 @@ import (
 )
 
 type ArchiveFileInfo struct {
-	Mode     os.FileMode
-	Size     int64
-	IsDir    bool
-	ModTime  time.Time
-	Name     string
-	FullPath string
+	splittedPath [2]string
+	Mode         os.FileMode
+	Size         int64
+	IsDir        bool
+	ModTime      time.Time
+	Name         string
+	FullPath     string
 }
 
 type ArchiveMeta struct {
@@ -36,7 +37,7 @@ type ArchivePack struct {
 }
 
 type filePathListSortInfo struct {
-	pathSplitted []string
+	pathSplitted [2]string
 	isDir        bool
 	Mode         os.FileMode
 	Size         int64
