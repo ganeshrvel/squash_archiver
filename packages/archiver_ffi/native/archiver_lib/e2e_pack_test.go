@@ -6,7 +6,7 @@ import (
 	"testing"
 )
 
-func _testListingPackedArchive(_metaObj *ArchiveMeta, password string) {
+func _testListingPackedArchive(_metaObj *ArchiveMeta, password string, customAssertionPathlist []string) {
 	Convey("recursive=true | Asc - it should not throw an error", func() {
 		_listObj := &ArchiveRead{
 			password:          password,
@@ -26,9 +26,13 @@ func _testListingPackedArchive(_metaObj *ArchiveMeta, password string) {
 			itemsArr = append(itemsArr, item.FullPath)
 		}
 
-		assertionArr := []string{"mock_dir1/", "mock_dir1/a.txt", "mock_dir1/1/", "mock_dir1/1/a.txt", "mock_dir1/2/", "mock_dir1/2/b.txt", "mock_dir1/3/", "mock_dir1/3/b.txt", "mock_dir1/3/2/", "mock_dir1/3/2/b.txt"}
+		var assertionArr []string
 
-		_ = []string{"mock_dir1/", "mock_dir1/1", "mock_dir1/2", "mock_dir1/3", "mock_dir1/a.txt", "mock_dir1/1/a.txt", "mock_dir1/2/b.txt", "mock_dir1/3/2", "mock_dir1/3/b.txt", "mock_dir1/3/2/b.txt"}
+		if customAssertionPathlist != nil {
+			assertionArr = customAssertionPathlist
+		} else {
+			assertionArr = []string{"mock_dir1/", "mock_dir1/a.txt", "mock_dir1/1/", "mock_dir1/1/a.txt", "mock_dir1/2/", "mock_dir1/2/b.txt", "mock_dir1/3/", "mock_dir1/3/b.txt", "mock_dir1/3/2/", "mock_dir1/3/2/b.txt"}
+		}
 
 		So(itemsArr, ShouldResemble, assertionArr)
 	})
@@ -40,7 +44,6 @@ func _testPacking(_metaObj *ArchiveMeta, password string) {
 		_packObj := &ArchivePack{
 			password:          password,
 			fileList:          []string{path1},
-			gitIgnorePattern:  "",
 			overwriteExisting: true,
 		}
 
@@ -49,12 +52,11 @@ func _testPacking(_metaObj *ArchiveMeta, password string) {
 		So(err, ShouldBeNil)
 	})
 
-	Convey("It should not throw an error", func() {
+	Convey("empty password | encryptionMethod=zip.StandardEncryption | It should not throw an error", func() {
 		path1 := getTestMocksAsset("mock_dir1")
 		_packObj := &ArchivePack{
 			password:          password,
 			fileList:          []string{path1},
-			gitIgnorePattern:  "", //todo
 			encryptionMethod:  zip.StandardEncryption,
 			overwriteExisting: true,
 		}
@@ -63,8 +65,29 @@ func _testPacking(_metaObj *ArchiveMeta, password string) {
 
 		So(err, ShouldBeNil)
 
-		Convey("Packed Archive listing", func() {
-			_testListingPackedArchive(_metaObj, password)
+		Convey("List Packed Archive files", func() {
+			_testListingPackedArchive(_metaObj, password, nil)
+		})
+	})
+
+	Convey("gitIgnorePattern | It should not throw an error", func() {
+		path1 := getTestMocksAsset("mock_dir1")
+		_packObj := &ArchivePack{
+			password:          password,
+			fileList:          []string{path1},
+			gitIgnorePattern:  []string{"b.txt"},
+			encryptionMethod:  zip.StandardEncryption,
+			overwriteExisting: true,
+		}
+
+		err := startPacking(_metaObj, _packObj)
+
+		So(err, ShouldBeNil)
+
+		Convey("List Packed Archive files", func() {
+			assertionArr := []string{"mock_dir1/", "mock_dir1/a.txt", "mock_dir1/1/", "mock_dir1/1/a.txt", "mock_dir1/2/", "mock_dir1/3/", "mock_dir1/3/2/"}
+
+			_testListingPackedArchive(_metaObj, password, assertionArr)
 		})
 	})
 }

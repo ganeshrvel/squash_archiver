@@ -72,7 +72,7 @@ func Pack() {
 	_packObj := &ArchivePack{
 		password:          "",
 		fileList:          []string{path1, path2},
-		gitIgnorePattern:  "",
+		gitIgnorePattern:  []string{},
 		encryptionMethod:  zip.StandardEncryption,
 		overwriteExisting: true,
 	}

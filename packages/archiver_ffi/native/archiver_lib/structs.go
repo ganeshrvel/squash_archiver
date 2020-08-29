@@ -7,12 +7,12 @@ import (
 )
 
 type ArchiveFileInfo struct {
-	Mode         os.FileMode
-	Size         int64
-	IsDir        bool
-	ModTime      time.Time
-	Name         string
-	FullPath     string
+	Mode     os.FileMode
+	Size     int64
+	IsDir    bool
+	ModTime  time.Time
+	Name     string
+	FullPath string
 }
 
 type ArchiveMeta struct {
@@ -30,19 +30,19 @@ type ArchiveRead struct {
 type ArchivePack struct {
 	password          string
 	fileList          []string
-	gitIgnorePattern  string
+	gitIgnorePattern  []string
 	encryptionMethod  zip.EncryptionMethod
 	overwriteExisting bool
 }
 
 type filePathListSortInfo struct {
 	splittedPaths [2]string
-	IsDir        bool
-	Mode         os.FileMode
-	Size         int64
-	ModTime      time.Time
-	Name         string
-	FullPath     string
+	IsDir         bool
+	Mode          os.FileMode
+	Size          int64
+	ModTime       time.Time
+	Name          string
+	FullPath      string
 }
 
 type ZipArchive struct {

@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	ignore "github.com/sabhiram/go-gitignore"
 	"github.com/wesovilabs/koazee"
 	"github.com/yeka/zip"
 	"io"
@@ -22,6 +23,7 @@ func getArchiveFilesRelativePath(absFilepath string, commonParentPath string) st
 func createZipFile(arc *ZipArchive, _fileList []string, commonParentPath string) error {
 	_filename := arc.meta.filename
 	_password := arc.pack.password
+	_gitIgnorePattern := arc.pack.gitIgnorePattern
 	_encryptionMethod := arc.pack.encryptionMethod
 
 	newZipFile, err := os.Create(_filename)
@@ -33,15 +35,17 @@ func createZipFile(arc *ZipArchive, _fileList []string, commonParentPath string)
 
 	zipWriter := zip.NewWriter(newZipFile)
 
+	var ignoreList []string
+	ignoreList = append(ignoreList, GlobalPatternDenylist...)
+	ignoreList = append(ignoreList, _gitIgnorePattern...)
+
+	ignoreMatches, _ := ignore.CompileIgnoreLines(ignoreList...)
+
 	for _, item := range _fileList {
 		err = filepath.Walk(item, func(absFilepath string, info os.FileInfo, err error) error {
 			if err != nil {
 				return err
 			}
-
-			/*if info.IsDir() {
-				return nil
-			}*/
 
 			relativeFilePath := absFilepath
 
@@ -73,6 +77,11 @@ func createZipFile(arc *ZipArchive, _fileList []string, commonParentPath string)
 			isFileADir := info.IsDir()
 			if isFileADir && !strings.HasSuffix(relativeFilePath, PathSep) {
 				relativeFilePath = fmt.Sprintf("%s%s", relativeFilePath, PathSep)
+			}
+
+			// ignore the files if pattern matches
+			if ignoreMatches.MatchesPath(relativeFilePath) {
+				return nil
 			}
 
 			if _password == "" {
