@@ -35,7 +35,6 @@ func _testListingPackedArchive(_metaObj *ArchiveMeta, password string) {
 }
 
 func _testPacking(_metaObj *ArchiveMeta, password string) {
-
 	Convey("encryptionMethod=nil | It should not throw an error", func() {
 		path1 := getTestMocksAsset("mock_dir1")
 		_packObj := &ArchivePack{
