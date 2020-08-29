@@ -47,6 +47,8 @@ func createZipFile(arc *ZipArchive, _fileList []string, commonParentPath string)
 				return err
 			}
 
+			//pretty.Println(absFilepath)
+
 			relativeFilePath := absFilepath
 
 			if commonParentPath != "" {
@@ -70,7 +72,6 @@ func createZipFile(arc *ZipArchive, _fileList []string, commonParentPath string)
 
 				} else {
 					relativeFilePath = getArchiveFilesRelativePath(absFilepath, commonParentPath)
-
 				}
 			}
 
@@ -78,6 +79,8 @@ func createZipFile(arc *ZipArchive, _fileList []string, commonParentPath string)
 			if isFileADir && !strings.HasSuffix(relativeFilePath, PathSep) {
 				relativeFilePath = fmt.Sprintf("%s%s", relativeFilePath, PathSep)
 			}
+
+			relativeFilePath = strings.TrimLeft(relativeFilePath, PathSep)
 
 			// ignore the files if pattern matches
 			if ignoreMatches.MatchesPath(relativeFilePath) {
