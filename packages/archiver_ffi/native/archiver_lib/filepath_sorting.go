@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/kr/pretty"
 	"path/filepath"
 	"sort"
 )
@@ -21,6 +22,10 @@ func sortPath(list []ArchiveFileInfo, orderDir ArchiveOrderDir) []ArchiveFileInf
 			IsDir:         x.IsDir,
 			FullPath:      x.FullPath,
 			splittedPaths: splittedPaths,
+			Mode:          x.Mode,
+			Size:          x.Size,
+			ModTime:       x.ModTime,
+			Name:          x.Name,
 		})
 	}
 
@@ -55,16 +60,17 @@ func _sortPath(pathList *[]filePathListSortInfo, orderDir ArchiveOrderDir) {
 
 	count := 0
 	for count < len(_pathList)-1 {
-		var bucket = [2]int{count, len(_pathList)}
+		start := count
+		end := len(_pathList)
 
 		for k, _ := range _pathList[count:] {
-			if orderDir == OrderDirDesc && count+k >= len(_pathList)-1 {
+			if count+k+1 >= len(_pathList) {
 				break
 			}
 
 			if _pathList[count+k].splittedPaths[0] != _pathList[count+k+1].splittedPaths[0] {
 
-				bucket[1] = count + k - 1
+				end = count + k + 1
 				count = count + k
 
 				break
@@ -72,12 +78,14 @@ func _sortPath(pathList *[]filePathListSortInfo, orderDir ArchiveOrderDir) {
 
 		}
 
-		trimmedPathList := _pathList[bucket[0] : bucket[1]+2]
+		trimmedPathList := _pathList[start : end]
 
 		sort.SliceStable(trimmedPathList, func(i, j int) bool {
 			if orderDir == OrderDirDesc {
 				return trimmedPathList[i].splittedPaths[1] > trimmedPathList[j].splittedPaths[1]
 			}
+
+			pretty.Println(trimmedPathList[i].splittedPaths[1], trimmedPathList[j].splittedPaths[1])
 
 			return trimmedPathList[i].splittedPaths[1] < trimmedPathList[j].splittedPaths[1]
 		})
