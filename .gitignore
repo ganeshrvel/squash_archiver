@@ -46,4 +46,3 @@ android/key.properties
 .gradle
 .android
 !vendors/.gitkeep
-packages/archiver_ffi/native/archiver_lib/tests/mocks-build

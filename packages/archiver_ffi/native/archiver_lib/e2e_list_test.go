@@ -477,7 +477,7 @@ func _testOrderByFullPathListing() {
 
 func _testArchiveEncryption() {
 	Convey("Encrypted zip | it should return true", func() {
-		filename := getTestMocksFile("mock_enc_test_file1.zip")
+		filename := getTestMocksAsset("mock_enc_test_file1.zip")
 		_metaObj := &ArchiveMeta{filename: filename}
 
 		result, err := isArchiveEncrypted(_metaObj)
@@ -488,7 +488,7 @@ func _testArchiveEncryption() {
 	})
 
 	Convey("Non Encrypted zip | it should return false", func() {
-		filename := getTestMocksFile("mock_test_file1.zip")
+		filename := getTestMocksAsset("mock_test_file1.zip")
 		_metaObj := &ArchiveMeta{filename: filename}
 
 		result, err := isArchiveEncrypted(_metaObj)
@@ -500,33 +500,37 @@ func _testArchiveEncryption() {
 }
 
 func TestArchiveListing(t *testing.T) {
+	if testing.Short() {
+		t.Skip("skipping 'TestArchiveListing' testing in short mode")
+	}
+
 	Convey("Testing OrderByFullPath", t, func() {
 		_testOrderByFullPathListing()
 	})
 
 	Convey("macOS Compressed Archive Listing - ZIP", t, func() {
-		filename := getTestMocksFile("mock_mac_test_file1.zip")
+		filename := getTestMocksAsset("mock_mac_test_file1.zip")
 		_metaObj := &ArchiveMeta{filename: filename}
 
 		_testArchiveListing(_metaObj, "")
 	})
 
 	Convey("Archive Listing - ZIP", t, func() {
-		filename := getTestMocksFile("mock_test_file1.zip")
+		filename := getTestMocksAsset("mock_test_file1.zip")
 		_metaObj := &ArchiveMeta{filename: filename}
 
 		_testArchiveListing(_metaObj, "")
 	})
 
 	Convey("Archive Listing - Encrypted ZIP", t, func() {
-		filename := getTestMocksFile("mock_enc_test_file1.zip")
+		filename := getTestMocksAsset("mock_enc_test_file1.zip")
 		_metaObj := &ArchiveMeta{filename: filename}
 
 		_testArchiveListing(_metaObj, "1234567")
 	})
 
 	Convey("Archive Listing - tar.gz", t, func() {
-		filename := getTestMocksFile("mock_test_file1.tar.gz")
+		filename := getTestMocksAsset("mock_test_file1.tar.gz")
 		_metaObj := &ArchiveMeta{filename: filename}
 
 		_testArchiveListing(_metaObj, "")
@@ -535,6 +539,10 @@ func TestArchiveListing(t *testing.T) {
 }
 
 func TestArchiveEncryption(t *testing.T) {
+	if testing.Short() {
+		t.Skip("skipping 'TestArchiveEncryption' testing in short mode")
+	}
+
 	Convey("Archive Encryption", t, func() {
 		_testArchiveEncryption()
 	})

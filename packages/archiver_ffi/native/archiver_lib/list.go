@@ -162,6 +162,8 @@ func (arc ZipArchive) list() ([]ArchiveFileInfo, error) {
 			FullPath: file.Name,
 		}
 
+		sanitizeDirPath(&fileInfo)
+
 		allowIncludeFile := getFilteredFiles(fileInfo, _listDirectoryPath, _recursive)
 
 		if allowIncludeFile {
@@ -254,6 +256,8 @@ func (arc CommonArchive) list() ([]ArchiveFileInfo, error) {
 			break
 		}
 
+		sanitizeDirPath(&fileInfo)
+
 		allowIncludeFile := getFilteredFiles(fileInfo, _listDirectoryPath, _recursive)
 
 		if allowIncludeFile {
@@ -306,4 +310,12 @@ func getArchiveFileList(meta *ArchiveMeta, read *ArchiveRead) ([]ArchiveFileInfo
 	}
 
 	return arcObj.list()
+}
+
+func sanitizeDirPath(fileInfo *ArchiveFileInfo, ) {
+	// add a directory separator if missing in the path.
+	// we use directory separator to perform some calculations
+	if fileInfo.IsDir && !strings.HasSuffix(fileInfo.FullPath, PathSep) {
+		fileInfo.FullPath = fmt.Sprintf("%s%s", fileInfo.FullPath, PathSep)
+	}
 }

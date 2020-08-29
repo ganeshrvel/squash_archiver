@@ -39,9 +39,9 @@ func createZipFile(arc *ZipArchive, _fileList []string, commonParentPath string)
 				return err
 			}
 
-			if info.IsDir() {
+			/*if info.IsDir() {
 				return nil
-			}
+			}*/
 
 			relativeFilePath := absFilepath
 
@@ -66,7 +66,13 @@ func createZipFile(arc *ZipArchive, _fileList []string, commonParentPath string)
 
 				} else {
 					relativeFilePath = getArchiveFilesRelativePath(absFilepath, commonParentPath)
+
 				}
+			}
+
+			isFileADir := info.IsDir()
+			if isFileADir && !strings.HasSuffix(relativeFilePath, PathSep) {
+				relativeFilePath = fmt.Sprintf("%s%s", relativeFilePath, PathSep)
 			}
 
 			if _password == "" {

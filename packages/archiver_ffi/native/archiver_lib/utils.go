@@ -17,6 +17,15 @@ func fileExists(filename string) bool {
 
 	return !info.IsDir()
 }
+func exists(filename string) bool {
+	_, err := os.Stat(filename)
+
+	if os.IsNotExist(err) {
+		return false
+	}
+
+	return true
+}
 
 func getDesktopFiles(filename string) string {
 	_home, _ := homedir.Dir()
