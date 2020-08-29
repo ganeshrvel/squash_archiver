@@ -1,7 +1,6 @@
 package main
 
 import (
-	"github.com/kr/pretty"
 	"path/filepath"
 	"sort"
 )
@@ -78,14 +77,12 @@ func _sortPath(pathList *[]filePathListSortInfo, orderDir ArchiveOrderDir) {
 
 		}
 
-		trimmedPathList := _pathList[start : end]
+		trimmedPathList := _pathList[start:end]
 
 		sort.SliceStable(trimmedPathList, func(i, j int) bool {
 			if orderDir == OrderDirDesc {
 				return trimmedPathList[i].splittedPaths[1] > trimmedPathList[j].splittedPaths[1]
 			}
-
-			pretty.Println(trimmedPathList[i].splittedPaths[1], trimmedPathList[j].splittedPaths[1])
 
 			return trimmedPathList[i].splittedPaths[1] < trimmedPathList[j].splittedPaths[1]
 		})
