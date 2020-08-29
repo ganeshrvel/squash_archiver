@@ -1,65 +1,11 @@
 package main
 
 import (
-	"fmt"
 	. "github.com/smartystreets/goconvey/convey"
-	"log"
-	"os"
 	"path/filepath"
 	"strings"
 	"testing"
 )
-
-func getTestMocksFile(filename string) string {
-	currentDir, err := os.Getwd()
-
-	if err != nil {
-		log.Panicf("unable to fetch the current directory: %s\n", currentDir)
-	}
-
-	resultPath := fmt.Sprintf("%s/tests/mocks/", currentDir)
-
-	if exist := isDir(resultPath); !exist {
-		_, err := os.Create(resultPath)
-
-		if err != nil {
-			log.Panicf("'mocks' directory not found: %s\n", resultPath)
-		}
-	}
-
-	resultPath = fmt.Sprintf("%s%s", resultPath, filename)
-
-	if exist := fileExists(resultPath); !exist {
-		log.Panicf("the 'mocks' file not found: %s\n", resultPath)
-	}
-
-	return resultPath
-}
-func getTestMocksBuildDir(filename string) string {
-	currentDir, err := os.Getwd()
-
-	if err != nil {
-		log.Panicf("unable to fetch the current directory: %s\n", currentDir)
-	}
-
-	resultPath := fmt.Sprintf("%s/tests/mocks-build/", currentDir)
-
-	if exist := isDir(resultPath); !exist {
-		_, err := os.Create(resultPath)
-
-		if err != nil {
-			log.Panicf("'mocks-build' directory not found: %s\n", resultPath)
-		}
-	}
-
-	resultPath = fmt.Sprintf("%s%s", resultPath, filename)
-
-	if exist := fileExists(resultPath); !exist {
-		log.Panicf("the 'mocks-build' file not found: %s\n", resultPath)
-	}
-
-	return resultPath
-}
 
 func _testArchiveListing(_metaObj *ArchiveMeta, password string) {
 	Convey("General tests", func() {
@@ -529,6 +475,30 @@ func _testOrderByFullPathListing() {
 	})
 }
 
+func _testArchiveEncryption() {
+	Convey("Encrypted zip | it should return true", func() {
+		filename := getTestMocksFile("mock_enc_test_file1.zip")
+		_metaObj := &ArchiveMeta{filename: filename}
+
+		result, err := isArchiveEncrypted(_metaObj)
+
+		So(err, ShouldBeNil)
+
+		So(result, ShouldBeTrue)
+	})
+
+	Convey("Non Encrypted zip | it should return false", func() {
+		filename := getTestMocksFile("mock_test_file1.zip")
+		_metaObj := &ArchiveMeta{filename: filename}
+
+		result, err := isArchiveEncrypted(_metaObj)
+
+		So(err, ShouldBeNil)
+
+		So(result, ShouldBeFalse)
+	})
+}
+
 func TestArchiveListing(t *testing.T) {
 	Convey("Testing OrderByFullPath", t, func() {
 		_testOrderByFullPathListing()
@@ -560,5 +530,12 @@ func TestArchiveListing(t *testing.T) {
 		_metaObj := &ArchiveMeta{filename: filename}
 
 		_testArchiveListing(_metaObj, "")
+	})
+
+}
+
+func TestArchiveEncryption(t *testing.T) {
+	Convey("Archive Encryption", t, func() {
+		_testArchiveEncryption()
 	})
 }
