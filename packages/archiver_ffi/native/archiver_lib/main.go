@@ -2,10 +2,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/kr/pretty"
 	"github.com/yeka/zip"
-	"path/filepath"
-	"strings"
 )
 
 //export ListArchive
@@ -96,64 +93,4 @@ func main() {
 	//ListArchive()
 	//IsArchiveEncrypted()
 	//Pack()
-
-	var splittedList []filePathListSortInfo
-	/*	for _, x := range list {
-		splittedList_ = append(splittedList_, x.FullPath)
-	}*/
-
-	//__splittedList := []string{"mock_dir1/1/", "mock_dir1/3/", "mock_dir1/2/", "mock_dir1/a.txt"}
-
-	//__splittedList := []string{"/mock_dir1/3/2", "/mock_dir1/3/2/b.txt", "mock_dir1/3/b.txt"}
-	/*__splittedList := []string{"mock_dir1/3/2", "mock_dir1/3/2/b", "mock_dir1/2/", "mock_dir1/1", "mock_dir1/3/b.txt"}*/
-	list := []string{"/A/file1.txt",
-		"/A/B/C/D/file3.txt",
-		"/A/B/file2.txt",
-		"/A/B/file1.txt",
-		"/A/B/123.txt",
-		"/A/B/C/D/file1.txt",
-		"/A/file2.txt",
-		"/A/B/",
-		"/A/W/X/Y/Z/file1.txt",
-		"/A/W/file1.txt",
-		"/A/W/X/file1.txt",
-		"/A/file3.txt",
-		"/A/B/C/file1.txt",
-		"/mock_dir1/3/2/",
-		"/mock_dir1/3/2/b/",
-		"/mock_dir1/2/",
-		"/mock_dir1/1/",
-		"/mock_dir1/1/2/",
-		"/mock_dir1/1/a.txt",
-		"/mock_dir1/3/b.txt",
-		"/A/W/X/Y/file1.txt",
-		"/A/B/file2.txt"}
-
-	for _, x := range list {
-		isDir := !strings.HasSuffix(x, ".txt")
-
-		var pathSplitted [2]string
-
-		if !isDir {
-			pathSplitted = [2]string{filepath.Dir(x), filepath.Base(x)}
-		} else {
-			pathSplitted = [2]string{filepath.Dir(x), ""}
-		}
-
-		splittedList = append(splittedList, filePathListSortInfo{
-			IsDir:        isDir,
-			FullPath:     x,
-			splittedPaths: pathSplitted,
-		})
-	}
-
-	_sortPath(&splittedList, OrderDirDesc)
-
-	var sortedPath []string
-
-	for _, x := range splittedList {
-		sortedPath = append(sortedPath, x.FullPath)
-	}
-
-	pretty.Println(sortedPath)
 }

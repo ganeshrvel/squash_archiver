@@ -63,14 +63,17 @@ func _sortPath(pathList *[]filePathListSortInfo, orderDir ArchiveOrderDir) {
 		end := len(_pathList)
 
 		for k, _ := range _pathList[count:] {
-			if count+k+1 >= len(_pathList) {
+			currentIndex := count + k
+			nextIndex := count + k + 1
+
+			if nextIndex >= len(_pathList) {
 				break
 			}
 
-			if _pathList[count+k].splittedPaths[0] != _pathList[count+k+1].splittedPaths[0] {
+			if _pathList[currentIndex].splittedPaths[0] != _pathList[nextIndex].splittedPaths[0] {
 
-				end = count + k + 1
-				count = count + k
+				end = nextIndex
+				count = currentIndex
 
 				break
 			}
