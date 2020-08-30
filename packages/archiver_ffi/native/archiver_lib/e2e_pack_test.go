@@ -6,7 +6,7 @@ import (
 	"testing"
 )
 
-func _testListingPackedArchive(_metaObj *ArchiveMeta, password string, customAssertionPathlist []string) {
+func _testListingPackedArchive(_metaObj *ArchiveMeta, password string, assertionArr []string) {
 	Convey("recursive=true | Asc - it should not throw an error", func() {
 		_listObj := &ArchiveRead{
 			password:          password,
@@ -24,14 +24,6 @@ func _testListingPackedArchive(_metaObj *ArchiveMeta, password string, customAss
 
 		for _, item := range result {
 			itemsArr = append(itemsArr, item.FullPath)
-		}
-
-		var assertionArr []string
-
-		if customAssertionPathlist != nil {
-			assertionArr = customAssertionPathlist
-		} else {
-			assertionArr = []string{"mock_dir1/", "mock_dir1/a.txt", "mock_dir1/1/", "mock_dir1/1/a.txt", "mock_dir1/2/", "mock_dir1/2/b.txt", "mock_dir1/3/", "mock_dir1/3/b.txt", "mock_dir1/3/2/", "mock_dir1/3/2/b.txt"}
 		}
 
 		So(itemsArr, ShouldResemble, assertionArr)
@@ -74,7 +66,9 @@ func _testPacking(_metaObj *ArchiveMeta, password string, encryptionMethod zip.E
 		So(err, ShouldBeNil)
 
 		Convey("List Packed Archive files", func() {
-			_testListingPackedArchive(_metaObj, password, nil)
+			assertionArr := []string{"mock_dir1/", "mock_dir1/a.txt", "mock_dir1/1/", "mock_dir1/1/a.txt", "mock_dir1/2/", "mock_dir1/2/b.txt", "mock_dir1/3/", "mock_dir1/3/b.txt", "mock_dir1/3/2/", "mock_dir1/3/2/b.txt"}
+
+			_testListingPackedArchive(_metaObj, password, assertionArr)
 		})
 	})
 
@@ -307,7 +301,7 @@ func _testPacking(_metaObj *ArchiveMeta, password string, encryptionMethod zip.E
 		So(err, ShouldBeNil)
 
 		Convey("List Packed Archive files", func() {
-			assertionList := []string{"mock_dir1/", "mock_dir1/1/", "mock_dir1/1/a.txt", "mock_dir2/", "mock_dir2/3/", "mock_dir2/3/2/", "mock_dir2/3/2/b.txt", "mock_dir3/", "mock_dir3/dir_1/", "mock_dir3/dir_1/a.txt", "mock_dir3/dir_1/1/", "mock_dir3/dir_1/1/", "mock_dir3/dir_1/1/a.txt", "mock_dir3/dir_1/2/", "mock_dir3/dir_1/2/b.txt", "mock_dir3/dir_1/3/", "mock_dir3/dir_1/3/b.txt", "mock_dir3/dir_1/3/2/", "mock_dir3/dir_1/3/2/b.txt"}
+			assertionList := []string{"mock_dir1/", "mock_dir1/1/", "mock_dir1/1/a.txt", "mock_dir2/", "mock_dir2/3/", "mock_dir2/3/2/", "mock_dir2/3/2/b.txt", "mock_dir3/", "mock_dir3/dir_1/", "mock_dir3/dir_1/a.txt", "mock_dir3/dir_1/1/", "mock_dir3/dir_1/1/a.txt", "mock_dir3/dir_1/2/", "mock_dir3/dir_1/2/b.txt", "mock_dir3/dir_1/3/", "mock_dir3/dir_1/3/b.txt", "mock_dir3/dir_1/3/2/", "mock_dir3/dir_1/3/2/b.txt"}
 
 			_testListingPackedArchive(_metaObj, password, assertionList)
 		})
@@ -351,8 +345,7 @@ func _testPacking(_metaObj *ArchiveMeta, password string, encryptionMethod zip.E
 		So(err, ShouldBeNil)
 
 		Convey("List Packed Archive files", func() {
-			assertionList := []string{"mock_dir1/", "mock_dir1/1/", "mock_dir1/1/a.txt", "mock_dir2/", "mock_dir2/3/", "mock_dir2/3/2/", "mock_dir2/3/2/b.txt"}
-			//assertionList := []string{"b.txt", "/", "2/", "2/", "2/b.txt"}
+			assertionList := []string{"b.txt", "2/", "2/b.txt"}
 
 			_testListingPackedArchive(_metaObj, password, assertionList)
 		})
@@ -373,10 +366,72 @@ func _testPacking(_metaObj *ArchiveMeta, password string, encryptionMethod zip.E
 		So(err, ShouldBeNil)
 
 		Convey("List Packed Archive files", func() {
-			assertionList := []string{"mock_dir1/", "mock_dir1/1/", "mock_dir1/1/a.txt", "mock_dir2/", "mock_dir2/3/", "mock_dir2/3/2/", "mock_dir2/3/2/b.txt"}
-			//assertionList := []string{"b.txt", "/", "2/", "2/", "2/b.txt"}
+			assertionList := []string{"b.txt", "2/", "2/b.txt"}
 
 			_testListingPackedArchive(_metaObj, password, assertionList)
+		})
+	})
+
+	Convey("Multiple paths in 'fileList' | selected - same file multiple times | It should not throw an error", func() {
+		path1 := getTestMocksAsset("mock_dir3/b.txt")
+		path2 := getTestMocksAsset("mock_dir3/b.txt")
+		path3 := getTestMocksAsset("mock_dir3/b.txt")
+		_packObj := &ArchivePack{
+			password:          password,
+			fileList:          []string{path1, path2, path3},
+			encryptionMethod:  encryptionMethod,
+			overwriteExisting: true,
+		}
+
+		err := startPacking(_metaObj, _packObj)
+
+		So(err, ShouldBeNil)
+
+		Convey("List Packed Archive files", func() {
+			assertionList := []string{"b.txt"}
+
+			_testListingPackedArchive(_metaObj, password, assertionList)
+		})
+	})
+
+	Convey("Multiple paths in 'fileList' | selected - same directory multiple times | It should not throw an error", func() {
+		path1 := getTestMocksAsset("mock_dir3/")
+		path2 := getTestMocksAsset("mock_dir3/")
+		path3 := getTestMocksAsset("mock_dir3/")
+		_packObj := &ArchivePack{
+			password:          password,
+			fileList:          []string{path1, path2, path3},
+			encryptionMethod:  encryptionMethod,
+			overwriteExisting: true,
+		}
+
+		err := startPacking(_metaObj, _packObj)
+
+		So(err, ShouldBeNil)
+
+		Convey("List Packed Archive files", func() {
+			assertionList := []string{"a.txt", "b.txt", "1/", "1/a.txt", "2/", "2/b.txt", "dir_1/", "dir_1/a.txt", "dir_1/1/", "dir_1/1/a.txt", "dir_1/2/", "dir_1/2/b.txt", "dir_1/3/", "dir_1/3/b.txt", "dir_1/3/2/", "dir_1/3/2/b.txt"}
+
+			_testListingPackedArchive(_metaObj, password, assertionList)
+		})
+	})
+
+	Convey("Multiple paths in 'fileList' | selected - no file | It should not throw an error", func() {
+		_packObj := &ArchivePack{
+			password:          password,
+			fileList:          []string{},
+			encryptionMethod:  encryptionMethod,
+			overwriteExisting: true,
+		}
+
+		err := startPacking(_metaObj, _packObj)
+
+		So(err, ShouldBeNil)
+
+		Convey("List Packed Archive files", func() {
+			assertionArr := []string(nil)
+
+			_testListingPackedArchive(_metaObj, password, assertionArr)
 		})
 	})
 }

@@ -124,8 +124,14 @@ func isDir(name string) bool {
 	return false
 }
 
-func addSlashToDir(isDir bool, absFilepath *string) {
-	if isDir && !strings.HasSuffix(*absFilepath, PathSep) {
-		*absFilepath = fmt.Sprintf("%s%s", *absFilepath, PathSep)
+func fixDirSlash(isDir bool, absFilepath string) string {
+	if isDir && !strings.HasSuffix(absFilepath, PathSep) {
+		absFilepath = fmt.Sprintf("%s%s", absFilepath, PathSep)
 	}
+
+	return absFilepath
+}
+
+func stringIndexExists(arr *[]string, index int) bool {
+	return len(*arr) > index
 }

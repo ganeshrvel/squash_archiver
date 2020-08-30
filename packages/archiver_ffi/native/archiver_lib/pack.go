@@ -6,6 +6,7 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"strings"
 	"time"
 )
 
@@ -16,6 +17,12 @@ func (arc ZipArchive) doPack() error {
 	_fileList := arc.pack.fileList
 
 	commonParentPath := getParentPath(os.PathSeparator, _fileList...)
+
+	if stringIndexExists(&_fileList, 0) && commonParentPath == _fileList[0] {
+		commonParentPathSplitted := strings.Split(_fileList[0], PathSep)
+
+		commonParentPath = strings.Join(commonParentPathSplitted[:len(commonParentPathSplitted)-1], PathSep)
+	}
 
 	if err := createZipFile(&arc, _fileList, commonParentPath); err != nil {
 		return err

@@ -81,7 +81,7 @@ func createZipFile(arc *ZipArchive, _fileList []string, commonParentPath string)
 			}
 
 			isFileADir := info.IsDir()
-			addSlashToDir(isFileADir, &relativeFilePath)
+			relativeFilePath = fixDirSlash(isFileADir, relativeFilePath)
 
 			relativeFilePath = strings.TrimLeft(relativeFilePath, PathSep)
 
@@ -97,6 +97,11 @@ func createZipFile(arc *ZipArchive, _fileList []string, commonParentPath string)
 					for pathIndex := range splittedPaths {
 						_relativeFilePath := strings.Join(splittedPaths[:pathIndex+1], PathSep)
 
+						// skip if filename is blank
+						if _relativeFilePath == "" {
+							continue
+						}
+
 						_absFilepath := fmt.Sprintf("%s%s%s", commonParentPath, PathSep, _relativeFilePath)
 
 						isDir := true
@@ -105,7 +110,7 @@ func createZipFile(arc *ZipArchive, _fileList []string, commonParentPath string)
 							isDir = false
 						}
 
-						addSlashToDir(isDir, &_absFilepath)
+						_absFilepath = fixDirSlash(isDir, _absFilepath)
 
 						zipFilePathListMap[_absFilepath] = createZipFilePathList{
 							absFilepath:      _absFilepath,
@@ -117,6 +122,8 @@ func createZipFile(arc *ZipArchive, _fileList []string, commonParentPath string)
 					return nil
 				}
 			}
+
+			absFilepath = fixDirSlash(isFileADir, absFilepath)
 
 			zipFilePathListMap[absFilepath] = createZipFilePathList{
 				absFilepath:      absFilepath,
@@ -130,6 +137,7 @@ func createZipFile(arc *ZipArchive, _fileList []string, commonParentPath string)
 	}
 
 	for _, item := range zipFilePathListMap {
+
 		if _password == "" {
 			if err := addFileToRegularZip(zipWriter, item.absFilepath, item.relativeFilePath); err != nil {
 				return err
