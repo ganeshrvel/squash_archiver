@@ -446,10 +446,34 @@ func TestPacking(t *testing.T) {
 	})
 
 	Convey("Packing | Encrypted - ZIP (StandardEncryption)", t, func() {
-		filename := newTempMocksAsset("arc_test_enc_pack.zip")
+		filename := newTempMocksAsset("arc_test_stdenc_pack.zip")
 
 		_metaObj := &ArchiveMeta{filename: filename}
 
 		_testPacking(_metaObj, "1234567", zip.StandardEncryption)
+	})
+
+	Convey("Packing | Encrypted - ZIP (AES128Encryption)", t, func() {
+		filename := newTempMocksAsset("arc_test_AES128enc_pack.zip")
+
+		_metaObj := &ArchiveMeta{filename: filename}
+
+		_testPacking(_metaObj, "1234567", zip.AES128Encryption)
+	})
+
+	Convey("Packing | Encrypted - ZIP (AES192Encryption)", t, func() {
+		filename := newTempMocksAsset("arc_test_AES192enc_pack.zip")
+
+		_metaObj := &ArchiveMeta{filename: filename}
+
+		_testPacking(_metaObj, "1234567", zip.AES192Encryption)
+	})
+
+	Convey("Packing | Encrypted - ZIP (AES256Encryption)", t, func() {
+		filename := newTempMocksAsset("arc_test_AES256enc_pack.zip")
+
+		_metaObj := &ArchiveMeta{filename: filename}
+
+		_testPacking(_metaObj, "1234567", zip.AES256Encryption)
 	})
 }
