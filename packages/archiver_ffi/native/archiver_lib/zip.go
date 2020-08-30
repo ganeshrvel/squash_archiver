@@ -111,6 +111,7 @@ func createZipFile(arc *ZipArchive, _fileList []string, commonParentPath string)
 						}
 
 						_absFilepath = fixDirSlash(isDir, _absFilepath)
+						_relativeFilePath = fixDirSlash(isDir, _relativeFilePath)
 
 						zipFilePathListMap[_absFilepath] = createZipFilePathList{
 							absFilepath:      _absFilepath,
@@ -143,7 +144,7 @@ func createZipFile(arc *ZipArchive, _fileList []string, commonParentPath string)
 				return err
 			}
 		} else {
-			if err := addFileToEncryptedZip(zipWriter, item.absFilepath, _password, _encryptionMethod); err != nil {
+			if err := addFileToEncryptedZip(zipWriter, item.absFilepath, item.relativeFilePath, _password, _encryptionMethod); err != nil {
 				return err
 			}
 		}
@@ -196,7 +197,7 @@ func addFileToRegularZip(zipWriter *zip.Writer, filename string, relativeFilenam
 	return err
 }
 
-func addFileToEncryptedZip(zipWriter *zip.Writer, filename string, password string,
+func addFileToEncryptedZip(zipWriter *zip.Writer, filename string, relativeFilename string, password string,
 	encryptionMethod zip.EncryptionMethod) error {
 	fileToZip, err := os.Open(filename)
 
@@ -209,8 +210,7 @@ func addFileToEncryptedZip(zipWriter *zip.Writer, filename string, password stri
 	// Get the file information
 	// Using FileInfoHeader() above only uses the basename of the file. If we want
 	// to preserve the folder structure we can overwrite this with the full path.
-
-	writer, err := zipWriter.Encrypt(filename, password, encryptionMethod)
+	writer, err := zipWriter.Encrypt(relativeFilename, password, encryptionMethod)
 
 	if err != nil {
 		return err

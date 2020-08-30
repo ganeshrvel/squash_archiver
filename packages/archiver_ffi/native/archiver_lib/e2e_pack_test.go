@@ -444,4 +444,12 @@ func TestPacking(t *testing.T) {
 
 		_testPacking(_metaObj, "", zip.StandardEncryption)
 	})
+
+	Convey("Packing | Encrypted - ZIP (StandardEncryption)", t, func() {
+		filename := newTempMocksAsset("arc_test_enc_pack.zip")
+
+		_metaObj := &ArchiveMeta{filename: filename}
+
+		_testPacking(_metaObj, "1234567", zip.StandardEncryption)
+	})
 }
