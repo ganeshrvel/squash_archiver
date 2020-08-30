@@ -20,6 +20,11 @@ func getArchiveFilesRelativePath(absFilepath string, commonParentPath string) st
 	return lastItem.String()
 }
 
+type createZipFilePathList struct {
+	absFilepath, relativeFilePath string
+	isDir                         bool
+}
+
 func createZipFile(arc *ZipArchive, _fileList []string, commonParentPath string) error {
 	_filename := arc.meta.filename
 	_password := arc.pack.password
@@ -41,13 +46,13 @@ func createZipFile(arc *ZipArchive, _fileList []string, commonParentPath string)
 
 	ignoreMatches, _ := ignore.CompileIgnoreLines(ignoreList...)
 
+	zipFilePathListMap := make(map[string]createZipFilePathList)
+
 	for _, item := range _fileList {
 		err = filepath.Walk(item, func(absFilepath string, info os.FileInfo, err error) error {
 			if err != nil {
 				return err
 			}
-
-			//pretty.Println(absFilepath)
 
 			relativeFilePath := absFilepath
 
@@ -76,9 +81,7 @@ func createZipFile(arc *ZipArchive, _fileList []string, commonParentPath string)
 			}
 
 			isFileADir := info.IsDir()
-			if isFileADir && !strings.HasSuffix(relativeFilePath, PathSep) {
-				relativeFilePath = fmt.Sprintf("%s%s", relativeFilePath, PathSep)
-			}
+			addSlashToDir(isFileADir, &relativeFilePath)
 
 			relativeFilePath = strings.TrimLeft(relativeFilePath, PathSep)
 
@@ -87,19 +90,55 @@ func createZipFile(arc *ZipArchive, _fileList []string, commonParentPath string)
 				return nil
 			}
 
-			if _password == "" {
-				if err := addFileToRegularZip(zipWriter, absFilepath, relativeFilePath); err != nil {
-					return err
+			// when the commonpath is used to construct the relative path, the parent directories in the filepath list doesnt get written into the archive file
+			if commonParentPath != "" && absFilepath != commonParentPath {
+				if item == absFilepath {
+					splittedPaths := strings.Split(relativeFilePath, PathSep)
+					for pathIndex := range splittedPaths {
+						_relativeFilePath := strings.Join(splittedPaths[:pathIndex+1], PathSep)
+
+						_absFilepath := fmt.Sprintf("%s%s%s", commonParentPath, PathSep, _relativeFilePath)
+
+						isDir := true
+
+						if pathIndex == len(splittedPaths)-1 {
+							isDir = false
+						}
+
+						addSlashToDir(isDir, &_absFilepath)
+
+						zipFilePathListMap[_absFilepath] = createZipFilePathList{
+							absFilepath:      _absFilepath,
+							relativeFilePath: _relativeFilePath,
+							isDir:            isDir,
+						}
+					}
+
+					return nil
 				}
-			} else {
-				if err := addFileToEncryptedZip(zipWriter, absFilepath, _password, _encryptionMethod); err != nil {
-					return err
-				}
+			}
+
+			zipFilePathListMap[absFilepath] = createZipFilePathList{
+				absFilepath:      absFilepath,
+				relativeFilePath: relativeFilePath,
+				isDir:            isFileADir,
 			}
 
 			return nil
 		})
 
+	}
+
+	for _, item := range zipFilePathListMap {
+		if _password == "" {
+			if err := addFileToRegularZip(zipWriter, item.absFilepath, item.relativeFilePath); err != nil {
+				return err
+			}
+		} else {
+			if err := addFileToEncryptedZip(zipWriter, item.absFilepath, _password, _encryptionMethod); err != nil {
+				return err
+			}
+		}
 	}
 
 	defer func() {

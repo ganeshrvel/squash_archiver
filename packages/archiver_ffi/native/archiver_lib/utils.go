@@ -6,6 +6,7 @@ import (
 	"github.com/mitchellh/go-homedir"
 	"os"
 	"path"
+	"strings"
 )
 
 func fileExists(filename string) bool {
@@ -121,4 +122,10 @@ func isDir(name string) bool {
 		}
 	}
 	return false
+}
+
+func addSlashToDir(isDir bool, absFilepath *string) {
+	if isDir && !strings.HasSuffix(*absFilepath, PathSep) {
+		*absFilepath = fmt.Sprintf("%s%s", *absFilepath, PathSep)
+	}
 }
