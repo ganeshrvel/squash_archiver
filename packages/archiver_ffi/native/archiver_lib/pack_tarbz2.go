@@ -7,7 +7,7 @@ import (
 	"strings"
 )
 
-func packCommonArchives(arc *CommonArchive, newArchiveFile *archiver.TarGz, fileList []string, commonParentPath string) error {
+func packTarBz2(arc *CommonArchive, newArchiveFile *archiver.TarBz2, fileList []string, commonParentPath string) error {
 	_filename := arc.meta.filename
 	_gitIgnorePattern := arc.pack.gitIgnorePattern
 
@@ -29,7 +29,7 @@ func packCommonArchives(arc *CommonArchive, newArchiveFile *archiver.TarGz, file
 	}
 
 	for _, item := range zipFilePathListMap {
-		if err := addFileToCommonArchive(newArchiveFile, item.fileInfo, item.absFilepath, item.relativeFilePath, item.isDir)
+		if err := addFileToTarBz2Archive(newArchiveFile, item.fileInfo, item.absFilepath, item.relativeFilePath, item.isDir)
 			err != nil {
 			return err
 		}
@@ -44,7 +44,7 @@ func packCommonArchives(arc *CommonArchive, newArchiveFile *archiver.TarGz, file
 	return err
 }
 
-func addFileToCommonArchive(newArchiveFile *archiver.TarGz, fileInfo os.FileInfo, filename string, relativeFilename string, isDir bool) error {
+func addFileToTarBz2Archive(newArchiveFile *archiver.TarBz2, fileInfo os.FileInfo, filename string, relativeFilename string, isDir bool) error {
 	fileToZip, err := os.Open(filename)
 	_relativeFilename := relativeFilename
 

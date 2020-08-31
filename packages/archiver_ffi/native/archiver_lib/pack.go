@@ -66,8 +66,14 @@ func (arc CommonArchive) doPack() error {
 	}
 
 	switch arcValue := arcFileObj.(type) {
+	case *archiver.Tar:
+		err = packTar(&arc, arcValue, _fileList, commonParentPath)
+
 	case *archiver.TarGz:
-		err = packCommonArchives(&arc, arcValue, _fileList, commonParentPath)
+		err = packTarGz(&arc, arcValue, _fileList, commonParentPath)
+
+	case *archiver.TarBz2:
+		err = packTarBz2(&arc, arcValue, _fileList, commonParentPath)
 
 	default:
 		break
