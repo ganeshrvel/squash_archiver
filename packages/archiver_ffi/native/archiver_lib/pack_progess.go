@@ -2,10 +2,12 @@ package main
 
 import (
 	rxgo "github.com/ReactiveX/RxGo"
+	"time"
 )
 
 func initPackingProgress(totalFiles int) (*PackingProgressInfo, *chan rxgo.Item) {
 	pInfo := PackingProgressInfo{
+		startTime:          time.Now(),
 		totalFiles:         totalFiles,
 		progressCount:      0,
 		currentFilename:    "",
@@ -21,7 +23,10 @@ func initPackingProgress(totalFiles int) (*PackingProgressInfo, *chan rxgo.Item)
 	}, func(err error) {
 		//fmt.Printf("error: %e\n", err)
 	}, func() {
+		//elapsed := time.Since(pInfo.startTime)
+		//
 		//fmt.Println("observable is closed")
+		//fmt.Printf("\nTime taken to create the archive: %s\n", elapsed)
 	})
 
 	return &pInfo, &ch

@@ -5,17 +5,12 @@ import (
 	"github.com/ganeshrvel/archiver"
 	ignore "github.com/sabhiram/go-gitignore"
 	"github.com/wesovilabs/koazee"
-	"log"
 	"os"
 	"path/filepath"
 	"strings"
-	"time"
 )
 
 func (arc ZipArchive) doPack() error {
-	// TODO remove
-	start := time.Now()
-
 	_fileList := arc.pack.fileList
 
 	commonParentPath := getParentPath(os.PathSeparator, _fileList...)
@@ -30,17 +25,10 @@ func (arc ZipArchive) doPack() error {
 		return err
 	}
 
-	// TODO remove
-	elapsed := time.Since(start)
-	log.Printf("time taken %s", elapsed)
-
 	return nil
 }
 
 func (arc CommonArchive) doPack() error {
-	// TODO remove
-	start := time.Now()
-
 	_filename := arc.meta.filename
 	_fileList := arc.pack.fileList
 	_overwriteExisting := arc.pack.overwriteExisting
@@ -90,10 +78,6 @@ func (arc CommonArchive) doPack() error {
 	if err != nil {
 		return err
 	}
-
-	// TODO remove
-	elapsed := time.Since(start)
-	log.Printf("time taken %s", elapsed)
 
 	return nil
 }

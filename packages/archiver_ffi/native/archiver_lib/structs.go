@@ -76,8 +76,9 @@ type createZipFilePathList struct {
 }
 
 type PackingProgressInfo struct {
-	totalFiles int
-	progressCount int
-	currentFilename string
+	startTime          time.Time
+	totalFiles         int
+	progressCount      int
+	currentFilename    string
 	progressPercentage float32
 }

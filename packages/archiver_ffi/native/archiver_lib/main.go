@@ -65,7 +65,7 @@ func IsArchiveEncrypted() {
 func Pack() {
 	filename := getDesktopFiles("12345.pack.zip")
 	path1 := getDesktopFiles("test")
-	path2 := getDesktopFiles("openmtp/dll")
+	path2 := getDesktopFiles("openmtp")
 
 	_metaObj := &ArchiveMeta{filename: filename}
 
