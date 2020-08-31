@@ -1,7 +1,10 @@
 package main
 
 import (
+	"fmt"
 	"github.com/ganeshrvel/archiver"
+	ignore "github.com/sabhiram/go-gitignore"
+	"github.com/wesovilabs/koazee"
 	"log"
 	"os"
 	"path/filepath"
@@ -64,35 +67,15 @@ func (arc CommonArchive) doPack() error {
 
 	switch arcValue := arcFileObj.(type) {
 	case *archiver.TarGz:
-		if err := createTarGzFile(&arc, arcValue, _fileList, commonParentPath); err != nil {
-			return err
-		}
+		err = packCommonArchives(&arc, arcValue, _fileList, commonParentPath)
 
 	default:
 		break
 	}
 
-	//w, ok := arcFileObj.(archiver.Archiver)
-	//
-	//if !ok {
-	//	return fmt.Errorf("the archive command does not support the format")
-	//}
-	//var sources []string
-	//for _, src := range _fileList {
-	//	srcs, err := filepath.Glob(src)
-	//
-	//	if err != nil {
-	//		return err
-	//	}
-	//
-	//	sources = append(sources, srcs...)
-	//}
-	//
-	//err = w.Archive(sources, _filename)
-	//
-	//if err != nil {
-	//	return err
-	//}
+	if err != nil {
+		return err
+	}
 
 	// TODO remove
 	elapsed := time.Since(start)
@@ -130,4 +113,124 @@ func startPacking(meta *ArchiveMeta, pack *ArchivePack) error {
 	}
 
 	return arcPackObj.doPack()
+}
+
+func getArchiveFilesRelativePath(absFilepath string, commonParentPath string) string {
+	splittedFilepath := strings.Split(absFilepath, commonParentPath)
+
+	_koazeeStream := koazee.StreamOf(splittedFilepath)
+	lastItem := _koazeeStream.Last()
+
+	return lastItem.String()
+}
+
+func processFilesForPacking(zipFilePathListMap *map[string]createZipFilePathList, fileList *[]string, commonParentPath string, gitIgnorePattern *[]string) error {
+	_zipFilePathListMap := *zipFilePathListMap
+	_fileList := *fileList
+
+	var ignoreList []string
+	ignoreList = append(ignoreList, GlobalPatternDenylist...)
+	ignoreList = append(ignoreList, *gitIgnorePattern...)
+
+	ignoreMatches, _ := ignore.CompileIgnoreLines(ignoreList...)
+
+	for _, item := range _fileList {
+		err := filepath.Walk(item, func(absFilepath string, fileInfo os.FileInfo, err error) error {
+			if err != nil {
+				return err
+			}
+
+			if isSymlink(fileInfo) {
+				return nil
+			}
+
+			relativeFilePath := absFilepath
+
+			if commonParentPath != "" {
+				// if there is only one filepath in [_fileList]
+				if len(_fileList) < 2 && _fileList[0] == commonParentPath {
+					splittedFilepath := strings.Split(_fileList[0], PathSep)
+
+					_koazeeStream := koazee.StreamOf(splittedFilepath)
+					lastItem := _koazeeStream.Last()
+					lastPartOfFilename := lastItem.String()
+
+					// then the selected folder name should be the root directory in the archive
+					if isDir(_fileList[0]) {
+						archiveFilesRelativePath := getArchiveFilesRelativePath(absFilepath, commonParentPath)
+
+						relativeFilePath = fmt.Sprintf("%s%s", lastPartOfFilename, archiveFilesRelativePath)
+					} else {
+						// then the selected file should be in the root directory in the archive
+						relativeFilePath = lastPartOfFilename
+					}
+
+				} else {
+					relativeFilePath = getArchiveFilesRelativePath(absFilepath, commonParentPath)
+				}
+			}
+
+			isFileADir := fileInfo.IsDir()
+			relativeFilePath = fixDirSlash(isFileADir, relativeFilePath)
+
+			relativeFilePath = strings.TrimLeft(relativeFilePath, PathSep)
+
+			// ignore the files if pattern matches
+			if ignoreMatches.MatchesPath(relativeFilePath) {
+				return nil
+			}
+
+			// when the commonpath is used to construct the relative path, the parent directories in the filepath list doesnt get written into the archive file
+			if commonParentPath != "" && absFilepath != commonParentPath {
+				if item == absFilepath {
+					splittedPaths := strings.Split(relativeFilePath, PathSep)
+					for pathIndex := range splittedPaths {
+						_relativeFilePath := strings.Join(splittedPaths[:pathIndex+1], PathSep)
+
+						// skip if filename is blank
+						if _relativeFilePath == "" {
+							continue
+						}
+
+						_absFilepath := fmt.Sprintf("%s%s%s", commonParentPath, PathSep, _relativeFilePath)
+
+						isDir := true
+
+						if pathIndex == len(splittedPaths)-1 {
+							isDir = false
+						}
+
+						_absFilepath = fixDirSlash(isDir, _absFilepath)
+						_relativeFilePath = fixDirSlash(isDir, _relativeFilePath)
+
+						_zipFilePathListMap[_absFilepath] = createZipFilePathList{
+							absFilepath:      _absFilepath,
+							relativeFilePath: _relativeFilePath,
+							isDir:            isDir,
+							fileInfo:         fileInfo,
+						}
+					}
+
+					return nil
+				}
+			}
+
+			absFilepath = fixDirSlash(isFileADir, absFilepath)
+
+			_zipFilePathListMap[absFilepath] = createZipFilePathList{
+				absFilepath:      absFilepath,
+				relativeFilePath: relativeFilePath,
+				isDir:            isFileADir,
+				fileInfo:         fileInfo,
+			}
+
+			return nil
+		})
+
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
 }
