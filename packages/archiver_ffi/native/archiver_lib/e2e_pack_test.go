@@ -457,14 +457,14 @@ func _testPacking(_metaObj *ArchiveMeta, password string, encryptionMethod zip.E
 }
 
 func TestPacking(t *testing.T) {
-	//Convey("Packing | No encryption - ZIP", t, func() {
-	//	filename := newTempMocksAsset("arc_test_pack.zip")
-	//
-	//	_metaObj := &ArchiveMeta{filename: filename}
-	//
-	//	_testPacking(_metaObj, "", zip.StandardEncryption)
-	//})
-	//
+	Convey("Packing | No encryption - ZIP", t, func() {
+		filename := newTempMocksAsset("arc_test_pack.zip")
+
+		_metaObj := &ArchiveMeta{filename: filename}
+
+		_testPacking(_metaObj, "", zip.StandardEncryption)
+	})
+
 	//Convey("Packing | Encrypted - ZIP (StandardEncryption)", t, func() {
 	//	filename := newTempMocksAsset("arc_test_stdenc_pack.zip")
 	//
@@ -502,11 +502,11 @@ func TestPacking(t *testing.T) {
 	//
 	//	_testPacking(_metaObj, "", 0)
 	//})
-	Convey("Packing | Tar.lz4", t, func() {
-		filename := newTempMocksAsset("arc_test_stdenc_pack.tar.lz4")
-
-		_metaObj := &ArchiveMeta{filename: filename}
-
-		_testPacking(_metaObj, "", 0)
-	})
+	//Convey("Packing | Tar.lz4", t, func() {
+	//	filename := newTempMocksAsset("arc_test_stdenc_pack.tar.lz4")
+	//
+	//	_metaObj := &ArchiveMeta{filename: filename}
+	//
+	//	_testPacking(_metaObj, "", 0)
+	//})
 }

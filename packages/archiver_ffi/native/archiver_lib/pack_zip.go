@@ -29,7 +29,12 @@ func createZipFile(arc *ZipArchive, fileList []string, commonParentPath string) 
 		return err
 	}
 
-	for _, item := range zipFilePathListMap {
+	totalFiles := len(zipFilePathListMap)
+	pInfo, ch := initPackingProgress(totalFiles)
+
+	for absolutePath, item := range zipFilePathListMap {
+		pInfo.packingProgress(ch, totalFiles, absolutePath)
+
 		if _password == "" {
 			if err := addFileToRegularZip(zipWriter, item.fileInfo, item.absFilepath, item.relativeFilePath); err != nil {
 				return err
@@ -39,7 +44,10 @@ func createZipFile(arc *ZipArchive, fileList []string, commonParentPath string) 
 				return err
 			}
 		}
+
 	}
+
+	pInfo.closePacking(ch, totalFiles)
 
 	defer func() {
 		if err := zipWriter.Close(); err != nil {

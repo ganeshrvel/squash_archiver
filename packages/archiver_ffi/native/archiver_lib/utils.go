@@ -139,3 +139,7 @@ func stringIndexExists(arr *[]string, index int) bool {
 func isSymlink(fi os.FileInfo) bool {
 	return fi.Mode()&os.ModeSymlink != 0
 }
+
+func Percent(percent float32, all float32) float32 {
+	return (percent / all) * 100
+}

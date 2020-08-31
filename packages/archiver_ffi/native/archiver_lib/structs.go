@@ -74,3 +74,10 @@ type createZipFilePathList struct {
 	isDir                         bool
 	fileInfo                      os.FileInfo
 }
+
+type PackingProgressInfo struct {
+	totalFiles int
+	progressCount int
+	currentFilename string
+	progressPercentage float32
+}
