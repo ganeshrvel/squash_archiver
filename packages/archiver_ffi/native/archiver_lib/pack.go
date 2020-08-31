@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"github.com/ganeshrvel/archiver"
 	"log"
 	"os"
@@ -55,27 +54,45 @@ func (arc CommonArchive) doPack() error {
 		return err
 	}
 
-	w, ok := arcFileObj.(archiver.Archiver)
-	if !ok {
-		return fmt.Errorf("the archive command does not support the format")
+	commonParentPath := getParentPath(os.PathSeparator, _fileList...)
+
+	if stringIndexExists(&_fileList, 0) && commonParentPath == _fileList[0] {
+		commonParentPathSplitted := strings.Split(_fileList[0], PathSep)
+
+		commonParentPath = strings.Join(commonParentPathSplitted[:len(commonParentPathSplitted)-1], PathSep)
 	}
 
-	var sources []string
-	for _, src := range _fileList {
-		srcs, err := filepath.Glob(src)
-
-		if err != nil {
+	switch arcValue := arcFileObj.(type) {
+	case *archiver.TarGz:
+		if err := createTarGzFile(&arc, arcValue, _fileList, commonParentPath); err != nil {
 			return err
 		}
 
-		sources = append(sources, srcs...)
+	default:
+		break
 	}
 
-	err = w.Archive(sources, _filename)
-
-	if err != nil {
-		return err
-	}
+	//w, ok := arcFileObj.(archiver.Archiver)
+	//
+	//if !ok {
+	//	return fmt.Errorf("the archive command does not support the format")
+	//}
+	//var sources []string
+	//for _, src := range _fileList {
+	//	srcs, err := filepath.Glob(src)
+	//
+	//	if err != nil {
+	//		return err
+	//	}
+	//
+	//	sources = append(sources, srcs...)
+	//}
+	//
+	//err = w.Archive(sources, _filename)
+	//
+	//if err != nil {
+	//	return err
+	//}
 
 	// TODO remove
 	elapsed := time.Since(start)
