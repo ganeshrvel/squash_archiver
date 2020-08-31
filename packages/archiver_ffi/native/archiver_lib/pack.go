@@ -194,11 +194,12 @@ func processFilesForPacking(zipFilePathListMap *map[string]createZipFilePathList
 
 						_absFilepath := fmt.Sprintf("%s%s%s", commonParentPath, PathSep, _relativeFilePath)
 
-						isDir := true
-
-						if pathIndex == len(splittedPaths)-1 {
-							isDir = false
+						_fileInfo, err := os.Lstat(_absFilepath)
+						if err != nil {
+							return err
 						}
+
+						isDir := _fileInfo.IsDir()
 
 						_absFilepath = fixDirSlash(isDir, _absFilepath)
 						_relativeFilePath = fixDirSlash(isDir, _relativeFilePath)
@@ -207,7 +208,7 @@ func processFilesForPacking(zipFilePathListMap *map[string]createZipFilePathList
 							absFilepath:      _absFilepath,
 							relativeFilePath: _relativeFilePath,
 							isDir:            isDir,
-							fileInfo:         fileInfo,
+							fileInfo:         _fileInfo,
 						}
 					}
 

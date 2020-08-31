@@ -3,8 +3,8 @@ package main
 import (
 	"fmt"
 	"github.com/ganeshrvel/archiver"
-	"github.com/kr/pretty"
 	"os"
+	"strings"
 )
 
 func packCommonArchives(arc *CommonArchive, newArchiveFile *archiver.TarGz, fileList []string, commonParentPath string) error {
@@ -29,9 +29,8 @@ func packCommonArchives(arc *CommonArchive, newArchiveFile *archiver.TarGz, file
 	}
 
 	for _, item := range zipFilePathListMap {
-		pretty.Println("\nitem", item.absFilepath)
-
-		if err := addFileToCommonArchive(newArchiveFile, item.fileInfo, item.absFilepath, item.relativeFilePath); err != nil {
+		if err := addFileToCommonArchive(newArchiveFile, item.fileInfo, item.absFilepath, item.relativeFilePath, item.isDir)
+			err != nil {
 			return err
 		}
 	}
@@ -45,8 +44,13 @@ func packCommonArchives(arc *CommonArchive, newArchiveFile *archiver.TarGz, file
 	return err
 }
 
-func addFileToCommonArchive(newArchiveFile *archiver.TarGz, fileInfo os.FileInfo, filename string, relativeFilename string) error {
+func addFileToCommonArchive(newArchiveFile *archiver.TarGz, fileInfo os.FileInfo, filename string, relativeFilename string, isDir bool) error {
 	fileToZip, err := os.Open(filename)
+	_relativeFilename := relativeFilename
+
+	if isDir {
+		_relativeFilename = strings.TrimRight(_relativeFilename, PathSep)
+	}
 
 	if err != nil {
 		return err
@@ -54,12 +58,14 @@ func addFileToCommonArchive(newArchiveFile *archiver.TarGz, fileInfo os.FileInfo
 
 	defer fileToZip.Close()
 
-	return newArchiveFile.Write(archiver.File{
+	err = newArchiveFile.Write(archiver.File{
 		FileInfo: archiver.FileInfo{
 			FileInfo:   fileInfo,
-			CustomName: relativeFilename,
+			CustomName: _relativeFilename,
 		},
 		OriginalPath: filename,
 		ReadCloser:   fileToZip,
 	})
+
+	return err
 }
