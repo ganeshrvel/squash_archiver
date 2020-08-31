@@ -28,12 +28,19 @@ func packTarGz(arc *CommonArchive, newArchiveFile *archiver.TarGz, fileList []st
 		return err
 	}
 
-	for _, item := range zipFilePathListMap {
+	totalFiles := len(zipFilePathListMap)
+	pInfo, ch := initPackingProgress(totalFiles)
+
+	for absolutePath, item := range zipFilePathListMap {
+		pInfo.packingProgress(ch, totalFiles, absolutePath)
+
 		if err := addFileToTarGzArchive(newArchiveFile, item.fileInfo, item.absFilepath, item.relativeFilePath, item.isDir)
 			err != nil {
 			return err
 		}
 	}
+
+	pInfo.closePacking(ch, totalFiles)
 
 	defer func() {
 		if err := newArchiveFile.Close(); err != nil {

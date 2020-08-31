@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	rxgo "github.com/ReactiveX/RxGo"
 )
 
@@ -18,11 +17,11 @@ func initPackingProgress(totalFiles int) (*PackingProgressInfo, *chan rxgo.Item)
 	observable := rxgo.FromChannel(ch)
 
 	observable.ForEach(func(v interface{}) {
-		fmt.Printf("received: %v\n", v)
+		//fmt.Printf("received: %v\n", v)
 	}, func(err error) {
-		fmt.Printf("error: %e\n", err)
+		//fmt.Printf("error: %e\n", err)
 	}, func() {
-		fmt.Println("observable is closed")
+		//fmt.Println("observable is closed")
 	})
 
 	return &pInfo, &ch
