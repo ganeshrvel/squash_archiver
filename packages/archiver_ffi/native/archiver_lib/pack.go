@@ -67,21 +67,21 @@ func (arc CommonArchive) doPack() error {
 
 	switch arcFileObj.(type) {
 	case *archiver.Tar:
-		err = packTarBalls(&arc, arcFileObj, &_fileList, commonParentPath)
+		err = packTarballs(&arc, arcFileObj, &_fileList, commonParentPath)
 	case *archiver.TarGz:
-		err = packTarBalls(&arc, arcFileObj, &_fileList, commonParentPath)
+		err = packTarballs(&arc, arcFileObj, &_fileList, commonParentPath)
 	case *archiver.TarBz2:
-		err = packTarBalls(&arc, arcFileObj, &_fileList, commonParentPath)
+		err = packTarballs(&arc, arcFileObj, &_fileList, commonParentPath)
 	case *archiver.TarBrotli:
-		err = packTarBalls(&arc, arcFileObj, &_fileList, commonParentPath)
+		err = packTarballs(&arc, arcFileObj, &_fileList, commonParentPath)
 	case *archiver.TarLz4:
-		err = packTarBalls(&arc, arcFileObj, &_fileList, commonParentPath)
+		err = packTarballs(&arc, arcFileObj, &_fileList, commonParentPath)
 	case *archiver.TarSz:
-		err = packTarBalls(&arc, arcFileObj, &_fileList, commonParentPath)
+		err = packTarballs(&arc, arcFileObj, &_fileList, commonParentPath)
 	case *archiver.TarXz:
-		err = packTarBalls(&arc, arcFileObj, &_fileList, commonParentPath)
+		err = packTarballs(&arc, arcFileObj, &_fileList, commonParentPath)
 	case *archiver.TarZstd:
-		err = packTarBalls(&arc, arcFileObj, &_fileList, commonParentPath)
+		err = packTarballs(&arc, arcFileObj, &_fileList, commonParentPath)
 
 	//case *archiver.Brotli:
 	//case *archiver.Bz2:

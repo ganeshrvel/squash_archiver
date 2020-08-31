@@ -7,9 +7,8 @@ import (
 	"strings"
 )
 
-func packTarBalls(arc *CommonArchive, arcFileObj interface{}, fileList *[]string, commonParentPath string) error {
+func packTarballs(arc *CommonArchive, arcFileObj interface{}, fileList *[]string, commonParentPath string) error {
 	var newArchiveFile interface{ archiver.Writer }
-	var err error
 
 	switch value := arcFileObj.(type) {
 	case *archiver.Tar:
