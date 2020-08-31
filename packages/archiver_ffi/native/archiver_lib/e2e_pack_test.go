@@ -434,6 +434,26 @@ func _testPacking(_metaObj *ArchiveMeta, password string, encryptionMethod zip.E
 			_testListingPackedArchive(_metaObj, password, assertionArr)
 		})
 	})
+
+	Convey("symlink | directory | It should not throw an error", func() {
+		path1 := getTestMocksAsset("mock_dir4/")
+		_packObj := &ArchivePack{
+			password:          password,
+			fileList:          []string{path1},
+			encryptionMethod:  encryptionMethod,
+			overwriteExisting: true,
+		}
+
+		err := startPacking(_metaObj, _packObj)
+
+		So(err, ShouldBeNil)
+
+		Convey("List Packed Archive files", func() {
+			assertionArr := []string{"a.txt", "1/", "1/a.txt", "2/", "2/b.txt", "3/", "3/b.txt", "3/2/", "3/2/b.txt"}
+
+			_testListingPackedArchive(_metaObj, password, assertionArr)
+		})
+	})
 }
 
 func TestPacking(t *testing.T) {
@@ -453,27 +473,12 @@ func TestPacking(t *testing.T) {
 		_testPacking(_metaObj, "1234567", zip.StandardEncryption)
 	})
 
-	Convey("Packing | Encrypted - ZIP (AES128Encryption)", t, func() {
-		filename := newTempMocksAsset("arc_test_AES128enc_pack.zip")
+	/*Convey("Packing | Tar", t, func() {
+		filename := newTempMocksAsset("arc_test_stdenc_pack.tar.gz")
 
 		_metaObj := &ArchiveMeta{filename: filename}
 
-		_testPacking(_metaObj, "1234567", zip.AES128Encryption)
-	})
+		_testPacking(_metaObj, "", 0)
+	})*/
 
-	Convey("Packing | Encrypted - ZIP (AES192Encryption)", t, func() {
-		filename := newTempMocksAsset("arc_test_AES192enc_pack.zip")
-
-		_metaObj := &ArchiveMeta{filename: filename}
-
-		_testPacking(_metaObj, "1234567", zip.AES192Encryption)
-	})
-
-	Convey("Packing | Encrypted - ZIP (AES256Encryption)", t, func() {
-		filename := newTempMocksAsset("arc_test_AES256enc_pack.zip")
-
-		_metaObj := &ArchiveMeta{filename: filename}
-
-		_testPacking(_metaObj, "1234567", zip.AES256Encryption)
-	})
 }

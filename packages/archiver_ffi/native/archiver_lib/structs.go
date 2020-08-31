@@ -68,3 +68,9 @@ type ArchiveUtils interface {
 type ArchivePacker interface {
 	doPack() error
 }
+
+type createZipFilePathList struct {
+	absFilepath, relativeFilePath string
+	isDir                         bool
+	fileInfo                      os.FileInfo
+}

@@ -20,11 +20,6 @@ func getArchiveFilesRelativePath(absFilepath string, commonParentPath string) st
 	return lastItem.String()
 }
 
-type createZipFilePathList struct {
-	absFilepath, relativeFilePath string
-	isDir                         bool
-}
-
 func createZipFile(arc *ZipArchive, _fileList []string, commonParentPath string) error {
 	_filename := arc.meta.filename
 	_password := arc.pack.password
@@ -49,9 +44,13 @@ func createZipFile(arc *ZipArchive, _fileList []string, commonParentPath string)
 	zipFilePathListMap := make(map[string]createZipFilePathList)
 
 	for _, item := range _fileList {
-		err = filepath.Walk(item, func(absFilepath string, info os.FileInfo, err error) error {
+		err = filepath.Walk(item, func(absFilepath string, fileInfo os.FileInfo, err error) error {
 			if err != nil {
 				return err
+			}
+
+			if isSymlink(fileInfo) {
+				return nil
 			}
 
 			relativeFilePath := absFilepath
@@ -80,7 +79,7 @@ func createZipFile(arc *ZipArchive, _fileList []string, commonParentPath string)
 				}
 			}
 
-			isFileADir := info.IsDir()
+			isFileADir := fileInfo.IsDir()
 			relativeFilePath = fixDirSlash(isFileADir, relativeFilePath)
 
 			relativeFilePath = strings.TrimLeft(relativeFilePath, PathSep)
@@ -117,6 +116,7 @@ func createZipFile(arc *ZipArchive, _fileList []string, commonParentPath string)
 							absFilepath:      _absFilepath,
 							relativeFilePath: _relativeFilePath,
 							isDir:            isDir,
+							fileInfo:         fileInfo,
 						}
 					}
 
@@ -130,6 +130,7 @@ func createZipFile(arc *ZipArchive, _fileList []string, commonParentPath string)
 				absFilepath:      absFilepath,
 				relativeFilePath: relativeFilePath,
 				isDir:            isFileADir,
+				fileInfo:         fileInfo,
 			}
 
 			return nil
@@ -138,9 +139,8 @@ func createZipFile(arc *ZipArchive, _fileList []string, commonParentPath string)
 	}
 
 	for _, item := range zipFilePathListMap {
-
 		if _password == "" {
-			if err := addFileToRegularZip(zipWriter, item.absFilepath, item.relativeFilePath); err != nil {
+			if err := addFileToRegularZip(zipWriter, item.fileInfo, item.absFilepath, item.relativeFilePath); err != nil {
 				return err
 			}
 		} else {
@@ -159,7 +159,7 @@ func createZipFile(arc *ZipArchive, _fileList []string, commonParentPath string)
 	return err
 }
 
-func addFileToRegularZip(zipWriter *zip.Writer, filename string, relativeFilename string) error {
+func addFileToRegularZip(zipWriter *zip.Writer, fileInfo os.FileInfo, filename string, relativeFilename string) error {
 	fileToZip, err := os.Open(filename)
 
 	if err != nil {
@@ -168,15 +168,7 @@ func addFileToRegularZip(zipWriter *zip.Writer, filename string, relativeFilenam
 
 	defer fileToZip.Close()
 
-	// Get the file information
-	// Using FileInfoHeader() above only uses the basename of the file. If we want
-	// to preserve the folder structure we can overwrite this with the full path.
-	info, err := fileToZip.Stat()
-	if err != nil {
-		return err
-	}
-
-	header, err := zip.FileInfoHeader(info)
+	header, err := zip.FileInfoHeader(fileInfo)
 
 	if err != nil {
 		return err
@@ -207,9 +199,6 @@ func addFileToEncryptedZip(zipWriter *zip.Writer, filename string, relativeFilen
 
 	defer fileToZip.Close()
 
-	// Get the file information
-	// Using FileInfoHeader() above only uses the basename of the file. If we want
-	// to preserve the folder structure we can overwrite this with the full path.
 	writer, err := zipWriter.Encrypt(relativeFilename, password, encryptionMethod)
 
 	if err != nil {

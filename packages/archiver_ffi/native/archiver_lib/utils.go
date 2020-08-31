@@ -135,3 +135,7 @@ func fixDirSlash(isDir bool, absFilepath string) string {
 func stringIndexExists(arr *[]string, index int) bool {
 	return len(*arr) > index
 }
+
+func isSymlink(fi os.FileInfo) bool {
+	return fi.Mode()&os.ModeSymlink != 0
+}
