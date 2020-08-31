@@ -65,33 +65,31 @@ func (arc CommonArchive) doPack() error {
 		commonParentPath = strings.Join(commonParentPathSplitted[:len(commonParentPathSplitted)-1], PathSep)
 	}
 
-	switch arcValue := arcFileObj.(type) {
+	switch arcFileObj.(type) {
 	case *archiver.Tar:
-		err = packTar(&arc, arcValue, _fileList, commonParentPath)
-
+		err = packCommonArchives(&arc, arcFileObj, &_fileList, commonParentPath)
 	case *archiver.TarGz:
-		err = packTarGz(&arc, arcValue, _fileList, commonParentPath)
-
+		err = packCommonArchives(&arc, arcFileObj, &_fileList, commonParentPath)
 	case *archiver.TarBz2:
-		err = packTarBz2(&arc, arcValue, _fileList, commonParentPath)
-
+		err = packCommonArchives(&arc, arcFileObj, &_fileList, commonParentPath)
 	case *archiver.TarBrotli:
-		err = packTarBrotli(&arc, arcValue, _fileList, commonParentPath)
-
+		err = packCommonArchives(&arc, arcFileObj, &_fileList, commonParentPath)
 	case *archiver.TarLz4:
-		err = packTarLz4(&arc, arcValue, _fileList, commonParentPath)
+		err = packCommonArchives(&arc, arcFileObj, &_fileList, commonParentPath)
+	case *archiver.TarSz:
+		err = packCommonArchives(&arc, arcFileObj, &_fileList, commonParentPath)
+	case *archiver.TarXz:
+		err = packCommonArchives(&arc, arcFileObj, &_fileList, commonParentPath)
+	case *archiver.TarZstd:
+		err = packCommonArchives(&arc, arcFileObj, &_fileList, commonParentPath)
 
-		//	case *archiver.TarSz:
-		//	case *archiver.TarXz:
-		//	case *archiver.TarZstd:
-		//	case *archiver.Zip:
-		//	case *archiver.Brotli:
-		//	case *archiver.Bz2:
-		//	case *archiver.Lz4:
-		//	case *archiver.Gz:
-		//	case *archiver.Snappy:
-		//	case *archiver.Xz:
-		//	case *archiver.Zstd:
+	//case *archiver.Brotli:
+	//case *archiver.Bz2:
+	//case *archiver.Lz4:
+	//case *archiver.Gz:
+	//case *archiver.Snappy:
+	//case *archiver.Xz:
+	//case *archiver.Zstd:
 
 	default:
 		return fmt.Errorf("archive file format is not supported")
