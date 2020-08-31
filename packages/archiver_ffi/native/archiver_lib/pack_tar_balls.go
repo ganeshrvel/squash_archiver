@@ -7,7 +7,7 @@ import (
 	"strings"
 )
 
-func packCommonArchives(arc *CommonArchive, arcFileObj interface{}, fileList *[]string, commonParentPath string) error {
+func packTarBalls(arc *CommonArchive, arcFileObj interface{}, fileList *[]string, commonParentPath string) error {
 	var newArchiveFile interface{ archiver.Writer }
 	var err error
 
@@ -74,7 +74,7 @@ func packCommonArchives(arc *CommonArchive, arcFileObj interface{}, fileList *[]
 	for absolutePath, item := range zipFilePathListMap {
 		pInfo.packingProgress(ch, totalFiles, absolutePath)
 
-		if err := addFileToCommonArchives(&newArchiveFile, item.fileInfo, item.absFilepath, item.relativeFilePath, item.isDir)
+		if err := addFileToTarBall(&newArchiveFile, item.fileInfo, item.absFilepath, item.relativeFilePath, item.isDir)
 			err != nil {
 			return err
 		}
@@ -91,7 +91,7 @@ func packCommonArchives(arc *CommonArchive, arcFileObj interface{}, fileList *[]
 	return err
 }
 
-func addFileToCommonArchives(newArchiveFile *interface{ archiver.Writer }, fileInfo os.FileInfo, filename string, relativeFilename string, isDir bool) error {
+func addFileToTarBall(newArchiveFile *interface{ archiver.Writer }, fileInfo os.FileInfo, filename string, relativeFilename string, isDir bool) error {
 	_newArchiveFile := *newArchiveFile
 
 	fileToZip, err := os.Open(filename)
