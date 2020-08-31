@@ -93,18 +93,18 @@ func packTarballs(arc *CommonArchive, arcFileObj interface{}, fileList *[]string
 func addFileToTarBall(newArchiveFile *interface{ archiver.Writer }, fileInfo os.FileInfo, filename string, relativeFilename string, isDir bool) error {
 	_newArchiveFile := *newArchiveFile
 
-	fileToZip, err := os.Open(filename)
 	_relativeFilename := relativeFilename
 
 	if isDir {
 		_relativeFilename = strings.TrimRight(_relativeFilename, PathSep)
 	}
 
+	fileToArchive, err := os.Open(filename)
 	if err != nil {
 		return err
 	}
 
-	defer fileToZip.Close()
+	defer fileToArchive.Close()
 
 	err = _newArchiveFile.Write(archiver.File{
 		FileInfo: archiver.FileInfo{
@@ -112,7 +112,7 @@ func addFileToTarBall(newArchiveFile *interface{ archiver.Writer }, fileInfo os.
 			CustomName: _relativeFilename,
 		},
 		OriginalPath: filename,
-		ReadCloser:   fileToZip,
+		ReadCloser:   fileToArchive,
 	})
 
 	return err

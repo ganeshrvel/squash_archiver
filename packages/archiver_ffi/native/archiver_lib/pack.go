@@ -83,14 +83,6 @@ func (arc CommonArchive) doPack() error {
 	case *archiver.TarZstd:
 		err = packTarballs(&arc, arcFileObj, &_fileList, commonParentPath)
 
-	//case *archiver.Brotli:
-	//case *archiver.Bz2:
-	//case *archiver.Lz4:
-	//case *archiver.Gz:
-	//case *archiver.Snappy:
-	//case *archiver.Xz:
-	//case *archiver.Zstd:
-
 	default:
 		return fmt.Errorf("archive file format is not supported")
 	}
