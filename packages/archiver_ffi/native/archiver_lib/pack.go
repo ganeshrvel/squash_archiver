@@ -75,8 +75,26 @@ func (arc CommonArchive) doPack() error {
 	case *archiver.TarBz2:
 		err = packTarBz2(&arc, arcValue, _fileList, commonParentPath)
 
+	case *archiver.TarBrotli:
+		err = packTarBrotli(&arc, arcValue, _fileList, commonParentPath)
+
+	case *archiver.TarLz4:
+		err = packTarLz4(&arc, arcValue, _fileList, commonParentPath)
+
+		//	case *archiver.TarSz:
+		//	case *archiver.TarXz:
+		//	case *archiver.TarZstd:
+		//	case *archiver.Zip:
+		//	case *archiver.Brotli:
+		//	case *archiver.Bz2:
+		//	case *archiver.Lz4:
+		//	case *archiver.Gz:
+		//	case *archiver.Snappy:
+		//	case *archiver.Xz:
+		//	case *archiver.Zstd:
+
 	default:
-		break
+		return fmt.Errorf("archive file format is not supported")
 	}
 
 	if err != nil {

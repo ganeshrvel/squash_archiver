@@ -488,8 +488,22 @@ func TestPacking(t *testing.T) {
 	//
 	//	_testPacking(_metaObj, "", 0)
 	//})
-	Convey("Packing | Tar.bz2", t, func() {
-		filename := newTempMocksAsset("arc_test_stdenc_pack.tar.bz2")
+	//Convey("Packing | Tar.bz2", t, func() {
+	//	filename := newTempMocksAsset("arc_test_stdenc_pack.tar.bz2")
+	//
+	//	_metaObj := &ArchiveMeta{filename: filename}
+	//
+	//	_testPacking(_metaObj, "", 0)
+	//})
+	//Convey("Packing | Tar.br (brotli)", t, func() {
+	//	filename := newTempMocksAsset("arc_test_stdenc_pack.tar.br")
+	//
+	//	_metaObj := &ArchiveMeta{filename: filename}
+	//
+	//	_testPacking(_metaObj, "", 0)
+	//})
+	Convey("Packing | Tar.lz4", t, func() {
+		filename := newTempMocksAsset("arc_test_stdenc_pack.tar.lz4")
 
 		_metaObj := &ArchiveMeta{filename: filename}
 
