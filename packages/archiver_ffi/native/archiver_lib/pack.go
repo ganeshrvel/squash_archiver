@@ -71,20 +71,22 @@ func (arc CommonArchive) doPack() error {
 	case *archiver.TarZstd:
 		err = packTarballs(&arc, archValue, &_fileList, commonParentPath)
 
+	// Todo: parking the development of file compressors for now.
+	// It requires a different logic for listing, compressing and uncompressing
 	//case *archiver.Gz:
-	//	v.CompressionLevel = compressionLevel
+	//	err = packCompressFile(&arc, archValue, &_fileList)
 	//case *archiver.Brotli:
-	//	v.Quality = compressionLevel
+	//	err = packCompressFile(&arc, archValue, &_fileList)
 	//case *archiver.Bz2:
-	//	v.CompressionLevel = compressionLevel
+	//	err = packCompressFile(&arc, archValue, &_fileList)
 	//case *archiver.Lz4:
-	//	v.CompressionLevel = compressionLevel
+	//	err = packCompressFile(&arc, archValue, &_fileList)
 	//case *archiver.Snappy:
-	//	// nothing to customize
+	//	err = packCompressFile(&arc, archValue, &_fileList)
 	//case *archiver.Xz:
-	//	// nothing to customize
+	//	err = packCompressFile(&arc, archValue, &_fileList)
 	//case *archiver.Zstd:
-	//	// nothing to customize
+	//	err = packCompressFile(&arc, archValue, &_fileList)
 
 	default:
 		return fmt.Errorf("archive file format is not supported")

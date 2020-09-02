@@ -416,7 +416,7 @@ func _testPacking(_metaObj *ArchiveMeta, password string, encryptionMethod zip.E
 		})
 	})
 
-	Convey("Multiple paths in 'fileList' | selected - no file | It should not throw an error", func() {
+	Convey("no files in the pathlist |d It should not throw an error", func() {
 		_packObj := &ArchivePack{
 			password:          password,
 			fileList:          []string{},

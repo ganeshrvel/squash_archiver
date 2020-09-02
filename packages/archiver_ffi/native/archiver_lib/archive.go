@@ -118,7 +118,7 @@ func archiveFormat(arcFileObj *interface{}, password string, overwriteExisting b
 		break
 
 	default:
-		return fmt.Errorf("format does not support customization")
+		return fmt.Errorf("the format does not support customization")
 	}
 
 	return nil

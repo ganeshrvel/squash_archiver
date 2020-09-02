@@ -138,6 +138,9 @@ func indexExists(arr interface{}, index int) bool {
 	case *[]string:
 		return len(*value) > index
 
+	case []string:
+		return len(value) > index
+
 	default:
 		log.Panic("invalid type in 'indexExists'")
 	}
