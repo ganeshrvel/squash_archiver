@@ -15,7 +15,7 @@ func (arc ZipArchive) doPack() error {
 
 	commonParentPath := getParentPath(os.PathSeparator, _fileList...)
 
-	if stringIndexExists(&_fileList, 0) && commonParentPath == _fileList[0] {
+	if indexExists(&_fileList, 0) && commonParentPath == _fileList[0] {
 		commonParentPathSplitted := strings.Split(_fileList[0], PathSep)
 
 		commonParentPath = strings.Join(commonParentPathSplitted[:len(commonParentPathSplitted)-1], PathSep)
@@ -47,29 +47,44 @@ func (arc CommonArchive) doPack() error {
 
 	commonParentPath := getParentPath(os.PathSeparator, _fileList...)
 
-	if stringIndexExists(&_fileList, 0) && commonParentPath == _fileList[0] {
+	if indexExists(&_fileList, 0) && commonParentPath == _fileList[0] {
 		commonParentPathSplitted := strings.Split(_fileList[0], PathSep)
 
 		commonParentPath = strings.Join(commonParentPathSplitted[:len(commonParentPathSplitted)-1], PathSep)
 	}
 
-	switch arcFileObj.(type) {
+	switch archValue := arcFileObj.(type) {
 	case *archiver.Tar:
-		err = packTarballs(&arc, arcFileObj, &_fileList, commonParentPath)
+		err = packTarballs(&arc, archValue, &_fileList, commonParentPath)
 	case *archiver.TarGz:
-		err = packTarballs(&arc, arcFileObj, &_fileList, commonParentPath)
+		err = packTarballs(&arc, archValue, &_fileList, commonParentPath)
 	case *archiver.TarBz2:
-		err = packTarballs(&arc, arcFileObj, &_fileList, commonParentPath)
+		err = packTarballs(&arc, archValue, &_fileList, commonParentPath)
 	case *archiver.TarBrotli:
-		err = packTarballs(&arc, arcFileObj, &_fileList, commonParentPath)
+		err = packTarballs(&arc, archValue, &_fileList, commonParentPath)
 	case *archiver.TarLz4:
-		err = packTarballs(&arc, arcFileObj, &_fileList, commonParentPath)
+		err = packTarballs(&arc, archValue, &_fileList, commonParentPath)
 	case *archiver.TarSz:
-		err = packTarballs(&arc, arcFileObj, &_fileList, commonParentPath)
+		err = packTarballs(&arc, archValue, &_fileList, commonParentPath)
 	case *archiver.TarXz:
-		err = packTarballs(&arc, arcFileObj, &_fileList, commonParentPath)
+		err = packTarballs(&arc, archValue, &_fileList, commonParentPath)
 	case *archiver.TarZstd:
-		err = packTarballs(&arc, arcFileObj, &_fileList, commonParentPath)
+		err = packTarballs(&arc, archValue, &_fileList, commonParentPath)
+
+	//case *archiver.Gz:
+	//	v.CompressionLevel = compressionLevel
+	//case *archiver.Brotli:
+	//	v.Quality = compressionLevel
+	//case *archiver.Bz2:
+	//	v.CompressionLevel = compressionLevel
+	//case *archiver.Lz4:
+	//	v.CompressionLevel = compressionLevel
+	//case *archiver.Snappy:
+	//	// nothing to customize
+	//case *archiver.Xz:
+	//	// nothing to customize
+	//case *archiver.Zstd:
+	//	// nothing to customize
 
 	default:
 		return fmt.Errorf("archive file format is not supported")
@@ -154,7 +169,7 @@ func processFilesForPacking(zipFilePathListMap *map[string]createZipFilePathList
 					lastPartOfFilename := lastItem.String()
 
 					// then the selected folder name should be the root directory in the archive
-					if isDir(_fileList[0]) {
+					if isDirectory(_fileList[0]) {
 						archiveFilesRelativePath := getArchiveFilesRelativePath(absFilepath, commonParentPath)
 
 						relativeFilePath = fmt.Sprintf("%s%s", lastPartOfFilename, archiveFilesRelativePath)

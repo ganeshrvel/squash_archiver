@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/denormal/go-gitignore"
 	"github.com/mitchellh/go-homedir"
+	"log"
 	"os"
 	"path"
 	"strings"
@@ -115,7 +116,7 @@ func isFile(name string) bool {
 	return false
 }
 
-func isDir(name string) bool {
+func isDirectory(name string) bool {
 	if fi, err := os.Stat(name); err == nil {
 		if fi.Mode().IsDir() {
 			return true
@@ -132,8 +133,16 @@ func fixDirSlash(isDir bool, absFilepath string) string {
 	return absFilepath
 }
 
-func stringIndexExists(arr *[]string, index int) bool {
-	return len(*arr) > index
+func indexExists(arr interface{}, index int) bool {
+	switch value := arr.(type) {
+	case *[]string:
+		return len(*value) > index
+
+	default:
+		log.Panic("invalid type in 'indexExists'")
+	}
+
+	return false
 }
 
 func isSymlink(fi os.FileInfo) bool {

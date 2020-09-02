@@ -47,7 +47,7 @@ func newTempMocksAsset(_filePath string) string {
 
 	resultPath := fmt.Sprintf("%s/tests/mocks-build/", currentDir)
 
-	if exist := isDir(resultPath); !exist {
+	if exist := isDirectory(resultPath); !exist {
 		_, err := os.Create(resultPath)
 
 		if err != nil {
