@@ -1,10 +1,8 @@
 import 'dart:ffi';
 import 'package:ffi/ffi.dart';
-import 'dart:io';
 import 'dart:isolate';
 import 'package:archiver_ffi/constants/app_files.dart';
 import 'package:archiver_ffi/generated/bindings.dart';
-import 'package:path/path.dart' as path;
 
 class Work extends Struct {
   Pointer<Utf8> name;

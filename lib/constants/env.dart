@@ -18,6 +18,7 @@ class Env {
     apiBaseUrl: null,
     reportCrashAnalytics: false,
     enableHttpTimelineLogging: false,
+    enableCrashAnalyticsInDevMode: false,
     showDebugLogs: true,
   );
 
@@ -28,6 +29,7 @@ class Env {
     apiBaseUrl: null,
     reportCrashAnalytics: true,
     enableHttpTimelineLogging: true,
+    enableCrashAnalyticsInDevMode: true,
     showDebugLogs: false,
   );
 }
@@ -39,6 +41,7 @@ class _EnvData {
   final bool logApiClient;
   final bool reportCrashAnalytics;
   final bool enableHttpTimelineLogging;
+  final bool enableCrashAnalyticsInDevMode;
   final bool showDebugLogs;
 
   _EnvData({
@@ -48,6 +51,7 @@ class _EnvData {
     @required this.apiBaseUrl,
     @required this.reportCrashAnalytics,
     @required this.enableHttpTimelineLogging,
+    @required this.enableCrashAnalyticsInDevMode,
     @required this.showDebugLogs,
   });
 }

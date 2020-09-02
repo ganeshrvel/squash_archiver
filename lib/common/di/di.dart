@@ -5,7 +5,7 @@ import 'package:squash_archiver/common/di/di.iconfig.dart';
 final GetIt getIt = GetIt.instance;
 
 @injectableInit
-Future<void> init() => $initGetIt(getIt);
+Future<void> getItInit() => $initGetIt(getIt);
 
 void resetGetIt<T>({
   Object instance,

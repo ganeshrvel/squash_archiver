@@ -1,8 +1,12 @@
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:squash_archiver/common/di/di.dart';
 import 'package:squash_archiver/common/helpers/display_helper.dart';
 import 'package:squash_archiver/constants/colors.dart';
+import 'package:squash_archiver/features/app/ui/store/app_store.dart';
 import 'package:squash_archiver/utils/utils/files.dart';
 import 'package:squash_archiver/utils/utils/functs.dart';
 import 'package:squash_archiver/utils/utils/math.dart';
@@ -11,11 +15,11 @@ import 'package:squash_archiver/widget_extends/sf_widget.dart';
 
 class Img extends StatefulWidget {
   final String url;
+  final bool isStorageFile;
   final double height;
   final double width;
   final bool fullWidth;
   final bool fullHeight;
-  final bool fullFit;
   final bool isSvg;
   final BoxFit fit;
 
@@ -28,7 +32,7 @@ class Img extends StatefulWidget {
     this.isSvg = false,
     this.fullWidth = false,
     this.fullHeight = false,
-    this.fullFit = false,
+    this.isStorageFile,
   }) : super(key: key);
 
   @override
@@ -46,29 +50,23 @@ class _ImgState extends SfWidget<Img> {
 
   bool get fullHeight => widget.fullHeight;
 
-  bool get fullFit => widget.fullFit;
-
   BoxFit get fit => widget.fit;
 
   bool get isSvg => widget.isSvg;
+
+  bool get isStorageFile => widget.isStorageFile ?? false;
+
+  AppStore get _appStore => getIt<AppStore>();
 
   double get _displayHeight => Display.getHeight(context);
 
   double get _displayWidth => Display.getWidth(context);
 
   double get _height {
-    if (fullFit) {
-      return height ?? _displayWidth;
-    }
-
     return fullHeight ? _displayHeight : height;
   }
 
   double get _width {
-    if (fullFit) {
-      return _displayWidth;
-    }
-
     return fullWidth ? _displayWidth : width;
   }
 
@@ -126,7 +124,6 @@ class _ImgState extends SfWidget<Img> {
   Widget _buildFullFitImage(
     BuildContext context,
     ImageProvider imageProvider,
-    BoxFit fix,
   ) {
     return Container(
       width: _width,
@@ -140,19 +137,30 @@ class _ImgState extends SfWidget<Img> {
     );
   }
 
-  Widget _buildImage(BuildContext context) {
-    final _fit = fit ?? BoxFit.fill;
-    final _url = url;
+  Widget _buildPlaceholder(BuildContext context) {
+    return SizedBox(
+      height: _placeholderSize,
+      width: _placeholderSize,
+      child: Padding(
+        padding: EdgeInsets.zero,
+        child: CircularProgressIndicator(
+          backgroundColor: AppColors.white,
+          valueColor: AlwaysStoppedAnimation<Color>(AppColors.blue),
+        ),
+      ),
+    );
+  }
 
+  Widget _buildImage(BuildContext context) {
     if (isNullOrEmpty(url)) {
       return Container();
     }
 
-    if (isSvg || getFileExtension(_url) == 'svg') {
-      return _buildSvg(url: _url);
+    if (isSvg || getFileExtension(url) == 'svg') {
+      return _buildSvg(url: url);
     }
 
-    return _buildPng(url: _url, fit: _fit);
+    return _buildPng(url: url);
   }
 
   Widget _buildSvg({
@@ -167,6 +175,20 @@ class _ImgState extends SfWidget<Img> {
         context: context,
         child: SvgPicture.asset(
           url,
+          height: _height,
+          width: _width,
+        ),
+      );
+    }
+
+    if (isStorageFile) {
+      return _buildSizedContainer(
+        context: context,
+        child: SvgPicture.file(
+          File(url),
+          placeholderBuilder: (BuildContext context) {
+            return _buildPlaceholder(context);
+          },
           height: _height,
           width: _width,
         ),
@@ -188,11 +210,21 @@ class _ImgState extends SfWidget<Img> {
 
   Widget _buildPng({
     @required String url,
-    @required BoxFit fit,
   }) {
     final _isNetworkUrl = isUrl(
       url,
     );
+
+    if (isStorageFile) {
+      return _buildSizedContainer(
+        context: context,
+        child: Image.file(
+          File(url),
+          height: _height,
+          width: _width,
+        ),
+      );
+    }
 
     if (!_isNetworkUrl) {
       return _buildSizedContainer(
@@ -207,11 +239,6 @@ class _ImgState extends SfWidget<Img> {
 
     return _buildSizedContainer(
       child: CachedNetworkImage(
-        imageBuilder: fullFit
-            ? (context, imageProvider) {
-                return _buildFullFitImage(context, imageProvider, fit);
-              }
-            : null,
         imageUrl: url,
         placeholder: (context, _url) {
           return _buildPlaceholder(context);
@@ -225,27 +252,16 @@ class _ImgState extends SfWidget<Img> {
         fadeInDuration: const Duration(milliseconds: 100),
         height: _height,
         width: _width,
+        fit: fit,
       ),
       context: context,
     );
   }
 
-  Widget _buildPlaceholder(BuildContext context) {
-    return SizedBox(
-      height: _placeholderSize,
-      width: _placeholderSize,
-      child: Padding(
-        padding: const EdgeInsets.all(0),
-        child: CircularProgressIndicator(
-          backgroundColor: AppColors.white,
-          valueColor: AlwaysStoppedAnimation<Color>(AppColors.blue),
-        ),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
-    return _buildImage(context);
+    return _buildImage(
+      context,
+    );
   }
 }

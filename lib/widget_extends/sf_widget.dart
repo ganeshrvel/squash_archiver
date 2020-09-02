@@ -88,8 +88,8 @@ abstract class SfWidget<S extends StatefulWidget> extends State<S>
     final _reportCrash = reportCrash ?? true;
 
     log.error(
-      message,
-      error: title,
+      title: title,
+      error: message,
       stackTrace: stackTrace,
       report: _reportCrash,
     );

@@ -61,8 +61,8 @@ class DeviceDetails {
       if (!Platform.isMacOS) {
         throw "Platform isn't supported yet";
       }
-    } on PlatformException catch (e) {
-      log.error(e);
+    } on PlatformException catch (e, stackTrace) {
+      log.error(title: 'DeviceDetails.init', error: e, stackTrace: stackTrace);
 
       throw 'Platform error';
     }

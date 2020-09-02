@@ -84,7 +84,10 @@ abstract class _AppStoreBase with Store {
     appData.pick(
       onError: (error) {
         if (error is CacheException) {
-          log.error(error);
+          log.error(
+            title: '_AppStoreBase.getAppLanguage',
+            error: error,
+          );
         }
 
         language = getDefaultAppLanguage();
@@ -129,7 +132,10 @@ abstract class _AppStoreBase with Store {
     appData.pick(
       onError: (error) {
         if (error is CacheException) {
-          log.error(error);
+          log.error(
+            title: '_AppStoreBase.getAppTheme',
+            error: error,
+          );
         }
 
         theme = getDefaultAppTheme();

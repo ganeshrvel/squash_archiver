@@ -64,7 +64,7 @@ HandleExceptionModel handleException(
     const _title = 'An exception was thrown';
 
     log.error(
-      _title,
+      title: _title,
       error: _exception,
       stackTrace: stackTrace,
       report: _reportCrash,

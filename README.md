@@ -1,4 +1,6 @@
 # Squash Archiver
 - Requirements: Flutter and Dart
 
-Coming soon.
+```shell 
+    flutter build macos
+```

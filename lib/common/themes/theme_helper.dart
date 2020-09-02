@@ -66,7 +66,7 @@ String colorToHex(Color color, {bool leadingHashSign = false}) {
 int colorToInt(String hexColor) {
   var _hexColor = hexColor.toUpperCase().replaceAll('#', '');
 
-  if (hexColor.length == 6) {
+  if (_hexColor.length == 6) {
     _hexColor = 'FF$_hexColor';
   }
 

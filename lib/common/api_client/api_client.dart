@@ -1,6 +1,5 @@
 import 'package:dio/dio.dart';
 import 'package:squash_archiver/common/api_client/api_errors/network_404_api_error.dart';
-import 'package:squash_archiver/common/api_client/interceptors/api_raw_error_message_interceptor.dart';
 import 'package:squash_archiver/common/api_client/interceptors/network_404_error_interceptor.dart';
 import 'package:squash_archiver/common/exceptions/bad_network_exception.dart';
 import 'package:squash_archiver/common/exceptions/dio_exception.dart';
@@ -44,8 +43,6 @@ class ApiClient {
     dio.interceptors.add(Network404Interceptor());
 
     if (env.config.logApiClient) {
-      dio.interceptors.add(ApiRawErrorMessageInterceptor());
-
       dio.interceptors.add(PrettyDioLogger(
         requestHeader: true,
         requestBody: true,
@@ -89,13 +86,14 @@ class ApiClient {
   }
 
   Future<Response> delete(
-    String path, {
+    String path,
+    Map<String, dynamic> data, {
     Map<String, dynamic> queryParameters,
   }) async {
     return _processData(
       _allowedDioMethods.DELETE,
       path,
-      null,
+      data,
       queryParameters: queryParameters,
     );
   }
@@ -139,6 +137,7 @@ class ApiClient {
         case _allowedDioMethods.DELETE:
           return await dio.delete(
             path,
+            data: data,
             queryParameters: queryParameters,
           );
 
