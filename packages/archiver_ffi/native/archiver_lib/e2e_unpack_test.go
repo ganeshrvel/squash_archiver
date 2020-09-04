@@ -127,9 +127,9 @@ func _testUnpacking(_metaObj *ArchiveMeta, password string) {
 }
 
 func TestUnpacking(t *testing.T) {
-	//if testing.Short() {
-	//	t.Skip("skipping 'TestUnpacking' testing in short mode")
-	//}
+	if testing.Short() {
+		t.Skip("skipping 'TestUnpacking' testing in short mode")
+	}
 
 	Convey("Packing | No encryption - ZIP", t, func() {
 		filename := getTestMocksAsset("mock_test_file1.zip")
