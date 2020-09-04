@@ -88,9 +88,35 @@ func Pack() {
 	fmt.Printf("Result: %+v\n", "Success")
 }
 
+//export Unpack
+func Unpack() {
+	filename := getTestMocksAsset("mock_test_file1.zip")
+	tempDir := newTempMocksDir("arc_test_pack/", false)
+
+	_metaObj := &ArchiveMeta{filename: filename}
+
+	_packObj := &ArchiveUnpack{
+		password:         "",
+		fileList:         []string{},
+		gitIgnorePattern: []string{},
+		destination:      tempDir,
+	}
+
+	err := startUnpacking(_metaObj, _packObj)
+
+	if err != nil {
+		fmt.Printf("Error occured: %+v\n", err)
+
+		return
+	}
+
+	fmt.Printf("Result: %+v\n", "Success")
+}
+
 // Unused
 func main() {
 	//ListArchive()
 	//IsArchiveEncrypted()
 	//Pack()
+	Unpack()
 }

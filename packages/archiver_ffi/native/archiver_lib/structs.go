@@ -35,6 +35,13 @@ type ArchivePack struct {
 	overwriteExisting bool
 }
 
+type ArchiveUnpack struct {
+	password         string
+	fileList         []string
+	gitIgnorePattern []string
+	destination      string
+}
+
 type filePathListSortInfo struct {
 	splittedPaths [2]string
 	IsDir         bool
@@ -46,15 +53,17 @@ type filePathListSortInfo struct {
 }
 
 type ZipArchive struct {
-	meta ArchiveMeta // required
-	read ArchiveRead // required for listing files
-	pack ArchivePack // required for archiving files
+	meta   ArchiveMeta   // required
+	read   ArchiveRead   // required for listing files
+	pack   ArchivePack   // required for archiving files
+	unpack ArchiveUnpack // required for unarchiving files
 }
 
 type CommonArchive struct {
-	meta ArchiveMeta // required
-	read ArchiveRead // required for listing files
-	pack ArchivePack // required for archiving files
+	meta   ArchiveMeta   // required
+	read   ArchiveRead   // required for listing files
+	pack   ArchivePack   // required for archiving files
+	unpack ArchiveUnpack // required for unarchiving files
 }
 
 type ArchiveReader interface {
@@ -69,10 +78,20 @@ type ArchivePacker interface {
 	doPack() error
 }
 
-type createZipFilePathList struct {
+type ArchiveUnpacker interface {
+	doUnpack() error
+}
+
+type createArchiveFileInfo struct {
 	absFilepath, relativeFilePath string
 	isDir                         bool
 	fileInfo                      os.FileInfo
+}
+
+type extractArchiveFileInfo struct {
+	absFilepath, name string
+	fileInfo          os.FileInfo
+	zipFileInfo       zip.File
 }
 
 type PackingProgressInfo struct {

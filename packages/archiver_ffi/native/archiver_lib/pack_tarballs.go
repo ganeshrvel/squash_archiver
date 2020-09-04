@@ -21,7 +21,7 @@ func packTarballs(arc *CommonArchive, arcFileObj interface{ archiver.Writer }, f
 		return err
 	}
 
-	zipFilePathListMap := make(map[string]createZipFilePathList)
+	zipFilePathListMap := make(map[string]createArchiveFileInfo)
 
 	err = processFilesForPacking(&zipFilePathListMap, fileList, commonParentPath, &_gitIgnorePattern)
 	if err != nil {

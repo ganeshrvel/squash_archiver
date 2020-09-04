@@ -108,7 +108,7 @@ func pathExists(path string, searchPath string) bool {
 	return path != "" && strings.HasPrefix(searchPath, path)
 }
 
-// list zip archives
+// list files in zip archives
 // yeka package is used here to list encrypted zip files
 func (arc ZipArchive) list() ([]ArchiveFileInfo, error) {
 	_filename := arc.meta.filename
@@ -184,7 +184,7 @@ func (arc ZipArchive) list() ([]ArchiveFileInfo, error) {
 	return sortedPaths, err
 }
 
-// List common archives
+// List files in the common archives
 func (arc CommonArchive) list() ([]ArchiveFileInfo, error) {
 	_filename := arc.meta.filename
 	_password := arc.read.password

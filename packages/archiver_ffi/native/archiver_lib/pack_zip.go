@@ -22,7 +22,7 @@ func createZipFile(arc *ZipArchive, fileList []string, commonParentPath string) 
 
 	zipWriter := zip.NewWriter(newZipFile)
 
-	zipFilePathListMap := make(map[string]createZipFilePathList)
+	zipFilePathListMap := make(map[string]createArchiveFileInfo)
 
 	err = processFilesForPacking(&zipFilePathListMap, &fileList, commonParentPath, &_gitIgnorePattern)
 	if err != nil {

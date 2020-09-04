@@ -139,7 +139,7 @@ func getArchiveFilesRelativePath(absFilepath string, commonParentPath string) st
 	return lastItem.String()
 }
 
-func processFilesForPacking(zipFilePathListMap *map[string]createZipFilePathList, fileList *[]string, commonParentPath string, gitIgnorePattern *[]string) error {
+func processFilesForPacking(zipFilePathListMap *map[string]createArchiveFileInfo, fileList *[]string, commonParentPath string, gitIgnorePattern *[]string) error {
 	_zipFilePathListMap := *zipFilePathListMap
 	_fileList := *fileList
 
@@ -219,7 +219,7 @@ func processFilesForPacking(zipFilePathListMap *map[string]createZipFilePathList
 						_absFilepath = fixDirSlash(isDir, _absFilepath)
 						_relativeFilePath = fixDirSlash(isDir, _relativeFilePath)
 
-						_zipFilePathListMap[_absFilepath] = createZipFilePathList{
+						_zipFilePathListMap[_absFilepath] = createArchiveFileInfo{
 							absFilepath:      _absFilepath,
 							relativeFilePath: _relativeFilePath,
 							isDir:            isDir,
@@ -233,7 +233,7 @@ func processFilesForPacking(zipFilePathListMap *map[string]createZipFilePathList
 
 			absFilepath = fixDirSlash(isFileADir, absFilepath)
 
-			_zipFilePathListMap[absFilepath] = createZipFilePathList{
+			_zipFilePathListMap[absFilepath] = createArchiveFileInfo{
 				absFilepath:      absFilepath,
 				relativeFilePath: relativeFilePath,
 				isDir:            isFileADir,
