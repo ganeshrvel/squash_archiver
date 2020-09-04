@@ -50,9 +50,12 @@ func startUnpackingZip(arc ZipArchive) error {
 	totalFiles := len(reader.File)
 	pInfo, ch := initPackingProgress(totalFiles)
 
-	for _, file := range zipFilePathListMap {
-		pInfo.packingProgress(ch, totalFiles, file.absFilepath)
-		if err := addFileToDisk(&file.zipFileInfo, file.absFilepath); err != nil {
+	count := 0
+	for absolutePath, file := range zipFilePathListMap {
+		count += 1
+		pInfo.packingProgress(ch, totalFiles, absolutePath, count)
+
+		if err := addFileToDisk(&file.zipFileInfo, absolutePath); err != nil {
 			return err
 		}
 	}

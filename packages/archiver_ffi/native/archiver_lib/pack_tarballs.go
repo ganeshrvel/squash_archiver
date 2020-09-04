@@ -31,8 +31,10 @@ func packTarballs(arc *CommonArchive, arcFileObj interface{ archiver.Writer }, f
 	totalFiles := len(zipFilePathListMap)
 	pInfo, ch := initPackingProgress(totalFiles)
 
+	count := 0
 	for absolutePath, item := range zipFilePathListMap {
-		pInfo.packingProgress(ch, totalFiles, absolutePath)
+		count += 1
+		pInfo.packingProgress(ch, totalFiles, absolutePath, count)
 
 		if err := addFileToTarBall(&arcFileObj, item.fileInfo, item.absFilepath, item.relativeFilePath, item.isDir)
 			err != nil {

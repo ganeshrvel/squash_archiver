@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	rxgo "github.com/ReactiveX/RxGo"
 	"time"
 )
@@ -19,18 +20,30 @@ func initPackingProgress(totalFiles int) (*PackingProgressInfo, *chan rxgo.Item)
 	observable := rxgo.FromChannel(ch)
 
 	observable.ForEach(func(v interface{}) {
-		//fmt.Printf("received: %v\n", v)
+		fmt.Printf("received: %v\n", v)
 	}, func(err error) {
-		//	fmt.Printf("error: %e\n", err)
+		fmt.Printf("error: %e\n", err)
 	}, func() {
-		//elapsed := time.Since(pInfo.startTime)
+		elapsed := time.Since(pInfo.startTime)
 
-		//fmt.Println("observable is closed")
-		//fmt.Println("Time taken to create the archive: %s", elapsed)
+		fmt.Println("observable is closed")
+		fmt.Printf("Time taken to create the archive: %s", elapsed)
 	})
 
 	return &pInfo, &ch
 }
+
+func (pInfo *PackingProgressInfo) packingProgress(ch *chan rxgo.Item, totalFiles int, absolutePath string, progressCount int) {
+	progressPercentage := Percent(float32(progressCount), float32(totalFiles))
+
+	pInfo.totalFiles = totalFiles
+	pInfo.progressCount = progressCount
+	pInfo.currentFilename = absolutePath
+	pInfo.progressPercentage = progressPercentage
+
+	*ch <- rxgo.Of(pInfo)
+}
+
 func (pInfo *PackingProgressInfo) closePacking(ch *chan rxgo.Item, totalFiles int) {
 	pInfo.totalFiles = totalFiles
 	pInfo.progressCount = totalFiles
@@ -40,16 +53,4 @@ func (pInfo *PackingProgressInfo) closePacking(ch *chan rxgo.Item, totalFiles in
 	*ch <- rxgo.Of(pInfo)
 
 	defer close(*ch)
-}
-
-func (pInfo *PackingProgressInfo) packingProgress(ch *chan rxgo.Item, totalFiles int, absolutePath string) {
-	progressCount := pInfo.progressCount + 1
-	progressPercentage := Percent(float32(progressCount), float32(totalFiles))
-
-	pInfo.totalFiles = totalFiles
-	pInfo.progressCount = progressCount
-	pInfo.currentFilename = absolutePath
-	pInfo.progressPercentage = progressPercentage
-
-	*ch <- rxgo.Of(pInfo)
 }

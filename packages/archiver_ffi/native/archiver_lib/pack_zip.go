@@ -32,8 +32,10 @@ func createZipFile(arc *ZipArchive, fileList []string, commonParentPath string) 
 	totalFiles := len(zipFilePathListMap)
 	pInfo, ch := initPackingProgress(totalFiles)
 
+	count := 0
 	for absolutePath, item := range zipFilePathListMap {
-		pInfo.packingProgress(ch, totalFiles, absolutePath)
+		count += 1
+		pInfo.packingProgress(ch, totalFiles, absolutePath, count)
 
 		if _password == "" {
 			if err := addFileToRegularZip(zipWriter, item.fileInfo, item.absFilepath, item.relativeFilePath); err != nil {
