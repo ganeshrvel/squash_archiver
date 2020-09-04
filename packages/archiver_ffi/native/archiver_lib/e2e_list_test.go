@@ -326,7 +326,7 @@ func _testOrderByFullPathListing() {
 				"mock_dir1/1/a.txt",
 				"mock_dir1/3/b.txt",
 				"A/W/X/Y/file1.txt",
-				"A/B/file2.txt"}
+				"A/B/file2.txt", "A/file5.txt"}
 
 			for _, x := range list {
 				isDir := !strings.HasSuffix(x, ".txt")
@@ -348,7 +348,7 @@ func _testOrderByFullPathListing() {
 
 			_sortPath(&filePathList, OrderDirAsc)
 
-			assertionArr := []string{"A/file1.txt", "A/file2.txt", "A/file3.txt", "A/B/", "A/B/123.txt", "A/B/file1.txt", "A/B/file2.txt", "A/B/file2.txt", "A/B/C/file1.txt", "A/B/C/D/file1.txt", "A/B/C/D/file3.txt", "A/W/file1.txt", "A/W/X/file1.txt", "A/W/X/Y/file1.txt", "A/W/X/Y/Z/file1.txt", "mock_dir1/1/", "mock_dir1/1/a.txt", "mock_dir1/1/2/", "mock_dir1/2/", "mock_dir1/3/b.txt", "mock_dir1/3/2/", "mock_dir1/3/2/b/"}
+			assertionArr := []string{"A/file1.txt", "A/file2.txt", "A/file3.txt", "A/file5.txt", "A/B/", "A/B/123.txt", "A/B/file1.txt", "A/B/file2.txt", "A/B/file2.txt", "A/B/C/file1.txt", "A/B/C/D/file1.txt", "A/B/C/D/file3.txt", "A/W/file1.txt", "A/W/X/file1.txt", "A/W/X/Y/file1.txt", "A/W/X/Y/Z/file1.txt", "mock_dir1/1/", "mock_dir1/1/a.txt", "mock_dir1/1/2/", "mock_dir1/2/", "mock_dir1/3/b.txt", "mock_dir1/3/2/", "mock_dir1/3/2/b/"}
 
 			var itemsArr []string
 
@@ -406,6 +406,42 @@ func _testOrderByFullPathListing() {
 			_sortPath(&filePathList, OrderDirDesc)
 
 			assertionArr := []string{"/mock_dir1/3/2/b/", "/mock_dir1/3/2/", "/mock_dir1/3/b.txt", "/mock_dir1/2/", "/mock_dir1/1/2/", "/mock_dir1/1/a.txt", "/mock_dir1/1/", "/A/W/X/Y/Z/file1.txt", "/A/W/X/Y/file1.txt", "/A/W/X/file1.txt", "/A/W/file1.txt", "/A/B/C/D/file3.txt", "/A/B/C/D/file1.txt", "/A/B/C/file1.txt", "/A/B/file2.txt", "/A/B/file2.txt", "/A/B/file1.txt", "/A/B/123.txt", "/A/B/", "/A/file3.txt", "/A/file2.txt", "/A/file1.txt"}
+
+			var itemsArr []string
+
+			for _, x := range filePathList {
+				itemsArr = append(itemsArr, x.FullPath)
+			}
+
+			So(itemsArr, ShouldResemble, assertionArr)
+		})
+
+		Convey("Asc | 3 - it should not throw an error", func() {
+			var filePathList []filePathListSortInfo
+
+			list := []string{"mock_dir1/", "mock_dir1/a.txt", "mock_dir1/1/", "mock_dir1/1/a.txt", "mock_dir1/2/", "mock_dir1/2/b.txt", "mock_dir1/3/", "mock_dir1/3/b.txt", "mock_dir1/3/2/", "mock_dir1/3/2/b.txt"}
+
+			for _, x := range list {
+				isDir := !strings.HasSuffix(x, ".txt")
+
+				var pathSplitted [2]string
+
+				if !isDir {
+					pathSplitted = [2]string{filepath.Dir(x), filepath.Base(x)}
+				} else {
+					pathSplitted = [2]string{filepath.Dir(x), ""}
+				}
+
+				filePathList = append(filePathList, filePathListSortInfo{
+					IsDir:         isDir,
+					FullPath:      x,
+					splittedPaths: pathSplitted,
+				})
+			}
+
+			_sortPath(&filePathList, OrderDirAsc)
+
+			assertionArr := []string{"mock_dir1/", "mock_dir1/a.txt", "mock_dir1/1/", "mock_dir1/1/a.txt", "mock_dir1/2/", "mock_dir1/2/b.txt", "mock_dir1/3/", "mock_dir1/3/b.txt", "mock_dir1/3/2/", "mock_dir1/3/2/b.txt"}
 
 			var itemsArr []string
 

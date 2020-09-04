@@ -457,6 +457,10 @@ func _testPacking(_metaObj *ArchiveMeta, password string, encryptionMethod zip.E
 }
 
 func TestPacking(t *testing.T) {
+	if testing.Short() {
+		t.Skip("skipping 'TestPacking' testing in short mode")
+	}
+
 	Convey("Packing | No encryption - ZIP", t, func() {
 		filename := newTempMocksAsset("arc_test_pack.zip")
 
