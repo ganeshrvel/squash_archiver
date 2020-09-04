@@ -71,8 +71,14 @@ func newTempMocksDir(_dirPath string, resetDir bool) string {
 	resultPath := filepath.Join(currentDir, "tests/mocks-build", _dirPath)
 
 	if resetDir == true {
+		err := os.RemoveAll(resultPath)
+
+		if err != nil {
+			log.Panic(err)
+		}
+
 		if exist := isDirectory(resultPath); !exist {
-			err := os.MkdirAll(resultPath, os.ModePerm)
+			err = os.MkdirAll(resultPath, os.ModePerm)
 
 			if err != nil {
 				log.Panicf("\ntemp mocks directory not found: %s\nerror: %+v\n", resultPath, err)

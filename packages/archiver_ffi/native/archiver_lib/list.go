@@ -8,7 +8,6 @@ import (
 	"github.com/ganeshrvel/archiver"
 	"github.com/nwaples/rardecode"
 	"github.com/sabhiram/go-gitignore"
-	"github.com/wesovilabs/koazee"
 	"github.com/yeka/zip"
 	"io/ioutil"
 	"path/filepath"
@@ -57,16 +56,12 @@ func sortFiles(list []ArchiveFileInfo, orderBy ArchiveOrderBy, orderDir ArchiveO
 	return list
 }
 
-func getFilteredFiles(fileInfo ArchiveFileInfo, listDirectoryPath string, recursive bool) (include bool) {
-	_koazeeStream := koazee.StreamOf(GlobalFileDenylist)
+func getFilteredFiles(fileInfo ArchiveFileInfo, listDirectoryPath string, recursive bool, gitIgnorePattern []string) (include bool) {
+	var ignoreList []string
+	ignoreList = append(ignoreList, GlobalPatternDenylist...)
+	ignoreList = append(ignoreList, gitIgnorePattern...)
 
-	// match and exclude files in [GlobalFileDenylist]
-	if found, err := _koazeeStream.Contains(fileInfo.Name); err != nil || found {
-		return false
-	}
-
-	// ignore the files if pattern matches
-	ignoreMatches, _ := ignore.CompileIgnoreLines(GlobalPatternDenylist...)
+	ignoreMatches, _ := ignore.CompileIgnoreLines(ignoreList...)
 
 	if ignoreMatches.MatchesPath(fileInfo.FullPath) {
 		return false
@@ -117,6 +112,7 @@ func (arc ZipArchive) list() ([]ArchiveFileInfo, error) {
 	_recursive := arc.read.recursive
 	_orderBy := arc.read.orderBy
 	_orderDir := arc.read.orderDir
+	_gitIgnorePattern := arc.read.gitIgnorePattern
 
 	reader, err := zip.OpenReader(_filename)
 	if err != nil {
@@ -164,7 +160,7 @@ func (arc ZipArchive) list() ([]ArchiveFileInfo, error) {
 
 		sanitizeDirPath(&fileInfo)
 
-		allowIncludeFile := getFilteredFiles(fileInfo, _listDirectoryPath, _recursive)
+		allowIncludeFile := getFilteredFiles(fileInfo, _listDirectoryPath, _recursive, _gitIgnorePattern)
 
 		if allowIncludeFile {
 			filteredPaths = append(filteredPaths, fileInfo)
@@ -192,6 +188,7 @@ func (arc CommonArchive) list() ([]ArchiveFileInfo, error) {
 	_recursive := arc.read.recursive
 	_orderBy := arc.read.orderBy
 	_orderDir := arc.read.orderDir
+	_gitIgnorePattern := arc.read.gitIgnorePattern
 	_overwriteExisting := arc.pack.overwriteExisting
 
 	arcFileObj, err := archiver.ByExtension(_filename)
@@ -258,7 +255,7 @@ func (arc CommonArchive) list() ([]ArchiveFileInfo, error) {
 
 		sanitizeDirPath(&fileInfo)
 
-		allowIncludeFile := getFilteredFiles(fileInfo, _listDirectoryPath, _recursive)
+		allowIncludeFile := getFilteredFiles(fileInfo, _listDirectoryPath, _recursive, _gitIgnorePattern)
 
 		if allowIncludeFile {
 			filteredPaths = append(filteredPaths, fileInfo)

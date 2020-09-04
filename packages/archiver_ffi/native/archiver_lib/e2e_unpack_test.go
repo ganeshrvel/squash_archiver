@@ -9,7 +9,9 @@ import (
 	"testing"
 )
 
-func _testListingUnpackedArchive(_metaObj *ArchiveMeta, password string, assertionArr []string, destination string) {
+func _testListingUnpackedArchive(_metaObj *ArchiveMeta, _unpackObj *ArchiveUnpack, password string, assertionArr []string) {
+	destination := _unpackObj.destination
+
 	Convey("recursive=true | Asc - it should not throw an error", func() {
 		_listObj := &ArchiveRead{
 			password:          password,
@@ -17,6 +19,7 @@ func _testListingUnpackedArchive(_metaObj *ArchiveMeta, password string, asserti
 			recursive:         true,
 			orderBy:           OrderByFullPath,
 			orderDir:          OrderDirAsc,
+			gitIgnorePattern:  _unpackObj.gitIgnorePattern,
 		}
 
 		result, err := getArchiveFileList(_metaObj, _listObj)
@@ -97,7 +100,28 @@ func _testUnpacking(_metaObj *ArchiveMeta, password string) {
 		Convey("List Packed Archive files", func() {
 			assertionArr := []string{"mock_dir1/", "mock_dir1/a.txt", "mock_dir1/1/", "mock_dir1/1/a.txt", "mock_dir1/2/", "mock_dir1/2/b.txt", "mock_dir1/3/", "mock_dir1/3/b.txt", "mock_dir1/3/2/", "mock_dir1/3/2/b.txt"}
 
-			_testListingUnpackedArchive(_metaObj, password, assertionArr, _destination)
+			_testListingUnpackedArchive(_metaObj, _unpackObj, password, assertionArr)
+		})
+	})
+
+	Convey("gitIgnore | It should not throw an error", func() {
+		_destination := newTempMocksDir("mock_test_file1", true)
+
+		_unpackObj := &ArchiveUnpack{
+			password:         password,
+			fileList:         []string{},
+			gitIgnorePattern: []string{"a.txt"},
+			destination:      _destination,
+		}
+
+		err := startUnpacking(_metaObj, _unpackObj)
+
+		So(err, ShouldBeNil)
+
+		Convey("List Packed Archive files", func() {
+			assertionArr := []string{"mock_dir1/", "mock_dir1/1/", "mock_dir1/2/", "mock_dir1/2/b.txt", "mock_dir1/3/", "mock_dir1/3/b.txt", "mock_dir1/3/2/", "mock_dir1/3/2/b.txt"}
+
+			_testListingUnpackedArchive(_metaObj, _unpackObj, password, assertionArr)
 		})
 	})
 }

@@ -22,6 +22,7 @@ type ArchiveMeta struct {
 type ArchiveRead struct {
 	password          string
 	listDirectoryPath string
+	gitIgnorePattern  []string
 	orderBy           ArchiveOrderBy
 	orderDir          ArchiveOrderDir
 	recursive         bool

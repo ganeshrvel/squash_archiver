@@ -10,7 +10,6 @@ import (
 func _testArchiveListing(_metaObj *ArchiveMeta, password string) {
 	Convey("General tests", func() {
 		Convey("Incorrect listDirectoryPath - it should throw an error", func() {
-
 			_listObj := &ArchiveRead{
 				password:          password,
 				listDirectoryPath: "qwerty/",
@@ -118,6 +117,33 @@ func _testArchiveListing(_metaObj *ArchiveMeta, password string) {
 			}
 
 			assertionArr := []string{"mock_dir1/3/b.txt", "mock_dir1/3/2/b.txt", "mock_dir1/3/2/"}
+
+			So(itemsArr, ShouldResemble, assertionArr)
+		})
+	})
+
+	Convey("gitIgnore", func() {
+		Convey("gitIgnore | recursive=true | Asc - it should not throw an error", func() {
+			_listObj := &ArchiveRead{
+				password:          password,
+				listDirectoryPath: "",
+				recursive:         true,
+				orderBy:           OrderByFullPath,
+				orderDir:          OrderDirAsc,
+				gitIgnorePattern:  []string{"a.txt"},
+			}
+
+			result, err := getArchiveFileList(_metaObj, _listObj)
+
+			So(err, ShouldBeNil)
+
+			var itemsArr []string
+
+			for _, item := range result {
+				itemsArr = append(itemsArr, item.FullPath)
+			}
+
+			assertionArr := []string{"mock_dir1/", "mock_dir1/1/", "mock_dir1/2/", "mock_dir1/2/b.txt", "mock_dir1/3/", "mock_dir1/3/b.txt", "mock_dir1/3/2/", "mock_dir1/3/2/b.txt"}
 
 			So(itemsArr, ShouldResemble, assertionArr)
 		})
