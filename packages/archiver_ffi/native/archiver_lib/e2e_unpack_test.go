@@ -320,6 +320,29 @@ func _testUnpacking(metaObj *ArchiveMeta) {
 			_testListingUnpackedArchive(metaObj, unpackObj, archiveFilesAssertionArr, directoryFilesAssertionArr)
 		})
 	})
+
+	Convey("gitIgnorePattern | fileList | 1 | It should not throw an error", func() {
+		_destination := newTempMocksDir("mock_test_file1", true)
+
+		unpackObj := &ArchiveUnpack{
+			fileList:    []string{"mock_dir1/2/b.txt", "mock_dir1/3/b.txt"},
+			destination: _destination,
+		}
+
+		metaObj.gitIgnorePattern = []string{"mock_dir1/3"}
+
+		err := startUnpacking(metaObj, unpackObj)
+
+		So(err, ShouldBeNil)
+
+		Convey("List Packed Archive files", func() {
+			archiveFilesAssertionArr := []string{"mock_dir1/", "mock_dir1/a.txt", "mock_dir1/1/", "mock_dir1/1/a.txt", "mock_dir1/2/", "mock_dir1/2/b.txt"}
+
+			directoryFilesAssertionArr := []string{"mock_dir1/", "mock_dir1/2/", "mock_dir1/2/b.txt"}
+
+			_testListingUnpackedArchive(metaObj, unpackObj, archiveFilesAssertionArr, directoryFilesAssertionArr)
+		})
+	})
 }
 
 func TestUnpacking(t *testing.T) {
