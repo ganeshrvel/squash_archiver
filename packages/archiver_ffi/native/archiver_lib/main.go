@@ -15,10 +15,10 @@ func ListArchive() {
 		return
 	}
 
-	_metaObj := &ArchiveMeta{filename: filename}
+	_metaObj := &ArchiveMeta{filename: filename,
+		password: ""}
 
 	_listObj := &ArchiveRead{
-		password:          "",
 		listDirectoryPath: "phayes-geoPHP-6855624/",
 		recursive:         true,
 		orderBy:           OrderByName,
@@ -67,13 +67,13 @@ func Pack() {
 	path1 := getDesktopFiles("test")
 	path2 := getDesktopFiles("openmtp")
 
-	_metaObj := &ArchiveMeta{filename: filename}
+	_metaObj := &ArchiveMeta{filename: filename,
+		gitIgnorePattern: []string{},
+		password:         "",
+		encryptionMethod: zip.StandardEncryption}
 
 	_packObj := &ArchivePack{
-		password:          "",
 		fileList:          []string{path1, path2},
-		gitIgnorePattern:  []string{},
-		encryptionMethod:  zip.StandardEncryption,
 		overwriteExisting: true,
 	}
 
@@ -93,13 +93,13 @@ func Unpack() {
 	filename := getTestMocksAsset("mock_test_file1.zip")
 	tempDir := newTempMocksDir("arc_test_pack/", false)
 
-	_metaObj := &ArchiveMeta{filename: filename}
+	_metaObj := &ArchiveMeta{filename: filename,
+		password:         "",
+		gitIgnorePattern: []string{}}
 
 	_packObj := &ArchiveUnpack{
-		password:         "",
-		fileList:         []string{},
-		gitIgnorePattern: []string{},
-		destination:      tempDir,
+		fileList:    []string{},
+		destination: tempDir,
 	}
 
 	err := startUnpacking(_metaObj, _packObj)

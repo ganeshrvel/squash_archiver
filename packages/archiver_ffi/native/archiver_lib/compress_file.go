@@ -8,7 +8,7 @@ import (
 
 func compressFile(arc *CommonArchive, newArchiveFile interface{ archiver.Compressor }, fileList *[]string) error {
 	_filename := arc.meta.filename
-	_gitIgnorePattern := arc.pack.gitIgnorePattern
+	_gitIgnorePattern := arc.meta.gitIgnorePattern
 	_fileList := *fileList
 
 	var ignoreList []string

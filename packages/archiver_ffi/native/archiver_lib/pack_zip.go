@@ -9,9 +9,9 @@ import (
 
 func createZipFile(arc *ZipArchive, fileList []string, commonParentPath string) error {
 	_filename := arc.meta.filename
-	_password := arc.pack.password
-	_gitIgnorePattern := arc.pack.gitIgnorePattern
-	_encryptionMethod := arc.pack.encryptionMethod
+	_password := arc.meta.password
+	_gitIgnorePattern := arc.meta.gitIgnorePattern
+	_encryptionMethod := arc.meta.encryptionMethod
 
 	newZipFile, err := os.Create(_filename)
 	if err != nil {

@@ -16,31 +16,27 @@ type ArchiveFileInfo struct {
 }
 
 type ArchiveMeta struct {
-	filename string
+	filename         string
+	password         string
+	gitIgnorePattern []string
+	encryptionMethod zip.EncryptionMethod
 }
 
 type ArchiveRead struct {
-	password          string
 	listDirectoryPath string
-	gitIgnorePattern  []string
 	orderBy           ArchiveOrderBy
 	orderDir          ArchiveOrderDir
 	recursive         bool
 }
 
 type ArchivePack struct {
-	password          string
 	fileList          []string
-	gitIgnorePattern  []string
-	encryptionMethod  zip.EncryptionMethod
 	overwriteExisting bool
 }
 
 type ArchiveUnpack struct {
-	password         string
-	fileList         []string
-	gitIgnorePattern []string
-	destination      string
+	fileList    []string
+	destination string
 }
 
 type filePathListSortInfo struct {

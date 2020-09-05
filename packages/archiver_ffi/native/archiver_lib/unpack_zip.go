@@ -11,9 +11,9 @@ import (
 
 func startUnpackingZip(arc ZipArchive) error {
 	_filename := arc.meta.filename
-	_password := arc.pack.password
+	_password := arc.meta.password
 	_destination := arc.unpack.destination
-	_gitIgnorePattern := arc.unpack.gitIgnorePattern
+	_gitIgnorePattern := arc.meta.gitIgnorePattern
 
 	reader, err := zip.OpenReader(_filename)
 	if err != nil {

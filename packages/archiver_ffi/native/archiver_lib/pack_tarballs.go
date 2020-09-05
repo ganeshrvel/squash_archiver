@@ -9,7 +9,7 @@ import (
 
 func packTarballs(arc *CommonArchive, arcFileObj interface{ archiver.Writer }, fileList *[]string, commonParentPath string) error {
 	_filename := arc.meta.filename
-	_gitIgnorePattern := arc.pack.gitIgnorePattern
+	_gitIgnorePattern := arc.meta.gitIgnorePattern
 
 	out, err := os.Create(_filename)
 	if err != nil {

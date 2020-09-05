@@ -108,11 +108,11 @@ func pathExists(path string, searchPath string) bool {
 func (arc ZipArchive) list() ([]ArchiveFileInfo, error) {
 	_filename := arc.meta.filename
 	_listDirectoryPath := arc.read.listDirectoryPath
-	_password := arc.read.password
+	_password := arc.meta.password
 	_recursive := arc.read.recursive
 	_orderBy := arc.read.orderBy
 	_orderDir := arc.read.orderDir
-	_gitIgnorePattern := arc.read.gitIgnorePattern
+	_gitIgnorePattern := arc.meta.gitIgnorePattern
 
 	reader, err := zip.OpenReader(_filename)
 	if err != nil {
@@ -183,12 +183,12 @@ func (arc ZipArchive) list() ([]ArchiveFileInfo, error) {
 // List files in the common archives
 func (arc CommonArchive) list() ([]ArchiveFileInfo, error) {
 	_filename := arc.meta.filename
-	_password := arc.read.password
+	_password := arc.meta.password
 	_listDirectoryPath := arc.read.listDirectoryPath
 	_recursive := arc.read.recursive
 	_orderBy := arc.read.orderBy
 	_orderDir := arc.read.orderDir
-	_gitIgnorePattern := arc.read.gitIgnorePattern
+	_gitIgnorePattern := arc.meta.gitIgnorePattern
 	_overwriteExisting := arc.pack.overwriteExisting
 
 	arcFileObj, err := archiver.ByExtension(_filename)
