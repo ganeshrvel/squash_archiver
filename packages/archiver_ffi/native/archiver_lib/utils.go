@@ -155,3 +155,15 @@ func isSymlink(fi os.FileInfo) bool {
 func Percent(percent float32, all float32) float32 {
 	return (percent / all) * 100
 }
+
+func StringFilter(x []string, f func(string) bool) []string {
+	a := make([]string, 0)
+
+	for _, v := range x {
+		if f(v) && len(v) > 7 {
+			a = append(a, v)
+		}
+	}
+
+	return a
+}

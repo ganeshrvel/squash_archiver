@@ -553,9 +553,9 @@ func _testArchiveEncryption() {
 }
 
 func TestArchiveListing(t *testing.T) {
-	//if testing.Short() {
-	//	t.Skip("skipping 'TestArchiveListing' testing in short mode")
-	//}
+	if testing.Short() {
+		t.Skip("skipping 'TestArchiveListing' testing in short mode")
+	}
 
 	Convey("Testing OrderByFullPath", t, func() {
 		_testOrderByFullPathListing()
@@ -647,9 +647,9 @@ func TestArchiveListing(t *testing.T) {
 }
 
 func TestArchiveEncryption(t *testing.T) {
-	//if testing.Short() {
-	//	t.Skip("skipping 'TestArchiveEncryption' testing in short mode")
-	//}
+	if testing.Short() {
+		t.Skip("skipping 'TestArchiveEncryption' testing in short mode")
+	}
 
 	Convey("Archive Encryption", t, func() {
 		_testArchiveEncryption()

@@ -33,7 +33,7 @@ func _testListingUnpackedArchive(metaObj *ArchiveMeta, unpackObj *ArchiveUnpack,
 		So(itemsArr, ShouldResemble, archiveFilesAssertionArr)
 	})
 
-	Convey("Fetch  - it should not throw an error", func() {
+	Convey("Read the extracted directory  - it should not throw an error", func() {
 		var filePathList []filePathListSortInfo
 
 		err := filepath.Walk(destination, func(path string, info os.FileInfo, err error) error {
@@ -120,27 +120,114 @@ func _testUnpacking(metaObj *ArchiveMeta) {
 		})
 	})
 
-	//Convey("fileList | It should not throw an error", func() {
-	//	_destination := newTempMocksDir("mock_test_file1", true)
-	//
-	//	unpackObj := &ArchiveUnpack{
-	//		fileList:    []string{"mock_dir1/"},
-	//		destination: _destination,
-	//	}
-	//
-	//	metaObj.gitIgnorePattern = []string{}
-	//
-	//	err := startUnpacking(metaObj, unpackObj)
-	//
-	//	So(err, ShouldBeNil)
-	//
-	//	Convey("List Packed Archive files", func() {
-	//		archiveFilesAssertionArr := []string{"mock_dir1/", "mock_dir1/a.txt", "mock_dir1/1/", "mock_dir1/1/a.txt", "mock_dir1/2/", "mock_dir1/2/b.txt", "mock_dir1/3/", "mock_dir1/3/b.txt", "mock_dir1/3/2/", "mock_dir1/3/2/b.txt"}
-	//		directoryFilesAssertionArr := []string{"mock_dir1/", "mock_dir1/a.txt", "mock_dir1/1/", "mock_dir1/1/a.txt", "mock_dir1/2/", "mock_dir1/2/b.txt", "mock_dir1/3/", "mock_dir1/3/b.txt", "mock_dir1/3/2/", "mock_dir1/3/2/b.txt"}
-	//
-	//		_testListingUnpackedArchive(metaObj, unpackObj, archiveFilesAssertionArr, directoryFilesAssertionArr)
-	//	})
-	//})
+	Convey("fileList | 1 | It should not throw an error", func() {
+		_destination := newTempMocksDir("mock_test_file1", true)
+
+		unpackObj := &ArchiveUnpack{
+			fileList:    []string{"mock_dir1/"},
+			destination: _destination,
+		}
+
+		metaObj.gitIgnorePattern = []string{}
+
+		err := startUnpacking(metaObj, unpackObj)
+
+		So(err, ShouldBeNil)
+
+		Convey("List Packed Archive files", func() {
+			archiveFilesAssertionArr := []string{"mock_dir1/", "mock_dir1/a.txt", "mock_dir1/1/", "mock_dir1/1/a.txt", "mock_dir1/2/", "mock_dir1/2/b.txt", "mock_dir1/3/", "mock_dir1/3/b.txt", "mock_dir1/3/2/", "mock_dir1/3/2/b.txt"}
+			directoryFilesAssertionArr := []string{"mock_dir1/", "mock_dir1/a.txt", "mock_dir1/1/", "mock_dir1/1/a.txt", "mock_dir1/2/", "mock_dir1/2/b.txt", "mock_dir1/3/", "mock_dir1/3/b.txt", "mock_dir1/3/2/", "mock_dir1/3/2/b.txt"}
+
+			_testListingUnpackedArchive(metaObj, unpackObj, archiveFilesAssertionArr, directoryFilesAssertionArr)
+		})
+	})
+
+	Convey("fileList | 2 | It should not throw an error", func() {
+		_destination := newTempMocksDir("mock_test_file1", true)
+
+		unpackObj := &ArchiveUnpack{
+			fileList:    []string{"mock_dir1/2/"},
+			destination: _destination,
+		}
+
+		metaObj.gitIgnorePattern = []string{}
+
+		err := startUnpacking(metaObj, unpackObj)
+
+		So(err, ShouldBeNil)
+
+		Convey("List Packed Archive files", func() {
+			archiveFilesAssertionArr := []string{"mock_dir1/", "mock_dir1/a.txt", "mock_dir1/1/", "mock_dir1/1/a.txt", "mock_dir1/2/", "mock_dir1/2/b.txt", "mock_dir1/3/", "mock_dir1/3/b.txt", "mock_dir1/3/2/", "mock_dir1/3/2/b.txt"}
+			directoryFilesAssertionArr := []string{"mock_dir1/", "mock_dir1/2/", "mock_dir1/2/b.txt"}
+
+			_testListingUnpackedArchive(metaObj, unpackObj, archiveFilesAssertionArr, directoryFilesAssertionArr)
+		})
+	})
+
+	Convey("fileList | 3 | It should not throw an error", func() {
+		_destination := newTempMocksDir("mock_test_file1", true)
+
+		unpackObj := &ArchiveUnpack{
+			fileList:    []string{"mock_dir1/2/b.txt"},
+			destination: _destination,
+		}
+
+		metaObj.gitIgnorePattern = []string{}
+
+		err := startUnpacking(metaObj, unpackObj)
+
+		So(err, ShouldBeNil)
+
+		Convey("List Packed Archive files", func() {
+			archiveFilesAssertionArr := []string{"mock_dir1/", "mock_dir1/a.txt", "mock_dir1/1/", "mock_dir1/1/a.txt", "mock_dir1/2/", "mock_dir1/2/b.txt", "mock_dir1/3/", "mock_dir1/3/b.txt", "mock_dir1/3/2/", "mock_dir1/3/2/b.txt"}
+			directoryFilesAssertionArr := []string{"mock_dir1/", "mock_dir1/2/", "mock_dir1/2/b.txt"}
+
+			_testListingUnpackedArchive(metaObj, unpackObj, archiveFilesAssertionArr, directoryFilesAssertionArr)
+		})
+	})
+
+	Convey("fileList | 4 | It should not throw an error", func() {
+		_destination := newTempMocksDir("mock_test_file1", true)
+
+		unpackObj := &ArchiveUnpack{
+			fileList:    []string{"mock_dir1/a.txt"},
+			destination: _destination,
+		}
+
+		metaObj.gitIgnorePattern = []string{}
+
+		err := startUnpacking(metaObj, unpackObj)
+
+		So(err, ShouldBeNil)
+
+		Convey("List Packed Archive files", func() {
+			archiveFilesAssertionArr := []string{"mock_dir1/", "mock_dir1/a.txt", "mock_dir1/1/", "mock_dir1/1/a.txt", "mock_dir1/2/", "mock_dir1/2/b.txt", "mock_dir1/3/", "mock_dir1/3/b.txt", "mock_dir1/3/2/", "mock_dir1/3/2/b.txt"}
+			directoryFilesAssertionArr := []string{"mock_dir1/", "mock_dir1/a.txt"}
+
+			_testListingUnpackedArchive(metaObj, unpackObj, archiveFilesAssertionArr, directoryFilesAssertionArr)
+		})
+	})
+
+	Convey("fileList | 5 | It should not throw an error", func() {
+		_destination := newTempMocksDir("mock_test_file1", true)
+
+		unpackObj := &ArchiveUnpack{
+			fileList:    []string{"mock_dir1", "mock_dir1/a.txt"},
+			destination: _destination,
+		}
+
+		metaObj.gitIgnorePattern = []string{}
+
+		err := startUnpacking(metaObj, unpackObj)
+
+		So(err, ShouldBeNil)
+
+		Convey("List Packed Archive files", func() {
+			archiveFilesAssertionArr := []string{"mock_dir1/", "mock_dir1/a.txt", "mock_dir1/1/", "mock_dir1/1/a.txt", "mock_dir1/2/", "mock_dir1/2/b.txt", "mock_dir1/3/", "mock_dir1/3/b.txt", "mock_dir1/3/2/", "mock_dir1/3/2/b.txt"}
+
+			_testListingUnpackedArchive(metaObj, unpackObj, archiveFilesAssertionArr, archiveFilesAssertionArr)
+		})
+	})
 }
 
 func TestUnpacking(t *testing.T) {

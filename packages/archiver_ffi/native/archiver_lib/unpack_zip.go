@@ -7,6 +7,7 @@ import (
 	"io"
 	"os"
 	"path/filepath"
+	"strings"
 )
 
 func startUnpackingZip(arc ZipArchive) error {
@@ -14,6 +15,9 @@ func startUnpackingZip(arc ZipArchive) error {
 	_password := arc.meta.password
 	_destination := arc.unpack.destination
 	_gitIgnorePattern := arc.meta.gitIgnorePattern
+	_fileList := arc.unpack.fileList
+
+	allowFileFiltering := len(_fileList) > 0
 
 	reader, err := zip.OpenReader(_filename)
 	if err != nil {
@@ -31,6 +35,17 @@ func startUnpackingZip(arc ZipArchive) error {
 	for _, file := range reader.File {
 		if file.IsEncrypted() {
 			file.SetPassword(_password)
+		}
+
+		if allowFileFiltering {
+			matched := StringFilter(_fileList, func(s string) bool {
+				_fName := fixDirSlash(file.FileInfo().IsDir(), file.Name)
+				return strings.HasPrefix(_fName, s) // return foo_testfor
+			})
+
+			if len(matched) < 1 {
+				continue
+			}
 		}
 
 		if ignoreMatches.MatchesPath(file.Name) {
