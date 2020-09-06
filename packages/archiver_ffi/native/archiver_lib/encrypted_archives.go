@@ -119,7 +119,7 @@ func (arc CommonArchive) isEncrypted() (EncryptedArchiveInfo, error) {
 		return ai, err
 	}
 
-	err = archiveFormat(&arcFileObj, _password, true)
+	err = archiveFormat(&arcFileObj, _password, OverwriteExisting)
 
 	if err != nil {
 		return ai, err

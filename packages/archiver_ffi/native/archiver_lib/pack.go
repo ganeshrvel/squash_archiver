@@ -31,7 +31,6 @@ func (arc ZipArchive) doPack() error {
 func (arc CommonArchive) doPack() error {
 	_filename := arc.meta.filename
 	_fileList := arc.pack.fileList
-	_overwriteExisting := arc.pack.overwriteExisting
 
 	arcFileObj, err := archiver.ByExtension(_filename)
 
@@ -39,7 +38,7 @@ func (arc CommonArchive) doPack() error {
 		return err
 	}
 
-	err = archiveFormat(&arcFileObj, "", _overwriteExisting)
+	err = archiveFormat(&arcFileObj, "", OverwriteExisting)
 
 	if err != nil {
 		return err
@@ -103,13 +102,11 @@ func startPacking(meta *ArchiveMeta, pack *ArchivePack) error {
 	_meta := *meta
 	_pack := *pack
 
-	_overwriteExisting := pack.overwriteExisting
-
 	var arcPackObj ArchivePacker
 
 	ext := filepath.Ext(_meta.filename)
 
-	if _overwriteExisting && fileExists(_meta.filename) {
+	if OverwriteExisting && fileExists(_meta.filename) {
 		if err := os.Remove(_meta.filename); err != nil {
 			return err
 		}

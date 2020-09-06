@@ -73,8 +73,7 @@ func Pack() {
 		encryptionMethod: zip.StandardEncryption}
 
 	_packObj := &ArchivePack{
-		fileList:          []string{path1, path2},
-		overwriteExisting: true,
+		fileList: []string{path1, path2},
 	}
 
 	err := startPacking(_metaObj, _packObj)

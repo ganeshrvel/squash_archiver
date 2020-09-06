@@ -31,7 +31,6 @@ type ArchiveRead struct {
 
 type ArchivePack struct {
 	fileList          []string
-	overwriteExisting bool
 }
 
 type ArchiveUnpack struct {

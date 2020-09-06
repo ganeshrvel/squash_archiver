@@ -20,7 +20,7 @@ func (arc CommonArchive) doUnpack() error {
 		return err
 	}
 
-	err = archiveFormat(&arcFileObj, _password, true)
+	err = archiveFormat(&arcFileObj, _password, OverwriteExisting)
 
 	if err != nil {
 		return err

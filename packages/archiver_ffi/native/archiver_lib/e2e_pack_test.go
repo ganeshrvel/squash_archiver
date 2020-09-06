@@ -34,7 +34,6 @@ func _testPacking(_metaObj *ArchiveMeta) {
 		path1 := getTestMocksAsset("mock_dir1")
 		_packObj := &ArchivePack{
 			fileList:          []string{path1},
-			overwriteExisting: true,
 		}
 
 		_metaObj.gitIgnorePattern = []string{"b.txt"}
@@ -54,7 +53,6 @@ func _testPacking(_metaObj *ArchiveMeta) {
 		path1 := getTestMocksAsset("mock_dir1")
 		_packObj := &ArchivePack{
 			fileList:          []string{path1},
-			overwriteExisting: true,
 		}
 
 		err := startPacking(_metaObj, _packObj)
@@ -72,7 +70,6 @@ func _testPacking(_metaObj *ArchiveMeta) {
 		path1 := getTestMocksAsset("mock_dir1/a.txt")
 		_packObj := &ArchivePack{
 			fileList:          []string{path1},
-			overwriteExisting: true,
 		}
 
 		err := startPacking(_metaObj, _packObj)
@@ -91,7 +88,6 @@ func _testPacking(_metaObj *ArchiveMeta) {
 		path2 := getTestMocksAsset("mock_dir2")
 		_packObj := &ArchivePack{
 			fileList:          []string{path1, path2},
-			overwriteExisting: true,
 		}
 
 		err := startPacking(_metaObj, _packObj)
@@ -110,7 +106,6 @@ func _testPacking(_metaObj *ArchiveMeta) {
 		path2 := getTestMocksAsset("mock_dir3/b.txt")
 		_packObj := &ArchivePack{
 			fileList:          []string{path1, path2},
-			overwriteExisting: true,
 		}
 
 		err := startPacking(_metaObj, _packObj)
@@ -129,7 +124,6 @@ func _testPacking(_metaObj *ArchiveMeta) {
 		path2 := getTestMocksAsset("mock_dir1/1/")
 		_packObj := &ArchivePack{
 			fileList:          []string{path1, path2},
-			overwriteExisting: true,
 		}
 
 		err := startPacking(_metaObj, _packObj)
@@ -149,7 +143,6 @@ func _testPacking(_metaObj *ArchiveMeta) {
 		path3 := getTestMocksAsset("mock_dir1/2/")
 		_packObj := &ArchivePack{
 			fileList:          []string{path1, path2, path3},
-			overwriteExisting: true,
 		}
 
 		err := startPacking(_metaObj, _packObj)
@@ -170,7 +163,6 @@ func _testPacking(_metaObj *ArchiveMeta) {
 		path4 := getTestMocksAsset("mock_dir3/2/")
 		_packObj := &ArchivePack{
 			fileList:          []string{path1, path2, path3, path4},
-			overwriteExisting: true,
 		}
 
 		err := startPacking(_metaObj, _packObj)
@@ -189,7 +181,6 @@ func _testPacking(_metaObj *ArchiveMeta) {
 		path2 := getTestMocksAsset("mock_dir1/1/a.txt")
 		_packObj := &ArchivePack{
 			fileList:          []string{path1, path2},
-			overwriteExisting: true,
 		}
 
 		err := startPacking(_metaObj, _packObj)
@@ -208,7 +199,6 @@ func _testPacking(_metaObj *ArchiveMeta) {
 		path2 := getTestMocksAsset("mock_dir2/")
 		_packObj := &ArchivePack{
 			fileList:          []string{path1, path2},
-			overwriteExisting: true,
 		}
 
 		err := startPacking(_metaObj, _packObj)
@@ -227,7 +217,6 @@ func _testPacking(_metaObj *ArchiveMeta) {
 		path2 := getTestMocksAsset("mock_dir2/")
 		_packObj := &ArchivePack{
 			fileList:          []string{path1, path2},
-			overwriteExisting: true,
 		}
 
 		err := startPacking(_metaObj, _packObj)
@@ -246,7 +235,6 @@ func _testPacking(_metaObj *ArchiveMeta) {
 		path2 := getTestMocksAsset("mock_dir3/dir_1/")
 		_packObj := &ArchivePack{
 			fileList:          []string{path1, path2},
-			overwriteExisting: true,
 		}
 
 		err := startPacking(_metaObj, _packObj)
@@ -267,7 +255,6 @@ func _testPacking(_metaObj *ArchiveMeta) {
 		path4 := getTestMocksAsset("mock_dir3/dir_1/")
 		_packObj := &ArchivePack{
 			fileList:          []string{path1, path2, path3, path4},
-			overwriteExisting: true,
 		}
 
 		err := startPacking(_metaObj, _packObj)
@@ -288,7 +275,6 @@ func _testPacking(_metaObj *ArchiveMeta) {
 		path4 := getTestMocksAsset("mock_dir2/3/2/b.txt")
 		_packObj := &ArchivePack{
 			fileList:          []string{path1, path2, path3, path4},
-			overwriteExisting: true,
 		}
 
 		err := startPacking(_metaObj, _packObj)
@@ -307,7 +293,6 @@ func _testPacking(_metaObj *ArchiveMeta) {
 		path2 := getTestMocksAsset("mock_dir2/3/2/b.txt")
 		_packObj := &ArchivePack{
 			fileList:          []string{path1, path2},
-			overwriteExisting: true,
 		}
 
 		err := startPacking(_metaObj, _packObj)
@@ -326,7 +311,6 @@ func _testPacking(_metaObj *ArchiveMeta) {
 		path2 := getTestMocksAsset("mock_dir2/3/")
 		_packObj := &ArchivePack{
 			fileList:          []string{path1, path2},
-			overwriteExisting: true,
 		}
 
 		err := startPacking(_metaObj, _packObj)
@@ -346,7 +330,6 @@ func _testPacking(_metaObj *ArchiveMeta) {
 		path3 := getTestMocksAsset("mock_dir3/b.txt")
 		_packObj := &ArchivePack{
 			fileList:          []string{path1, path2, path3},
-			overwriteExisting: true,
 		}
 
 		err := startPacking(_metaObj, _packObj)
@@ -366,7 +349,6 @@ func _testPacking(_metaObj *ArchiveMeta) {
 		path3 := getTestMocksAsset("mock_dir3/")
 		_packObj := &ArchivePack{
 			fileList:          []string{path1, path2, path3},
-			overwriteExisting: true,
 		}
 
 		err := startPacking(_metaObj, _packObj)
@@ -383,7 +365,6 @@ func _testPacking(_metaObj *ArchiveMeta) {
 	Convey("no files in the pathlist |d It should not throw an error", func() {
 		_packObj := &ArchivePack{
 			fileList:          []string{},
-			overwriteExisting: true,
 		}
 
 		err := startPacking(_metaObj, _packObj)
@@ -401,7 +382,6 @@ func _testPacking(_metaObj *ArchiveMeta) {
 		path1 := getTestMocksAsset("mock_dir4/")
 		_packObj := &ArchivePack{
 			fileList:          []string{path1},
-			overwriteExisting: true,
 		}
 
 		err := startPacking(_metaObj, _packObj)

@@ -16,7 +16,6 @@ func (arc CommonArchive) list() ([]ArchiveFileInfo, error) {
 	_orderBy := arc.read.orderBy
 	_orderDir := arc.read.orderDir
 	_gitIgnorePattern := arc.meta.gitIgnorePattern
-	_overwriteExisting := arc.pack.overwriteExisting
 
 	arcFileObj, err := archiver.ByExtension(_filename)
 
@@ -24,7 +23,7 @@ func (arc CommonArchive) list() ([]ArchiveFileInfo, error) {
 		return nil, err
 	}
 
-	err = archiveFormat(&arcFileObj, _password, _overwriteExisting)
+	err = archiveFormat(&arcFileObj, _password, OverwriteExisting)
 
 	if err != nil {
 		return nil, err
