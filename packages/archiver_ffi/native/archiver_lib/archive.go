@@ -9,7 +9,7 @@ func archiveFormat(arcFileObj *interface{}, password string, overwriteExisting b
 	const (
 		mkdirAll               = true
 		implicitTopLevelFolder = false
-		continueOnError        = true
+		continueOnError        = false
 		compressionLevel       = 9
 		selectiveCompression   = false
 	)

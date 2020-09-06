@@ -68,7 +68,7 @@ type ArchiveReader interface {
 }
 
 type ArchiveUtils interface {
-	isEncrypted() (bool, error)
+	isEncrypted() (EncryptedArchiveInfo, error)
 }
 
 type ArchivePacker interface {
@@ -103,4 +103,9 @@ type PackingProgressInfo struct {
 	progressCount      int
 	currentFilename    string
 	progressPercentage float32
+}
+
+type EncryptedArchiveInfo struct {
+	isEncrypted     bool
+	isValidPassword bool
 }

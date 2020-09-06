@@ -54,6 +54,12 @@ func createZipFile(arc *ZipArchive, fileList []string, commonParentPath string) 
 		}
 	}()
 
+	defer func() {
+		if err := zipWriter.Flush(); err != nil {
+			fmt.Println(err)
+		}
+	}()
+
 	return err
 }
 
