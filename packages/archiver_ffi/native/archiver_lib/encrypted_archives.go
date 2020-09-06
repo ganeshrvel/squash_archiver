@@ -150,16 +150,6 @@ func (arc CommonArchive) isEncrypted() (EncryptedArchiveInfo, error) {
 	default:
 		return ai, nil
 	}
-
-	//var arcWalker, ok = arcFileObj.(archiver.Walker)
-	//if !ok {
-	//	return ai, fmt.Errorf("some error occured while reading the archive")
-	//}
-	//
-	//err = arcWalker.Walk(_filename, func(file archiver.File) error {
-	//	return nil
-	//})
-
 }
 
 func isArchiveEncrypted(meta *ArchiveMeta) (EncryptedArchiveInfo, error) {
@@ -186,7 +176,7 @@ func isArchiveEncrypted(meta *ArchiveMeta) (EncryptedArchiveInfo, error) {
 			isValidPassword: false,
 		}
 
-		return ai, fmt.Errorf("encryption check: file format not supported")
+		return ai, nil
 	}
 
 	return utilsObj.isEncrypted()
