@@ -2,11 +2,11 @@ package main
 
 import (
 	"fmt"
-	"github.com/denormal/go-gitignore"
 	"github.com/mitchellh/go-homedir"
 	"log"
 	"os"
 	"path"
+	"path/filepath"
 	"strings"
 )
 
@@ -32,23 +32,13 @@ func exists(filename string) bool {
 func getDesktopFiles(filename string) string {
 	_home, _ := homedir.Dir()
 
-	return fmt.Sprintf("%s%sDesktop%s%s", _home, PathSep, PathSep, filename)
+	return filepath.Join(_home, "Desktop", filename)
 }
 
 func getHomeDirFiles(filename string) string {
 	_home, _ := homedir.Dir()
 
-	return fmt.Sprintf("%s%s%s", _home, PathSep, filename)
-}
-
-func gitIgnorePathAllow(filename string) (bool, error) {
-	_, err := gitignore.NewFromFile("/my/.gitignore")
-
-	if err != nil {
-		return true, err
-	}
-
-	return true, nil
+	return filepath.Join(_home, filename)
 }
 
 func getParentPath(sep byte, paths ...string) string {

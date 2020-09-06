@@ -157,7 +157,7 @@ func processFilesForPacking(zipFilePathListMap *map[string]createArchiveFileInfo
 			}
 
 			absFilepath = filepath.ToSlash(absFilepath)
-			relativeFilePath := filepath.ToSlash(absFilepath)
+			relativeFilePath := absFilepath
 
 			if commonParentPath != "" {
 				// if there is only one filepath in [_fileList]
@@ -172,7 +172,7 @@ func processFilesForPacking(zipFilePathListMap *map[string]createArchiveFileInfo
 					if isDirectory(_fileList[0]) {
 						archiveFilesRelativePath := getArchiveFilesRelativePath(absFilepath, commonParentPath)
 
-						relativeFilePath = fmt.Sprintf("%s%s", lastPartOfFilename, archiveFilesRelativePath)
+						relativeFilePath = filepath.Join(lastPartOfFilename, archiveFilesRelativePath)
 					} else {
 						// then the selected file should be in the root directory in the archive
 						relativeFilePath = lastPartOfFilename
@@ -205,7 +205,7 @@ func processFilesForPacking(zipFilePathListMap *map[string]createArchiveFileInfo
 							continue
 						}
 
-						_absFilepath := fmt.Sprintf("%s%s%s", commonParentPath, PathSep, _relativeFilePath)
+						_absFilepath := filepath.Join(commonParentPath, _relativeFilePath)
 
 						_fileInfo, err := os.Lstat(_absFilepath)
 						if err != nil {
