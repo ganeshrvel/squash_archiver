@@ -7,7 +7,6 @@ import (
 	"io"
 	"os"
 	"path/filepath"
-	"strings"
 )
 
 func startUnpackingZip(arc ZipArchive) error {
@@ -30,17 +29,20 @@ func startUnpackingZip(arc ZipArchive) error {
 
 	ignoreMatches, _ := ignore.CompileIgnoreLines(ignoreList...)
 
-	zipFilePathListMap := make(map[string]extractArchiveFileInfo)
+	zipFilePathListMap := make(map[string]extractZipFileInfo)
 
 	for _, file := range reader.File {
 		if file.IsEncrypted() {
 			file.SetPassword(_password)
 		}
 
+		_fileInfo := file.FileInfo()
+
 		if allowFileFiltering {
 			matched := StringFilter(_fileList, func(s string) bool {
-				_fName := fixDirSlash(file.FileInfo().IsDir(), file.Name)
-				return strings.HasPrefix(_fName, s) // return foo_testfor
+				_fName := fixDirSlash(_fileInfo.IsDir(), file.Name)
+
+				return subpathExists(s, _fName)
 			})
 
 			if len(matched) < 1 {
@@ -54,11 +56,11 @@ func startUnpackingZip(arc ZipArchive) error {
 
 		_absPath := filepath.Join(_destination, file.Name)
 
-		zipFilePathListMap[_absPath] = extractArchiveFileInfo{
+		zipFilePathListMap[_absPath] = extractZipFileInfo{
 			absFilepath: _absPath,
 			name:        file.Name,
-			fileInfo:    file.FileInfo(),
-			zipFileInfo: *file,
+			fileInfo:    &_fileInfo,
+			zipFileInfo: file,
 		}
 	}
 
@@ -70,7 +72,7 @@ func startUnpackingZip(arc ZipArchive) error {
 		count += 1
 		pInfo.packingProgress(ch, totalFiles, absolutePath, count)
 
-		if err := addFileToDisk(&file.zipFileInfo, absolutePath); err != nil {
+		if err := addFileFromZipToDisk(file.zipFileInfo, absolutePath); err != nil {
 			return err
 		}
 	}
@@ -86,7 +88,7 @@ func startUnpackingZip(arc ZipArchive) error {
 	return nil
 }
 
-func addFileToDisk(file *zip.File, filename string) error {
+func addFileFromZipToDisk(file *zip.File, filename string) error {
 	fileToExtract, err := file.Open()
 
 	if err != nil {

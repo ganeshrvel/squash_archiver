@@ -1,6 +1,8 @@
 package main
 
 import (
+	"fmt"
+	"github.com/ganeshrvel/archiver"
 	"path/filepath"
 )
 
@@ -9,8 +11,27 @@ func (arc ZipArchive) doUnpack() error {
 }
 
 func (arc CommonArchive) doUnpack() error {
+	_filename := arc.meta.filename
+	_password := arc.meta.password
 
-	return nil
+	arcFileObj, err := archiver.ByExtension(_filename)
+
+	if err != nil {
+		return err
+	}
+
+	err = archiveFormat(&arcFileObj, _password, true)
+
+	if err != nil {
+		return err
+	}
+
+	var arcWalker, ok = arcFileObj.(archiver.Walker)
+	if !ok {
+		return fmt.Errorf("some error occured while reading the archive")
+	}
+
+	return startUnpackingCommonArchives(arc, arcWalker)
 }
 
 func startUnpacking(meta *ArchiveMeta, pack *ArchiveUnpack) error {

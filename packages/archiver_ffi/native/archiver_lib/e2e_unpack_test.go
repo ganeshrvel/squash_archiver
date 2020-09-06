@@ -92,7 +92,7 @@ func _testUnpacking(metaObj *ArchiveMeta) {
 
 		So(err, ShouldBeNil)
 
-		Convey("List Packed Archive files", func() {
+		Convey("List the archive files", func() {
 			assertionArr := []string{"mock_dir1/", "mock_dir1/a.txt", "mock_dir1/1/", "mock_dir1/1/a.txt", "mock_dir1/2/", "mock_dir1/2/b.txt", "mock_dir1/3/", "mock_dir1/3/b.txt", "mock_dir1/3/2/", "mock_dir1/3/2/b.txt"}
 
 			_testListingUnpackedArchive(metaObj, unpackObj, assertionArr, assertionArr)
@@ -113,7 +113,7 @@ func _testUnpacking(metaObj *ArchiveMeta) {
 
 		So(err, ShouldBeNil)
 
-		Convey("List Packed Archive files", func() {
+		Convey("List the archive files", func() {
 			assertionArr := []string{"mock_dir1/", "mock_dir1/1/", "mock_dir1/2/", "mock_dir1/2/b.txt", "mock_dir1/3/", "mock_dir1/3/b.txt", "mock_dir1/3/2/", "mock_dir1/3/2/b.txt"}
 
 			_testListingUnpackedArchive(metaObj, unpackObj, assertionArr, assertionArr)
@@ -134,7 +134,7 @@ func _testUnpacking(metaObj *ArchiveMeta) {
 
 		So(err, ShouldBeNil)
 
-		Convey("List Packed Archive files", func() {
+		Convey("List the archive files", func() {
 			archiveFilesAssertionArr := []string{"mock_dir1/", "mock_dir1/a.txt", "mock_dir1/1/", "mock_dir1/1/a.txt", "mock_dir1/2/", "mock_dir1/2/b.txt", "mock_dir1/3/", "mock_dir1/3/b.txt", "mock_dir1/3/2/", "mock_dir1/3/2/b.txt"}
 			directoryFilesAssertionArr := []string{"mock_dir1/", "mock_dir1/a.txt", "mock_dir1/1/", "mock_dir1/1/a.txt", "mock_dir1/2/", "mock_dir1/2/b.txt", "mock_dir1/3/", "mock_dir1/3/b.txt", "mock_dir1/3/2/", "mock_dir1/3/2/b.txt"}
 
@@ -156,7 +156,7 @@ func _testUnpacking(metaObj *ArchiveMeta) {
 
 		So(err, ShouldBeNil)
 
-		Convey("List Packed Archive files", func() {
+		Convey("List the archive files", func() {
 			archiveFilesAssertionArr := []string{"mock_dir1/", "mock_dir1/a.txt", "mock_dir1/1/", "mock_dir1/1/a.txt", "mock_dir1/2/", "mock_dir1/2/b.txt", "mock_dir1/3/", "mock_dir1/3/b.txt", "mock_dir1/3/2/", "mock_dir1/3/2/b.txt"}
 			directoryFilesAssertionArr := []string{"mock_dir1/", "mock_dir1/2/", "mock_dir1/2/b.txt"}
 
@@ -178,7 +178,7 @@ func _testUnpacking(metaObj *ArchiveMeta) {
 
 		So(err, ShouldBeNil)
 
-		Convey("List Packed Archive files", func() {
+		Convey("List the archive files", func() {
 			archiveFilesAssertionArr := []string{"mock_dir1/", "mock_dir1/a.txt", "mock_dir1/1/", "mock_dir1/1/a.txt", "mock_dir1/2/", "mock_dir1/2/b.txt", "mock_dir1/3/", "mock_dir1/3/b.txt", "mock_dir1/3/2/", "mock_dir1/3/2/b.txt"}
 			directoryFilesAssertionArr := []string{"mock_dir1/", "mock_dir1/2/", "mock_dir1/2/b.txt"}
 
@@ -200,7 +200,7 @@ func _testUnpacking(metaObj *ArchiveMeta) {
 
 		So(err, ShouldBeNil)
 
-		Convey("List Packed Archive files", func() {
+		Convey("List the archive files", func() {
 			archiveFilesAssertionArr := []string{"mock_dir1/", "mock_dir1/a.txt", "mock_dir1/1/", "mock_dir1/1/a.txt", "mock_dir1/2/", "mock_dir1/2/b.txt", "mock_dir1/3/", "mock_dir1/3/b.txt", "mock_dir1/3/2/", "mock_dir1/3/2/b.txt"}
 			directoryFilesAssertionArr := []string{"mock_dir1/", "mock_dir1/a.txt"}
 
@@ -222,7 +222,7 @@ func _testUnpacking(metaObj *ArchiveMeta) {
 
 		So(err, ShouldBeNil)
 
-		Convey("List Packed Archive files", func() {
+		Convey("List the archive files", func() {
 			archiveFilesAssertionArr := []string{"mock_dir1/", "mock_dir1/a.txt", "mock_dir1/1/", "mock_dir1/1/a.txt", "mock_dir1/2/", "mock_dir1/2/b.txt", "mock_dir1/3/", "mock_dir1/3/b.txt", "mock_dir1/3/2/", "mock_dir1/3/2/b.txt"}
 
 			_testListingUnpackedArchive(metaObj, unpackObj, archiveFilesAssertionArr, archiveFilesAssertionArr)
@@ -243,7 +243,7 @@ func _testUnpacking(metaObj *ArchiveMeta) {
 
 		So(err, ShouldBeNil)
 
-		Convey("List Packed Archive files", func() {
+		Convey("List the archive files", func() {
 			archiveFilesAssertionArr := []string{"mock_dir1/", "mock_dir1/a.txt", "mock_dir1/1/", "mock_dir1/1/a.txt", "mock_dir1/2/", "mock_dir1/2/b.txt", "mock_dir1/3/", "mock_dir1/3/b.txt", "mock_dir1/3/2/", "mock_dir1/3/2/b.txt"}
 
 			directoryFilesAssertionArr := []string{"mock_dir1/", "mock_dir1/a.txt", "mock_dir1/2/", "mock_dir1/2/b.txt"}
@@ -266,7 +266,7 @@ func _testUnpacking(metaObj *ArchiveMeta) {
 
 		So(err, ShouldBeNil)
 
-		Convey("List Packed Archive files", func() {
+		Convey("List the archive files", func() {
 			archiveFilesAssertionArr := []string{"mock_dir1/", "mock_dir1/a.txt", "mock_dir1/1/", "mock_dir1/1/a.txt", "mock_dir1/2/", "mock_dir1/2/b.txt", "mock_dir1/3/", "mock_dir1/3/b.txt", "mock_dir1/3/2/", "mock_dir1/3/2/b.txt"}
 
 			directoryFilesAssertionArr := []string{"mock_dir1/", "mock_dir1/2/", "mock_dir1/2/b.txt", "mock_dir1/3/", "mock_dir1/3/b.txt", "mock_dir1/3/2/", "mock_dir1/3/2/b.txt"}
@@ -289,7 +289,7 @@ func _testUnpacking(metaObj *ArchiveMeta) {
 
 		So(err, ShouldBeNil)
 
-		Convey("List Packed Archive files", func() {
+		Convey("List the archive files", func() {
 			archiveFilesAssertionArr := []string{"mock_dir1/", "mock_dir1/a.txt", "mock_dir1/1/", "mock_dir1/1/a.txt", "mock_dir1/2/", "mock_dir1/2/b.txt", "mock_dir1/3/", "mock_dir1/3/b.txt", "mock_dir1/3/2/", "mock_dir1/3/2/b.txt"}
 
 			directoryFilesAssertionArr := []string{"mock_dir1/", "mock_dir1/2/", "mock_dir1/2/b.txt", "mock_dir1/3/", "mock_dir1/3/b.txt", "mock_dir1/3/2/", "mock_dir1/3/2/b.txt"}
@@ -312,7 +312,7 @@ func _testUnpacking(metaObj *ArchiveMeta) {
 
 		So(err, ShouldBeNil)
 
-		Convey("List Packed Archive files", func() {
+		Convey("List the archive files", func() {
 			archiveFilesAssertionArr := []string{"mock_dir1/", "mock_dir1/a.txt", "mock_dir1/1/", "mock_dir1/1/a.txt", "mock_dir1/2/", "mock_dir1/2/b.txt", "mock_dir1/3/", "mock_dir1/3/b.txt", "mock_dir1/3/2/", "mock_dir1/3/2/b.txt"}
 
 			directoryFilesAssertionArr := []string{"mock_dir1/", "mock_dir1/2/", "mock_dir1/2/b.txt", "mock_dir1/3/", "mock_dir1/3/b.txt"}
@@ -335,7 +335,7 @@ func _testUnpacking(metaObj *ArchiveMeta) {
 
 		So(err, ShouldBeNil)
 
-		Convey("List Packed Archive files", func() {
+		Convey("List the archive files", func() {
 			archiveFilesAssertionArr := []string{"mock_dir1/", "mock_dir1/a.txt", "mock_dir1/1/", "mock_dir1/1/a.txt", "mock_dir1/2/", "mock_dir1/2/b.txt"}
 
 			directoryFilesAssertionArr := []string{"mock_dir1/", "mock_dir1/2/", "mock_dir1/2/b.txt"}
@@ -350,11 +350,83 @@ func TestUnpacking(t *testing.T) {
 	//	t.Skip("skipping 'TestUnpacking' testing in short mode")
 	//}
 
-	Convey("Packing | No encryption - ZIP", t, func() {
+	Convey("Unpacking | No encryption - ZIP", t, func() {
 		filename := getTestMocksAsset("mock_test_file1.zip")
 
 		metaObj := &ArchiveMeta{filename: filename, password: ""}
 
 		_testUnpacking(metaObj)
+	})
+
+	Convey("Unpacking | Encryption - ZIP", t, func() {
+		filename := getTestMocksAsset("mock_enc_test_file1.zip")
+
+		metaObj := &ArchiveMeta{filename: filename, password: "1234567"}
+
+		_testUnpacking(metaObj)
+	})
+
+	Convey("Unpacking | Tar", t, func() {
+		filename := getTestMocksAsset("mock_test_file1.tar")
+
+		_metaObj := &ArchiveMeta{filename: filename}
+
+		_testUnpacking(_metaObj)
+	})
+
+	Convey("Unpacking | Tar.gz", t, func() {
+		filename := getTestMocksAsset("mock_test_file1.tar.gz")
+
+		_metaObj := &ArchiveMeta{filename: filename}
+
+		_testUnpacking(_metaObj)
+	})
+
+	Convey("Unpacking | Tar.bz2", t, func() {
+		filename := getTestMocksAsset("mock_test_file1.tar.bz2")
+
+		_metaObj := &ArchiveMeta{filename: filename}
+
+		_testUnpacking(_metaObj)
+	})
+
+	Convey("Unpacking | Tar.br (brotli)", t, func() {
+		filename := getTestMocksAsset("mock_test_file1.tar.br")
+
+		_metaObj := &ArchiveMeta{filename: filename}
+
+		_testUnpacking(_metaObj)
+	})
+
+	Convey("Unpacking | Tar.lz4", t, func() {
+		filename := getTestMocksAsset("mock_test_file1.tar.lz4")
+
+		_metaObj := &ArchiveMeta{filename: filename}
+
+		_testUnpacking(_metaObj)
+	})
+
+	Convey("Unpacking | Tar.sz", t, func() {
+		filename := getTestMocksAsset("mock_test_file1.tar.sz")
+
+		_metaObj := &ArchiveMeta{filename: filename}
+
+		_testUnpacking(_metaObj)
+	})
+
+	Convey("Unpacking | Tar.xz", t, func() {
+		filename := getTestMocksAsset("mock_test_file1.tar.xz")
+
+		_metaObj := &ArchiveMeta{filename: filename}
+
+		_testUnpacking(_metaObj)
+	})
+
+	Convey("Unpacking | Tar.zst (zstd)", t, func() {
+		filename := getTestMocksAsset("mock_test_file1.tar.zst")
+
+		_metaObj := &ArchiveMeta{filename: filename}
+
+		_testUnpacking(_metaObj)
 	})
 }

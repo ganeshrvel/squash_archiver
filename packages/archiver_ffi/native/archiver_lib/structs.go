@@ -82,13 +82,19 @@ type ArchiveUnpacker interface {
 type createArchiveFileInfo struct {
 	absFilepath, relativeFilePath string
 	isDir                         bool
-	fileInfo                      os.FileInfo
+	fileInfo                      *os.FileInfo
 }
 
-type extractArchiveFileInfo struct {
+type extractZipFileInfo struct {
 	absFilepath, name string
-	fileInfo          os.FileInfo
-	zipFileInfo       zip.File
+	fileInfo          *os.FileInfo
+	zipFileInfo       *zip.File
+}
+
+type extractCommonArchiveFileInfo struct {
+	absFilepath, name string
+	fileInfo          *ArchiveFileInfo
+	fileBytes         *[]byte
 }
 
 type PackingProgressInfo struct {

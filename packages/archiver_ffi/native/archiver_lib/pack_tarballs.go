@@ -36,7 +36,7 @@ func packTarballs(arc *CommonArchive, arcFileObj interface{ archiver.Writer }, f
 		count += 1
 		pInfo.packingProgress(ch, totalFiles, absolutePath, count)
 
-		if err := addFileToTarBall(&arcFileObj, item.fileInfo, item.absFilepath, item.relativeFilePath, item.isDir)
+		if err := addFileToTarBall(&arcFileObj, *item.fileInfo, item.absFilepath, item.relativeFilePath, item.isDir)
 			err != nil {
 			return err
 		}

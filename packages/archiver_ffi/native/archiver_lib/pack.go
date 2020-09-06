@@ -223,7 +223,7 @@ func processFilesForPacking(zipFilePathListMap *map[string]createArchiveFileInfo
 							absFilepath:      _absFilepath,
 							relativeFilePath: _relativeFilePath,
 							isDir:            isDir,
-							fileInfo:         _fileInfo,
+							fileInfo:         &_fileInfo,
 						}
 					}
 
@@ -237,7 +237,7 @@ func processFilesForPacking(zipFilePathListMap *map[string]createArchiveFileInfo
 				absFilepath:      absFilepath,
 				relativeFilePath: relativeFilePath,
 				isDir:            isFileADir,
-				fileInfo:         fileInfo,
+				fileInfo:         &fileInfo,
 			}
 
 			return nil

@@ -38,7 +38,7 @@ func createZipFile(arc *ZipArchive, fileList []string, commonParentPath string) 
 		pInfo.packingProgress(ch, totalFiles, absolutePath, count)
 
 		if _password == "" {
-			if err := addFileToRegularZip(zipWriter, item.fileInfo, item.absFilepath, item.relativeFilePath); err != nil {
+			if err := addFileToRegularZip(zipWriter, *item.fileInfo, item.absFilepath, item.relativeFilePath); err != nil {
 				return err
 			}
 		} else if err := addFileToEncryptedZip(zipWriter, item.absFilepath, item.relativeFilePath, _password, _encryptionMethod); err != nil {

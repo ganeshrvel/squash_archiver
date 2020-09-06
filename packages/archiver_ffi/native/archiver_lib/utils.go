@@ -167,3 +167,7 @@ func StringFilter(x []string, f func(string) bool) []string {
 
 	return a
 }
+
+func subpathExists(path string, searchPath string) bool {
+	return path != "" && strings.HasPrefix(searchPath, path)
+}
