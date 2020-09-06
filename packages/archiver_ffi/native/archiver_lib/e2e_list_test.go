@@ -638,9 +638,16 @@ func TestArchiveListing(t *testing.T) {
 		_testArchiveListing(_metaObj)
 	})
 
-	Convey("Archive Listing | Rar", t, func() {
+	Convey("Archive Listing | Non encrypted Rar", t, func() {
 		filename := getTestMocksAsset("mock_test_file1.rar")
 		_metaObj := &ArchiveMeta{filename: filename}
+
+		_testArchiveListing(_metaObj)
+	})
+
+	Convey("Archive Listing | Encrypted Rar", t, func() {
+		filename := getTestMocksAsset("mock_enc_test_file1.rar")
+		_metaObj := &ArchiveMeta{filename: filename, password: "1234567"}
 
 		_testArchiveListing(_metaObj)
 	})
