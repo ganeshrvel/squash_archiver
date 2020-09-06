@@ -33,7 +33,7 @@ func _testPacking(_metaObj *ArchiveMeta) {
 	Convey("gitIgnorePattern | It should not throw an error", func() {
 		path1 := getTestMocksAsset("mock_dir1")
 		_packObj := &ArchivePack{
-			fileList:          []string{path1},
+			fileList: []string{path1},
 		}
 
 		_metaObj.gitIgnorePattern = []string{"b.txt"}
@@ -52,7 +52,7 @@ func _testPacking(_metaObj *ArchiveMeta) {
 	Convey("Single path in 'fileList' | selected - a directory  | It should not throw an error", func() {
 		path1 := getTestMocksAsset("mock_dir1")
 		_packObj := &ArchivePack{
-			fileList:          []string{path1},
+			fileList: []string{path1},
 		}
 
 		err := startPacking(_metaObj, _packObj)
@@ -69,7 +69,7 @@ func _testPacking(_metaObj *ArchiveMeta) {
 	Convey("Single path in 'fileList' | selected - a file  | It should not throw an error", func() {
 		path1 := getTestMocksAsset("mock_dir1/a.txt")
 		_packObj := &ArchivePack{
-			fileList:          []string{path1},
+			fileList: []string{path1},
 		}
 
 		err := startPacking(_metaObj, _packObj)
@@ -87,7 +87,7 @@ func _testPacking(_metaObj *ArchiveMeta) {
 		path1 := getTestMocksAsset("mock_dir1")
 		path2 := getTestMocksAsset("mock_dir2")
 		_packObj := &ArchivePack{
-			fileList:          []string{path1, path2},
+			fileList: []string{path1, path2},
 		}
 
 		err := startPacking(_metaObj, _packObj)
@@ -105,7 +105,7 @@ func _testPacking(_metaObj *ArchiveMeta) {
 		path1 := getTestMocksAsset("mock_dir3/a.txt")
 		path2 := getTestMocksAsset("mock_dir3/b.txt")
 		_packObj := &ArchivePack{
-			fileList:          []string{path1, path2},
+			fileList: []string{path1, path2},
 		}
 
 		err := startPacking(_metaObj, _packObj)
@@ -123,7 +123,7 @@ func _testPacking(_metaObj *ArchiveMeta) {
 		path1 := getTestMocksAsset("mock_dir1/a.txt")
 		path2 := getTestMocksAsset("mock_dir1/1/")
 		_packObj := &ArchivePack{
-			fileList:          []string{path1, path2},
+			fileList: []string{path1, path2},
 		}
 
 		err := startPacking(_metaObj, _packObj)
@@ -142,7 +142,7 @@ func _testPacking(_metaObj *ArchiveMeta) {
 		path2 := getTestMocksAsset("mock_dir1/1/")
 		path3 := getTestMocksAsset("mock_dir1/2/")
 		_packObj := &ArchivePack{
-			fileList:          []string{path1, path2, path3},
+			fileList: []string{path1, path2, path3},
 		}
 
 		err := startPacking(_metaObj, _packObj)
@@ -162,7 +162,7 @@ func _testPacking(_metaObj *ArchiveMeta) {
 		path3 := getTestMocksAsset("mock_dir3/1/")
 		path4 := getTestMocksAsset("mock_dir3/2/")
 		_packObj := &ArchivePack{
-			fileList:          []string{path1, path2, path3, path4},
+			fileList: []string{path1, path2, path3, path4},
 		}
 
 		err := startPacking(_metaObj, _packObj)
@@ -180,7 +180,7 @@ func _testPacking(_metaObj *ArchiveMeta) {
 		path1 := getTestMocksAsset("mock_dir1/a.txt")
 		path2 := getTestMocksAsset("mock_dir1/1/a.txt")
 		_packObj := &ArchivePack{
-			fileList:          []string{path1, path2},
+			fileList: []string{path1, path2},
 		}
 
 		err := startPacking(_metaObj, _packObj)
@@ -198,7 +198,7 @@ func _testPacking(_metaObj *ArchiveMeta) {
 		path1 := getTestMocksAsset("mock_dir1/a.txt")
 		path2 := getTestMocksAsset("mock_dir2/")
 		_packObj := &ArchivePack{
-			fileList:          []string{path1, path2},
+			fileList: []string{path1, path2},
 		}
 
 		err := startPacking(_metaObj, _packObj)
@@ -216,7 +216,7 @@ func _testPacking(_metaObj *ArchiveMeta) {
 		path1 := getTestMocksAsset("mock_dir1/1")
 		path2 := getTestMocksAsset("mock_dir2/")
 		_packObj := &ArchivePack{
-			fileList:          []string{path1, path2},
+			fileList: []string{path1, path2},
 		}
 
 		err := startPacking(_metaObj, _packObj)
@@ -234,7 +234,7 @@ func _testPacking(_metaObj *ArchiveMeta) {
 		path1 := getTestMocksAsset("mock_dir1/1")
 		path2 := getTestMocksAsset("mock_dir3/dir_1/")
 		_packObj := &ArchivePack{
-			fileList:          []string{path1, path2},
+			fileList: []string{path1, path2},
 		}
 
 		err := startPacking(_metaObj, _packObj)
@@ -254,7 +254,7 @@ func _testPacking(_metaObj *ArchiveMeta) {
 		path3 := getTestMocksAsset("mock_dir3/dir_1/1/a.txt")
 		path4 := getTestMocksAsset("mock_dir3/dir_1/")
 		_packObj := &ArchivePack{
-			fileList:          []string{path1, path2, path3, path4},
+			fileList: []string{path1, path2, path3, path4},
 		}
 
 		err := startPacking(_metaObj, _packObj)
@@ -274,7 +274,7 @@ func _testPacking(_metaObj *ArchiveMeta) {
 		path3 := getTestMocksAsset("mock_dir2/3/2/b.txt")
 		path4 := getTestMocksAsset("mock_dir2/3/2/b.txt")
 		_packObj := &ArchivePack{
-			fileList:          []string{path1, path2, path3, path4},
+			fileList: []string{path1, path2, path3, path4},
 		}
 
 		err := startPacking(_metaObj, _packObj)
@@ -292,7 +292,7 @@ func _testPacking(_metaObj *ArchiveMeta) {
 		path1 := getTestMocksAsset("mock_dir2/3/")
 		path2 := getTestMocksAsset("mock_dir2/3/2/b.txt")
 		_packObj := &ArchivePack{
-			fileList:          []string{path1, path2},
+			fileList: []string{path1, path2},
 		}
 
 		err := startPacking(_metaObj, _packObj)
@@ -310,7 +310,7 @@ func _testPacking(_metaObj *ArchiveMeta) {
 		path1 := getTestMocksAsset("mock_dir2/3/2/b.txt")
 		path2 := getTestMocksAsset("mock_dir2/3/")
 		_packObj := &ArchivePack{
-			fileList:          []string{path1, path2},
+			fileList: []string{path1, path2},
 		}
 
 		err := startPacking(_metaObj, _packObj)
@@ -329,7 +329,7 @@ func _testPacking(_metaObj *ArchiveMeta) {
 		path2 := getTestMocksAsset("mock_dir3/b.txt")
 		path3 := getTestMocksAsset("mock_dir3/b.txt")
 		_packObj := &ArchivePack{
-			fileList:          []string{path1, path2, path3},
+			fileList: []string{path1, path2, path3},
 		}
 
 		err := startPacking(_metaObj, _packObj)
@@ -348,7 +348,7 @@ func _testPacking(_metaObj *ArchiveMeta) {
 		path2 := getTestMocksAsset("mock_dir3/")
 		path3 := getTestMocksAsset("mock_dir3/")
 		_packObj := &ArchivePack{
-			fileList:          []string{path1, path2, path3},
+			fileList: []string{path1, path2, path3},
 		}
 
 		err := startPacking(_metaObj, _packObj)
@@ -364,7 +364,7 @@ func _testPacking(_metaObj *ArchiveMeta) {
 
 	Convey("no files in the pathlist |d It should not throw an error", func() {
 		_packObj := &ArchivePack{
-			fileList:          []string{},
+			fileList: []string{},
 		}
 
 		err := startPacking(_metaObj, _packObj)
@@ -381,7 +381,7 @@ func _testPacking(_metaObj *ArchiveMeta) {
 	Convey("symlink | directory | It should not throw an error", func() {
 		path1 := getTestMocksAsset("mock_dir4/")
 		_packObj := &ArchivePack{
-			fileList:          []string{path1},
+			fileList: []string{path1},
 		}
 
 		err := startPacking(_metaObj, _packObj)
@@ -397,9 +397,9 @@ func _testPacking(_metaObj *ArchiveMeta) {
 }
 
 func TestPacking(t *testing.T) {
-	if testing.Short() {
-		t.Skip("skipping 'TestPacking' testing in short mode")
-	}
+	//if testing.Short() {
+	//	t.Skip("skipping 'TestPacking' testing in short mode")
+	//}
 
 	Convey("Packing | No encryption - ZIP", t, func() {
 		filename := newTempMocksAsset("arc_test_pack.zip")

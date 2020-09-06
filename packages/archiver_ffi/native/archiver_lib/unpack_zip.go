@@ -36,13 +36,14 @@ func startUnpackingZip(arc ZipArchive) error {
 			file.SetPassword(_password)
 		}
 
+		fileName := filepath.ToSlash(file.Name)
 		_fileInfo := file.FileInfo()
 
 		if allowFileFiltering {
 			matched := StringFilter(_fileList, func(s string) bool {
-				_fName := fixDirSlash(_fileInfo.IsDir(), file.Name)
+				_filterFName := fixDirSlash(_fileInfo.IsDir(), fileName)
 
-				return subpathExists(s, _fName)
+				return subpathExists(s, _filterFName)
 			})
 
 			if len(matched) < 1 {
@@ -50,15 +51,15 @@ func startUnpackingZip(arc ZipArchive) error {
 			}
 		}
 
-		if ignoreMatches.MatchesPath(file.Name) {
+		if ignoreMatches.MatchesPath(fileName) {
 			continue
 		}
 
-		_absPath := filepath.Join(_destination, file.Name)
+		_absPath := filepath.Join(_destination, fileName)
 
 		zipFilePathListMap[_absPath] = extractZipFileInfo{
 			absFilepath: _absPath,
-			name:        file.Name,
+			name:        fileName,
 			fileInfo:    &_fileInfo,
 			zipFileInfo: file,
 		}

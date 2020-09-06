@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/ganeshrvel/archiver"
 	"github.com/nwaples/rardecode"
+	"path/filepath"
 )
 
 // List files in the common archives
@@ -49,7 +50,7 @@ func (arc CommonArchive) list() ([]ArchiveFileInfo, error) {
 				IsDir:    file.IsDir(),
 				ModTime:  file.ModTime(),
 				Name:     file.Name(),
-				FullPath: fileHeader.Name,
+				FullPath: filepath.ToSlash(fileHeader.Name),
 			}
 
 			break
@@ -61,7 +62,7 @@ func (arc CommonArchive) list() ([]ArchiveFileInfo, error) {
 				IsDir:    file.IsDir(),
 				ModTime:  file.ModTime(),
 				Name:     file.Name(),
-				FullPath: fileHeader.Name,
+				FullPath: filepath.ToSlash(fileHeader.Name),
 			}
 
 			break
@@ -74,7 +75,7 @@ func (arc CommonArchive) list() ([]ArchiveFileInfo, error) {
 				IsDir:    file.IsDir(),
 				ModTime:  file.ModTime(),
 				Name:     file.Name(),
-				FullPath: file.FileInfo.Name(),
+				FullPath: filepath.ToSlash(file.FileInfo.Name()),
 			}
 
 			break

@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"github.com/yeka/zip"
 	"io/ioutil"
+	"path/filepath"
 )
 
 // list files in zip archives
@@ -60,7 +61,7 @@ func (arc ZipArchive) list() ([]ArchiveFileInfo, error) {
 			IsDir:    file.FileInfo().IsDir(),
 			ModTime:  file.FileInfo().ModTime(),
 			Name:     file.FileInfo().Name(),
-			FullPath: file.Name,
+			FullPath: filepath.ToSlash(file.Name),
 		}
 
 		fileInfo.FullPath = fixDirSlash(fileInfo.IsDir, fileInfo.FullPath)

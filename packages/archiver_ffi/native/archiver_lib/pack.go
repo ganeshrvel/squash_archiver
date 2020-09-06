@@ -156,7 +156,8 @@ func processFilesForPacking(zipFilePathListMap *map[string]createArchiveFileInfo
 				return nil
 			}
 
-			relativeFilePath := absFilepath
+			absFilepath = filepath.ToSlash(absFilepath)
+			relativeFilePath := filepath.ToSlash(absFilepath)
 
 			if commonParentPath != "" {
 				// if there is only one filepath in [_fileList]
