@@ -601,7 +601,7 @@ func _testRarArchiveEncryption() {
 		So(result.isEncrypted, ShouldBeTrue)
 	})
 
-	Convey("Encrypted zip | wrong password", func() {
+	Convey("Encrypted rar | wrong password", func() {
 		filename := getTestMocksAsset("mock_enc_test_file1.rar")
 		_metaObj := &ArchiveMeta{filename: filename, password: "123"}
 
@@ -613,7 +613,7 @@ func _testRarArchiveEncryption() {
 		So(result.isValidPassword, ShouldBeFalse)
 	})
 
-	Convey("Encrypted zip | correct password", func() {
+	Convey("Encrypted rar | correct password", func() {
 		filename := getTestMocksAsset("mock_enc_test_file1.rar")
 		_metaObj := &ArchiveMeta{filename: filename, password: "1234567"}
 
@@ -725,14 +725,6 @@ func TestArchiveListing(t *testing.T) {
 
 		_testArchiveListing(_metaObj)
 	})
-
-	//Convey("Archive Listing | Wrong password | Encrypted Rar", t, func() {
-	//	filename := getTestMocksAsset("mock_enc_test_file1.rar")
-	//	_metaObj := &ArchiveMeta{filename: filename, password: ""}
-	//
-	//	_testArchiveListing(_metaObj)
-	//})
-	// TODO: wrong password handling rar, zip, check if encrytped rar, wrong password zip
 }
 
 func TestArchiveEncryption(t *testing.T) {
@@ -744,7 +736,7 @@ func TestArchiveEncryption(t *testing.T) {
 		_testZipArchiveEncryption()
 	})
 
-	//Convey("Rar Archive Encryption", t, func() {
-	//	_testRarArchiveEncryption()
-	//})
+	Convey("Rar Archive Encryption", t, func() {
+		_testRarArchiveEncryption()
+	})
 }
