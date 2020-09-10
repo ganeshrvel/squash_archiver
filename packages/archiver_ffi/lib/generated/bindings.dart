@@ -12,18 +12,17 @@ class SquashArchiverLib {
   SquashArchiverLib(ffi.DynamicLibrary dynamicLibrary)
       : _dylib = dynamicLibrary;
 
-  void InitializeDartApi(
+  void InitNewNativeDartPort(
     ffi.Pointer<ffi.Void> api,
   ) {
-    _InitializeDartApi ??=
-        _dylib.lookupFunction<_c_InitializeDartApi, _dart_InitializeDartApi>(
-            'InitializeDartApi');
-    return _InitializeDartApi(
+    _InitNewNativeDartPort ??= _dylib.lookupFunction<_c_InitNewNativeDartPort,
+        _dart_InitNewNativeDartPort>('InitNewNativeDartPort');
+    return _InitNewNativeDartPort(
       api,
     );
   }
 
-  _dart_InitializeDartApi _InitializeDartApi;
+  _dart_InitNewNativeDartPort _InitNewNativeDartPort;
 
   int CloseNativeDartPort(
     int port,
@@ -37,53 +36,52 @@ class SquashArchiverLib {
 
   _dart_CloseNativeDartPort _CloseNativeDartPort;
 
-  void StartWork(
+  void ListArchive(
     int port,
+    ffi.Pointer<ffi.Int8> filename,
+    ffi.Pointer<ffi.Int8> password,
+    ffi.Pointer<ffi.Int8> orderBy,
+    ffi.Pointer<ffi.Int8> orderDir,
+    ffi.Pointer<ffi.Int8> listDirectoryPath,
+    int recursive,
   ) {
-    _StartWork ??=
-        _dylib.lookupFunction<_c_StartWork, _dart_StartWork>('StartWork');
-    return _StartWork(
+    _ListArchive ??=
+        _dylib.lookupFunction<_c_ListArchive, _dart_ListArchive>('ListArchive');
+    return _ListArchive(
       port,
+      filename,
+      password,
+      orderBy,
+      orderDir,
+      listDirectoryPath,
+      recursive,
     );
   }
 
-  _dart_StartWork _StartWork;
+  _dart_ListArchive _ListArchive;
 
-  void FreeWorkStructMemory(
-    ffi.Pointer<ffi.Int64> pointer,
-  ) {
-    _FreeWorkStructMemory ??= _dylib.lookupFunction<_c_FreeWorkStructMemory,
-        _dart_FreeWorkStructMemory>('FreeWorkStructMemory');
-    return _FreeWorkStructMemory(
-      pointer,
-    );
+  void IsArchiveEncrypted() {
+    _IsArchiveEncrypted ??=
+        _dylib.lookupFunction<_c_IsArchiveEncrypted, _dart_IsArchiveEncrypted>(
+            'IsArchiveEncrypted');
+    return _IsArchiveEncrypted();
   }
 
-  _dart_FreeWorkStructMemory _FreeWorkStructMemory;
+  _dart_IsArchiveEncrypted _IsArchiveEncrypted;
 
-  void StartUser(
-    int port,
-  ) {
-    _StartUser ??=
-        _dylib.lookupFunction<_c_StartUser, _dart_StartUser>('StartUser');
-    return _StartUser(
-      port,
-    );
+  void Pack() {
+    _Pack ??= _dylib.lookupFunction<_c_Pack, _dart_Pack>('Pack');
+    return _Pack();
   }
 
-  _dart_StartUser _StartUser;
+  _dart_Pack _Pack;
 
-  void FreeUserStructMemory(
-    ffi.Pointer<ffi.Int64> pointer,
-  ) {
-    _FreeUserStructMemory ??= _dylib.lookupFunction<_c_FreeUserStructMemory,
-        _dart_FreeUserStructMemory>('FreeUserStructMemory');
-    return _FreeUserStructMemory(
-      pointer,
-    );
+  void Unpack() {
+    _Unpack ??= _dylib.lookupFunction<_c_Unpack, _dart_Unpack>('Unpack');
+    return _Unpack();
   }
 
-  _dart_FreeUserStructMemory _FreeUserStructMemory;
+  _dart_Unpack _Unpack;
 }
 
 class __darwin_pthread_handler_rec extends ffi.Struct {
@@ -203,11 +201,11 @@ const int NULL = 0;
 
 const int USER_ADDR_NULL = 0;
 
-typedef _c_InitializeDartApi = ffi.Void Function(
+typedef _c_InitNewNativeDartPort = ffi.Void Function(
   ffi.Pointer<ffi.Void> api,
 );
 
-typedef _dart_InitializeDartApi = void Function(
+typedef _dart_InitNewNativeDartPort = void Function(
   ffi.Pointer<ffi.Void> api,
 );
 
@@ -219,37 +217,37 @@ typedef _dart_CloseNativeDartPort = int Function(
   int port,
 );
 
-typedef _c_StartWork = ffi.Void Function(
+typedef _c_ListArchive = ffi.Void Function(
   ffi.Int64 port,
+  ffi.Pointer<ffi.Int8> filename,
+  ffi.Pointer<ffi.Int8> password,
+  ffi.Pointer<ffi.Int8> orderBy,
+  ffi.Pointer<ffi.Int8> orderDir,
+  ffi.Pointer<ffi.Int8> listDirectoryPath,
+  ffi.Uint8 recursive,
 );
 
-typedef _dart_StartWork = void Function(
+typedef _dart_ListArchive = void Function(
   int port,
+  ffi.Pointer<ffi.Int8> filename,
+  ffi.Pointer<ffi.Int8> password,
+  ffi.Pointer<ffi.Int8> orderBy,
+  ffi.Pointer<ffi.Int8> orderDir,
+  ffi.Pointer<ffi.Int8> listDirectoryPath,
+  int recursive,
 );
 
-typedef _c_FreeWorkStructMemory = ffi.Void Function(
-  ffi.Pointer<ffi.Int64> pointer,
-);
+typedef _c_IsArchiveEncrypted = ffi.Void Function();
 
-typedef _dart_FreeWorkStructMemory = void Function(
-  ffi.Pointer<ffi.Int64> pointer,
-);
+typedef _dart_IsArchiveEncrypted = void Function();
 
-typedef _c_StartUser = ffi.Void Function(
-  ffi.Int64 port,
-);
+typedef _c_Pack = ffi.Void Function();
 
-typedef _dart_StartUser = void Function(
-  int port,
-);
+typedef _dart_Pack = void Function();
 
-typedef _c_FreeUserStructMemory = ffi.Void Function(
-  ffi.Pointer<ffi.Int64> pointer,
-);
+typedef _c_Unpack = ffi.Void Function();
 
-typedef _dart_FreeUserStructMemory = void Function(
-  ffi.Pointer<ffi.Int64> pointer,
-);
+typedef _dart_Unpack = void Function();
 
 typedef _typedefC_1 = ffi.Void Function(
   ffi.Pointer<ffi.Void>,

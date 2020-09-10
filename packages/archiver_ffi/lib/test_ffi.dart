@@ -1,8 +1,8 @@
 import 'package:archiver_ffi/archiver_ffi.dart';
 
 void main() {
-  final _archiverFfi = ArchiverFfi();
+  final _archiverFfi = ArchiverFfi(isTest: true);
 
-  _archiverFfi.getWorkData();
-  _archiverFfi.getUserData();
+  _archiverFfi.listArchive();
+  // _archiverFfi.getUserData();
 }

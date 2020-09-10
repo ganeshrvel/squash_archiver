@@ -68,12 +68,12 @@ typedef struct { void *data; GoInt len; GoInt cap; } GoSlice;
 extern "C" {
 #endif
 
-extern void InitializeDartApi(void* api);
+extern void InitNewNativeDartPort(void* api);
 extern GoUint8 CloseNativeDartPort(GoInt64 port);
-extern void StartWork(GoInt64 port);
-extern void FreeWorkStructMemory(GoInt64* pointer);
-extern void StartUser(GoInt64 port);
-extern void FreeUserStructMemory(GoInt64* pointer);
+extern void ListArchive(GoInt64 port, char* filename, char* password, char* orderBy, char* orderDir, char* listDirectoryPath, GoUint8 recursive);
+extern void IsArchiveEncrypted();
+extern void Pack();
+extern void Unpack();
 
 #ifdef __cplusplus
 }
