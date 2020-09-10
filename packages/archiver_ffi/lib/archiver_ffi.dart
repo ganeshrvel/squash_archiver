@@ -27,6 +27,11 @@ class ArcFileInfo extends Struct {
   @Int64()
   int Size;
 
+  @Int8()
+  int IsDir;
+
+  Pointer<Utf8> ModTime;
+
   Pointer<Utf8> Name;
 
   Pointer<Utf8> FullPath;
@@ -34,12 +39,16 @@ class ArcFileInfo extends Struct {
   factory ArcFileInfo.allocate(
     int Mode,
     int Size,
+    int IsDir,
+    Pointer<Utf8> ModTime,
     Pointer<Utf8> Name,
     Pointer<Utf8> FullPath,
   ) =>
       allocate<ArcFileInfo>().ref
         ..Mode = Mode
         ..Size = Size
+        ..IsDir = IsDir
+        ..ModTime = ModTime
         ..Name = Name
         ..FullPath = FullPath;
 }
@@ -87,8 +96,6 @@ class ArchiverFfi {
       _recursive,
     );
 
-    print('=====');
-
     StreamSubscription _requestsSub;
 
     _requestsSub = _requests.listen((address) {
@@ -101,9 +108,10 @@ class ArchiverFfi {
 
       final _value = _string_list_ptr.elementAt(0).value;
 
-
-      // print(_value.ref.Mode.ref.toString());
-      // print(_value.ref.Size.ref.toString());
+      print(_value.ref.Mode);
+      print(_value.ref.Size);
+      print(_value.ref.ModTime.ref.toString());
+      print(_value.ref.IsDir); // 1 => true, 0 => 0
       print(_value.ref.Name.ref.toString());
       print(_value.ref.FullPath.ref.toString());
 
