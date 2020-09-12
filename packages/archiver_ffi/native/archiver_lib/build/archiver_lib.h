@@ -71,6 +71,7 @@ extern "C" {
 extern void InitNewNativeDartPort(void* api);
 extern GoUint8 CloseNativeDartPort(GoInt64 port);
 extern void ListArchive(GoInt64 port, char* filename, char* password, char* orderBy, char* orderDir, char* listDirectoryPath, GoUint8 recursive);
+extern void FreeListArchiveMemory(GoInt64 ptrAddr);
 extern void IsArchiveEncrypted();
 extern void Pack();
 extern void Unpack();

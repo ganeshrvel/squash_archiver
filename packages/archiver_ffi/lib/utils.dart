@@ -8,10 +8,10 @@ String getNativeLibRoot() {
   return path.join(Directory.current.path, 'native/', 'archiver_lib/');
 }
 
-String getNativeLib({bool fullpath}) {
-  final _fullpath = fullpath ?? false;
+String getNativeLib({bool fullPath}) {
+  final _fullPath = fullPath ?? false;
 
-  if (_fullpath) {
+  if (_fullPath) {
     return path.join(getNativeLibRoot(), 'build/', AppFiles.ARCHIVER_FFI_LIB);
   }
 

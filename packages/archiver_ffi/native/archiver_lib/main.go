@@ -88,6 +88,11 @@ func ListArchive(port int64, filename, password, orderBy, orderDir, listDirector
 	dart_api_dl.SendArchiveListing(port, err, &result)
 }
 
+//export FreeListArchiveMemory
+func FreeListArchiveMemory(ptrAddr int64) {
+	dart_api_dl.FreeListArchiveMemory(ptrAddr)
+}
+
 //export IsArchiveEncrypted
 func IsArchiveEncrypted() {
 

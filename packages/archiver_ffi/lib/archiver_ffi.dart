@@ -22,39 +22,50 @@ enum OrderDir {
 
 class ArcFileInfo extends Struct {
   @Int32()
-  int Mode;
+  int mode;
 
   @Int64()
-  int Size;
+  int size;
 
   @Int8()
-  int IsDir;
+  int isDir;
 
-  Pointer<Utf8> ModTime;
+  Pointer<Utf8> modTime;
 
-  Pointer<Utf8> Name;
+  Pointer<Utf8> name;
 
-  Pointer<Utf8> FullPath;
+  Pointer<Utf8> fullPath;
 
   factory ArcFileInfo.allocate(
-    int Mode,
-    int Size,
-    int IsDir,
-    Pointer<Utf8> ModTime,
-    Pointer<Utf8> Name,
-    Pointer<Utf8> FullPath,
+    int mode,
+    int size,
+    int isDir,
+    Pointer<Utf8> modTime,
+    Pointer<Utf8> name,
+    Pointer<Utf8> fullPath,
   ) =>
       allocate<ArcFileInfo>().ref
-        ..Mode = Mode
-        ..Size = Size
-        ..IsDir = IsDir
-        ..ModTime = ModTime
-        ..Name = Name
-        ..FullPath = FullPath;
+        ..mode = mode
+        ..size = size
+        ..isDir = isDir
+        ..modTime = modTime
+        ..name = name
+        ..fullPath = fullPath;
 }
 
 class ArcFileInfoResult extends Struct {
   Pointer<Pointer<ArcFileInfo>> files;
+
+  @Int64()
+  int totalFiles;
+
+  factory ArcFileInfoResult.allocate(
+    Pointer<Pointer<ArcFileInfo>> files,
+    int totalFiles,
+  ) =>
+      allocate<ArcFileInfoResult>().ref
+        ..files = files
+        ..totalFiles = totalFiles;
 }
 
 class ArchiverFfi {
@@ -63,7 +74,7 @@ class ArchiverFfi {
   ArchiverFfi({bool isTest}) {
     final _isTest = isTest ?? false;
 
-    final _dylib = DynamicLibrary.open(getNativeLib(fullpath: _isTest));
+    final _dylib = DynamicLibrary.open(getNativeLib(fullPath: _isTest));
 
     _squashArchiverLib = SquashArchiverLib(_dylib);
     _squashArchiverLib.InitNewNativeDartPort(NativeApi.initializeApiDLData);
@@ -97,31 +108,70 @@ class ArchiverFfi {
     );
 
     StreamSubscription _requestsSub;
-
+    print('=======================');
     _requestsSub = _requests.listen((address) {
       final _address = address as int;
 
       final work = Pointer<ArcFileInfoResult>.fromAddress(_address);
 
-      final _string_list_ptr = work.ref.files;
+      final filesPtr = work.ref.files;
+      final totalFilesPtr = work.ref.totalFiles;
       //  final infoPtr = work.ref.info;
 
-      final _value = _string_list_ptr.elementAt(0).value;
+      final _value = filesPtr.elementAt(0).value;
 
-      print(_value.ref.Mode);
-      print(_value.ref.Size);
-      print(_value.ref.ModTime.ref.toString());
-      print(_value.ref.IsDir); // 1 => true, 0 => 0
-      print(_value.ref.Name.ref.toString());
-      print(_value.ref.FullPath.ref.toString());
+      print(_value.ref.mode);
+      print(_value.ref.size);
+      print(_value.ref.modTime.ref.toString());
+      print(_value.ref.isDir); // 1 => true, 0 => 0
+      print(_value.ref.name.ref.toString());
+      print(_value.ref.fullPath.ref.toString());
+
+      print(work.ref.totalFiles);
+
+      final _totalFiles = totalFilesPtr;
 
       _ptrToFreeList.forEach((ptr) {
         free(ptr);
       });
 
-      _requests.close();
-      _requestsSub.cancel();
-      _squashArchiverLib.CloseNativeDartPort(_nativePort);
+      _squashArchiverLib.FreeListArchiveMemory(_address);
+
+      print('=======================');
+
+      Future.delayed(Duration(seconds: 5), () {
+        print('=====delayed check for memory');
+        print(_value.ref.mode);
+        print(_value.ref.size);
+        // print(_value.ref.modTime.ref.toString());
+        print(_value.ref.isDir); // 1 => true, 0 => 0
+        // print(_value.ref.name.ref.toString());
+        // print(_value.ref.fullPath.ref.toString());
+
+        print(work.ref.totalFiles);
+      });
+
+/*
+      Future.delayed(Duration(seconds: 3), () {
+        final work = Pointer<ArcFileInfoResult>.fromAddress(_address);
+
+        final _string_list_ptr = work.ref.files;
+        //  final infoPtr = work.ref.info;
+
+        final _value = _string_list_ptr.elementAt(0).value;
+
+        print(_value.ref.Mode);
+        print(_value.ref.size);
+        print(_value.ref.modTime.ref.toString());
+        print(_value.ref.isDir); // 1 => true, 0 => 0
+        print(_value.ref.name.ref.toString());
+        print(_value.ref.fullPath.ref.toString());
+      });
+*/
+
+      // _requests.close();
+      // _requestsSub.cancel();
+      // _squashArchiverLib.CloseNativeDartPort(_nativePort);
 
       // final work = Pointer<Work>.fromAddress(_address);
       //
@@ -149,9 +199,6 @@ class ArchiverFfi {
       //   count += 1;
       // }
       //
-      // _squashArchiverLib.FreeWorkStructMemory(Pointer<Int64>.fromAddress(
-      //   _address,
-      // ));
 
       print('=======================');
     });
