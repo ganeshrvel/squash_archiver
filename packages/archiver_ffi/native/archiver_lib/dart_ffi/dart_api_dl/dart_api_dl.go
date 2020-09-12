@@ -4,6 +4,7 @@ import "C"
 import (
 	onearchiver "github.com/ganeshrvel/one-archiver"
 	"github.com/kr/pretty"
+	"time"
 	"unsafe"
 )
 
@@ -136,29 +137,28 @@ func SendArchiveListing(port int64, err error, result *[]onearchiver.ArchiveFile
 	*(*C.int64_t)(unsafe.Pointer(&obj.value[0])) = C.int64_t(ptrAddr)
 	C.GoDart_PostCObject(C.int64_t(port), &obj)
 
-	//go func() {
-	//	time.Sleep(1000 * time.Millisecond)
-	//	//ptr := *(*C.struct_ArcFileInfo)(unsafe.Pointer(C.int64_t(&ptrAddr)))
-	//	p1 := (*C.int64_t)(&ptrAddr)
-	//	ptr := (*C.struct_ArcFileInfoResult)(unsafe.Pointer(p1))
-	//
-	//	pretty.Println("\n", *ptr.files[0].Mode)
-	//
-	//	//defer C.free(unsafe.Pointer(&ptr.Mode))
-	//	//defer C.free(unsafe.Pointer(&ptr.Size))
-	//	//defer C.free(unsafe.Pointer(ptr.Name))
-	//	//defer C.free(unsafe.Pointer(&ptr.IsDir))
-	//	//defer C.free(unsafe.Pointer(&ptr.ModTime))
-	//	//defer C.free(unsafe.Pointer(&ptr.FullPath))
-	//	//defer C.free(unsafe.Pointer(&ptr))
-	//	//defer C.free(unsafe.Pointer(&air.files))
-	//	//defer C.free(unsafe.Pointer(&air))
-	//
-	//	for i := 0; i < 1000; i++ {
-	//		time.Sleep(1000 * time.Millisecond)
-	//		fmt.Println("world")
-	//	}
-	//}()
+	go func() {
+		//defer C.free(unsafe.Pointer(&ptr.Mode))
+		//defer C.free(unsafe.Pointer(&ptr.Size))
+		//defer C.free(unsafe.Pointer(ptr.Name))
+		//defer C.free(unsafe.Pointer(&ptr.IsDir))
+		//defer C.free(unsafe.Pointer(&ptr.ModTime))
+		//defer C.free(unsafe.Pointer(&ptr.FullPath))
+		//defer C.free(unsafe.Pointer(&ptr))
+		//defer C.free(unsafe.Pointer(&air.files))
+		//defer C.free(unsafe.Pointer(&air))
+
+		for i := 0; i < 3; i++ {
+			time.Sleep(7000 * time.Millisecond)
+			pretty.Println("\ninside go routine ptrAddr", ptrAddr)
+
+			//ptr := *(*C.struct_ArcFileInfo)(unsafe.Pointer(C.int64_t(&ptrAddr)))
+			p1 := (*C.int64_t)(&ptrAddr)
+			ptr := (*C.struct_ArcFileInfoResult)(unsafe.Pointer(p1))
+
+			pretty.Println("\n", *ptr.files[0].mode)
+		}
+	}()
 }
 
 func FreeListArchiveMemory(ptrAddr int64) {
