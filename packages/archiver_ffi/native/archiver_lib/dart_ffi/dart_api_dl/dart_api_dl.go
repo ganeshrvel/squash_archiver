@@ -38,10 +38,6 @@ import (
 	}ArcFileInfoResult;
 
 	int64_t GetArcFileInfoResultPtr(ArcFileInfoResult *pResult) {
-		Dart_CObject = dartObj;
-		dartObj._type = Dart_CObject_kInt64;
-
-
 		int64_t ptr = (int64_t)pResult;
 
 		return ptr;
