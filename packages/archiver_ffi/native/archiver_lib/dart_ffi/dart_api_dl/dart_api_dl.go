@@ -23,6 +23,11 @@ import (
 	  return Dart_CloseNativePort_DL(port);
 	}
 
+	typedef struct ErrorInfo{
+		char *errorType;
+		char *error;
+	}ErrorInfo;
+
 	typedef struct ArcFileInfo{
 		uint32_t mode;
 		int64_t size;
@@ -35,6 +40,7 @@ import (
 	typedef struct ArcFileInfoResult{
 		ArcFileInfo **files;
 		int64_t totalFiles;
+		ErrorInfo *error;
 	}ArcFileInfoResult;
 
 	int64_t GetArcFileInfoResultPtr(ArcFileInfoResult *pResult) {
@@ -66,26 +72,29 @@ func CloseNativePort(port int64) bool {
 	return (bool)(result)
 }
 
-type ErrorInfo struct {
-	errorType, error string
-}
-
 func SendArchiveListing(port int64, err error, result *[]onearchiver.ArchiveFileInfo) {
-	var ei ErrorInfo
-
-	// Parse errors
-	ei.processErrors(err)
-
 	var dartObj C.Dart_CObject
 	dartObj._type = C.Dart_CObject_kInt64
+
+	// Parse errors
+	var ei C.ErrorInfo
+	if err != nil {
+		ei.error = C.CString(err.Error())
+		ei.errorType = C.CString(processErrors(err))
+	}
 
 	var aiList []*C.struct_ArcFileInfo
 
 	for _, item := range *result {
 		aif := (*C.struct_ArcFileInfo)(C.malloc(C.sizeof_struct_ArcFileInfo))
 
-		mode, _ := strconv.ParseInt(fmt.Sprintf("%o", item.Mode.Perm()), 10, 64)
-		aif.mode = C.uint32_t(mode)
+		mode, err := strconv.ParseInt(fmt.Sprintf("%o", item.Mode.Perm()), 10, 64)
+		if err != nil {
+			aif.mode = C.uint32_t(0)
+		} else {
+			aif.mode = C.uint32_t(mode)
+		}
+
 		aif.size = C.int64_t(item.Size)
 		aif.name = C.CString(item.Name)
 		aif.isDir = C.bool(item.IsDir)
@@ -106,6 +115,7 @@ func SendArchiveListing(port int64, err error, result *[]onearchiver.ArchiveFile
 	}
 
 	air.totalFiles = C.int64_t(aiListLen)
+	air.error = &ei
 
 	ptrAddr := C.GetArcFileInfoResultPtr(air)
 

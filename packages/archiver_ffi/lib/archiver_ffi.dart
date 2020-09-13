@@ -53,19 +53,37 @@ class ArcFileInfo extends Struct {
         ..fullPath = fullPath;
 }
 
+class ResultErrors extends Struct {
+  Pointer<Utf8> error;
+
+  Pointer<Utf8> errorType;
+
+  factory ResultErrors.allocate(
+    Pointer<Utf8> error,
+    Pointer<Utf8> errorType,
+  ) =>
+      allocate<ResultErrors>().ref
+        ..error = error
+        ..errorType = errorType;
+}
+
 class ArcFileInfoResult extends Struct {
   Pointer<Pointer<ArcFileInfo>> files;
 
   @Int64()
   int totalFiles;
 
+  Pointer<ResultErrors> error;
+
   factory ArcFileInfoResult.allocate(
     Pointer<Pointer<ArcFileInfo>> files,
     int totalFiles,
+    Pointer<ResultErrors> error,
   ) =>
       allocate<ArcFileInfoResult>().ref
         ..files = files
-        ..totalFiles = totalFiles;
+        ..totalFiles = totalFiles
+        ..error = error;
 }
 
 class ArchiverFfi {
@@ -94,7 +112,7 @@ class ArchiverFfi {
     final _password = ffiString('', _ptrToFreeList);
     final _orderBy = ffiString(enumToString(OrderBy.fullPath), _ptrToFreeList);
     final _orderDir = ffiString(enumToString(OrderDir.asc), _ptrToFreeList);
-    final _listDirectoryPath = ffiString('', _ptrToFreeList);
+    final _listDirectoryPath = ffiString('nm', _ptrToFreeList);
     final _recursive = ffiBool(true);
 
     _squashArchiverLib.ListArchive(
@@ -113,6 +131,15 @@ class ArchiverFfi {
       final _address = address as int;
 
       final work = Pointer<ArcFileInfoResult>.fromAddress(_address);
+
+      final _error = work.ref.error;
+      if (_error.address != 0) {
+        print('Error occured');
+        print(_error.ref.error.ref.toString());
+        print(_error.ref.errorType.ref.toString());
+
+        return;
+      }
 
       final filesPtr = work.ref.files;
       final totalFilesPtr = work.ref.totalFiles;
@@ -154,7 +181,7 @@ class ArchiverFfi {
 
           print(_value.ref.mode);
           print(_value.ref.size);
-        //  print(_value.ref.modTime.ref.toString());
+          //  print(_value.ref.modTime.ref.toString());
           print(_value.ref.isDir); // 1 => true, 0 => 0
           //print(_value.ref.name.ref.toString());
           //print(_value.ref.fullPath.ref.toString());

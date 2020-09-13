@@ -1,23 +1,28 @@
 package dart_api_dl
 
+import "C"
 import "strings"
 
 type Errors string
 
 const (
 	ErrorOthers       Errors = "Some other error occured. Try again."
-	ErrorFileNotExist Errors = "ErrorFileNotExist"
+	ErrorFileNotFound Errors = "ErrorFileNotFound"
+	ErrorFilterPathNotFound Errors = "ErrorFilterPathNotFound"
 )
 
-func (ei *ErrorInfo) processErrors(e error) {
+func processErrors(e error) string {
 	if e == nil {
-		return
+		return ""
 	}
 
-	ei.error = e.Error()
-	ei.errorType = string(ErrorOthers)
+	errorType := string(ErrorOthers)
 
-	if strings.Contains(ei.error, "file does not exist") {
-		ei.errorType = string(ErrorFileNotExist)
+	if strings.Contains(e.Error(), "file does not exist") {
+		errorType = string(ErrorFileNotFound)
+	} else if strings.Contains(e.Error(), "path not found to filter") {
+		errorType = string(ErrorFilterPathNotFound)
 	}
+
+	return errorType
 }
