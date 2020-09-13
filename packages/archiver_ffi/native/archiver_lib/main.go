@@ -32,7 +32,7 @@ func ListArchive(port int64, filename, password, orderBy, orderDir, listDirector
 	if exist := onearchiver.FileExists(_filename); !exist {
 		err = fmt.Errorf("file does not exist: %v\n", _filename)
 	} else {
-		meta := &onearchiver.ArchiveMeta{Filename: _filename, Password: _password}
+		meta := &onearchiver.ArchiveMeta{Filename: _filename, Password: _password /*, GitIgnorePattern:*/}
 
 		var ob onearchiver.ArchiveOrderBy
 

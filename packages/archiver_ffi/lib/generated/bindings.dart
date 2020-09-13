@@ -61,12 +61,12 @@ class SquashArchiverLib {
   _dart_ListArchive _ListArchive;
 
   void FreeListArchiveMemory(
-    int pointer,
+    int ptrAddr,
   ) {
     _FreeListArchiveMemory ??= _dylib.lookupFunction<_c_FreeListArchiveMemory,
         _dart_FreeListArchiveMemory>('FreeListArchiveMemory');
     return _FreeListArchiveMemory(
-      pointer,
+      ptrAddr,
     );
   }
 
@@ -250,11 +250,11 @@ typedef _dart_ListArchive = void Function(
 );
 
 typedef _c_FreeListArchiveMemory = ffi.Void Function(
-  ffi.Int64 pointer,
+  ffi.Int64 ptrAddr,
 );
 
 typedef _dart_FreeListArchiveMemory = void Function(
-  int pointer,
+  int ptrAddr,
 );
 
 typedef _c_IsArchiveEncrypted = ffi.Void Function();

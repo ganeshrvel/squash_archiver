@@ -2,89 +2,12 @@ import 'dart:async';
 import 'dart:ffi';
 import 'dart:isolate';
 
-import 'package:archiver_ffi/test_utils.dart';
-import 'package:archiver_ffi/utils.dart';
+import 'package:archiver_ffi/models/list_archives.dart';
+import 'package:archiver_ffi/structs/list_archives.dart';
+import 'package:archiver_ffi/utils/ffi.dart';
+import 'package:archiver_ffi/utils/utils.dart';
 import 'package:archiver_ffi/generated/bindings.dart';
 import 'package:ffi/ffi.dart';
-
-enum OrderBy {
-  size,
-  modTime,
-  name,
-  fullPath,
-}
-
-enum OrderDir {
-  asc,
-  desc,
-  none,
-}
-
-class ArcFileInfo extends Struct {
-  @Uint32()
-  int mode;
-
-  @Int64()
-  int size;
-
-  @Int8()
-  int isDir;
-
-  Pointer<Utf8> modTime;
-
-  Pointer<Utf8> name;
-
-  Pointer<Utf8> fullPath;
-
-  factory ArcFileInfo.allocate(
-    int mode,
-    int size,
-    int isDir,
-    Pointer<Utf8> modTime,
-    Pointer<Utf8> name,
-    Pointer<Utf8> fullPath,
-  ) =>
-      allocate<ArcFileInfo>().ref
-        ..mode = mode
-        ..size = size
-        ..isDir = isDir
-        ..modTime = modTime
-        ..name = name
-        ..fullPath = fullPath;
-}
-
-class ResultErrors extends Struct {
-  Pointer<Utf8> error;
-
-  Pointer<Utf8> errorType;
-
-  factory ResultErrors.allocate(
-    Pointer<Utf8> error,
-    Pointer<Utf8> errorType,
-  ) =>
-      allocate<ResultErrors>().ref
-        ..error = error
-        ..errorType = errorType;
-}
-
-class ArcFileInfoResult extends Struct {
-  Pointer<Pointer<ArcFileInfo>> files;
-
-  @Int64()
-  int totalFiles;
-
-  Pointer<ResultErrors> error;
-
-  factory ArcFileInfoResult.allocate(
-    Pointer<Pointer<ArcFileInfo>> files,
-    int totalFiles,
-    Pointer<ResultErrors> error,
-  ) =>
-      allocate<ArcFileInfoResult>().ref
-        ..files = files
-        ..totalFiles = totalFiles
-        ..error = error;
-}
 
 class ArchiverFfi {
   SquashArchiverLib _squashArchiverLib;
@@ -98,21 +21,27 @@ class ArchiverFfi {
     _squashArchiverLib.InitNewNativeDartPort(NativeApi.initializeApiDLData);
   }
 
-  Future<void> listArchive() async {
-    // collect all pointers to be freed later
-    final _ptrToFreeList = <Pointer<Int8>>[];
+  Future<void> listArchive(ListArchiver params) async {
+    print(params.filename);
+    print(params.password);
+    print(params.orderBy);
+    print(params.orderDir);
+    print(params.listDirectoryPath);
+    print(params.recursive);
 
     final _requests = ReceivePort();
     final _nativePort = _requests.sendPort.nativePort;
 
-    final _filename = ffiString(
-      getTestMocksAsset('mock_test_file1.zip'),
+    // collect all pointers to be freed later
+    final _ptrToFreeList = <Pointer<Int8>>[];
+    final _filename = ffiString(params.filename, _ptrToFreeList);
+    final _password = ffiString('', _ptrToFreeList);
+    final _orderBy = ffiString(enumToString(OrderBy.name), _ptrToFreeList);
+    final _orderDir = ffiString(enumToString(OrderDir.asc), _ptrToFreeList);
+    final _listDirectoryPath = ffiString(
+      '',
       _ptrToFreeList,
     );
-    final _password = ffiString('', _ptrToFreeList);
-    final _orderBy = ffiString(enumToString(OrderBy.fullPath), _ptrToFreeList);
-    final _orderDir = ffiString(enumToString(OrderDir.asc), _ptrToFreeList);
-    final _listDirectoryPath = ffiString('nm', _ptrToFreeList);
     final _recursive = ffiBool(true);
 
     _squashArchiverLib.ListArchive(
@@ -143,7 +72,6 @@ class ArchiverFfi {
 
       final filesPtr = work.ref.files;
       final totalFilesPtr = work.ref.totalFiles;
-      //  final infoPtr = work.ref.info;
 
       final _totalFiles = totalFilesPtr;
 
