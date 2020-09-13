@@ -7,6 +7,7 @@ void main() {
 
   final _param = ListArchiver(
     filename: getTestMocksAsset('mock_test_file1.zip'),
+    recursive: true,
   );
 
   _archiverFfi.listArchive(_param);
