@@ -22,27 +22,21 @@ class ArchiverFfi {
   }
 
   Future<void> listArchive(ListArchiver params) async {
-    print(params.filename);
-    print(params.password);
-    print(params.orderBy);
-    print(params.orderDir);
-    print(params.listDirectoryPath);
-    print(params.recursive);
-
     final _requests = ReceivePort();
     final _nativePort = _requests.sendPort.nativePort;
 
     // collect all pointers to be freed later
     final _ptrToFreeList = <Pointer<Int8>>[];
+
     final _filename = ffiString(params.filename, _ptrToFreeList);
-    final _password = ffiString('', _ptrToFreeList);
-    final _orderBy = ffiString(enumToString(OrderBy.name), _ptrToFreeList);
-    final _orderDir = ffiString(enumToString(OrderDir.asc), _ptrToFreeList);
+    final _password = ffiString(params.password, _ptrToFreeList);
+    final _orderBy = ffiString(enumToString(params.orderBy), _ptrToFreeList);
+    final _orderDir = ffiString(enumToString(params.orderDir), _ptrToFreeList);
     final _listDirectoryPath = ffiString(
-      '',
+      params.listDirectoryPath,
       _ptrToFreeList,
     );
-    final _recursive = ffiBool(true);
+    final _recursive = ffiBool(params.recursive);
 
     _squashArchiverLib.ListArchive(
       _nativePort,
@@ -59,19 +53,18 @@ class ArchiverFfi {
     _requestsSub = _requests.listen((address) {
       final _address = address as int;
 
-      final work = Pointer<ArcFileInfoResult>.fromAddress(_address);
+      final result = Pointer<ArcFileInfoResult>.fromAddress(_address);
 
-      final _error = work.ref.error;
-      if (_error.address != 0) {
-        print('Error occured');
+      final _error = result.ref.error;
+      if (_error.ref.error.address != 0) {
         print(_error.ref.error.ref.toString());
         print(_error.ref.errorType.ref.toString());
 
         return;
       }
 
-      final filesPtr = work.ref.files;
-      final totalFilesPtr = work.ref.totalFiles;
+      final filesPtr = result.ref.files;
+      final totalFilesPtr = result.ref.totalFiles;
 
       final _totalFiles = totalFilesPtr;
 
@@ -90,9 +83,10 @@ class ArchiverFfi {
         print(_value.ref.name.ref.toString());
         print(_value.ref.fullPath.ref.toString());
 
-        print(work.ref.totalFiles);
+        print(result.ref.totalFiles);
       }
 
+      // free all FFI allocated values
       _ptrToFreeList.forEach((ptr) {
         free(ptr);
       });
@@ -109,30 +103,20 @@ class ArchiverFfi {
 
           print(_value.ref.mode);
           print(_value.ref.size);
-          //  print(_value.ref.modTime.ref.toString());
           print(_value.ref.isDir); // 1 => true, 0 => 0
-          //print(_value.ref.name.ref.toString());
-          //print(_value.ref.fullPath.ref.toString());
 
-          print(work.ref.totalFiles);
+          print(result.ref.totalFiles);
         }
 
-        //print(_value.ref.mode);
-        //print(_value.ref.size);
-        // print(_value.ref.modTime.ref.toString());
-        //print(_value.ref.isDir); // 1 => true, 0 => 0
-        // print(_value.ref.name.ref.toString());
-        // print(_value.ref.fullPath.ref.toString());
-
-        print(work.ref.totalFiles);
+        print(result.ref.totalFiles);
       });
 
 /*
       Future.delayed(Duration(seconds: 3), () {
-        final work = Pointer<ArcFileInfoResult>.fromAddress(_address);
+        final result = Pointer<ArcFileInfoResult>.fromAddress(_address);
 
-        final _string_list_ptr = work.ref.files;
-        //  final infoPtr = work.ref.info;
+        final _string_list_ptr = result.ref.files;
+        //  final infoPtr = result.ref.info;
 
         final _value = _string_list_ptr.elementAt(0).value;
 
@@ -149,7 +133,7 @@ class ArchiverFfi {
       // _requestsSub.cancel();
       // _squashArchiverLib.CloseNativeDartPort(_nativePort);
 
-      // final work = Pointer<Work>.fromAddress(_address);
+      // final result = Pointer<Work>.fromAddress(_address);
       //
       // print('=======================');
       // print('WORK data');

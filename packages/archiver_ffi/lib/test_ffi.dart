@@ -10,5 +10,4 @@ void main() {
   );
 
   _archiverFfi.listArchive(_param);
-  // _archiverFfi.getUserData();
 }
