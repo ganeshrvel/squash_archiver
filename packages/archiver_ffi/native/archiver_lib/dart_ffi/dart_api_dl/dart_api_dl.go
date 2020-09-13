@@ -13,7 +13,6 @@ import (
 #include "stdint.h"
 #include "stdio.h"
 #include "include/dart_api_dl.c"
-
 	// Go does not allow calling C function pointers directly. So we are
 	// forced to provide a trampoline.
 	bool GoDart_PostCObject(Dart_Port_DL port, Dart_CObject* obj) {
@@ -39,6 +38,10 @@ import (
 	}ArcFileInfoResult;
 
 	int64_t GetArcFileInfoResultPtr(ArcFileInfoResult *pResult) {
+		Dart_CObject = dartObj;
+		dartObj._type = Dart_CObject_kInt64;
+
+
 		int64_t ptr = (int64_t)pResult;
 
 		return ptr;
