@@ -21,7 +21,7 @@ enum OrderDir {
 }
 
 class ArcFileInfo extends Struct {
-  @Int32()
+  @Uint32()
   int mode;
 
   @Int64()
@@ -118,18 +118,25 @@ class ArchiverFfi {
       final totalFilesPtr = work.ref.totalFiles;
       //  final infoPtr = work.ref.info;
 
-      final _value = filesPtr.elementAt(0).value;
-
-      print(_value.ref.mode);
-      print(_value.ref.size);
-      print(_value.ref.modTime.ref.toString());
-      print(_value.ref.isDir); // 1 => true, 0 => 0
-      print(_value.ref.name.ref.toString());
-      print(_value.ref.fullPath.ref.toString());
-
-      print(work.ref.totalFiles);
-
       final _totalFiles = totalFilesPtr;
+
+      for (var i = 0; i < _totalFiles; i++) {
+        print('==========index=============');
+        print('index:');
+        print(i);
+        print('\n');
+
+        final _value = filesPtr.elementAt(i).value;
+
+        print(_value.ref.mode);
+        print(_value.ref.size);
+        print(_value.ref.modTime.ref.toString());
+        print(_value.ref.isDir); // 1 => true, 0 => 0
+        print(_value.ref.name.ref.toString());
+        print(_value.ref.fullPath.ref.toString());
+
+        print(work.ref.totalFiles);
+      }
 
       _ptrToFreeList.forEach((ptr) {
         free(ptr);
@@ -141,10 +148,24 @@ class ArchiverFfi {
 
       Future.delayed(Duration(seconds: 5), () {
         print('=====delayed check for memory');
-        print(_value.ref.mode);
-        print(_value.ref.size);
+
+        for (var i = 0; i < _totalFiles; i++) {
+          final _value = filesPtr.elementAt(i).value;
+
+          print(_value.ref.mode);
+          print(_value.ref.size);
+        //  print(_value.ref.modTime.ref.toString());
+          print(_value.ref.isDir); // 1 => true, 0 => 0
+          //print(_value.ref.name.ref.toString());
+          //print(_value.ref.fullPath.ref.toString());
+
+          print(work.ref.totalFiles);
+        }
+
+        //print(_value.ref.mode);
+        //print(_value.ref.size);
         // print(_value.ref.modTime.ref.toString());
-        print(_value.ref.isDir); // 1 => true, 0 => 0
+        //print(_value.ref.isDir); // 1 => true, 0 => 0
         // print(_value.ref.name.ref.toString());
         // print(_value.ref.fullPath.ref.toString());
 
