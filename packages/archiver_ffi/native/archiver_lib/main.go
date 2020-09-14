@@ -26,7 +26,7 @@ func CloseNativeDartPort(port int64) bool {
 }
 
 //export ListArchive
-func ListArchive(port int64, filename, password, orderBy, orderDir, listDirectoryPath *C.char, gitIgnorePatternAddr int64, recursive bool) {
+func ListArchive(port int64, filename, password, orderBy, orderDir, listDirectoryPath *C.char, gitIgnorePatternPtrAddr int64, recursive bool) {
 	var err error
 	var result []onearchiver.ArchiveFileInfo
 
@@ -35,13 +35,12 @@ func ListArchive(port int64, filename, password, orderBy, orderDir, listDirector
 	_orderBy := C.GoString(orderBy)
 	_orderDir := C.GoString(orderDir)
 	_listDirectoryPath := C.GoString(listDirectoryPath)
-
-	dart_api_dl.GetGitIgnorePattern(gitIgnorePatternAddr)
+	_gitIgnorePattern := dart_api_dl.GetStringList(gitIgnorePatternPtrAddr)
 
 	if exist := onearchiver.FileExists(_filename); !exist {
 		err = fmt.Errorf("file does not exist: %v\n", _filename)
 	} else {
-		meta := &onearchiver.ArchiveMeta{Filename: _filename, Password: _password /*, GitIgnorePattern:*/}
+		meta := &onearchiver.ArchiveMeta{Filename: _filename, Password: _password, GitIgnorePattern: _gitIgnorePattern}
 
 		var ob onearchiver.ArchiveOrderBy
 

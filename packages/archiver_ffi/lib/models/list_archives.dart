@@ -8,6 +8,7 @@ class ListArchiver {
   OrderBy orderBy;
   OrderDir orderDir;
   String listDirectoryPath;
+  List<String> gitIgnorePattern;
   bool recursive;
 
   ListArchiver({
@@ -36,6 +37,10 @@ class ListArchiver {
 
     if (isNullOrEmpty(listDirectoryPath)) {
       this.listDirectoryPath = '';
+    }
+
+    if (isNullOrEmpty(gitIgnorePattern)) {
+      this.gitIgnorePattern = [];
     }
 
     if (isNull(recursive)) {

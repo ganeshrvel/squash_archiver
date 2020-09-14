@@ -28,6 +28,11 @@ import (
 		char *error;
 	}ErrorInfo;
 
+	typedef struct StringList{
+		char **list;
+		int64_t size;
+	}StringList;
+
 	typedef struct ArcFileInfo{
 		uint32_t mode;
 		int64_t size;
@@ -42,11 +47,6 @@ import (
 		int64_t totalFiles;
 		ErrorInfo *error;
 	}ArcFileInfoResult;
-
-	typedef struct GitIgnorePattern{
-		char **list;
-		int64_t size;
-	}GitIgnorePattern;
 
 	int64_t GetArcFileInfoResultPtr(ArcFileInfoResult *pResult) {
 		int64_t ptr = (int64_t)pResult;
@@ -65,12 +65,10 @@ import (
 		free(&pResult);
 	}
 
-	void GetGitIgnorePattern(int64_t gitIgnorePatternPtrAddr) {
-        GitIgnorePattern *pPattern = (struct GitIgnorePattern *) gitIgnorePatternPtrAddr;
+	StringList GetStringList(int64_t stringListPtrAddr) {
+        StringList *p = (struct StringList *) stringListPtrAddr;
 
-		for (int i = 0; i < pPattern->size; i++){
-			printf("\n%s", pPattern->list[i]);
-	  	}
+		return *p;
 	}
 */
 import "C"
@@ -167,6 +165,16 @@ func FreeListArchiveMemory(ptrAddr int64) {
 	C.ClearArcFileInfoResultMemory(C.int64_t(ptrAddr))
 }
 
-func GetGitIgnorePattern(gitIgnorePatternPtrAddr int64) {
-	C.GetGitIgnorePattern(C.int64_t(gitIgnorePatternPtrAddr))
+func GetStringList(stringListPtrAddr int64) []string {
+	stringList := C.GetStringList(C.int64_t(stringListPtrAddr))
+
+	length := stringList.size
+	tmpSlice := (*[1 << 30]*C.char)(unsafe.Pointer(stringList.list))[:length:length]
+
+	goSlice := make([]string, length)
+	for i, s := range tmpSlice {
+		goSlice[i] = C.GoString(s)
+	}
+
+	return goSlice
 }
