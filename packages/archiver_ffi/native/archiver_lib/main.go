@@ -1,12 +1,19 @@
 package main
 
+import "C"
 import (
 	"./dart_ffi/dart_api_dl"
-	"C"
 	fmt "fmt"
 	onearchiver "github.com/ganeshrvel/one-archiver"
 	"unsafe"
 )
+
+/*
+#include "stdlib.h"
+#include "stdint.h"
+#include "stdio.h"
+*/
+import "C"
 
 //export InitNewNativeDartPort
 func InitNewNativeDartPort(api unsafe.Pointer) {
@@ -19,7 +26,7 @@ func CloseNativeDartPort(port int64) bool {
 }
 
 //export ListArchive
-func ListArchive(port int64, filename, password, orderBy, orderDir, listDirectoryPath *C.char, recursive bool) {
+func ListArchive(port int64, filename, password, orderBy, orderDir, listDirectoryPath *C.char, gitIgnorePatternAddr int64, recursive bool) {
 	var err error
 	var result []onearchiver.ArchiveFileInfo
 
@@ -28,6 +35,8 @@ func ListArchive(port int64, filename, password, orderBy, orderDir, listDirector
 	_orderBy := C.GoString(orderBy)
 	_orderDir := C.GoString(orderDir)
 	_listDirectoryPath := C.GoString(listDirectoryPath)
+
+	dart_api_dl.GetGitIgnorePattern(gitIgnorePatternAddr)
 
 	if exist := onearchiver.FileExists(_filename); !exist {
 		err = fmt.Errorf("file does not exist: %v\n", _filename)

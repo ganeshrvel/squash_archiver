@@ -19,6 +19,13 @@ typedef struct { const char *p; ptrdiff_t n; } _GoString_;
 /* Start of preamble from import "C" comments.  */
 
 
+#line 11 "main.go"
+
+#include "stdlib.h"
+#include "stdint.h"
+#include "stdio.h"
+
+#line 1 "cgo-generated-wrapper"
 
 
 /* End of preamble from import "C" comments.  */
@@ -70,7 +77,7 @@ extern "C" {
 
 extern void InitNewNativeDartPort(void* api);
 extern GoUint8 CloseNativeDartPort(GoInt64 port);
-extern void ListArchive(GoInt64 port, char* filename, char* password, char* orderBy, char* orderDir, char* listDirectoryPath, GoUint8 recursive);
+extern void ListArchive(GoInt64 port, char* filename, char* password, char* orderBy, char* orderDir, char* listDirectoryPath, GoInt64 gitIgnorePatternAddr, GoUint8 recursive);
 extern void FreeListArchiveMemory(GoInt64 ptrAddr);
 extern void IsArchiveEncrypted();
 extern void Pack();

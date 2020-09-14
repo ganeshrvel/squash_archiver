@@ -43,6 +43,11 @@ import (
 		ErrorInfo *error;
 	}ArcFileInfoResult;
 
+	typedef struct GitIgnorePattern{
+		char **list;
+		int64_t size;
+	}GitIgnorePattern;
+
 	int64_t GetArcFileInfoResultPtr(ArcFileInfoResult *pResult) {
 		int64_t ptr = (int64_t)pResult;
 
@@ -58,6 +63,14 @@ import (
 
 		free(&pResult->files);
 		free(&pResult);
+	}
+
+	void GetGitIgnorePattern(int64_t gitIgnorePatternPtrAddr) {
+        GitIgnorePattern *pPattern = (struct GitIgnorePattern *) gitIgnorePatternPtrAddr;
+
+		for (int i = 0; i < pPattern->size; i++){
+			printf("\n%s", pPattern->list[i]);
+	  	}
 	}
 */
 import "C"
@@ -152,4 +165,8 @@ func SendArchiveListing(port int64, err error, result *[]onearchiver.ArchiveFile
 
 func FreeListArchiveMemory(ptrAddr int64) {
 	C.ClearArcFileInfoResultMemory(C.int64_t(ptrAddr))
+}
+
+func GetGitIgnorePattern(gitIgnorePatternPtrAddr int64) {
+	C.GetGitIgnorePattern(C.int64_t(gitIgnorePatternPtrAddr))
 }
