@@ -16,9 +16,9 @@ class StringList extends Struct {
 
     for (var i = 0; i < arr.length; i++) {
       list[i] = utfPtrs[i];
-
-      ptrList.add(list[i]);
     }
+
+    ptrList.addAll(utfPtrs);
 
     final pStrList = allocate<StringList>().ref;
     pStrList.list = list;
