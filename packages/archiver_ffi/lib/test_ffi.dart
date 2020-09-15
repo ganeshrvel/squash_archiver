@@ -1,16 +1,20 @@
 import 'package:archiver_ffi/archiver_ffi.dart';
-import 'package:archiver_ffi/models/list_archives.dart';
+import 'package:archiver_ffi/models/list_archives_request.dart';
 import 'package:archiver_ffi/utils/test_utils.dart';
 
-void main() {
+Future<void> main() async {
+  final stopwatch = Stopwatch()..start();
   final _archiverFfi = ArchiverFfi(isTest: true);
 
-  final _param = ListArchiver(
+  final _param = ListArchiveRequest(
     filename: getTestMocksAsset('mock_test_file1.zip'),
     recursive: true,
     listDirectoryPath: '',
-    gitIgnorePattern: ['1234', 'gtre'],
+    gitIgnorePattern: [],
   );
 
-  _archiverFfi.listArchive(_param);
+  final _result = await _archiverFfi.listArchive(_param);
+
+  stopwatch.stop();
+  print('executed in ${stopwatch.elapsed.inMilliseconds} ms');
 }

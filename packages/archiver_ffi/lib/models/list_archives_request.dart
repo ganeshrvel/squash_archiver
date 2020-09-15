@@ -2,7 +2,7 @@ import 'package:archiver_ffi/structs/list_archives.dart';
 import 'package:archiver_ffi/utils/functs.dart';
 import 'package:meta/meta.dart';
 
-class ListArchiver {
+class ListArchiveRequest {
   String filename;
   String password;
   OrderBy orderBy;
@@ -11,7 +11,7 @@ class ListArchiver {
   List<String> gitIgnorePattern;
   bool recursive;
 
-  ListArchiver({
+  ListArchiveRequest({
     @required this.filename,
     this.password,
     this.orderBy,

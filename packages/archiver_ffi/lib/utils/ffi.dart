@@ -3,11 +3,11 @@ import 'dart:ffi';
 import 'package:archiver_ffi/structs/common.dart';
 import 'package:ffi/ffi.dart';
 
-int ffiBool(bool value) {
+int toFfiBool(bool value) {
   return value ? 1 : 0;
 }
 
-Pointer<Int8> ffiString(String value, List<Pointer<NativeType>> ptrList) {
+Pointer<Int8> toFfiString(String value, List<Pointer<NativeType>> ptrList) {
   final _value = Utf8.toUtf8(value);
   final _ptr = _value.cast<Int8>();
 
@@ -16,7 +16,7 @@ Pointer<Int8> ffiString(String value, List<Pointer<NativeType>> ptrList) {
   return _ptr;
 }
 
-Pointer<StringList> ffiStringList(
+Pointer<StringList> toFfiStringList(
     List<String> values, List<Pointer<NativeType>> ptrList) {
   final pStrList = allocate<StringList>().ref;
   final _ptr = pStrList.fromList(values, ptrList);
@@ -24,4 +24,8 @@ Pointer<StringList> ffiStringList(
   ptrList.add(_ptr);
 
   return _ptr;
+}
+
+bool fromFfiBool(int value) {
+  return value > 0;
 }

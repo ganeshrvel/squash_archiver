@@ -16,6 +16,10 @@ dependencies:
 
   meta: ^1.2.3
 
+  data_channel: ^1.0.4+1
+
+  equatable: ^1.2.5
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
