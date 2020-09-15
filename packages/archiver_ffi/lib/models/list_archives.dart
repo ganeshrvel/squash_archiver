@@ -17,6 +17,7 @@ class ListArchiver {
     this.orderBy,
     this.orderDir,
     this.listDirectoryPath,
+    this.gitIgnorePattern,
     this.recursive,
   }) {
     if (isNullOrEmpty(filename)) {

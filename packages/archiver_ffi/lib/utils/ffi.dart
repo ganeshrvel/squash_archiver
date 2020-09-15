@@ -16,9 +16,10 @@ Pointer<Int8> ffiString(String value, List<Pointer<NativeType>> ptrList) {
   return _ptr;
 }
 
-Pointer<StringList> ffiStringList(List<String> values, List<Pointer<NativeType>> ptrList) {
+Pointer<StringList> ffiStringList(
+    List<String> values, List<Pointer<NativeType>> ptrList) {
   final pStrList = allocate<StringList>().ref;
-  final _ptr = pStrList.fromList(values);
+  final _ptr = pStrList.fromList(values, ptrList);
 
   ptrList.add(_ptr);
 

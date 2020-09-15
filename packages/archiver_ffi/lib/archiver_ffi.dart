@@ -36,11 +36,11 @@ class ArchiverFfi {
       params.listDirectoryPath,
       _ptrToFreeList,
     );
-    final _recursive = ffiBool(params.recursive);
     final _pGitIgnorePattern = ffiStringList(
       params.gitIgnorePattern,
       _ptrToFreeList,
     );
+    final _recursive = ffiBool(params.recursive);
 
     _squashArchiverLib.ListArchive(
       _nativePort,
@@ -91,6 +91,10 @@ class ArchiverFfi {
         print(result.ref.totalFiles);
       }
 
+
+      print(_ptrToFreeList);
+      print(_ptrToFreeList.length);
+
       // free all FFI allocated values
       _ptrToFreeList.forEach((ptr) {
         free(ptr);
@@ -115,8 +119,8 @@ class ArchiverFfi {
 
         print(result.ref.totalFiles);
 
-        // final _tt = _pGitIgnorePattern.ref.list.elementAt(1);
-        // print(_tt.value.elementAt(0).toString());
+        final _tt = _pGitIgnorePattern.ref.list.elementAt(1);
+        print(_tt.value.elementAt(0).toString());
       });
 
 /*

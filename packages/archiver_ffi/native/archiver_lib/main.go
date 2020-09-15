@@ -8,13 +8,6 @@ import (
 	"unsafe"
 )
 
-/*
-#include "stdlib.h"
-#include "stdint.h"
-#include "stdio.h"
-*/
-import "C"
-
 //export InitNewNativeDartPort
 func InitNewNativeDartPort(api unsafe.Pointer) {
 	dart_api_dl.InitializeDartApi(api)

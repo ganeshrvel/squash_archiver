@@ -8,7 +8,7 @@ class StringList extends Struct {
   @Int64()
   int size;
 
-  Pointer<StringList> fromList(List<String> arr) {
+  Pointer<StringList> fromList(List<String> arr, List<Pointer<NativeType>> ptrList) {
     final utfPtrs = arr.map(Utf8.toUtf8).toList();
 
     // ignore: omit_local_variable_types
@@ -16,6 +16,8 @@ class StringList extends Struct {
 
     for (var i = 0; i < arr.length; i++) {
       list[i] = utfPtrs[i];
+
+      ptrList.add(list[i]);
     }
 
     final pStrList = allocate<StringList>().ref;

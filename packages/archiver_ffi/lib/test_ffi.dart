@@ -9,7 +9,7 @@ void main() {
     filename: getTestMocksAsset('mock_test_file1.zip'),
     recursive: true,
     listDirectoryPath: '',
-
+    gitIgnorePattern: ['1234', 'gtre'],
   );
 
   _archiverFfi.listArchive(_param);
