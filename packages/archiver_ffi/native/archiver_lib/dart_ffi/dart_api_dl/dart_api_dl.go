@@ -82,7 +82,7 @@ import (
 	void ClearIsArchiveEncryptedMemory(int64_t ptrAddr) {
 		EncryptedArchiveInfo *pResult = (struct EncryptedArchiveInfo *) ptrAddr;
 
-		free(&pResult->error);
+		free(&pResult->isEncrypted);
 		free(&pResult);
 	}
 
