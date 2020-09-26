@@ -20,7 +20,7 @@ class ArchiveFileInfoStruct extends Struct {
   @Uint32()
   int mode;
 
-  @Int64()
+  @Uint64()
   int size;
 
   @Int8()
@@ -52,7 +52,7 @@ class ArchiveFileInfoStruct extends Struct {
 class ArchiveFileInfoResultStruct extends Struct {
   Pointer<Pointer<ArchiveFileInfoStruct>> files;
 
-  @Int64()
+  @Uint64()
   int totalFiles;
 
   Pointer<ResultErrorStruct> error;

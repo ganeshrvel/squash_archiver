@@ -104,12 +104,37 @@ class SquashArchiverLib {
 
   _dart_FreeIsArchiveEncryptedMemory _FreeIsArchiveEncryptedMemory;
 
-  void Pack() {
-    _Pack ??= _dylib.lookupFunction<_c_Pack, _dart_Pack>('Pack');
-    return _Pack();
+  void PackFiles(
+    int port,
+    ffi.Pointer<ffi.Int8> filename,
+    ffi.Pointer<ffi.Int8> password,
+    int gitIgnorePatternPtrAddr,
+    int fileListPtrAddr,
+  ) {
+    _PackFiles ??=
+        _dylib.lookupFunction<_c_PackFiles, _dart_PackFiles>('PackFiles');
+    return _PackFiles(
+      port,
+      filename,
+      password,
+      gitIgnorePatternPtrAddr,
+      fileListPtrAddr,
+    );
   }
 
-  _dart_Pack _Pack;
+  _dart_PackFiles _PackFiles;
+
+  void FreePackFilesMemory(
+    int ptrAddr,
+  ) {
+    _FreePackFilesMemory ??= _dylib.lookupFunction<_c_FreePackFilesMemory,
+        _dart_FreePackFilesMemory>('FreePackFilesMemory');
+    return _FreePackFilesMemory(
+      ptrAddr,
+    );
+  }
+
+  _dart_FreePackFilesMemory _FreePackFilesMemory;
 
   void Unpack() {
     _Unpack ??= _dylib.lookupFunction<_c_Unpack, _dart_Unpack>('Unpack');
@@ -302,9 +327,29 @@ typedef _dart_FreeIsArchiveEncryptedMemory = void Function(
   int ptrAddr,
 );
 
-typedef _c_Pack = ffi.Void Function();
+typedef _c_PackFiles = ffi.Void Function(
+  ffi.Int64 port,
+  ffi.Pointer<ffi.Int8> filename,
+  ffi.Pointer<ffi.Int8> password,
+  ffi.Int64 gitIgnorePatternPtrAddr,
+  ffi.Int64 fileListPtrAddr,
+);
 
-typedef _dart_Pack = void Function();
+typedef _dart_PackFiles = void Function(
+  int port,
+  ffi.Pointer<ffi.Int8> filename,
+  ffi.Pointer<ffi.Int8> password,
+  int gitIgnorePatternPtrAddr,
+  int fileListPtrAddr,
+);
+
+typedef _c_FreePackFilesMemory = ffi.Void Function(
+  ffi.Int64 ptrAddr,
+);
+
+typedef _dart_FreePackFilesMemory = void Function(
+  int ptrAddr,
+);
 
 typedef _c_Unpack = ffi.Void Function();
 

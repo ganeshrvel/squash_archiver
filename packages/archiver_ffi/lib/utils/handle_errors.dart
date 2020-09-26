@@ -6,7 +6,7 @@ import 'package:archiver_ffi/exceptions/filter_path_not_found_exception.dart';
 import 'package:archiver_ffi/structs/common.dart';
 import 'package:data_channel/data_channel.dart';
 
-DC<Exception, T> handleError<T>(Pointer<ResultErrorStruct> errorPtr) {
+DC<Exception, T> handleError<T>(Pointer<ResultErrorStruct> errorPtr, {T data}) {
   Exception _exception;
 
   final error = errorPtr.ref.error.ref.toString();
@@ -28,5 +28,5 @@ DC<Exception, T> handleError<T>(Pointer<ResultErrorStruct> errorPtr) {
       break;
   }
 
-  return DC.error(_exception);
+  return DC(error: _exception, data: data);
 }

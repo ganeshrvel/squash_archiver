@@ -33,10 +33,16 @@ import (
 		int64_t size;
 	}StringList;
 
+	StringList GetStringList(int64_t stringListPtrAddr) {
+        StringList *p = (struct StringList *) stringListPtrAddr;
+
+		return *p;
+	}
+
 	// Listing
 	typedef struct ArcFileInfo{
 		uint32_t mode;
-		int64_t size;
+		uint64_t size;
 		bool	isDir;
 		char 	*modTime;
 		char 	*name;
@@ -45,7 +51,7 @@ import (
 
 	typedef struct ArcFileInfoResult{
 		ArcFileInfo **files;
-		int64_t totalFiles;
+		uint64_t totalFiles;
 		ErrorInfo *error;
 	}ArcFileInfoResult;
 
@@ -67,29 +73,47 @@ import (
 	}
 
 	// Is encrypted
-	typedef struct EncryptedArchiveInfo{
+	typedef struct EncryptedArchiveInfoResult{
 		bool isEncrypted;
 		bool isValidPassword;
 		ErrorInfo *error;
-	}EncryptedArchiveInfo;
+	}EncryptedArchiveInfoResult;
 
-	int64_t GetEncryptedArchiveResultAddr(struct EncryptedArchiveInfo *pResult) {
+	int64_t GetEncryptedArchiveResultAddr(struct EncryptedArchiveInfoResult *pResult) {
 		int64_t ptr = (int64_t)pResult;
 
 		return ptr;
 	}
 
 	void ClearIsArchiveEncryptedMemory(int64_t ptrAddr) {
-		EncryptedArchiveInfo *pResult = (struct EncryptedArchiveInfo *) ptrAddr;
+		EncryptedArchiveInfoResult *pResult = (struct EncryptedArchiveInfoResult *) ptrAddr;
 
 		free(&pResult->isEncrypted);
 		free(&pResult);
 	}
 
-	StringList GetStringList(int64_t stringListPtrAddr) {
-        StringList *p = (struct StringList *) stringListPtrAddr;
+	// Pack files
+	typedef struct PackFilesResult{
+		char *startTime;
+		char *currentFilename;
+		uint64_t totalFiles;
+		uint64_t progressCount;
+		double progressPercentage;
+		bool ended;
+		ErrorInfo *error;
+	}PackFilesResult;
 
-		return *p;
+	int64_t GetPackFilesResultAddr(struct PackFilesResult *pResult) {
+		int64_t ptr = (int64_t)pResult;
+
+		return ptr;
+	}
+
+	void ClearPackFilesMemory(int64_t ptrAddr) {
+		PackFilesResult *pResult = (struct PackFilesResult *) ptrAddr;
+
+		free(&pResult->startTime);
+		free(&pResult);
 	}
 */
 import "C"
@@ -142,7 +166,7 @@ func SendArchiveListing(port int64, err error, result *[]onearchiver.ArchiveFile
 			aif.mode = C.uint32_t(mode)
 		}
 
-		aif.size = C.int64_t(item.Size)
+		aif.size = C.uint64_t(item.Size)
 		aif.name = C.CString(item.Name)
 		aif.isDir = C.bool(item.IsDir)
 		aif.modTime = C.CString(item.ModTime.String())
@@ -161,7 +185,7 @@ func SendArchiveListing(port int64, err error, result *[]onearchiver.ArchiveFile
 		air.files = nil
 	}
 
-	air.totalFiles = C.int64_t(aiListLen)
+	air.totalFiles = C.uint64_t(aiListLen)
 	air.error = &ei
 
 	ptrAddr := C.GetArcFileInfoResultAddr(air)
@@ -186,7 +210,7 @@ func SendIsArchiveEncrypted(port int64, err error, result *onearchiver.Encrypted
 		ei.errorType = C.CString(processErrors(err))
 	}
 
-	eai := (*C.struct_EncryptedArchiveInfo)(C.malloc(C.sizeof_struct_EncryptedArchiveInfo))
+	eai := (*C.struct_EncryptedArchiveInfoResult)(C.malloc(C.sizeof_struct_EncryptedArchiveInfoResult))
 
 	eai.isEncrypted = C.bool(result.IsEncrypted)
 	eai.isValidPassword = C.bool(result.IsValidPassword)
@@ -200,4 +224,35 @@ func SendIsArchiveEncrypted(port int64, err error, result *onearchiver.Encrypted
 
 func FreeIsArchiveEncryptedMemory(ptrAddr int64) {
 	C.ClearIsArchiveEncryptedMemory(C.int64_t(ptrAddr))
+}
+
+// Pack files
+func SendPackFiles(port int64, err error, pInfo *onearchiver.ProgressInfo, packingEnded bool) {
+	var dartObj C.Dart_CObject
+	dartObj._type = C.Dart_CObject_kInt64
+
+	// Parse errors
+	var ei C.struct_ErrorInfo
+	if err != nil {
+		ei.error = C.CString(err.Error())
+		ei.errorType = C.CString(processErrors(err))
+	}
+
+	pf := (*C.struct_PackFilesResult)(C.malloc(C.sizeof_struct_PackFilesResult))
+	pf.startTime = C.CString(pInfo.StartTime.String())
+	pf.currentFilename = C.CString(pInfo.CurrentFilename)
+	pf.progressCount = C.uint64_t(pInfo.ProgressCount)
+	pf.totalFiles = C.uint64_t(pInfo.TotalFiles)
+	pf.progressPercentage = C.double(pInfo.ProgressPercentage)
+	pf.ended = C.bool(packingEnded)
+	pf.error = &ei
+
+	ptrAddr := C.GetPackFilesResultAddr(pf)
+
+	*(*C.int64_t)(unsafe.Pointer(&dartObj.value[0])) = C.int64_t(ptrAddr)
+	C.GoDart_PostCObject(C.int64_t(port), &dartObj)
+}
+
+func FreePackFilesMemory(ptrAddr int64) {
+	C.ClearPackFilesMemory(C.int64_t(ptrAddr))
 }

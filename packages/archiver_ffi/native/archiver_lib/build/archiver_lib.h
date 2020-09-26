@@ -74,7 +74,8 @@ extern void ListArchive(GoInt64 port, char* filename, char* password, char* orde
 extern void FreeListArchiveMemory(GoInt64 ptrAddr);
 extern void IsArchiveEncrypted(GoInt64 port, char* filename, char* password);
 extern void FreeIsArchiveEncryptedMemory(GoInt64 ptrAddr);
-extern void Pack();
+extern void PackFiles(GoInt64 port, char* filename, char* password, GoInt64 gitIgnorePatternPtrAddr, GoInt64 fileListPtrAddr);
+extern void FreePackFilesMemory(GoInt64 ptrAddr);
 extern void Unpack();
 
 #ifdef __cplusplus

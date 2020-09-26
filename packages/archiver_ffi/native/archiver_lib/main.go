@@ -5,6 +5,7 @@ import (
 	"./dart_ffi/dart_api_dl"
 	fmt "fmt"
 	onearchiver "github.com/ganeshrvel/one-archiver"
+	"github.com/yeka/zip"
 	"unsafe"
 )
 
@@ -121,9 +122,46 @@ func FreeIsArchiveEncryptedMemory(ptrAddr int64) {
 	dart_api_dl.FreeIsArchiveEncryptedMemory(ptrAddr)
 }
 
-//export Pack
-func Pack() {
+//export PackFiles
+func PackFiles(port int64, filename, password *C.char, gitIgnorePatternPtrAddr int64, fileListPtrAddr int64) {
+	_filename := string(C.GoString(filename))
+	_password := string(C.GoString(password))
 
+	am := &onearchiver.ArchiveMeta{
+		Filename:         _filename,
+		Password:         _password,
+		GitIgnorePattern: dart_api_dl.GetStringList(gitIgnorePatternPtrAddr),
+		EncryptionMethod: zip.StandardEncryption,
+	}
+
+	ap := &onearchiver.ArchivePack{
+		FileList: dart_api_dl.GetStringList(fileListPtrAddr),
+	}
+
+	var _pInfo onearchiver.ProgressInfo
+	ph := &onearchiver.ProgressHandler{
+		OnReceived: func(pInfo *onearchiver.ProgressInfo) {
+			dart_api_dl.SendPackFiles(port, nil, pInfo, false)
+			_pInfo = *pInfo
+		},
+		OnError: func(err error, pInfo *onearchiver.ProgressInfo) {
+			dart_api_dl.SendPackFiles(port, err, pInfo, false)
+			_pInfo = *pInfo
+		},
+		OnCompleted: func(pInfo *onearchiver.ProgressInfo) {
+			dart_api_dl.SendPackFiles(port, nil, pInfo, false)
+			_pInfo = *pInfo
+		},
+	}
+
+	err := onearchiver.StartPacking(am, ap, ph)
+
+	dart_api_dl.SendPackFiles(port, err, &_pInfo, true)
+}
+
+//export FreePackFilesMemory
+func FreePackFilesMemory(ptrAddr int64) {
+	dart_api_dl.FreePackFilesMemory(ptrAddr)
 }
 
 //export Unpack
