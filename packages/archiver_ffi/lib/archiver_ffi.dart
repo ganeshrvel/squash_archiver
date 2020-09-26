@@ -141,6 +141,7 @@ class ArchiverFfi {
     final _completer = Completer<DC<Exception, IsArchiveEncryptedResult>>();
 
     StreamSubscription _requestsSub;
+
     _requestsSub = _requests.listen((address) {
       final _address = address as int;
       final _result =
@@ -171,9 +172,7 @@ class ArchiverFfi {
 
       // free all FFI allocated values
       _ptrToFreeList.forEach(free);
-      //todo
-      print('todo');
-      // _squashArchiverLib.FreeListArchiveMemory(_address);
+      _squashArchiverLib.FreeIsArchiveEncryptedMemory(_address);
 
       _requests.close();
       _requestsSub.cancel();
