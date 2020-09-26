@@ -72,7 +72,8 @@ extern void InitNewNativeDartPort(void* api);
 extern GoUint8 CloseNativeDartPort(GoInt64 port);
 extern void ListArchive(GoInt64 port, char* filename, char* password, char* orderBy, char* orderDir, char* listDirectoryPath, GoInt64 gitIgnorePatternPtrAddr, GoUint8 recursive);
 extern void FreeListArchiveMemory(GoInt64 ptrAddr);
-extern void IsArchiveEncrypted();
+extern void IsArchiveEncrypted(GoInt64 port, char* filename, char* password);
+extern void FreeIsArchiveEncryptedMemory(GoInt64 ptrAddr);
 extern void Pack();
 extern void Unpack();
 

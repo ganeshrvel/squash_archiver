@@ -14,7 +14,7 @@ class FileInfo extends Equatable {
 
   final String fullPath;
 
-  FileInfo({
+  const FileInfo({
     @required this.mode,
     @required this.size,
     @required this.isDir,
@@ -23,6 +23,7 @@ class FileInfo extends Equatable {
     @required this.fullPath,
   });
 
+  @override
   List<Object> get props => [
         mode,
         size,
@@ -38,11 +39,12 @@ class ListArchiveResponse extends Equatable {
 
   final int totalFiles;
 
-  ListArchiveResponse({
+  const ListArchiveResponse({
     @required this.files,
     @required this.totalFiles,
   });
 
+  @override
   List<Object> get props => [
         files,
         totalFiles,

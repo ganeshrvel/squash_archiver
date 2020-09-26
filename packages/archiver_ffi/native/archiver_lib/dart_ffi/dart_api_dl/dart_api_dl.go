@@ -33,6 +33,7 @@ import (
 		int64_t size;
 	}StringList;
 
+	// Listing
 	typedef struct ArcFileInfo{
 		uint32_t mode;
 		int64_t size;
@@ -48,13 +49,13 @@ import (
 		ErrorInfo *error;
 	}ArcFileInfoResult;
 
-	int64_t GetArcFileInfoResultPtr(ArcFileInfoResult *pResult) {
+	int64_t GetArcFileInfoResultPtr(struct ArcFileInfoResult *pResult) {
 		int64_t ptr = (int64_t)pResult;
 
 		return ptr;
 	}
 
-	void ClearArcFileInfoResultMemory(int64_t ptrAddr) {
+	void ClearListArchiveMemory(int64_t ptrAddr) {
 		ArcFileInfoResult *pResult = (struct ArcFileInfoResult *) ptrAddr;
 
 		for (int i = 0; i < pResult->totalFiles; i++) {
@@ -62,6 +63,26 @@ import (
 		}
 
 		free(&pResult->files);
+		free(&pResult);
+	}
+
+	// Is encrypted
+	typedef struct EncryptedArchiveInfo{
+		bool isEncrypted;
+		bool isValidPassword;
+		ErrorInfo *error;
+	}EncryptedArchiveInfo;
+
+	int64_t GetEncryptedArchiveResultPtr(struct EncryptedArchiveInfo *pResult) {
+		int64_t ptr = (int64_t)pResult;
+
+		return ptr;
+	}
+
+	void ClearIsArchiveEncryptedMemory(int64_t ptrAddr) {
+		EncryptedArchiveInfo *pResult = (struct EncryptedArchiveInfo *) ptrAddr;
+
+		free(&pResult->error);
 		free(&pResult);
 	}
 
@@ -83,12 +104,27 @@ func CloseNativePort(port int64) bool {
 	return (bool)(result)
 }
 
+func GetStringList(stringListPtrAddr int64) []string {
+	stringList := C.GetStringList(C.int64_t(stringListPtrAddr))
+
+	length := stringList.size
+	tmpSlice := (*[1 << 30]*C.char)(unsafe.Pointer(stringList.list))[:length:length]
+
+	goSlice := make([]string, length)
+	for i, s := range tmpSlice {
+		goSlice[i] = C.GoString(s)
+	}
+
+	return goSlice
+}
+
+// List the archive
 func SendArchiveListing(port int64, err error, result *[]onearchiver.ArchiveFileInfo) {
 	var dartObj C.Dart_CObject
 	dartObj._type = C.Dart_CObject_kInt64
 
 	// Parse errors
-	var ei C.ErrorInfo
+	var ei C.struct_ErrorInfo
 	if err != nil {
 		ei.error = C.CString(err.Error())
 		ei.errorType = C.CString(processErrors(err))
@@ -132,49 +168,36 @@ func SendArchiveListing(port int64, err error, result *[]onearchiver.ArchiveFile
 
 	*(*C.int64_t)(unsafe.Pointer(&dartObj.value[0])) = C.int64_t(ptrAddr)
 	C.GoDart_PostCObject(C.int64_t(port), &dartObj)
-
-	//go func() {
-	//	//defer C.free(unsafe.Pointer(&ptr.Mode))
-	//	//defer C.free(unsafe.Pointer(&ptr.Size))
-	//	//defer C.free(unsafe.Pointer(ptr.Name))
-	//	//defer C.free(unsafe.Pointer(&ptr.IsDir))
-	//	//defer C.free(unsafe.Pointer(&ptr.ModTime))
-	//	//defer C.free(unsafe.Pointer(&ptr.FullPath))
-	//	//defer C.free(unsafe.Pointer(&ptr))
-	//	//defer C.free(unsafe.Pointer(&air.files))
-	//	//defer C.free(unsafe.Pointer(&air))
-	//
-	//	for i := 0; i < 3; i++ {
-	//		time.Sleep(7000 * time.Millisecond)
-	//		//pretty.Println("\ninside go routine ptrAddr", ptrAddr)
-	//
-	//		//ptr := *(*C.struct_ArcFileInfo)(unsafe.Pointer(C.int64_t(&ptrAddr)))
-	//		//p1 := *(*C.int64_t)(&ptrAddr)
-	//		//ptr := *(*C.struct_ArcFileInfoResult)(unsafe.Pointer(C.int64_t(&ptrAddr)))
-	//		//ptr := (*C.struct_ArcFileInfoResult)(unsafe.Pointer(*(*C.int64_t)(&ptrAddr)))
-	//
-	//		//air := (*C.struct_ArcFileInfoResult)(unsafe.Pointer(*(*C.int64_t)(&ptrAddr)))
-	//		//files := (*[1 << 30]*C.struct_ArcFileInfo)(unsafe.Pointer(*air.files))[:1]
-	//
-	//		//pretty.Println("\n", aif)
-	//	}
-	//}()
 }
 
 func FreeListArchiveMemory(ptrAddr int64) {
-	C.ClearArcFileInfoResultMemory(C.int64_t(ptrAddr))
+	C.ClearListArchiveMemory(C.int64_t(ptrAddr))
 }
 
-func GetStringList(stringListPtrAddr int64) []string {
-	stringList := C.GetStringList(C.int64_t(stringListPtrAddr))
+// Check if the archive is encrypted
+func SendIsArchiveEncrypted(port int64, err error, result *onearchiver.EncryptedArchiveInfo) {
+	var dartObj C.Dart_CObject
+	dartObj._type = C.Dart_CObject_kInt64
 
-	length := stringList.size
-	tmpSlice := (*[1 << 30]*C.char)(unsafe.Pointer(stringList.list))[:length:length]
-
-	goSlice := make([]string, length)
-	for i, s := range tmpSlice {
-		goSlice[i] = C.GoString(s)
+	// Parse errors
+	var ei C.struct_ErrorInfo
+	if err != nil {
+		ei.error = C.CString(err.Error())
+		ei.errorType = C.CString(processErrors(err))
 	}
 
-	return goSlice
+	eai := (*C.struct_EncryptedArchiveInfo)(C.malloc(C.sizeof_struct_EncryptedArchiveInfo))
+
+	eai.isEncrypted = C.bool(result.IsEncrypted)
+	eai.isValidPassword = C.bool(result.IsValidPassword)
+	eai.error = &ei
+
+	ptrAddr := C.GetEncryptedArchiveResultPtr(eai)
+
+	*(*C.int64_t)(unsafe.Pointer(&dartObj.value[0])) = C.int64_t(ptrAddr)
+	C.GoDart_PostCObject(C.int64_t(port), &dartObj)
+}
+
+func FreeIsArchiveEncryptedMemory(ptrAddr int64) {
+	C.ClearIsArchiveEncryptedMemory(C.int64_t(ptrAddr))
 }

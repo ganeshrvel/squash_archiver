@@ -23,15 +23,15 @@ func ListArchive(port int64, filename, password, orderBy, orderDir, listDirector
 	var err error
 	var result []onearchiver.ArchiveFileInfo
 
-	_filename := C.GoString(filename)
-	_password := C.GoString(password)
-	_orderBy := C.GoString(orderBy)
-	_orderDir := C.GoString(orderDir)
-	_listDirectoryPath := C.GoString(listDirectoryPath)
+	_filename := string(C.GoString(filename))
+	_password := string(C.GoString(password))
+	_orderBy := string(C.GoString(orderBy))
+	_orderDir := string(C.GoString(orderDir))
+	_listDirectoryPath := string(C.GoString(listDirectoryPath))
 	_gitIgnorePattern := dart_api_dl.GetStringList(gitIgnorePatternPtrAddr)
 
 	if exist := onearchiver.FileExists(_filename); !exist {
-		err = fmt.Errorf("file does not exist: %v\n", _filename)
+		err = fmt.Errorf("file does not exist: %s\n", _filename)
 	} else {
 		meta := &onearchiver.ArchiveMeta{Filename: _filename, Password: _password, GitIgnorePattern: _gitIgnorePattern}
 
@@ -95,8 +95,30 @@ func FreeListArchiveMemory(ptrAddr int64) {
 }
 
 //export IsArchiveEncrypted
-func IsArchiveEncrypted() {
+func IsArchiveEncrypted(port int64, filename, password *C.char) {
+	_filename := string(C.GoString(filename))
+	_password := string(C.GoString(password))
 
+	var err error
+	var result onearchiver.EncryptedArchiveInfo
+
+	if exist := onearchiver.FileExists(_filename); !exist {
+		err = fmt.Errorf("file does not exist %s", _filename)
+	} else {
+		am := &onearchiver.ArchiveMeta{
+			Filename: _filename,
+			Password: _password,
+		}
+
+		result, err = onearchiver.IsArchiveEncrypted(am)
+	}
+
+	dart_api_dl.SendIsArchiveEncrypted(port, err, &result)
+}
+
+//export FreeIsArchiveEncryptedMemory
+func FreeIsArchiveEncryptedMemory(ptrAddr int64) {
+	dart_api_dl.FreeIsArchiveEncryptedMemory(ptrAddr)
 }
 
 //export Pack

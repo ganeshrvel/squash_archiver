@@ -3,6 +3,7 @@ import 'dart:ffi';
 import 'package:archiver_ffi/structs/common.dart';
 import 'package:ffi/ffi.dart';
 
+// ignore: avoid_positional_boolean_parameters
 int toFfiBool(bool value) {
   return value ? 1 : 0;
 }

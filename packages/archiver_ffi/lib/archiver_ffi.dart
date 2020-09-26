@@ -6,6 +6,7 @@ import 'package:archiver_ffi/models/list_archives_request.dart';
 import 'package:archiver_ffi/models/list_archives_response.dart';
 import 'package:archiver_ffi/structs/list_archives.dart';
 import 'package:archiver_ffi/utils/ffi.dart';
+import 'package:archiver_ffi/utils/handle_errors.dart';
 import 'package:archiver_ffi/utils/utils.dart';
 import 'package:archiver_ffi/generated/bindings.dart';
 import 'package:data_channel/data_channel.dart';
@@ -62,45 +63,47 @@ class ArchiverFfi {
     StreamSubscription _requestsSub;
     _requestsSub = _requests.listen((address) {
       final _address = address as int;
-
       final result = Pointer<ArcFileInfoResult>.fromAddress(_address);
 
       final _error = result.ref.error;
+      DC<Exception, ListArchiveResponse> _dc;
+
       if (_error.ref.error.address != 0) {
-        print(_error.ref.error.ref.toString());
-        print(_error.ref.errorType.ref.toString());
 
-        return;
-      }
+        _dc = handleError<ListArchiveResponse>(
+          error: _error.ref.error.ref.toString(),
+          errorType: _error.ref.errorType.ref.toString(),
+        );
+      } else {
+        final filesPtr = result.ref.files;
+        final _totalFiles = result.ref.totalFiles;
 
-      final filesPtr = result.ref.files;
-      final _totalFiles = result.ref.totalFiles;
+        final _files = <FileInfo>[];
 
-      final _files = <FileInfo>[];
+        for (var i = 0; i < _totalFiles; i++) {
+          final _value = filesPtr.elementAt(i).value;
 
-      for (var i = 0; i < _totalFiles; i++) {
-        final _value = filesPtr.elementAt(i).value;
+          final _file = FileInfo(
+            mode: _value.ref.mode,
+            size: _value.ref.size,
+            isDir: fromFfiBool(_value.ref.isDir),
+            modTime: _value.ref.modTime.ref.toString(),
+            name: _value.ref.name.ref.toString(),
+            fullPath: _value.ref.fullPath.ref.toString(),
+          );
 
-        final _file = FileInfo(
-          mode: _value.ref.mode,
-          size: _value.ref.size,
-          isDir: fromFfiBool(_value.ref.isDir),
-          modTime: _value.ref.modTime.ref.toString(),
-          name: _value.ref.name.ref.toString(),
-          fullPath: _value.ref.fullPath.ref.toString(),
+          _files.add(_file);
+        }
+        final _listArchiveResult = ListArchiveResponse(
+          totalFiles: result.ref.totalFiles,
+          files: _files,
         );
 
-        _files.add(_file);
+        _dc = DC(
+          data: _listArchiveResult,
+          error: null,
+        );
       }
-      final _listArchiveResult = ListArchiveResponse(
-        totalFiles: result.ref.totalFiles,
-        files: _files,
-      );
-
-      final _dc = DC(
-        data: _listArchiveResult,
-        error: null, //todo
-      );
 
       _completer.complete(_dc);
 
@@ -108,9 +111,9 @@ class ArchiverFfi {
       _ptrToFreeList.forEach(free);
       _squashArchiverLib.FreeListArchiveMemory(_address);
 
-      // _requests.close();
-      // _requestsSub.cancel();
-      // _squashArchiverLib.CloseNativeDartPort(_nativePort);
+      _requests.close();
+      _requestsSub.cancel();
+      _squashArchiverLib.CloseNativeDartPort(_nativePort);
     });
 
     return _completer.future;

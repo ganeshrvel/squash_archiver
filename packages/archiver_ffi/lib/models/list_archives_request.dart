@@ -3,7 +3,7 @@ import 'package:archiver_ffi/utils/functs.dart';
 import 'package:meta/meta.dart';
 
 class ListArchiveRequest {
-  String filename;
+  final String filename;
   String password;
   OrderBy orderBy;
   OrderDir orderDir;
@@ -25,27 +25,27 @@ class ListArchiveRequest {
     }
 
     if (isNull(password)) {
-      this.password = '';
+      password = '';
     }
 
     if (isNull(orderBy)) {
-      this.orderBy = OrderBy.name;
+      orderBy = OrderBy.name;
     }
 
     if (isNull(orderDir)) {
-      this.orderDir = OrderDir.none;
+      orderDir = OrderDir.none;
     }
 
     if (isNullOrEmpty(listDirectoryPath)) {
-      this.listDirectoryPath = '';
+      listDirectoryPath = '';
     }
 
     if (isNullOrEmpty(gitIgnorePattern)) {
-      this.gitIgnorePattern = [];
+      gitIgnorePattern = [];
     }
 
     if (isNull(recursive)) {
-      this.recursive = false;
+      recursive = false;
     }
   }
 }

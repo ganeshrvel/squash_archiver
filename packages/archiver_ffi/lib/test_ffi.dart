@@ -7,13 +7,15 @@ Future<void> main() async {
   final _archiverFfi = ArchiverFfi(isTest: true);
 
   final _param = ListArchiveRequest(
-    filename: getTestMocksAsset('mock_test_file1.zip'),
-    recursive: true,
-    listDirectoryPath: '',
-    gitIgnorePattern: [],
-  );
+      filename: getTestMocksAsset('mock_test_file1.zip'),
+      recursive: true,
+      listDirectoryPath: '',
+      gitIgnorePattern: []);
 
   final _result = await _archiverFfi.listArchive(_param);
+
+  print(_result.error);
+  print(_result.data.files);
 
   stopwatch.stop();
   print('executed in ${stopwatch.elapsed.inMilliseconds} ms');

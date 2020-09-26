@@ -8,7 +8,8 @@ class StringList extends Struct {
   @Int64()
   int size;
 
-  Pointer<StringList> fromList(List<String> arr, List<Pointer<NativeType>> ptrList) {
+  Pointer<StringList> fromList(
+      List<String> arr, List<Pointer<NativeType>> ptrList) {
     final pUtf = arr.map(Utf8.toUtf8).toList();
 
     // ignore: omit_local_variable_types
@@ -30,15 +31,14 @@ class StringList extends Struct {
 }
 
 class ResultErrors extends Struct {
-  Pointer<Utf8> error;
-
   Pointer<Utf8> errorType;
+  Pointer<Utf8> error;
 
   factory ResultErrors.allocate(
     Pointer<Utf8> error,
     Pointer<Utf8> errorType,
   ) =>
       allocate<ResultErrors>().ref
-        ..error = error
-        ..errorType = errorType;
+        ..errorType = errorType
+        ..error = error;
 }

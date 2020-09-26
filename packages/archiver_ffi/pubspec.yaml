@@ -26,6 +26,9 @@ dev_dependencies:
 
   ffigen: ^1.0.1
 
+  # Linting
+  lint: ^1.1.1
+
 ffigen:
   output: './lib/generated/bindings.dart'
   headers:
