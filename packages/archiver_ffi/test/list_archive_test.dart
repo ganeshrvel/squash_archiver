@@ -1,7 +1,6 @@
 import 'package:archiver_ffi/archiver_ffi.dart';
 import 'package:archiver_ffi/exceptions/file_not_found_exception.dart';
-import 'package:archiver_ffi/models/list_archives.dart';
-import 'package:archiver_ffi/models/list_archives_result.dart';
+import 'package:archiver_ffi/models/list_archive.dart';
 import 'package:archiver_ffi/utils/test_utils.dart';
 import 'package:data_channel/data_channel.dart';
 import 'package:meta/meta.dart';

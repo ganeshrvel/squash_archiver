@@ -17,9 +17,9 @@ Pointer<Int8> toFfiString(String value, List<Pointer<NativeType>> ptrList) {
   return _ptr;
 }
 
-Pointer<StringList> toFfiStringList(
+Pointer<StringListStruct> toFfiStringList(
     List<String> values, List<Pointer<NativeType>> ptrList) {
-  final pStrList = allocate<StringList>().ref;
+  final pStrList = allocate<StringListStruct>().ref;
   final _ptr = pStrList.fromList(values, ptrList);
 
   ptrList.add(_ptr);

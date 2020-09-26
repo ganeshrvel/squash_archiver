@@ -2,13 +2,13 @@ import 'dart:ffi';
 
 import 'package:ffi/ffi.dart';
 
-class StringList extends Struct {
+class StringListStruct extends Struct {
   Pointer<Pointer<Utf8>> list;
 
   @Int64()
   int size;
 
-  Pointer<StringList> fromList(
+  Pointer<StringListStruct> fromList(
     List<String> arr,
     List<Pointer<NativeType>> ptrList,
   ) {
@@ -24,7 +24,7 @@ class StringList extends Struct {
     ptrList.add(ppList);
     ptrList.addAll(pUtf);
 
-    final pStrList = allocate<StringList>().ref;
+    final pStrList = allocate<StringListStruct>().ref;
     pStrList.list = ppList;
     pStrList.size = arr.length;
 
@@ -32,15 +32,15 @@ class StringList extends Struct {
   }
 }
 
-class ResultErrors extends Struct {
+class ResultErrorStruct extends Struct {
   Pointer<Utf8> errorType;
   Pointer<Utf8> error;
 
-  factory ResultErrors.allocate(
+  factory ResultErrorStruct.allocate(
     Pointer<Utf8> error,
     Pointer<Utf8> errorType,
   ) =>
-      allocate<ResultErrors>().ref
+      allocate<ResultErrorStruct>().ref
         ..errorType = errorType
         ..error = error;
 }

@@ -49,7 +49,7 @@ import (
 		ErrorInfo *error;
 	}ArcFileInfoResult;
 
-	int64_t GetArcFileInfoResultPtr(struct ArcFileInfoResult *pResult) {
+	int64_t GetArcFileInfoResultAddr(struct ArcFileInfoResult *pResult) {
 		int64_t ptr = (int64_t)pResult;
 
 		return ptr;
@@ -73,7 +73,7 @@ import (
 		ErrorInfo *error;
 	}EncryptedArchiveInfo;
 
-	int64_t GetEncryptedArchiveResultPtr(struct EncryptedArchiveInfo *pResult) {
+	int64_t GetEncryptedArchiveResultAddr(struct EncryptedArchiveInfo *pResult) {
 		int64_t ptr = (int64_t)pResult;
 
 		return ptr;
@@ -164,7 +164,7 @@ func SendArchiveListing(port int64, err error, result *[]onearchiver.ArchiveFile
 	air.totalFiles = C.int64_t(aiListLen)
 	air.error = &ei
 
-	ptrAddr := C.GetArcFileInfoResultPtr(air)
+	ptrAddr := C.GetArcFileInfoResultAddr(air)
 
 	*(*C.int64_t)(unsafe.Pointer(&dartObj.value[0])) = C.int64_t(ptrAddr)
 	C.GoDart_PostCObject(C.int64_t(port), &dartObj)
@@ -192,7 +192,7 @@ func SendIsArchiveEncrypted(port int64, err error, result *onearchiver.Encrypted
 	eai.isValidPassword = C.bool(result.IsValidPassword)
 	eai.error = &ei
 
-	ptrAddr := C.GetEncryptedArchiveResultPtr(eai)
+	ptrAddr := C.GetEncryptedArchiveResultAddr(eai)
 
 	*(*C.int64_t)(unsafe.Pointer(&dartObj.value[0])) = C.int64_t(ptrAddr)
 	C.GoDart_PostCObject(C.int64_t(port), &dartObj)

@@ -1,14 +1,16 @@
+import 'dart:ffi';
+
 import 'package:archiver_ffi/exceptions/common_exception.dart';
 import 'package:archiver_ffi/exceptions/file_not_found_exception.dart';
 import 'package:archiver_ffi/exceptions/filter_path_not_found_exception.dart';
+import 'package:archiver_ffi/structs/common.dart';
 import 'package:data_channel/data_channel.dart';
-import 'package:meta/meta.dart';
 
-DC<Exception, T> handleError<T>({
-  @required String errorType,
-  @required String error,
-}) {
+DC<Exception, T> handleError<T>(Pointer<ResultErrorStruct> errorPtr) {
   Exception _exception;
+
+  final error = errorPtr.ref.error.ref.toString();
+  final errorType = errorPtr.ref.errorType.ref.toString();
 
   switch (errorType) {
     case 'ErrorFileNotFound':
