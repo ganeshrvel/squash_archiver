@@ -24,6 +24,9 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
+  # test
+  test: ^1.14.5
+
   ffigen: ^1.0.1
 
   # Linting
