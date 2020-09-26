@@ -1,12 +1,12 @@
 import 'package:archiver_ffi/archiver_ffi.dart';
-import 'package:archiver_ffi/models/list_archives_request.dart';
+import 'package:archiver_ffi/models/list_archives_model.dart';
 import 'package:archiver_ffi/utils/test_utils.dart';
 
 Future<void> main() async {
   final stopwatch = Stopwatch()..start();
   final _archiverFfi = ArchiverFfi(isTest: true);
 
-  final _param = ListArchiveRequest(
+  final _param = ListArchive(
       filename: getTestMocksAsset('mock_test_file1.zip'),
       recursive: true,
       listDirectoryPath: '',

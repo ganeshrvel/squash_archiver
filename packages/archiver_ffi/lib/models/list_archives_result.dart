@@ -34,12 +34,12 @@ class FileInfo extends Equatable {
       ];
 }
 
-class ListArchiveResponse extends Equatable {
+class ListArchiveResult extends Equatable {
   final List<FileInfo> files;
 
   final int totalFiles;
 
-  const ListArchiveResponse({
+  const ListArchiveResult({
     @required this.files,
     @required this.totalFiles,
   });

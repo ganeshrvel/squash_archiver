@@ -1,20 +1,20 @@
 import 'package:archiver_ffi/archiver_ffi.dart';
 import 'package:archiver_ffi/exceptions/file_not_found_exception.dart';
-import 'package:archiver_ffi/models/list_archives_request.dart';
-import 'package:archiver_ffi/models/list_archives_response.dart';
+import 'package:archiver_ffi/models/list_archives.dart';
+import 'package:archiver_ffi/models/list_archives_result.dart';
 import 'package:archiver_ffi/utils/test_utils.dart';
 import 'package:data_channel/data_channel.dart';
 import 'package:meta/meta.dart';
 import 'package:test/test.dart';
 
 void _testFilesDataTypesOf({
-  @required DC<Exception, ListArchiveResponse> result,
+  @required DC<Exception, ListArchiveResult> result,
   @required int totalFiles,
 }) {
   expect(result.hasError, equals(false));
   expect(result.hasData, equals(true));
   expect(result.error, null);
-  expect(result.data, isA<ListArchiveResponse>());
+  expect(result.data, isA<ListArchiveResult>());
   expect(result.data.totalFiles, totalFiles);
   expect(result.data.files, hasLength(totalFiles));
 
@@ -35,7 +35,7 @@ void main() {
     final _archiverFfi = ArchiverFfi(isTest: true);
 
     test('should throw (file does not exist) error', () async {
-      final _param = ListArchiveRequest(
+      final _param = ListArchive(
         filename: getTestMocksAsset('no_file.zip'),
         recursive: true,
         listDirectoryPath: '',
@@ -51,7 +51,7 @@ void main() {
     });
 
     test('empty listDirectoryPath | should not throw an error', () async {
-      final _param = ListArchiveRequest(
+      final _param = ListArchive(
         filename: getTestMocksAsset('mock_test_file1.zip'),
         recursive: true,
         listDirectoryPath: '',
@@ -77,7 +77,7 @@ void main() {
 
     test("listDirectoryPath='mock_dir1/' | should not throw an error",
         () async {
-      final _param = ListArchiveRequest(
+      final _param = ListArchive(
         filename: getTestMocksAsset('mock_test_file1.zip'),
         recursive: true,
         listDirectoryPath: 'mock_dir1/',
@@ -104,7 +104,7 @@ void main() {
     test(
         "recursive=true | listDirectoryPath='mock_dir1/' | should not throw an error",
         () async {
-      final _param = ListArchiveRequest(
+      final _param = ListArchive(
         filename: getTestMocksAsset('mock_test_file1.zip'),
         recursive: false,
         listDirectoryPath: 'mock_dir1/',
@@ -131,7 +131,7 @@ void main() {
     test(
         "gitIgnorePattern | listDirectoryPath='mock_dir1/1/' | should not throw an error",
         () async {
-      final _param = ListArchiveRequest(
+      final _param = ListArchive(
         filename: getTestMocksAsset('mock_test_file1.zip'),
         recursive: true,
         listDirectoryPath: 'mock_dir1',

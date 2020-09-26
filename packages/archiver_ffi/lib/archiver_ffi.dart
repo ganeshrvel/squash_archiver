@@ -2,8 +2,8 @@ import 'dart:async';
 import 'dart:ffi';
 import 'dart:isolate';
 
-import 'package:archiver_ffi/models/list_archives_request.dart';
-import 'package:archiver_ffi/models/list_archives_response.dart';
+import 'package:archiver_ffi/models/list_archives.dart';
+import 'package:archiver_ffi/models/list_archives_result.dart';
 import 'package:archiver_ffi/structs/list_archives.dart';
 import 'package:archiver_ffi/utils/ffi.dart';
 import 'package:archiver_ffi/utils/handle_errors.dart';
@@ -24,8 +24,9 @@ class ArchiverFfi {
     _squashArchiverLib.InitNewNativeDartPort(NativeApi.initializeApiDLData);
   }
 
-  Future<DC<Exception, ListArchiveResponse>> listArchive(
-      ListArchiveRequest params) async {
+  Future<DC<Exception, ListArchiveResult>> listArchive(
+    ListArchive params,
+  ) async {
     final _requests = ReceivePort();
     final _nativePort = _requests.sendPort.nativePort;
 
@@ -58,7 +59,7 @@ class ArchiverFfi {
       _recursive,
     );
 
-    final _completer = Completer<DC<Exception, ListArchiveResponse>>();
+    final _completer = Completer<DC<Exception, ListArchiveResult>>();
 
     StreamSubscription _requestsSub;
     _requestsSub = _requests.listen((address) {
@@ -66,11 +67,10 @@ class ArchiverFfi {
       final result = Pointer<ArcFileInfoResult>.fromAddress(_address);
 
       final _error = result.ref.error;
-      DC<Exception, ListArchiveResponse> _dc;
+      DC<Exception, ListArchiveResult> _dc;
 
       if (_error.ref.error.address != 0) {
-
-        _dc = handleError<ListArchiveResponse>(
+        _dc = handleError<ListArchiveResult>(
           error: _error.ref.error.ref.toString(),
           errorType: _error.ref.errorType.ref.toString(),
         );
@@ -94,7 +94,102 @@ class ArchiverFfi {
 
           _files.add(_file);
         }
-        final _listArchiveResult = ListArchiveResponse(
+        final _listArchiveResult = ListArchiveResult(
+          totalFiles: result.ref.totalFiles,
+          files: _files,
+        );
+
+        _dc = DC(
+          data: _listArchiveResult,
+          error: null,
+        );
+      }
+
+      _completer.complete(_dc);
+
+      // free all FFI allocated values
+      _ptrToFreeList.forEach(free);
+      _squashArchiverLib.FreeListArchiveMemory(_address);
+
+      _requests.close();
+      _requestsSub.cancel();
+      _squashArchiverLib.CloseNativeDartPort(_nativePort);
+    });
+
+    return _completer.future;
+  }
+
+  Future<DC<Exception, ListArchiveResult>> isArchiveEncrypted(
+    ListArchive params,
+  ) async {
+    final _requests = ReceivePort();
+    final _nativePort = _requests.sendPort.nativePort;
+
+    // collect all pointers to be freed later
+    final _ptrToFreeList = <Pointer<NativeType>>[];
+
+    final _filename = toFfiString(params.filename, _ptrToFreeList);
+    final _password = toFfiString(params.password, _ptrToFreeList);
+    final _orderBy = toFfiString(enumToString(params.orderBy), _ptrToFreeList);
+    final _orderDir =
+        toFfiString(enumToString(params.orderDir), _ptrToFreeList);
+    final _listDirectoryPath = toFfiString(
+      params.listDirectoryPath,
+      _ptrToFreeList,
+    );
+    final _pGitIgnorePattern = toFfiStringList(
+      params.gitIgnorePattern,
+      _ptrToFreeList,
+    );
+    final _recursive = toFfiBool(params.recursive);
+
+    _squashArchiverLib.ListArchive(
+      _nativePort,
+      _filename,
+      _password,
+      _orderBy,
+      _orderDir,
+      _listDirectoryPath,
+      _pGitIgnorePattern.address,
+      _recursive,
+    );
+
+    final _completer = Completer<DC<Exception, ListArchiveResult>>();
+
+    StreamSubscription _requestsSub;
+    _requestsSub = _requests.listen((address) {
+      final _address = address as int;
+      final result = Pointer<ArcFileInfoResult>.fromAddress(_address);
+
+      final _error = result.ref.error;
+      DC<Exception, ListArchiveResult> _dc;
+
+      if (_error.ref.error.address != 0) {
+        _dc = handleError<ListArchiveResult>(
+          error: _error.ref.error.ref.toString(),
+          errorType: _error.ref.errorType.ref.toString(),
+        );
+      } else {
+        final filesPtr = result.ref.files;
+        final _totalFiles = result.ref.totalFiles;
+
+        final _files = <FileInfo>[];
+
+        for (var i = 0; i < _totalFiles; i++) {
+          final _value = filesPtr.elementAt(i).value;
+
+          final _file = FileInfo(
+            mode: _value.ref.mode,
+            size: _value.ref.size,
+            isDir: fromFfiBool(_value.ref.isDir),
+            modTime: _value.ref.modTime.ref.toString(),
+            name: _value.ref.name.ref.toString(),
+            fullPath: _value.ref.fullPath.ref.toString(),
+          );
+
+          _files.add(_file);
+        }
+        final _listArchiveResult = ListArchiveResult(
           totalFiles: result.ref.totalFiles,
           files: _files,
         );
