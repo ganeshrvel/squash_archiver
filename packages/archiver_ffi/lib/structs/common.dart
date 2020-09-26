@@ -9,7 +9,9 @@ class StringList extends Struct {
   int size;
 
   Pointer<StringList> fromList(
-      List<String> arr, List<Pointer<NativeType>> ptrList) {
+    List<String> arr,
+    List<Pointer<NativeType>> ptrList,
+  ) {
     final pUtf = arr.map(Utf8.toUtf8).toList();
 
     // ignore: omit_local_variable_types
