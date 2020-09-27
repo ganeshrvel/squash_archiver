@@ -8,9 +8,9 @@ import 'package:meta/meta.dart';
 
 Future<void> main() async {
   _listArchive();
-  // _isArchiveEncrypted();
-  // _packFiles();
-  // _unpackFiles();
+  _isArchiveEncrypted();
+  _packFiles();
+  _unpackFiles();
 }
 
 Future<void> _listArchive() async {
