@@ -6,7 +6,7 @@ import 'package:data_channel/data_channel.dart';
 import 'package:meta/meta.dart';
 import 'package:test/test.dart';
 
-void _testFilesDataTypesOf({
+void testDataTypesOfArchivedFiles({
   @required DC<Exception, ListArchiveResult> result,
   @required int totalFiles,
 }) {
@@ -59,7 +59,7 @@ void main() {
 
       final _result = await _archiverFfi.listArchive(_param);
 
-      _testFilesDataTypesOf(
+      testDataTypesOfArchivedFiles(
         result: _result,
         totalFiles: 10,
       );
@@ -85,7 +85,7 @@ void main() {
 
       final _result = await _archiverFfi.listArchive(_param);
 
-      _testFilesDataTypesOf(
+      testDataTypesOfArchivedFiles(
         result: _result,
         totalFiles: 9,
       );
@@ -112,7 +112,7 @@ void main() {
 
       final _result = await _archiverFfi.listArchive(_param);
 
-      _testFilesDataTypesOf(
+      testDataTypesOfArchivedFiles(
         result: _result,
         totalFiles: 4,
       );
@@ -139,7 +139,7 @@ void main() {
 
       final _result = await _archiverFfi.listArchive(_param);
 
-      _testFilesDataTypesOf(
+      testDataTypesOfArchivedFiles(
         result: _result,
         totalFiles: 7,
       );

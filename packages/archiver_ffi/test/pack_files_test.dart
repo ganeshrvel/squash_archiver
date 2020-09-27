@@ -1,9 +1,34 @@
 import 'package:archiver_ffi/archiver_ffi.dart';
 import 'package:archiver_ffi/exceptions/file_not_found_packing_exception.dart';
+import 'package:archiver_ffi/models/list_archive.dart';
 import 'package:archiver_ffi/models/pack_files.dart';
 import 'package:archiver_ffi/utils/test_utils.dart';
 import 'package:meta/meta.dart';
 import 'package:test/test.dart';
+
+import 'list_archive_test.dart';
+
+Future<void> _testPackedArchive({
+  @required String filename,
+  @required ArchiverFfi archiverFfi,
+  @required int totalFiles,
+  String password,
+}) async {
+  final _param = ListArchive(
+    filename: filename,
+    password: password,
+    recursive: true,
+    listDirectoryPath: '',
+    gitIgnorePattern: [],
+  );
+
+  final _result = await archiverFfi.listArchive(_param);
+
+  testDataTypesOfArchivedFiles(
+    result: _result,
+    totalFiles: totalFiles,
+  );
+}
 
 void main() {
   group('Listing an archive', () {
@@ -31,9 +56,122 @@ void main() {
       expect(_result.error.toString(), contains('no such file or directory'));
     });
 
-    test('progress | should not throw error', () async {
+    test('adding files to pack | should not throw error', () async {
+      final _filename = getTestMocksBuildAsset('mock_test_file1.zip');
+
       final _param = PackFiles(
-        filename: getTestMocksBuildAsset('mock_test_file1.zip'),
+        filename: _filename,
+        password: '',
+        gitIgnorePattern: [],
+        fileList: [
+          getTestMocksAsset('mock_dir1'),
+        ],
+      );
+
+      final _result = await _archiverFfi.packFiles(
+        _param,
+        onProgress: null,
+      );
+
+      expect(_result.hasError, equals(false));
+      expect(_result.hasData, equals(true));
+
+      await _testPackedArchive(
+        filename: _filename,
+        archiverFfi: _archiverFfi,
+        totalFiles: 10,
+      );
+    });
+
+    test('password | zip | should not throw error', () async {
+      final _filename = getTestMocksBuildAsset('mock_enc_test_file1.zip');
+      const _password = '1234567';
+
+      final _param = PackFiles(
+        filename: _filename,
+        password: _password,
+        gitIgnorePattern: [],
+        fileList: [
+          getTestMocksAsset('mock_dir1'),
+        ],
+      );
+
+      final _result = await _archiverFfi.packFiles(
+        _param,
+        onProgress: null,
+      );
+
+      expect(_result.hasError, equals(false));
+      expect(_result.hasData, equals(true));
+
+      await _testPackedArchive(
+        filename: _filename,
+        archiverFfi: _archiverFfi,
+        totalFiles: 10,
+        password: _password,
+      );
+    });
+
+    test("mutliple files in 'fileList' | should not throw error", () async {
+      final _filename = getTestMocksBuildAsset('mock_test_file1.zip');
+
+      final _param = PackFiles(
+        filename: _filename,
+        password: '',
+        gitIgnorePattern: [],
+        fileList: [
+          getTestMocksAsset('mock_dir1'),
+          getTestMocksAsset('mock_dir2'),
+        ],
+      );
+
+      final _result = await _archiverFfi.packFiles(
+        _param,
+        onProgress: null,
+      );
+
+      expect(_result.hasError, equals(false));
+      expect(_result.hasData, equals(true));
+
+      await _testPackedArchive(
+        filename: _filename,
+        archiverFfi: _archiverFfi,
+        totalFiles: 20,
+      );
+    });
+
+    test("'gitIgnorePattern' | should not throw error", () async {
+      final _filename = getTestMocksBuildAsset('mock_test_file1.zip');
+
+      final _param = PackFiles(
+        filename: _filename,
+        password: '',
+        gitIgnorePattern: ['a.txt'],
+        fileList: [
+          getTestMocksAsset('mock_dir1'),
+        ],
+      );
+
+      final _result = await _archiverFfi.packFiles(
+        _param,
+        onProgress: null,
+      );
+
+      expect(_result.hasError, equals(false));
+      expect(_result.hasData, equals(true));
+
+      await _testPackedArchive(
+        filename: _filename,
+        archiverFfi: _archiverFfi,
+        totalFiles: 8,
+      );
+    });
+
+    test('progress | should not throw error', () async {
+      final _filename = getTestMocksBuildAsset('mock_test_file1.zip');
+
+      final _param = PackFiles(
+        filename: _filename,
         password: '',
         gitIgnorePattern: [],
         fileList: [
@@ -84,6 +222,12 @@ void main() {
       expect(_result.hasData, equals(true));
       expect(_cbCount, greaterThan(_totalFiles));
       expect(_lastProgressPercentage, equals(100.00));
+
+      await _testPackedArchive(
+        filename: _filename,
+        archiverFfi: _archiverFfi,
+        totalFiles: 10,
+      );
     });
   });
 }
