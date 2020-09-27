@@ -10,6 +10,7 @@ import 'package:archiver_ffi/structs/is_archive_encrypted.dart';
 import 'package:archiver_ffi/structs/list_archive.dart';
 import 'package:archiver_ffi/structs/pack_files.dart';
 import 'package:archiver_ffi/utils/ffi.dart';
+import 'package:archiver_ffi/utils/functs.dart';
 import 'package:archiver_ffi/utils/handle_errors.dart';
 import 'package:archiver_ffi/utils/utils.dart';
 import 'package:archiver_ffi/generated/bindings.dart';
@@ -247,13 +248,15 @@ class ArchiverFfi {
           error: null,
         );
 
-        onProgress(
-          progressPercentage: _result.ref.progressPercentage,
-          progressCount: _result.ref.progressCount,
-          startTime: _result.ref.startTime.ref.toString(),
-          totalFiles: _result.ref.totalFiles,
-          currentFilename: _result.ref.currentFilename.ref.toString(),
-        );
+        if (isNotNull(onProgress)) {
+          onProgress(
+            progressPercentage: _result.ref.progressPercentage,
+            progressCount: _result.ref.progressCount,
+            startTime: _result.ref.startTime.ref.toString(),
+            totalFiles: _result.ref.totalFiles,
+            currentFilename: _result.ref.currentFilename.ref.toString(),
+          );
+        }
       }
 
       // free the memory and complete the task if [_ended] flag is true

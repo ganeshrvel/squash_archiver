@@ -1,0 +1,9 @@
+run:
+  skip-dirs:
+    - generated
+    - build
+    - resources
+    -
+linters:
+  disable:
+    - wsl

@@ -217,7 +217,6 @@ func SendIsArchiveEncrypted(port int64, err error, result *onearchiver.Encrypted
 	eai.error = &ei
 
 	ptrAddr := C.GetEncryptedArchiveResultAddr(eai)
-
 	*(*C.int64_t)(unsafe.Pointer(&dartObj.value[0])) = C.int64_t(ptrAddr)
 	C.GoDart_PostCObject(C.int64_t(port), &dartObj)
 }

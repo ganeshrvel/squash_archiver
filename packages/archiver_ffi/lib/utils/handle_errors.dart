@@ -2,6 +2,7 @@ import 'dart:ffi';
 
 import 'package:archiver_ffi/exceptions/common_exception.dart';
 import 'package:archiver_ffi/exceptions/file_not_found_exception.dart';
+import 'package:archiver_ffi/exceptions/file_not_found_packing_exception.dart';
 import 'package:archiver_ffi/exceptions/filter_path_not_found_exception.dart';
 import 'package:archiver_ffi/structs/common.dart';
 import 'package:data_channel/data_channel.dart';
@@ -15,6 +16,10 @@ DC<Exception, T> handleError<T>(Pointer<ResultErrorStruct> errorPtr, {T data}) {
   switch (errorType) {
     case 'ErrorFileNotFound':
       _exception = FileNotFoundException(error);
+
+      break;
+     case 'ErrorFileNotFoundPacking':
+      _exception = FileNotFoundPackingException(error);
 
       break;
     case 'ErrorFilterPathNotFound':
