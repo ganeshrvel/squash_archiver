@@ -41,8 +41,10 @@ void main() {
         ],
       );
 
-      var _progressCbCount = 0;
+      var _cbCount = 0;
       var _totalFiles = 0;
+      var _lastProgressPercentage = 0.0;
+      const _progressStep = 10;
 
       void _packingCb({
         @required String startTime,
@@ -51,8 +53,9 @@ void main() {
         @required int progressCount,
         @required double progressPercentage,
       }) {
-        _progressCbCount += 1;
+        _cbCount += 1;
         _totalFiles = totalFiles;
+        _lastProgressPercentage = progressPercentage;
 
         expect(startTime, isA<String>());
         expect(currentFilename, isA<String>());
@@ -62,6 +65,14 @@ void main() {
 
         expect(isDate(startTime), equals(true));
         expect(totalFiles, equals(10));
+        expect(
+          progressPercentage.toInt(),
+          equals(_progressStep * progressCount),
+        );
+
+        if (progressCount < totalFiles) {
+          expect(currentFilename, contains('/'));
+        }
       }
 
       final _result = await _archiverFfi.packFiles(
@@ -71,7 +82,8 @@ void main() {
 
       expect(_result.hasError, equals(false));
       expect(_result.hasData, equals(true));
-      expect(_progressCbCount, greaterThan(_totalFiles));
+      expect(_cbCount, greaterThan(_totalFiles));
+      expect(_lastProgressPercentage, equals(100.00));
     });
   });
 }
