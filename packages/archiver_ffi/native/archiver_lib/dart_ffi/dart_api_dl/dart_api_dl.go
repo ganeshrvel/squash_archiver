@@ -169,7 +169,7 @@ func SendArchiveListing(port int64, err error, result *[]onearchiver.ArchiveFile
 		aif.size = C.uint64_t(item.Size)
 		aif.name = C.CString(item.Name)
 		aif.isDir = C.bool(item.IsDir)
-		aif.modTime = C.CString(item.ModTime.String())
+		aif.modTime = C.CString(item.ModTime.Format(DateTimeFormat))
 		aif.fullPath = C.CString(item.FullPath)
 
 		aiList = append(aiList, aif)
@@ -238,7 +238,7 @@ func SendPackFiles(port int64, err error, pInfo *onearchiver.ProgressInfo, packi
 	}
 
 	pf := (*C.struct_PackFilesResult)(C.malloc(C.sizeof_struct_PackFilesResult))
-	pf.startTime = C.CString(pInfo.StartTime.String())
+	pf.startTime = C.CString(pInfo.StartTime.Format(DateTimeFormat))
 	pf.currentFilename = C.CString(pInfo.CurrentFilename)
 	pf.progressCount = C.uint64_t(pInfo.ProgressCount)
 	pf.totalFiles = C.uint64_t(pInfo.TotalFiles)

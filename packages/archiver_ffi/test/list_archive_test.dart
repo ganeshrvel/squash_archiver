@@ -71,7 +71,7 @@ void main() {
       expect(_result.data.files[0].mode, equals(755));
       expect(_result.data.files[0].fullPath, equals('mock_dir1/'));
       expect(_result.data.files[0].modTime,
-          equals('2020-08-22 11:45:08 +0000 UTC'));
+          equals('2020-08-22T11:45:08.000Z'));
     });
 
     test("listDirectoryPath='mock_dir1/' | should not throw an error",
@@ -97,7 +97,7 @@ void main() {
       expect(_result.data.files[0].mode, equals(755));
       expect(_result.data.files[0].fullPath, equals('mock_dir1/1/'));
       expect(_result.data.files[0].modTime,
-          equals('2020-08-22 11:45:08 +0000 UTC'));
+          equals('2020-08-22T11:45:08.000Z'));
     });
 
     test(
@@ -124,7 +124,7 @@ void main() {
       expect(_result.data.files[0].mode, equals(755));
       expect(_result.data.files[0].fullPath, equals('mock_dir1/1/'));
       expect(_result.data.files[0].modTime,
-          equals('2020-08-22 11:45:08 +0000 UTC'));
+          equals('2020-08-22T11:45:08.000Z'));
     });
 
     test(
@@ -151,7 +151,7 @@ void main() {
       expect(_result.data.files[0].mode, equals(644));
       expect(_result.data.files[0].fullPath, equals('mock_dir1/a.txt'));
       expect(_result.data.files[0].modTime,
-          equals('2020-08-22 11:43:28 +0000 UTC'));
+          equals('2020-08-22T11:43:28.000Z'));
     });
   });
 }
