@@ -11,7 +11,7 @@ class IsArchiveEncrypted {
     this.password,
   }) {
     if (isNullOrEmpty(filename)) {
-      throw "archiver_ffi: 'filename' cannot be left empty";
+      throw "archiver_ffi: IsArchiveEncrypted 'filename' cannot be left empty";
     }
 
     if (isNull(password)) {

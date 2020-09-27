@@ -136,12 +136,39 @@ class SquashArchiverLib {
 
   _dart_FreePackFilesMemory _FreePackFilesMemory;
 
-  void Unpack() {
-    _Unpack ??= _dylib.lookupFunction<_c_Unpack, _dart_Unpack>('Unpack');
-    return _Unpack();
+  void UnpackFiles(
+    int port,
+    ffi.Pointer<ffi.Int8> filename,
+    ffi.Pointer<ffi.Int8> password,
+    ffi.Pointer<ffi.Int8> destination,
+    int gitIgnorePatternPtrAddr,
+    int fileListPtrAddr,
+  ) {
+    _UnpackFiles ??=
+        _dylib.lookupFunction<_c_UnpackFiles, _dart_UnpackFiles>('UnpackFiles');
+    return _UnpackFiles(
+      port,
+      filename,
+      password,
+      destination,
+      gitIgnorePatternPtrAddr,
+      fileListPtrAddr,
+    );
   }
 
-  _dart_Unpack _Unpack;
+  _dart_UnpackFiles _UnpackFiles;
+
+  void FreeUnpackFilesMemory(
+    int ptrAddr,
+  ) {
+    _FreeUnpackFilesMemory ??= _dylib.lookupFunction<_c_FreeUnpackFilesMemory,
+        _dart_FreeUnpackFilesMemory>('FreeUnpackFilesMemory');
+    return _FreeUnpackFilesMemory(
+      ptrAddr,
+    );
+  }
+
+  _dart_FreeUnpackFilesMemory _FreeUnpackFilesMemory;
 }
 
 class __darwin_pthread_handler_rec extends ffi.Struct {
@@ -351,9 +378,31 @@ typedef _dart_FreePackFilesMemory = void Function(
   int ptrAddr,
 );
 
-typedef _c_Unpack = ffi.Void Function();
+typedef _c_UnpackFiles = ffi.Void Function(
+  ffi.Int64 port,
+  ffi.Pointer<ffi.Int8> filename,
+  ffi.Pointer<ffi.Int8> password,
+  ffi.Pointer<ffi.Int8> destination,
+  ffi.Int64 gitIgnorePatternPtrAddr,
+  ffi.Int64 fileListPtrAddr,
+);
 
-typedef _dart_Unpack = void Function();
+typedef _dart_UnpackFiles = void Function(
+  int port,
+  ffi.Pointer<ffi.Int8> filename,
+  ffi.Pointer<ffi.Int8> password,
+  ffi.Pointer<ffi.Int8> destination,
+  int gitIgnorePatternPtrAddr,
+  int fileListPtrAddr,
+);
+
+typedef _c_FreeUnpackFilesMemory = ffi.Void Function(
+  ffi.Int64 ptrAddr,
+);
+
+typedef _dart_FreeUnpackFilesMemory = void Function(
+  int ptrAddr,
+);
 
 typedef _typedefC_1 = ffi.Void Function(
   ffi.Pointer<ffi.Void>,

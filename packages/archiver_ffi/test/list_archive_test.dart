@@ -1,5 +1,6 @@
 import 'package:archiver_ffi/archiver_ffi.dart';
 import 'package:archiver_ffi/exceptions/file_not_found_exception.dart';
+import 'package:archiver_ffi/exceptions/invalid_password_exception.dart';
 import 'package:archiver_ffi/models/list_archive.dart';
 import 'package:archiver_ffi/utils/test_utils.dart';
 import 'package:data_channel/data_channel.dart';
@@ -33,7 +34,7 @@ void main() {
   group('Listing an archive', () {
     final _archiverFfi = ArchiverFfi(isTest: true);
 
-    test('should throw (file does not exist) error', () async {
+    test('zip | should throw (file does not exist) error', () async {
       final _param = ListArchive(
         filename: getTestMocksAsset('no_file.zip'),
         recursive: true,
@@ -47,6 +48,72 @@ void main() {
       expect(_result.hasData, equals(false));
       expect(_result.error, isA<FileNotFoundException>());
       expect(_result.error.toString(), contains('file does not exist'));
+    });
+
+    test('tar | should throw (file does not exist) error', () async {
+      final _param = ListArchive(
+        filename: getTestMocksAsset('no_file.tar'),
+        recursive: true,
+        listDirectoryPath: '',
+        gitIgnorePattern: [],
+      );
+
+      final _result = await _archiverFfi.listArchive(_param);
+
+      expect(_result.hasError, equals(true));
+      expect(_result.hasData, equals(false));
+      expect(_result.error, isA<FileNotFoundException>());
+      expect(_result.error.toString(), contains('file does not exist'));
+    });
+
+    test('wrong extension | should throw (file does not exist) error',
+        () async {
+      final _param = ListArchive(
+        filename: getTestMocksAsset('no_file.test'),
+        recursive: true,
+        listDirectoryPath: '',
+        gitIgnorePattern: [],
+      );
+
+      final _result = await _archiverFfi.listArchive(_param);
+
+      expect(_result.hasError, equals(true));
+      expect(_result.hasData, equals(false));
+      expect(_result.error, isA<FileNotFoundException>());
+      expect(_result.error.toString(), contains('file does not exist'));
+    });
+
+    test('wrong extension | should throw (file does not exist) error',
+        () async {
+      final _param = ListArchive(
+        filename: getTestMocksAsset('no_file.zip'),
+        recursive: true,
+        listDirectoryPath: '',
+        gitIgnorePattern: [],
+      );
+
+      final _result = await _archiverFfi.listArchive(_param);
+
+      expect(_result.hasError, equals(true));
+      expect(_result.hasData, equals(false));
+      expect(_result.error, isA<FileNotFoundException>());
+      expect(_result.error.toString(), contains('file does not exist'));
+    });
+
+    test('wrong password | should throw (file does not exist) error', () async {
+      final _param = ListArchive(
+        filename: getTestMocksAsset('mock_enc_test_file1.zip'),
+        recursive: true,
+        listDirectoryPath: '',
+        gitIgnorePattern: [],
+      );
+
+      final _result = await _archiverFfi.listArchive(_param);
+
+      expect(_result.hasError, equals(true));
+      expect(_result.hasData, equals(false));
+      expect(_result.error, isA<InvalidPasswordException>());
+      expect(_result.error.toString(), contains('invalid password'));
     });
 
     test('empty listDirectoryPath | should not throw an error', () async {
@@ -70,8 +137,7 @@ void main() {
       expect(_result.data.files[0].isDir, equals(true));
       expect(_result.data.files[0].mode, equals(755));
       expect(_result.data.files[0].fullPath, equals('mock_dir1/'));
-      expect(_result.data.files[0].modTime,
-          equals('2020-08-22T11:45:08.000Z'));
+      expect(_result.data.files[0].modTime, equals('2020-08-22T11:45:08.000Z'));
     });
 
     test("listDirectoryPath='mock_dir1/' | should not throw an error",
@@ -96,8 +162,7 @@ void main() {
       expect(_result.data.files[0].isDir, equals(true));
       expect(_result.data.files[0].mode, equals(755));
       expect(_result.data.files[0].fullPath, equals('mock_dir1/1/'));
-      expect(_result.data.files[0].modTime,
-          equals('2020-08-22T11:45:08.000Z'));
+      expect(_result.data.files[0].modTime, equals('2020-08-22T11:45:08.000Z'));
     });
 
     test(
@@ -123,8 +188,7 @@ void main() {
       expect(_result.data.files[0].isDir, equals(true));
       expect(_result.data.files[0].mode, equals(755));
       expect(_result.data.files[0].fullPath, equals('mock_dir1/1/'));
-      expect(_result.data.files[0].modTime,
-          equals('2020-08-22T11:45:08.000Z'));
+      expect(_result.data.files[0].modTime, equals('2020-08-22T11:45:08.000Z'));
     });
 
     test(
@@ -150,8 +214,7 @@ void main() {
       expect(_result.data.files[0].isDir, equals(false));
       expect(_result.data.files[0].mode, equals(644));
       expect(_result.data.files[0].fullPath, equals('mock_dir1/a.txt'));
-      expect(_result.data.files[0].modTime,
-          equals('2020-08-22T11:43:28.000Z'));
+      expect(_result.data.files[0].modTime, equals('2020-08-22T11:43:28.000Z'));
     });
   });
 }

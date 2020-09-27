@@ -164,9 +164,48 @@ func FreePackFilesMemory(ptrAddr int64) {
 	dart_api_dl.FreePackFilesMemory(ptrAddr)
 }
 
-//export Unpack
-func Unpack() {
+//export UnpackFiles
+func UnpackFiles(port int64, filename, password, destination *C.char, gitIgnorePatternPtrAddr int64, fileListPtrAddr int64) {
+	_filename := string(C.GoString(filename))
+	_password := string(C.GoString(password))
+	_destination := string(C.GoString(destination))
 
+	am := &onearchiver.ArchiveMeta{
+		Filename:         _filename,
+		Password:         _password,
+		GitIgnorePattern: dart_api_dl.GetStringList(gitIgnorePatternPtrAddr),
+		EncryptionMethod: zip.StandardEncryption,
+	}
+
+	au := &onearchiver.ArchiveUnpack{
+		FileList:    dart_api_dl.GetStringList(fileListPtrAddr),
+		Destination: _destination,
+	}
+
+	var _pInfo onearchiver.ProgressInfo
+	ph := &onearchiver.ProgressHandler{
+		OnReceived: func(pInfo *onearchiver.ProgressInfo) {
+			dart_api_dl.SendUnpackFiles(port, nil, pInfo, false)
+			_pInfo = *pInfo
+		},
+		OnError: func(err error, pInfo *onearchiver.ProgressInfo) {
+			dart_api_dl.SendUnpackFiles(port, err, pInfo, false)
+			_pInfo = *pInfo
+		},
+		OnCompleted: func(pInfo *onearchiver.ProgressInfo) {
+			dart_api_dl.SendUnpackFiles(port, nil, pInfo, false)
+			_pInfo = *pInfo
+		},
+	}
+
+	err := onearchiver.StartUnpacking(am, au, ph)
+
+	dart_api_dl.SendUnpackFiles(port, err, &_pInfo, true)
+}
+
+//export FreeUnpackFilesMemory
+func FreeUnpackFilesMemory(ptrAddr int64) {
+	dart_api_dl.FreeUnpackFilesMemory(ptrAddr)
 }
 
 // Unused

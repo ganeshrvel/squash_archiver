@@ -8,9 +8,35 @@ void main() {
   group('Is archive encrypted', () {
     final _archiverFfi = ArchiverFfi(isTest: true);
 
-    test('should throw (file does not exist) error', () async {
+    test('zip | should throw (file does not exist) error', () async {
       final _param = IsArchiveEncrypted(
         filename: getTestMocksAsset('no_file.zip'),
+      );
+
+      final _result = await _archiverFfi.isArchiveEncrypted(_param);
+
+      expect(_result.hasError, equals(true));
+      expect(_result.hasData, equals(false));
+      expect(_result.error, isA<FileNotFoundException>());
+      expect(_result.error.toString(), contains('file does not exist'));
+    });
+
+    test('tar | should throw (file does not exist) error', () async {
+      final _param = IsArchiveEncrypted(
+        filename: getTestMocksAsset('no_file.tar'),
+      );
+
+      final _result = await _archiverFfi.isArchiveEncrypted(_param);
+
+      expect(_result.hasError, equals(true));
+      expect(_result.hasData, equals(false));
+      expect(_result.error, isA<FileNotFoundException>());
+      expect(_result.error.toString(), contains('file does not exist'));
+    });
+
+    test('wrong extension | should throw (file does not exist) error', () async {
+      final _param = IsArchiveEncrypted(
+        filename: getTestMocksAsset('no_file.tar'),
       );
 
       final _result = await _archiverFfi.isArchiveEncrypted(_param);

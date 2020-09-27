@@ -2,13 +2,15 @@ import 'package:archiver_ffi/archiver_ffi.dart';
 import 'package:archiver_ffi/models/is_archive_encrypted.dart';
 import 'package:archiver_ffi/models/list_archive.dart';
 import 'package:archiver_ffi/models/pack_files.dart';
+import 'package:archiver_ffi/models/unpack_files.dart';
 import 'package:archiver_ffi/utils/test_utils.dart';
 import 'package:meta/meta.dart';
 
 Future<void> main() async {
-  //_listArchive();
-  //_isArchiveEncrypted();
-  _packFiles();
+  // _listArchive();
+  // _isArchiveEncrypted();
+  // _packFiles();
+  // _unpackFiles();
 }
 
 Future<void> _listArchive() async {
@@ -56,6 +58,31 @@ void _packingCb({
 }) {
   print(progressPercentage);
 }
+
+Future<void> _unpackFiles() async {
+  final stopwatch = Stopwatch()..start();
+  final _archiverFfi = ArchiverFfi(isTest: true);
+
+  final _param = UnpackFiles(
+    filename: getTestMocksAsset('mock_test_file1.zip'),
+    password: '',
+    destination: getTestMocksBuildAsset('mock_test_file1'),
+    gitIgnorePattern: [],
+    fileList: [],
+  );
+
+  final _result = await _archiverFfi.unpackFiles(
+    _param,
+    onProgress: _packingCb,
+  );
+
+  print(_result.error);
+  print(_result.data.success);
+
+  stopwatch.stop();
+  print('executed in ${stopwatch.elapsed.inMilliseconds} ms');
+}
+
 
 Future<void> _packFiles() async {
   final stopwatch = Stopwatch()..start();

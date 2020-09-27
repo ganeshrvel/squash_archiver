@@ -3,16 +3,7 @@ package dart_api_dl
 import "C"
 import "strings"
 
-type Errors string
-
-const (
-	ErrorOthers              Errors = "Some other error occured. Try again."
-	ErrorFileNotFound        Errors = "ErrorFileNotFound"
-	ErrorFileNotFoundPacking Errors = "ErrorFileNotFoundPacking"
-	ErrorFilterPathNotFound  Errors = "ErrorFilterPathNotFound"
-)
-
-func processErrors(e error) string {
+func processErrors(e error, taskType TaskType) string {
 	if e == nil {
 		return ""
 	}
@@ -24,7 +15,16 @@ func processErrors(e error) string {
 	} else if strings.Contains(e.Error(), "path not found to filter") {
 		errorType = string(ErrorFilterPathNotFound)
 	} else if strings.Contains(e.Error(), "no such file or directory") {
-		errorType = string(ErrorFileNotFoundPacking)
+		if taskType == TaskPackFiles {
+			errorType = string(ErrorFileNotFoundToPack)
+		} else {
+			errorType = string(ErrorFileNotFound)
+		}
+
+	} else if strings.Contains(e.Error(), "format unrecognized by filename") {
+		errorType = string(ErrorUnsupportedFileFormat)
+	} else if strings.Contains(e.Error(), "invalid password") {
+		errorType = string(ErrorInvalidPassword)
 	}
 
 	return errorType

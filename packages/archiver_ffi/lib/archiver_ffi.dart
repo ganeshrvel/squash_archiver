@@ -6,6 +6,7 @@ import 'package:archiver_ffi/models/file_info.dart';
 import 'package:archiver_ffi/models/is_archive_encrypted.dart';
 import 'package:archiver_ffi/models/list_archive.dart';
 import 'package:archiver_ffi/models/pack_files.dart';
+import 'package:archiver_ffi/models/unpack_files.dart';
 import 'package:archiver_ffi/structs/is_archive_encrypted.dart';
 import 'package:archiver_ffi/structs/list_archive.dart';
 import 'package:archiver_ffi/structs/pack_files.dart';
@@ -203,7 +204,7 @@ class ArchiverFfi {
     final _requests = ReceivePort();
     final _nativePort = _requests.sendPort.nativePort;
 
-// collect all pointers to be freed later
+    // collect all pointers to be freed later
     final _ptrToFreeList = <Pointer<NativeType>>[];
 
     final _filename = toFfiString(params.filename, _ptrToFreeList);
@@ -266,6 +267,96 @@ class ArchiverFfi {
         // free all FFI allocated values
         _ptrToFreeList.forEach(free);
         _squashArchiverLib.FreePackFilesMemory(_address);
+
+        _requests.close();
+        _requestsSub.cancel();
+        _squashArchiverLib.CloseNativeDartPort(_nativePort);
+      }
+    });
+
+    return _completer.future;
+  }
+
+  // Unpack files
+  Future<DC<Exception, UnpackFilesResult>> unpackFiles(
+    UnpackFiles params, {
+    Function({
+      @required String startTime,
+      @required String currentFilename,
+      @required int totalFiles,
+      @required int progressCount,
+      @required double progressPercentage,
+    })
+        onProgress,
+  }) async {
+    final _requests = ReceivePort();
+    final _nativePort = _requests.sendPort.nativePort;
+
+    // collect all pointers to be freed later
+    final _ptrToFreeList = <Pointer<NativeType>>[];
+
+    final _filename = toFfiString(params.filename, _ptrToFreeList);
+    final _password = toFfiString(params.password, _ptrToFreeList);
+    final _destination = toFfiString(params.destination, _ptrToFreeList);
+    final _pGitIgnorePattern = toFfiStringList(
+      params.gitIgnorePattern,
+      _ptrToFreeList,
+    );
+    final _pFileList = toFfiStringList(
+      params.fileList,
+      _ptrToFreeList,
+    );
+
+    _squashArchiverLib.UnpackFiles(
+      _nativePort,
+      _filename,
+      _password,
+      _destination,
+      _pGitIgnorePattern.address,
+      _pFileList.address,
+    );
+
+    final _completer = Completer<DC<Exception, UnpackFilesResult>>();
+
+    StreamSubscription _requestsSub;
+
+    _requestsSub = _requests.listen((address) {
+      final _address = address as int;
+      final _result = Pointer<PackFiledStruct>.fromAddress(_address);
+
+      DC<Exception, UnpackFilesResult> _dc;
+
+      final _ended = fromFfiBool(_result.ref.ended);
+
+      final _error = _result.ref.error;
+      if (_error.ref.error.address != 0) {
+        _dc = handleError<UnpackFilesResult>(_error);
+      } else {
+        const _unpackFilesResult = UnpackFilesResult(success: true);
+
+        _dc = DC(
+          data: _unpackFilesResult,
+          error: null,
+        );
+
+        if (isNotNull(onProgress)) {
+          onProgress(
+            progressPercentage: _result.ref.progressPercentage,
+            progressCount: _result.ref.progressCount,
+            startTime: _result.ref.startTime.ref.toString(),
+            totalFiles: _result.ref.totalFiles,
+            currentFilename: _result.ref.currentFilename.ref.toString(),
+          );
+        }
+      }
+
+      // free the memory and complete the task if [_ended] flag is true
+      if (_ended) {
+        _completer.complete(_dc);
+
+        // free all FFI allocated values
+        _ptrToFreeList.forEach(free);
+        _squashArchiverLib.FreeUnpackFilesMemory(_address);
 
         _requests.close();
         _requestsSub.cancel();
