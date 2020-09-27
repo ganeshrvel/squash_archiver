@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 import 'package:path/path.dart' as path;
 
@@ -38,4 +39,8 @@ bool isDate(String str) {
   } catch (e) {
     return false;
   }
+}
+
+Future<List<FileSystemEntity>> dirContents(Directory dir) async {
+  return dir.listSync(recursive: true).toList();
 }

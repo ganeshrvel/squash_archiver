@@ -7,15 +7,15 @@ import 'package:archiver_ffi/utils/test_utils.dart';
 import 'package:meta/meta.dart';
 
 Future<void> main() async {
-  // _listArchive();
+  _listArchive();
   // _isArchiveEncrypted();
   // _packFiles();
   // _unpackFiles();
 }
 
 Future<void> _listArchive() async {
-  final stopwatch = Stopwatch()..start();
   final _archiverFfi = ArchiverFfi(isTest: true);
+  final stopwatch = Stopwatch()..start();
 
   final _param = ListArchive(
       filename: getTestMocksAsset('mock_test_file1.zip'),
@@ -33,8 +33,9 @@ Future<void> _listArchive() async {
 }
 
 Future<void> _isArchiveEncrypted() async {
-  final stopwatch = Stopwatch()..start();
   final _archiverFfi = ArchiverFfi(isTest: true);
+
+  final stopwatch = Stopwatch()..start();
 
   final _param = IsArchiveEncrypted(
     filename: getTestMocksAsset('mock_enc_test_file1.zip'),
@@ -60,8 +61,8 @@ void _packingCb({
 }
 
 Future<void> _unpackFiles() async {
-  final stopwatch = Stopwatch()..start();
   final _archiverFfi = ArchiverFfi(isTest: true);
+  final stopwatch = Stopwatch()..start();
 
   final _param = UnpackFiles(
     filename: getTestMocksAsset('mock_test_file1.zip'),
@@ -83,10 +84,9 @@ Future<void> _unpackFiles() async {
   print('executed in ${stopwatch.elapsed.inMilliseconds} ms');
 }
 
-
 Future<void> _packFiles() async {
-  final stopwatch = Stopwatch()..start();
   final _archiverFfi = ArchiverFfi(isTest: true);
+  final stopwatch = Stopwatch()..start();
 
   final _param = PackFiles(
     filename: getTestMocksBuildAsset('mock_test_file1.zip'),
