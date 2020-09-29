@@ -68,16 +68,26 @@ typedef struct { void *data; GoInt len; GoInt cap; } GoSlice;
 extern "C" {
 #endif
 
-extern void InitNewNativeDartPort(void* api);
-extern GoUint8 CloseNativeDartPort(GoInt64 port);
-extern void ListArchive(GoInt64 port, char* filename, char* password, char* orderBy, char* orderDir, char* listDirectoryPath, GoInt64 gitIgnorePatternPtrAddr, GoUint8 recursive);
-extern void FreeListArchiveMemory(GoInt64 ptrAddr);
-extern void IsArchiveEncrypted(GoInt64 port, char* filename, char* password);
-extern void FreeIsArchiveEncryptedMemory(GoInt64 ptrAddr);
-extern void PackFiles(GoInt64 port, char* filename, char* password, GoInt64 gitIgnorePatternPtrAddr, GoInt64 fileListPtrAddr);
-extern void FreePackFilesMemory(GoInt64 ptrAddr);
-extern void UnpackFiles(GoInt64 port, char* filename, char* password, char* destination, GoInt64 gitIgnorePatternPtrAddr, GoInt64 fileListPtrAddr);
-extern void FreeUnpackFilesMemory(GoInt64 ptrAddr);
+
+extern void InitNewNativeDartPort(void* p0);
+
+extern GoUint8 CloseNativeDartPort(GoInt64 p0);
+
+extern void ListArchive(GoInt64 p0, char* p1, char* p2, char* p3, char* p4, char* p5, GoInt64 p6, GoUint8 p7);
+
+extern void FreeListArchiveMemory(GoInt64 p0);
+
+extern void IsArchiveEncrypted(GoInt64 p0, char* p1, char* p2);
+
+extern void FreeIsArchiveEncryptedMemory(GoInt64 p0);
+
+extern void PackFiles(GoInt64 p0, char* p1, char* p2, GoInt64 p3, GoInt64 p4);
+
+extern void FreePackFilesMemory(GoInt64 p0);
+
+extern void UnpackFiles(GoInt64 p0, char* p1, char* p2, char* p3, GoInt64 p4, GoInt64 p5);
+
+extern void FreeUnpackFilesMemory(GoInt64 p0);
 
 #ifdef __cplusplus
 }

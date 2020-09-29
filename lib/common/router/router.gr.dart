@@ -49,8 +49,8 @@ class Router extends RouterBase {
         }
         final typedArgs = args as HomeScreenArguments ?? HomeScreenArguments();
         return PageRouteBuilder<dynamic>(
-          pageBuilder: (context, animation, secondaryAnimation) =>
-              HomeScreen(key: typedArgs.key),
+          pageBuilder: (context, animation, secondaryAnimation) => HomeScreen(
+              routeName: typedArgs.routeName, routeArgs: typedArgs.routeArgs),
           settings: settings,
         );
       default:
@@ -75,6 +75,7 @@ class SplashScreenArguments {
 
 //HomeScreen arguments holder class
 class HomeScreenArguments {
-  final Key key;
-  HomeScreenArguments({this.key});
+  final String routeName;
+  final Object routeArgs;
+  HomeScreenArguments({this.routeName, this.routeArgs});
 }

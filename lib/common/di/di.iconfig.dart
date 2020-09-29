@@ -14,7 +14,6 @@ import 'package:squash_archiver/common/di/dio_di.dart';
 import 'package:dio/dio.dart';
 import 'package:squash_archiver/constants/env.dart';
 import 'package:squash_archiver/common/helpers/flushbar_helper.dart';
-import 'package:squash_archiver/features/home/ui/pages/home_screen_store.dart';
 import 'package:squash_archiver/common/di/logger_di.dart';
 import 'package:logger/logger.dart';
 import 'package:squash_archiver/common/network/network_info.dart';
@@ -53,7 +52,6 @@ Future<void> $initGetIt(GetIt g, {String environment}) async {
   g.registerLazySingleton<Dio>(() => dioDi.dio);
   g.registerLazySingleton<Env>(() => Env());
   g.registerLazySingleton<FlushbarHelper>(() => FlushbarHelper());
-  g.registerLazySingleton<HomeScreenStore>(() => HomeScreenStore());
   g.registerLazySingleton<Logger>(() => loggerDi.logger);
   g.registerLazySingleton<NetworkInfo>(
       () => NetworkInfo(g<DataConnectionChecker>()));

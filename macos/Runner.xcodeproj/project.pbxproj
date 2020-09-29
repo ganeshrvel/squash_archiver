@@ -28,10 +28,10 @@
 		33CC11132044BFA00003C045 /* MainFlutterWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33CC11122044BFA00003C045 /* MainFlutterWindow.swift */; };
 		33D1A10422148B71006C7A3E /* FlutterMacOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 33D1A10322148B71006C7A3E /* FlutterMacOS.framework */; };
 		33D1A10522148B93006C7A3E /* FlutterMacOS.framework in Bundle Framework */ = {isa = PBXBuildFile; fileRef = 33D1A10322148B71006C7A3E /* FlutterMacOS.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		5B2B412325237DD600C15943 /* archiver_lib.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B2B412225237DD500C15943 /* archiver_lib.dylib */; settings = {ATTRIBUTES = (Weak, ); }; };
+		5B2B412425237DD800C15943 /* archiver_lib.dylib in Bundle Framework */ = {isa = PBXBuildFile; fileRef = 5B2B412225237DD500C15943 /* archiver_lib.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		5B2B412525237DE300C15943 /* archiver_lib.dylib in Resources */ = {isa = PBXBuildFile; fileRef = 5B2B412225237DD500C15943 /* archiver_lib.dylib */; };
 		5B617FE1249FE8420048A3E5 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5B617FE0249FE8420048A3E5 /* GoogleService-Info.plist */; };
-		5BE1EFB924EF196E0022D581 /* archiver_lib.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BE1EFB824EF196E0022D581 /* archiver_lib.dylib */; settings = {ATTRIBUTES = (Weak, ); }; };
-		5BE1EFBA24EF19770022D581 /* archiver_lib.dylib in Resources */ = {isa = PBXBuildFile; fileRef = 5BE1EFB824EF196E0022D581 /* archiver_lib.dylib */; };
-		5BE1EFBC24EF19850022D581 /* archiver_lib.dylib in Bundle Framework */ = {isa = PBXBuildFile; fileRef = 5BE1EFB824EF196E0022D581 /* archiver_lib.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		81383BB94B4C2B5DA0A85D56 /* Pods_Runner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EB3CBCDD60D4A133F1B78C4D /* Pods_Runner.framework */; };
 		D73912F022F37F9E000D13A0 /* App.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D73912EF22F37F9E000D13A0 /* App.framework */; };
 		D73912F222F3801D000D13A0 /* App.framework in Bundle Framework */ = {isa = PBXBuildFile; fileRef = D73912EF22F37F9E000D13A0 /* App.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -54,7 +54,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				5BE1EFBC24EF19850022D581 /* archiver_lib.dylib in Bundle Framework */,
+				5B2B412425237DD800C15943 /* archiver_lib.dylib in Bundle Framework */,
 				D73912F222F3801D000D13A0 /* App.framework in Bundle Framework */,
 				33D1A10522148B93006C7A3E /* FlutterMacOS.framework in Bundle Framework */,
 			);
@@ -81,8 +81,8 @@
 		33E51914231749380026EE4D /* Release.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = Release.entitlements; sourceTree = "<group>"; };
 		33E5194F232828860026EE4D /* AppInfo.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = AppInfo.xcconfig; sourceTree = "<group>"; };
 		4BF818E1B824ECD72A0E5EAC /* Pods-Runner.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.profile.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.profile.xcconfig"; sourceTree = "<group>"; };
+		5B2B412225237DD500C15943 /* archiver_lib.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = archiver_lib.dylib; path = ../packages/archiver_ffi/native/archiver_lib/build/archiver_lib.dylib; sourceTree = "<group>"; };
 		5B617FE0249FE8420048A3E5 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
-		5BE1EFB824EF196E0022D581 /* archiver_lib.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = archiver_lib.dylib; path = ../packages/archiver_ffi/native/archiver_lib/build/archiver_lib.dylib; sourceTree = "<group>"; };
 		619FEF4FF7001458AC554D4E /* Pods-Runner.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.release.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.release.xcconfig"; sourceTree = "<group>"; };
 		7AFA3C8E1D35360C0083082E /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
 		9740EEB21CF90195004384FC /* Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
@@ -97,7 +97,7 @@
 			files = (
 				D73912F022F37F9E000D13A0 /* App.framework in Frameworks */,
 				33D1A10422148B71006C7A3E /* FlutterMacOS.framework in Frameworks */,
-				5BE1EFB924EF196E0022D581 /* archiver_lib.dylib in Frameworks */,
+				5B2B412325237DD600C15943 /* archiver_lib.dylib in Frameworks */,
 				81383BB94B4C2B5DA0A85D56 /* Pods_Runner.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -119,7 +119,7 @@
 		33CC10E42044A3C60003C045 = {
 			isa = PBXGroup;
 			children = (
-				5BE1EFB824EF196E0022D581 /* archiver_lib.dylib */,
+				5B2B412225237DD500C15943 /* archiver_lib.dylib */,
 				5B617FE0249FE8420048A3E5 /* GoogleService-Info.plist */,
 				33FAB671232836740065AC1E /* Runner */,
 				33CEB47122A05771004F2AC0 /* Flutter */,
@@ -267,7 +267,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5BE1EFBA24EF19770022D581 /* archiver_lib.dylib in Resources */,
+				5B2B412525237DE300C15943 /* archiver_lib.dylib in Resources */,
 				33CC10F32044A3C60003C045 /* Assets.xcassets in Resources */,
 				33CC10F62044A3C60003C045 /* MainMenu.xib in Resources */,
 				5B617FE1249FE8420048A3E5 /* GoogleService-Info.plist in Resources */,

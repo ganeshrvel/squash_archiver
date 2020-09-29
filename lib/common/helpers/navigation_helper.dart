@@ -25,7 +25,13 @@ void navigateToRoute(
   }
 
   if (routeName == Routes.homeScreen) {
-    navigateToHome(context, routeArgs: HomeScreenArguments());
+    navigateToHome(
+      context,
+      routeArgs: HomeScreenArguments(
+        routeName: routeName,
+        routeArgs: routeArgs,
+      ),
+    );
 
     return;
   }
@@ -48,7 +54,13 @@ void navigateToRouteAndReplace(
   Object routeArgs,
 }) {
   if (routeName == Routes.homeScreen) {
-    navigateToHome(context, routeArgs: HomeScreenArguments());
+    navigateToHome(
+      context,
+      routeArgs: HomeScreenArguments(
+        routeName: routeName,
+        routeArgs: routeArgs,
+      ),
+    );
 
     return;
   }
