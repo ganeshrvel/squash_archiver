@@ -33,5 +33,9 @@
 	  <key>NSAllowsArbitraryLoads</key>
 	  <true/>
 	</dict>
+	<key>SUFeedURL</key>
+    <string>https://sparkle-project.org/files/sparkletestcast.xml</string>
+    <key>SUEnableAutomaticChecks</key>
+    <true/>
 </dict>
 </plist>
