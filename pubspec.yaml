@@ -110,6 +110,10 @@ dependencies:
   archiver_ffi:
     path: ./packages/archiver_ffi
 
+  # path
+  path: ^1.7.0
+  path_provider: ^1.5.1
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

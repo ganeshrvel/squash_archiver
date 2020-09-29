@@ -333,7 +333,7 @@ class Button extends StatelessWidget {
               child: InkWell(
                 splashColor: AppColors.splash,
                 onTap: isButtonDisabled() ? null : onPressed,
-                child: Container(
+                child: SizedBox(
                   width: width,
                   height: height,
                   child: Column(
