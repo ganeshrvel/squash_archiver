@@ -3,20 +3,26 @@ import FlutterMacOS
 import Sparkle
 
 class MainFlutterWindow: NSWindow {
-    @IBAction func checkForUpdates(_ sender: Any) {
-        let updater = SUUpdater.shared()
-        updater?.feedURL = URL(string: "https://sparkle-project.org/files/sparkletestcast.xml")
-        updater?.checkForUpdates(self)
+    var SUFeedURL: String? {
+        return Bundle.main.object(forInfoDictionaryKey: "SUFeedURL") as? String
     }
-    
-  override func awakeFromNib() {
-    let flutterViewController = FlutterViewController.init()
-    let windowFrame = self.frame
-    self.contentViewController = flutterViewController
-    self.setFrame(windowFrame, display: true)
 
-    RegisterGeneratedPlugins(registry: flutterViewController)
+	@IBAction func checkForUpdates(_ sender: Any) {
+        if SUFeedURL != nil {
+            let updater = SUUpdater.shared()
+            updater?.feedURL = URL(string: SUFeedURL!)
+            updater?.checkForUpdates(self)
+        }
+	}
 
-    super.awakeFromNib()
-  }
+	override func awakeFromNib() {
+		let flutterViewController = FlutterViewController.init()
+		let windowFrame = self.frame
+		self.contentViewController = flutterViewController
+		self.setFrame(windowFrame, display: true)
+
+		RegisterGeneratedPlugins(registry: flutterViewController)
+
+		super.awakeFromNib()
+	}
 }
