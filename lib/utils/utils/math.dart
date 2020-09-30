@@ -7,3 +7,4 @@ double getDoubleMax(Iterable<double> _array) {
 double getDoubleMin(Iterable<double> _array) {
   return _array.reduce(math.min);
 }
+

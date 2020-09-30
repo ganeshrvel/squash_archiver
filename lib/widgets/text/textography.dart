@@ -72,7 +72,7 @@ class Textography extends StatelessWidget {
         break;
       case TextVariants.button:
         _fontWeight = FontWeight.w900;
-        _fontSize = 16.0;
+        _fontSize = 14.0;
         break;
       case TextVariants.body2:
         _fontWeight = FontWeight.normal;

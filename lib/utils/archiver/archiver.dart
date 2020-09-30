@@ -19,9 +19,17 @@ class Archiver {
   ListArchiveResult _listArchiveResult;
 
   Future<DC<ArchiverException, List<ArchiveFileInfo>>> listFiles(
-    ListArchive params,
-  ) async {
+    ListArchive params, {
+    bool invalidateCache,
+  }) async {
     assert(params != null);
+
+    final _invalidateCache = invalidateCache ?? false;
+
+    if (_invalidateCache) {
+      _listArchiveParams = null;
+      _listArchiveResult = null;
+    }
 
     DC<ArchiverException, ListArchiveResult> _result;
 
@@ -52,8 +60,6 @@ class Archiver {
       return DC.data(_filteredPath);
     }
 
-    // todo calculate and return value back
-
     return DC.data([]);
   }
 
@@ -67,8 +73,8 @@ class Archiver {
       return [];
     }
 
-    if (isNullOrEmpty(listDirectoryPath)) {
-      return _listArchiveResult.files;
+    if (isNull(listDirectoryPath)) {
+      return [];
     }
 
     final _listDirectoryPath = fixDirSlash(

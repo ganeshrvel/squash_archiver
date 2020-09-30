@@ -203,8 +203,12 @@ class Button extends StatelessWidget {
   }
 
   ShapeBorder getBtnShape() {
-    if (isNull(roundedEdge)) {
-      return const RoundedRectangleBorder();
+    final _roundedEdge = roundedEdge ?? false;
+
+    if (!_roundedEdge) {
+      return const RoundedRectangleBorder(
+        borderRadius: BorderRadius.zero,
+      );
     }
 
     return RoundedRectangleBorder(
@@ -429,14 +433,14 @@ class Button extends StatelessWidget {
     var _maxHeight = 40.0;
 
     if (buttonSize == ButtonSizeTypes.SMALL) {
+      _minHeight = 20;
+      _maxHeight = 20;
+    } else if (buttonSize == ButtonSizeTypes.MEDIUM) {
+      _minHeight = 30;
+      _maxHeight = 30;
+    } else if (buttonSize == ButtonSizeTypes.LARGE) {
       _minHeight = 40;
       _maxHeight = 40;
-    } else if (buttonSize == ButtonSizeTypes.MEDIUM) {
-      _minHeight = 50;
-      _maxHeight = 50;
-    } else if (buttonSize == ButtonSizeTypes.LARGE) {
-      _minHeight = 60;
-      _maxHeight = 60;
     }
 
     _minHeight = height ?? _minHeight;

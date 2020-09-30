@@ -39,10 +39,37 @@ String fixDirSlash({
 }) {
   var _fullPath = fullPath;
 
-  if (isDir &&
-      !fullPath.contains(Platform.pathSeparator, fullPath.length - 1)) {
+  if (isNullOrEmpty(fullPath)) {
+    return '';
+  }
+
+  if (fullPath == Platform.pathSeparator) {
+    return _fullPath;
+  }
+
+  final _offset = fullPath.length - 1;
+
+  if (isDir && !fullPath.contains(Platform.pathSeparator, _offset)) {
     _fullPath = '$_fullPath${Platform.pathSeparator}';
   }
 
   return _fullPath;
+}
+
+String getParentPath(String fullPath) {
+  if (isNullOrEmpty(fullPath)) {
+    return '';
+  }
+
+  if (fullPath == Platform.pathSeparator) {
+    return fullPath;
+  }
+
+  final _parentDir = Directory(fullPath).parent.path;
+
+  if (_parentDir == '.') {
+    return '';
+  }
+
+  return _parentDir;
 }

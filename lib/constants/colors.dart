@@ -6,7 +6,7 @@ class AppColors {
   AppColors._();
 
   static const Color white = Colors.white;
-  static final Color blue = HexColor('007ffd');
+  static final Color blue = HexColor('2262c6');
   static final Color black = HexColor('000000');
   static final Color disabled = HexColor('CBCBCB');
   static final Color splash = Colors.white10;
