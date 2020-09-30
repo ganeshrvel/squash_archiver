@@ -3,7 +3,7 @@ package main
 import "C"
 import (
 	"./dart_ffi/dart_api_dl"
-	fmt "fmt"
+	"fmt"
 	onearchiver "github.com/ganeshrvel/one-archiver"
 	"github.com/yeka/zip"
 	"unsafe"
@@ -42,39 +42,26 @@ func ListArchive(port int64, filename, password, orderBy, orderDir, listDirector
 		case "size":
 			ob = onearchiver.OrderBySize
 
-			break
-
 		case "modTime":
 			ob = onearchiver.OrderByModTime
-
-			break
 
 		case "name":
 			ob = onearchiver.OrderByName
 
-			break
-
 		case "fullPath":
 			ob = onearchiver.OrderByFullPath
-
-			break
 		}
 
 		var od onearchiver.ArchiveOrderDir
 		switch _orderDir {
 		case "asc":
 			od = onearchiver.OrderDirAsc
-			break
 
 		case "desc":
 			od = onearchiver.OrderDirDesc
 
-			break
-
 		case "none":
 			od = onearchiver.OrderDirNone
-
-			break
 		}
 
 		read := &onearchiver.ArchiveRead{

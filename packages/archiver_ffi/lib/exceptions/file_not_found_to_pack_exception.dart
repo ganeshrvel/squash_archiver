@@ -1,4 +1,7 @@
-class FileNotFoundToPackException implements Exception {
+import 'package:archiver_ffi/exceptions/archiver_exception.dart';
+
+class FileNotFoundToPackException implements ArchiverException {
+  @override
   final String error;
 
   FileNotFoundToPackException(this.error);

@@ -18,4 +18,5 @@ const (
 	ErrorFilterPathNotFound    Errors = "ErrorFilterPathNotFound"
 	ErrorUnsupportedFileFormat Errors = "ErrorUnsupportedFileFormat"
 	ErrorInvalidPassword       Errors = "ErrorInvalidPassword"
+	ErrorOperationNotPermitted Errors = "ErrorInvalidPassword"
 )

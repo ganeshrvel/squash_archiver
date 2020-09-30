@@ -1,6 +1,6 @@
 Compile:
 ```shell script
-$ go build -v -o build/archiver_lib.dylib -buildmode=c-shared main.go
+go build -v -o build/archiver_lib.dylib -buildmode=c-shared main.go
 ```
 
 

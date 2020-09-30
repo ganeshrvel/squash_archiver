@@ -1,4 +1,7 @@
-class InvalidPasswordException implements Exception {
+import 'package:archiver_ffi/exceptions/archiver_exception.dart';
+
+class InvalidPasswordException implements ArchiverException {
+  @override
   final String error;
 
   InvalidPasswordException(this.error);
