@@ -225,6 +225,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.3.4"
+  data_tables:
+    dependency: "direct main"
+    description:
+      name: data_tables
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.3"
   device_info:
     dependency: "direct main"
     description:
