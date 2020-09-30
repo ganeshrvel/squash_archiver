@@ -1,15 +1,27 @@
 import 'package:archiver_ffi/models/archive_file_info.dart';
-import 'package:archiver_ffi/structs/list_archive.dart';
 import 'package:archiver_ffi/utils/functs.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
+
+enum ArchiverOrderBy {
+  size,
+  modTime,
+  name,
+  fullPath,
+}
+
+enum ArchiverOrderDir {
+  asc,
+  desc,
+  none,
+}
 
 // ignore: must_be_immutable
 class ListArchive extends Equatable {
   final String filename;
   String password;
-  OrderBy orderBy;
-  OrderDir orderDir;
+  ArchiverOrderBy orderBy;
+  ArchiverOrderDir orderDir;
   String listDirectoryPath;
   List<String> gitIgnorePattern;
   bool recursive;
@@ -32,11 +44,11 @@ class ListArchive extends Equatable {
     }
 
     if (isNull(orderBy)) {
-      orderBy = OrderBy.name;
+      orderBy = ArchiverOrderBy.name;
     }
 
     if (isNull(orderDir)) {
-      orderDir = OrderDir.none;
+      orderDir = ArchiverOrderDir.none;
     }
 
     if (isNullOrEmpty(listDirectoryPath)) {

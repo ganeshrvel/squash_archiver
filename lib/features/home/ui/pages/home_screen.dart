@@ -1,5 +1,4 @@
 import 'package:archiver_ffi/models/list_archive.dart';
-import 'package:archiver_ffi/structs/list_archive.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -32,8 +31,8 @@ class HomeScreen extends HookWidget {
       filename: _testFile,
       recursive: true,
       listDirectoryPath: 'flutter/dev/benchmarks/',
-      orderBy: OrderBy.fullPath,
-      orderDir: OrderDir.asc,
+      orderBy: ArchiverOrderBy.fullPath,
+      orderDir: ArchiverOrderDir.asc,
     ));
 
     if (_files.hasError) {

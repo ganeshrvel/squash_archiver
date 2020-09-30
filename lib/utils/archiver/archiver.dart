@@ -25,7 +25,7 @@ class Archiver {
 
     DC<ArchiverException, ListArchiveResult> _result;
 
-    if (_useCache(params)) {
+    if (_invalidateListingCache(params)) {
       // caching the results
       _listArchiveParams = params;
 
@@ -86,7 +86,7 @@ class Archiver {
     }).toList();
   }
 
-  bool _useCache(ListArchive params) {
+  bool _invalidateListingCache(ListArchive params) {
     if (isNull(params) || isNull(_listArchiveParams)) {
       return true;
     }

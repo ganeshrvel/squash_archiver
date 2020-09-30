@@ -3,19 +3,6 @@ import 'dart:ffi';
 import 'package:archiver_ffi/structs/common.dart';
 import 'package:ffi/ffi.dart';
 
-enum OrderBy {
-  size,
-  modTime,
-  name,
-  fullPath,
-}
-
-enum OrderDir {
-  asc,
-  desc,
-  none,
-}
-
 class ArchiveFileInfoStruct extends Struct {
   @Uint32()
   int mode;

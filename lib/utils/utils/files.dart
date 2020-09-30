@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'dart:io';
+
 import 'package:meta/meta.dart';
 import 'package:squash_archiver/utils/utils/functs.dart';
 import 'package:path/path.dart' as path;
