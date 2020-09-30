@@ -10,6 +10,7 @@ import 'package:archiver_ffi/models/unpack_files.dart';
 import 'package:archiver_ffi/structs/is_archive_encrypted.dart';
 import 'package:archiver_ffi/structs/list_archive.dart';
 import 'package:archiver_ffi/structs/pack_files.dart';
+import 'package:archiver_ffi/structs/unpack_files.dart';
 import 'package:archiver_ffi/utils/ffi.dart';
 import 'package:archiver_ffi/utils/functs.dart';
 import 'package:archiver_ffi/utils/handle_errors.dart';
@@ -97,6 +98,7 @@ class ArchiverFfi {
             modTime: _value.ref.modTime.ref.toString(),
             name: _value.ref.name.ref.toString(),
             fullPath: _value.ref.fullPath.ref.toString(),
+            parentPath: _value.ref.parentPath.ref.toString(),
           );
 
           _files.add(_file);
@@ -232,7 +234,7 @@ class ArchiverFfi {
 
     _requestsSub = _requests.listen((address) {
       final _address = address as int;
-      final _result = Pointer<PackFiledStruct>.fromAddress(_address);
+      final _result = Pointer<PackFilesStruct>.fromAddress(_address);
 
       DC<Exception, PackFilesResult> _dc;
 
@@ -322,7 +324,7 @@ class ArchiverFfi {
 
     _requestsSub = _requests.listen((address) {
       final _address = address as int;
-      final _result = Pointer<PackFiledStruct>.fromAddress(_address);
+      final _result = Pointer<UnpackFilesStruct>.fromAddress(_address);
 
       DC<Exception, UnpackFilesResult> _dc;
 

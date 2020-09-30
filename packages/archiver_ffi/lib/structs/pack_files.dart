@@ -3,7 +3,7 @@ import 'dart:ffi';
 import 'package:archiver_ffi/structs/common.dart';
 import 'package:ffi/ffi.dart';
 
-class PackFiledStruct extends Struct {
+class PackFilesStruct extends Struct {
   Pointer<Utf8> startTime;
 
   Pointer<Utf8> currentFilename;
@@ -22,7 +22,7 @@ class PackFiledStruct extends Struct {
 
   Pointer<ResultErrorStruct> error;
 
-  factory PackFiledStruct.allocate(
+  factory PackFilesStruct.allocate(
     Pointer<Utf8> startTime,
     Pointer<Utf8> currentFilename,
     int totalFiles,
@@ -31,7 +31,7 @@ class PackFiledStruct extends Struct {
     int ended,
     Pointer<ResultErrorStruct> error,
   ) =>
-      allocate<PackFiledStruct>().ref
+      allocate<PackFilesStruct>().ref
         ..startTime = startTime
         ..currentFilename = currentFilename
         ..totalFiles = totalFiles

@@ -47,6 +47,7 @@ import (
 		char 	*modTime;
 		char 	*name;
 		char 	*fullPath;
+		char 	*parentPath;
 	}ArcFileInfo;
 
 	typedef struct ArcFileInfoResult{
@@ -195,6 +196,7 @@ func SendArchiveListing(port int64, err error, result *[]onearchiver.ArchiveFile
 		aif.isDir = C.bool(item.IsDir)
 		aif.modTime = C.CString(item.ModTime.Format(DateTimeFormat))
 		aif.fullPath = C.CString(item.FullPath)
+		aif.parentPath = C.CString(item.ParentPath)
 
 		aiList = append(aiList, aif)
 	}

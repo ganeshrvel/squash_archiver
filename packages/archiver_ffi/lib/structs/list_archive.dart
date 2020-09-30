@@ -32,6 +32,8 @@ class ArchiveFileInfoStruct extends Struct {
 
   Pointer<Utf8> fullPath;
 
+  Pointer<Utf8> parentPath;
+
   factory ArchiveFileInfoStruct.allocate(
     int mode,
     int size,
@@ -39,6 +41,7 @@ class ArchiveFileInfoStruct extends Struct {
     Pointer<Utf8> modTime,
     Pointer<Utf8> name,
     Pointer<Utf8> fullPath,
+    Pointer<Utf8> parentPath,
   ) =>
       allocate<ArchiveFileInfoStruct>().ref
         ..mode = mode
@@ -46,7 +49,8 @@ class ArchiveFileInfoStruct extends Struct {
         ..isDir = isDir
         ..modTime = modTime
         ..name = name
-        ..fullPath = fullPath;
+        ..fullPath = fullPath
+        ..parentPath = parentPath;
 }
 
 class ArchiveFileInfoResultStruct extends Struct {

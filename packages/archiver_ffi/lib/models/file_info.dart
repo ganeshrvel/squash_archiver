@@ -14,6 +14,8 @@ class FileInfo extends Equatable {
 
   final String fullPath;
 
+  final String parentPath;
+
   const FileInfo({
     @required this.mode,
     @required this.size,
@@ -21,6 +23,7 @@ class FileInfo extends Equatable {
     @required this.modTime,
     @required this.name,
     @required this.fullPath,
+    @required this.parentPath,
   });
 
   @override
@@ -31,5 +34,6 @@ class FileInfo extends Equatable {
         modTime,
         name,
         fullPath,
+        parentPath,
       ];
 }
