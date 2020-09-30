@@ -1,10 +1,11 @@
-import 'package:archiver_ffi/models/file_info.dart';
+import 'package:archiver_ffi/models/archive_file_info.dart';
 import 'package:archiver_ffi/structs/list_archive.dart';
 import 'package:archiver_ffi/utils/functs.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 
-class ListArchive {
+// ignore: must_be_immutable
+class ListArchive extends Equatable {
   final String filename;
   String password;
   OrderBy orderBy;
@@ -50,10 +51,21 @@ class ListArchive {
       recursive = false;
     }
   }
+
+  @override
+  List<Object> get props => [
+        filename,
+        password,
+        orderBy,
+        orderDir,
+        listDirectoryPath,
+        gitIgnorePattern,
+        recursive,
+      ];
 }
 
 class ListArchiveResult extends Equatable {
-  final List<FileInfo> files;
+  final List<ArchiveFileInfo> files;
 
   final int totalFiles;
 
@@ -64,7 +76,7 @@ class ListArchiveResult extends Equatable {
 
   @override
   List<Object> get props => [
-    files,
-    totalFiles,
-  ];
+        files,
+        totalFiles,
+      ];
 }

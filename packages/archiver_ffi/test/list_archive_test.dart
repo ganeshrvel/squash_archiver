@@ -1,6 +1,7 @@
 import 'package:archiver_ffi/archiver_ffi.dart';
 import 'package:archiver_ffi/exceptions/file_not_found_exception.dart';
 import 'package:archiver_ffi/exceptions/invalid_password_exception.dart';
+import 'package:archiver_ffi/exceptions/archiver_exception.dart';
 import 'package:archiver_ffi/models/list_archive.dart';
 import 'package:archiver_ffi/utils/test_utils.dart';
 import 'package:data_channel/data_channel.dart';
@@ -8,7 +9,7 @@ import 'package:meta/meta.dart';
 import 'package:test/test.dart';
 
 void testDataTypesOfArchivedFiles({
-  @required DC<Exception, ListArchiveResult> result,
+  @required DC<ArchiverException, ListArchiveResult> result,
   @required int totalFiles,
 }) {
   expect(result.hasError, equals(false));

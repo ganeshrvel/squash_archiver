@@ -2,7 +2,8 @@ import 'package:archiver_ffi/utils/functs.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 
-class UnpackFiles {
+// ignore: must_be_immutable
+class UnpackFiles extends Equatable {
   final String filename;
   final String destination;
   String password;
@@ -36,6 +37,14 @@ class UnpackFiles {
       fileList = [];
     }
   }
+
+  @override
+  List<Object> get props => [
+        filename,
+        password,
+        gitIgnorePattern,
+        fileList,
+      ];
 }
 
 class UnpackFilesResult extends Equatable {

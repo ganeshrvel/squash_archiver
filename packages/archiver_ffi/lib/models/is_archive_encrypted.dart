@@ -2,7 +2,8 @@ import 'package:archiver_ffi/utils/functs.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 
-class IsArchiveEncrypted {
+// ignore: must_be_immutable
+class IsArchiveEncrypted extends Equatable {
   final String filename;
   String password;
 
@@ -18,6 +19,12 @@ class IsArchiveEncrypted {
       password = '';
     }
   }
+
+  @override
+  List<Object> get props => [
+        filename,
+        password,
+      ];
 }
 
 class IsArchiveEncryptedResult extends Equatable {

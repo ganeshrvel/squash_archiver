@@ -1,4 +1,6 @@
 import 'dart:io';
+import 'dart:io';
+import 'package:meta/meta.dart';
 import 'package:squash_archiver/utils/utils/functs.dart';
 import 'package:path/path.dart' as path;
 
@@ -29,4 +31,18 @@ String desktopDirectory() {
 
 String getDesktopFile(String filename) {
   return path.join(desktopDirectory(), filename);
+}
+
+String fixDirSlash({
+  @required bool isDir,
+  @required String fullPath,
+}) {
+  var _fullPath = fullPath;
+
+  if (isDir &&
+      !fullPath.contains(Platform.pathSeparator, fullPath.length - 1)) {
+    _fullPath = '$_fullPath${Platform.pathSeparator}';
+  }
+
+  return _fullPath;
 }

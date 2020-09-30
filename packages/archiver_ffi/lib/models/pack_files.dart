@@ -2,7 +2,8 @@ import 'package:archiver_ffi/utils/functs.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 
-class PackFiles {
+// ignore: must_be_immutable
+class PackFiles extends Equatable {
   final String filename;
   String password;
   List<String> gitIgnorePattern;
@@ -30,6 +31,14 @@ class PackFiles {
       fileList = [];
     }
   }
+
+  @override
+  List<Object> get props => [
+        filename,
+        password,
+        gitIgnorePattern,
+        fileList,
+      ];
 }
 
 class PackFilesResult extends Equatable {

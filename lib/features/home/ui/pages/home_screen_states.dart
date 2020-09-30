@@ -1,10 +1,10 @@
-import 'package:archiver_ffi/models/file_info.dart';
+import 'package:archiver_ffi/models/archive_file_info.dart';
 import 'package:hooks_riverpod/all.dart';
 
-class ListArchiveNotifier extends StateNotifier<List<FileInfo>> {
-  ListArchiveNotifier(List<FileInfo> state) : super(state);
+class ListArchiveNotifier extends StateNotifier<List<ArchiveFileInfo>> {
+  ListArchiveNotifier(List<ArchiveFileInfo> state) : super(state);
 
-  void add(List<FileInfo> _list) {
+  void add(List<ArchiveFileInfo> _list) {
     state = _list;
   }
 }

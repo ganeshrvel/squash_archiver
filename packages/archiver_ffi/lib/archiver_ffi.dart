@@ -2,7 +2,8 @@ import 'dart:async';
 import 'dart:ffi';
 import 'dart:isolate';
 
-import 'package:archiver_ffi/models/file_info.dart';
+import 'package:archiver_ffi/exceptions/archiver_exception.dart';
+import 'package:archiver_ffi/models/archive_file_info.dart';
 import 'package:archiver_ffi/models/is_archive_encrypted.dart';
 import 'package:archiver_ffi/models/list_archive.dart';
 import 'package:archiver_ffi/models/pack_files.dart';
@@ -33,7 +34,7 @@ class ArchiverFfi {
   }
 
   // List files in an archive
-  Future<DC<Exception, ListArchiveResult>> listArchive(
+  Future<DC<ArchiverException, ListArchiveResult>> listArchive(
     ListArchive params,
   ) async {
     final _requests = ReceivePort();
@@ -68,7 +69,7 @@ class ArchiverFfi {
       _recursive,
     );
 
-    final _completer = Completer<DC<Exception, ListArchiveResult>>();
+    final _completer = Completer<DC<ArchiverException, ListArchiveResult>>();
 
     StreamSubscription _requestsSub;
     _requestsSub = _requests.listen((address) {
@@ -78,7 +79,7 @@ class ArchiverFfi {
 
       final _error = _result.ref.error;
 
-      DC<Exception, ListArchiveResult> _dc;
+      DC<ArchiverException, ListArchiveResult> _dc;
 
       if (_error.ref.error.address != 0) {
         _dc = handleError<ListArchiveResult>(_error);
@@ -86,12 +87,12 @@ class ArchiverFfi {
         final filesPtr = _result.ref.files;
         final _totalFiles = _result.ref.totalFiles;
 
-        final _files = <FileInfo>[];
+        final _files = <ArchiveFileInfo>[];
 
         for (var i = 0; i < _totalFiles; i++) {
           final _value = filesPtr.elementAt(i).value;
 
-          final _file = FileInfo(
+          final _file = ArchiveFileInfo(
             mode: _value.ref.mode,
             size: _value.ref.size,
             isDir: fromFfiBool(_value.ref.isDir),
@@ -129,7 +130,7 @@ class ArchiverFfi {
   }
 
   // Check whether an archive is encrypted
-  Future<DC<Exception, IsArchiveEncryptedResult>> isArchiveEncrypted(
+  Future<DC<ArchiverException, IsArchiveEncryptedResult>> isArchiveEncrypted(
     IsArchiveEncrypted params,
   ) async {
     final _requests = ReceivePort();
@@ -147,7 +148,7 @@ class ArchiverFfi {
       _password,
     );
 
-    final _completer = Completer<DC<Exception, IsArchiveEncryptedResult>>();
+    final _completer = Completer<DC<ArchiverException, IsArchiveEncryptedResult>>();
 
     StreamSubscription _requestsSub;
 
@@ -158,7 +159,7 @@ class ArchiverFfi {
 
       final _error = _result.ref.error;
 
-      DC<Exception, IsArchiveEncryptedResult> _dc;
+      DC<ArchiverException, IsArchiveEncryptedResult> _dc;
 
       if (_error.ref.error.address != 0) {
         _dc = handleError<IsArchiveEncryptedResult>(_error);
@@ -192,7 +193,7 @@ class ArchiverFfi {
   }
 
   // Pack files
-  Future<DC<Exception, PackFilesResult>> packFiles(
+  Future<DC<ArchiverException, PackFilesResult>> packFiles(
     PackFiles params, {
     Function({
       @required String startTime,
@@ -228,7 +229,7 @@ class ArchiverFfi {
       _pFileList.address,
     );
 
-    final _completer = Completer<DC<Exception, PackFilesResult>>();
+    final _completer = Completer<DC<ArchiverException, PackFilesResult>>();
 
     StreamSubscription _requestsSub;
 
@@ -236,7 +237,7 @@ class ArchiverFfi {
       final _address = address as int;
       final _result = Pointer<PackFilesStruct>.fromAddress(_address);
 
-      DC<Exception, PackFilesResult> _dc;
+      DC<ArchiverException, PackFilesResult> _dc;
 
       final _ended = fromFfiBool(_result.ref.ended);
 
@@ -280,7 +281,7 @@ class ArchiverFfi {
   }
 
   // Unpack files
-  Future<DC<Exception, UnpackFilesResult>> unpackFiles(
+  Future<DC<ArchiverException, UnpackFilesResult>> unpackFiles(
     UnpackFiles params, {
     Function({
       @required String startTime,
@@ -318,7 +319,7 @@ class ArchiverFfi {
       _pFileList.address,
     );
 
-    final _completer = Completer<DC<Exception, UnpackFilesResult>>();
+    final _completer = Completer<DC<ArchiverException, UnpackFilesResult>>();
 
     StreamSubscription _requestsSub;
 
@@ -326,7 +327,7 @@ class ArchiverFfi {
       final _address = address as int;
       final _result = Pointer<UnpackFilesStruct>.fromAddress(_address);
 
-      DC<Exception, UnpackFilesResult> _dc;
+      DC<ArchiverException, UnpackFilesResult> _dc;
 
       final _ended = fromFfiBool(_result.ref.ended);
 
