@@ -114,9 +114,6 @@ dependencies:
   path: ^1.7.0
   path_provider: ^1.5.1
 
-  # data tablr
-  data_tables: ^1.0.3
-
 dev_dependencies:
   flutter_test:
     sdk: flutter
