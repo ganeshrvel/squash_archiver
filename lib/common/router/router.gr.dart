@@ -8,15 +8,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:squash_archiver/features/splash/ui/pages/splash_screen.dart';
-import 'package:squash_archiver/features/home/ui/pages/home_screen.dart';
+import 'package:squash_archiver/features/home/ui/pages/file_explorer_screen.dart';
 import 'package:squash_archiver/features/page_not_found/ui/pages/page_not_found_screen.dart';
 
 abstract class Routes {
   static const splashScreen = '/splash-screen';
-  static const homeScreen = '/';
+  static const fileExplorerScreen = '/';
   static const all = {
     splashScreen,
-    homeScreen,
+    fileExplorerScreen,
   };
 }
 
@@ -43,14 +43,18 @@ class Router extends RouterBase {
               SplashScreen(key: typedArgs.key),
           settings: settings,
         );
-      case Routes.homeScreen:
-        if (hasInvalidArgs<HomeScreenArguments>(args)) {
-          return misTypedArgsRoute<HomeScreenArguments>(args);
+      case Routes.fileExplorerScreen:
+        if (hasInvalidArgs<FileExplorerScreenArguments>(args)) {
+          return misTypedArgsRoute<FileExplorerScreenArguments>(args);
         }
-        final typedArgs = args as HomeScreenArguments ?? HomeScreenArguments();
+        final typedArgs = args as FileExplorerScreenArguments ??
+            FileExplorerScreenArguments();
         return PageRouteBuilder<dynamic>(
-          pageBuilder: (context, animation, secondaryAnimation) => HomeScreen(
-              routeName: typedArgs.routeName, routeArgs: typedArgs.routeArgs),
+          pageBuilder: (context, animation, secondaryAnimation) =>
+              FileExplorerScreen(
+                  key: typedArgs.key,
+                  redirectRouteName: typedArgs.redirectRouteName,
+                  redirectRouteArgs: typedArgs.redirectRouteArgs),
           settings: settings,
         );
       default:
@@ -73,9 +77,11 @@ class SplashScreenArguments {
   SplashScreenArguments({this.key});
 }
 
-//HomeScreen arguments holder class
-class HomeScreenArguments {
-  final String routeName;
-  final Object routeArgs;
-  HomeScreenArguments({this.routeName, this.routeArgs});
+//FileExplorerScreen arguments holder class
+class FileExplorerScreenArguments {
+  final Key key;
+  final String redirectRouteName;
+  final Object redirectRouteArgs;
+  FileExplorerScreenArguments(
+      {this.key, this.redirectRouteName, this.redirectRouteArgs});
 }

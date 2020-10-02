@@ -3,7 +3,7 @@ import 'dart:io';
 import 'dart:isolate';
 
 import 'package:flutter/material.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:mobx/mobx.dart';
 import 'package:squash_archiver/common/di/di.dart' show getItInit;
 import 'package:squash_archiver/constants/env.dart';
 import 'package:squash_archiver/features/app/ui/pages/app_screen.dart';
@@ -37,15 +37,34 @@ Future<void> main() async {
 
   runZonedGuarded(() {
     runApp(
-      ProviderScope(
-        child: AppScreen(),
-      ),
+      AppScreen(),
     );
   }, (Object error, StackTrace stackTrace) {
     // Whenever an error occurs, call the `_reportError` function. This sends
     // Dart errors to the dev console or Sentry depending on the environment.
     log.error(
       title: 'A crash was captured by main.runZonedGuarded',
+      error: error,
+      stackTrace: stackTrace,
+    );
+  });
+
+  mainContext.onReactionError((_, rxn) {
+    log.error(
+      title: 'A mobx reaction error occured.',
+      error: rxn.errorValue.exception,
+      stackTrace: rxn.errorValue.stackTrace,
+    );
+  });
+
+  runZonedGuarded(() {
+    runApp(AppScreen());
+  }, (Object error, StackTrace stackTrace) {
+    // Whenever an error occurs, call the `_reportError` function. This sends
+    // Dart errors to the dev console or Sentry depending on the environment.
+    log.error(
+      title:
+          'A Flutter crash occured and it was captured by main.runZonedGuarded',
       error: error,
       stackTrace: stackTrace,
     );

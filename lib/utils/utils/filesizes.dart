@@ -47,21 +47,21 @@ String filesize(dynamic size, [int round = 2]) {
 
   if (_size < divider * divider * divider * divider * divider &&
       _size % divider == 0) {
-    num r = _size / divider / divider / divider / divider;
+    final r = _size / divider / divider / divider / divider;
     return '${r.toStringAsFixed(0)} TB';
   }
 
   if (_size < divider * divider * divider * divider * divider) {
-    num r = _size / divider / divider / divider / divider;
+    final r = _size / divider / divider / divider / divider;
     return '${r.toStringAsFixed(round)} TB';
   }
 
   if (_size < divider * divider * divider * divider * divider * divider &&
       _size % divider == 0) {
-    num r = _size / divider / divider / divider / divider / divider;
+    final r = _size / divider / divider / divider / divider / divider;
     return '${r.toStringAsFixed(0)} PB';
   } else {
-    num r = _size / divider / divider / divider / divider / divider;
+    final r = _size / divider / divider / divider / divider / divider;
     return '${r.toStringAsFixed(round)} PB';
   }
 }

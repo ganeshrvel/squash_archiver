@@ -4,6 +4,10 @@ import 'package:squash_archiver/common/router/router.gr.dart';
 import 'package:squash_archiver/utils/utils/functs.dart';
 
 bool isCurrentScreen(BuildContext context) {
+  if (isNull(context)) {
+    return null;
+  }
+
   return ModalRoute.of(context).isCurrent;
 }
 
@@ -15,106 +19,105 @@ String getCurrentScreen(BuildContext context) {
   return ModalRoute.of(context).settings.name;
 }
 
-void navigateToRoute(
+Future<T> navigateToRoute<T>(
   BuildContext context,
   String routeName, {
   Object routeArgs,
-}) {
-  if (getCurrentScreen(context) == routeName) {
-    return;
+  bool skipSameRouteCheck,
+}) async {
+  final _skipSameRouteCheck = skipSameRouteCheck ?? true;
+
+  if (!_skipSameRouteCheck && getCurrentScreen(context) == routeName) {
+    return null;
   }
 
-  if (routeName == Routes.homeScreen) {
-    navigateToHome(
-      context,
-      routeArgs: HomeScreenArguments(
-        routeName: routeName,
-        routeArgs: routeArgs,
-      ),
-    );
+  if (routeName == Routes.fileExplorerScreen) {
+    var _routeArgs = FileExplorerScreenArguments();
 
-    return;
+    if (routeArgs is FileExplorerScreenArguments) {
+      _routeArgs = routeArgs;
+    }
+
+    return navigateToFileExplorerScreen<T>(context, routeArgs: _routeArgs);
   }
 
   if (routeArgs != null) {
-    ExtendedNavigator.of(context).pushNamed(
+    return ExtendedNavigator?.rootNavigator?.pushNamed<T>(
       routeName,
       arguments: routeArgs,
     );
-
-    return;
   }
-
-  ExtendedNavigator.of(context).pushNamed(routeName);
+  return ExtendedNavigator?.rootNavigator?.pushNamed<T>(routeName);
 }
 
-void navigateToRouteAndReplace(
+Future<T> navigateToRouteAndReplace<T>(
   BuildContext context,
   String routeName, {
   Object routeArgs,
-}) {
-  if (routeName == Routes.homeScreen) {
-    navigateToHome(
-      context,
-      routeArgs: HomeScreenArguments(
-        routeName: routeName,
-        routeArgs: routeArgs,
-      ),
-    );
+}) async {
+  if (routeName == Routes.fileExplorerScreen) {
+    var _routeArgs = FileExplorerScreenArguments();
 
-    return;
+    if (routeArgs is FileExplorerScreenArguments) {
+      _routeArgs = routeArgs;
+    }
+
+    return navigateToFileExplorerScreen<T>(context, routeArgs: _routeArgs);
   }
 
   if (routeArgs != null) {
-    ExtendedNavigator.of(context).pushReplacementNamed(
+    return ExtendedNavigator?.rootNavigator?.pushReplacementNamed(
       routeName,
       arguments: routeArgs,
     );
-
-    return;
   }
 
-  ExtendedNavigator.of(context).pushReplacementNamed(
+  return ExtendedNavigator?.rootNavigator?.pushReplacementNamed(
     routeName,
   );
 }
 
-void navigateToRouteAndRemoveUntil(
+Future<T> navigateToRouteAndRemoveUntil<T>(
   BuildContext context,
   String routeName, {
   Object routeArgs,
-}) {
+}) async {
   if (routeArgs != null) {
-    ExtendedNavigator.of(context).pushNamedAndRemoveUntil(
+    return ExtendedNavigator?.rootNavigator?.pushNamedAndRemoveUntil<T>(
       routeName,
       (final route) => false,
       arguments: routeArgs,
     );
-
-    return;
   }
 
-  ExtendedNavigator.of(context).pushNamedAndRemoveUntil(
+  return ExtendedNavigator?.rootNavigator?.pushNamedAndRemoveUntil<T>(
     routeName,
     (final route) => false,
   );
 }
 
-void popCurrentRoute(BuildContext context) {
-  ExtendedNavigator.of(context).pop();
-}
-
-void canPopCurrentRoute(BuildContext context) {
-  ExtendedNavigator.of(context).canPop();
-}
-
-void navigateToHome(
+void popCurrentRoute<T>(
   BuildContext context, {
-  @required HomeScreenArguments routeArgs,
+  T result,
 }) {
-  navigateToRouteAndRemoveUntil(
+  return ExtendedNavigator?.rootNavigator?.pop<T>(result);
+}
+
+bool canPopCurrentRoute<T>(BuildContext context) {
+  return ExtendedNavigator?.rootNavigator?.canPop();
+}
+
+Future<T> pushRoute<T>(BuildContext context, Route route) async {
+  return ExtendedNavigator?.rootNavigator?.push<dynamic>(route) as Future<T>;
+}
+
+Future<T> navigateToFileExplorerScreen<T>(
+  BuildContext context, {
+  @required FileExplorerScreenArguments routeArgs,
+}) async {
+  return navigateToRouteAndRemoveUntil<T>(
     context,
-    Routes.homeScreen,
+    Routes.fileExplorerScreen,
     routeArgs: routeArgs,
   );
 }

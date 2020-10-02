@@ -5,14 +5,14 @@ import 'package:archiver_ffi/models/list_archive.dart';
 import 'package:data_channel/data_channel.dart';
 import 'package:flutter/foundation.dart';
 import 'package:injectable/injectable.dart';
-import 'package:squash_archiver/utils/archiver/archiver_provider.dart';
 import 'package:squash_archiver/utils/utils/files.dart';
 import 'package:squash_archiver/utils/utils/functs.dart';
 
 @lazySingleton
 class Archiver {
-  final ArchiverFfi _ffiLib =
-      archiverFfiProviderContainer.read(archiverFfiProvider);
+  final ArchiverFfi _ffiLib;
+
+  Archiver(this._ffiLib);
 
   ListArchive _listArchiveParams;
 
@@ -136,7 +136,9 @@ class Archiver {
 Future<DC<ArchiverException, ListArchiveResult>> _fetchFiles(
   ListArchive params,
 ) async {
-  final _ffiLib = archiverFfiProviderContainer.read(archiverFfiProvider);
+  /// todo see if ArchiverFfi in _fetchFiles can be accessed from provider
+  print('todo see if ArchiverFfi in _fetchFiles can be accessed from provider');
+  final _ffiLib = ArchiverFfi();
 
   return _ffiLib.listArchive(params);
 }
