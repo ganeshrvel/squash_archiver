@@ -1,13 +1,7 @@
 import 'dart:ffi';
 
-import 'package:archiver_ffi/exceptions/archiver_exception.dart';
-import 'package:archiver_ffi/exceptions/file_not_found_exception.dart';
-import 'package:archiver_ffi/exceptions/file_not_found_to_pack_exception.dart';
-import 'package:archiver_ffi/exceptions/file_unsupported_file_format_exception.dart';
-import 'package:archiver_ffi/exceptions/filter_path_not_found_exception.dart';
-import 'package:archiver_ffi/exceptions/invalid_password_exception.dart';
-import 'package:archiver_ffi/exceptions/operation_not_permitted_exception.dart';
-import 'package:archiver_ffi/structs/common.dart';
+import 'package:archiver_ffi/src/exceptions/exceptions.dart';
+import 'package:archiver_ffi/src/structs/common.dart';
 import 'package:data_channel/data_channel.dart';
 
 DC<ArchiverException, T> handleError<T>(Pointer<ResultErrorStruct> errorPtr, {T data}) {

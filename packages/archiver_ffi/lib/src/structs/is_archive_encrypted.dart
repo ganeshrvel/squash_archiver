@@ -1,6 +1,6 @@
 import 'dart:ffi';
 
-import 'package:archiver_ffi/structs/common.dart';
+import 'package:archiver_ffi/src/structs/common.dart';
 import 'package:ffi/ffi.dart';
 
 class IsArchiveEncryptedResultStruct extends Struct {

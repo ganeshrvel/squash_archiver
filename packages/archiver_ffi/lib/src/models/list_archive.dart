@@ -1,5 +1,5 @@
-import 'package:archiver_ffi/models/archive_file_info.dart';
-import 'package:archiver_ffi/utils/functs.dart';
+import 'package:archiver_ffi/src/models/archive_file_info.dart';
+import 'package:archiver_ffi/src/utils/functs.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 

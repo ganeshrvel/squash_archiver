@@ -1,9 +1,8 @@
-import 'package:archiver_ffi/archiver_ffi.dart';
-import 'package:archiver_ffi/exceptions/file_not_found_to_pack_exception.dart';
-import 'package:archiver_ffi/exceptions/file_unsupported_file_format_exception.dart';
-import 'package:archiver_ffi/models/list_archive.dart';
-import 'package:archiver_ffi/models/pack_files.dart';
-import 'package:archiver_ffi/utils/test_utils.dart';
+import 'package:archiver_ffi/src/archiver_ffi.dart';
+import 'package:archiver_ffi/src/exceptions/exceptions.dart';
+import 'package:archiver_ffi/src/models/list_archive.dart';
+import 'package:archiver_ffi/src/models/pack_files.dart';
+import 'package:archiver_ffi/src/utils/test_utils.dart';
 import 'package:meta/meta.dart';
 import 'package:test/test.dart';
 
@@ -57,7 +56,8 @@ void main() {
       expect(_result.error.toString(), contains('no such file or directory'));
     });
 
-    test('wrong extension | should throw | (format unrecognized by filename) error',
+    test(
+        'wrong extension | should throw | (format unrecognized by filename) error',
         () async {
       final _param = PackFiles(
         filename: getTestMocksBuildAsset('mock_test_file1.test'),
@@ -77,7 +77,8 @@ void main() {
       expect(_result.hasError, equals(true));
       expect(_result.hasData, equals(false));
       expect(_result.error, isA<UnsupportedFileFormatException>());
-      expect(_result.error.toString(), contains('format unrecognized by filename'));
+      expect(_result.error.toString(),
+          contains('format unrecognized by filename'));
     });
 
     test('adding files to pack | should not throw error', () async {

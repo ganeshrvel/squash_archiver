@@ -1,7 +1,7 @@
-import 'package:archiver_ffi/archiver_ffi.dart';
-import 'package:archiver_ffi/exceptions/file_not_found_exception.dart';
-import 'package:archiver_ffi/models/is_archive_encrypted.dart';
-import 'package:archiver_ffi/utils/test_utils.dart';
+import 'package:archiver_ffi/src/archiver_ffi.dart';
+import 'package:archiver_ffi/src/exceptions/exceptions.dart';
+import 'package:archiver_ffi/src/models/is_archive_encrypted.dart';
+import 'package:archiver_ffi/src/utils/test_utils.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -34,7 +34,8 @@ void main() {
       expect(_result.error.toString(), contains('file does not exist'));
     });
 
-    test('wrong extension | should throw (file does not exist) error', () async {
+    test('wrong extension | should throw (file does not exist) error',
+        () async {
       final _param = IsArchiveEncrypted(
         filename: getTestMocksAsset('no_file.tar'),
       );
@@ -71,7 +72,8 @@ void main() {
       expect(_result.data.isValidPassword, equals(false));
     });
 
-    test('encrypted file | invalid password | should not throw an error', () async {
+    test('encrypted file | invalid password | should not throw an error',
+        () async {
       final _param = IsArchiveEncrypted(
         filename: getTestMocksAsset('mock_enc_test_file1.zip'),
         password: 'qwerty',
@@ -84,7 +86,8 @@ void main() {
       expect(_result.data.isValidPassword, equals(false));
     });
 
-    test('encrypted file | valid password | should not throw an error', () async {
+    test('encrypted file | valid password | should not throw an error',
+        () async {
       final _param = IsArchiveEncrypted(
         filename: getTestMocksAsset('mock_enc_test_file1.zip'),
         password: '1234567',
@@ -97,7 +100,8 @@ void main() {
       expect(_result.data.isValidPassword, equals(true));
     });
 
-    test('encrypted rar file | valid password | should not throw an error', () async {
+    test('encrypted rar file | valid password | should not throw an error',
+        () async {
       final _param = IsArchiveEncrypted(
         filename: getTestMocksAsset('mock_enc_test_file1.rar'),
         password: '1234567',

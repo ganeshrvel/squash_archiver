@@ -1,9 +1,9 @@
 name: archiver_ffi
 description: Archiver FFI package
-version: 0.0.1
+version: 0.5.0
 
 environment:
-  sdk: ">=2.9.0 <3.0.0"
+  sdk: '>=2.9.0 <3.0.0'
 
 dependencies:
   ffi: ^0.1.3

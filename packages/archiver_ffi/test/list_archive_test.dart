@@ -1,9 +1,7 @@
-import 'package:archiver_ffi/archiver_ffi.dart';
-import 'package:archiver_ffi/exceptions/file_not_found_exception.dart';
-import 'package:archiver_ffi/exceptions/invalid_password_exception.dart';
-import 'package:archiver_ffi/exceptions/archiver_exception.dart';
-import 'package:archiver_ffi/models/list_archive.dart';
-import 'package:archiver_ffi/utils/test_utils.dart';
+import 'package:archiver_ffi/src/archiver_ffi.dart';
+import 'package:archiver_ffi/src/exceptions/exceptions.dart';
+import 'package:archiver_ffi/src/models/list_archive.dart';
+import 'package:archiver_ffi/src/utils/test_utils.dart';
 import 'package:data_channel/data_channel.dart';
 import 'package:meta/meta.dart';
 import 'package:test/test.dart';

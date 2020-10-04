@@ -1,9 +1,9 @@
-import 'package:archiver_ffi/archiver_ffi.dart';
-import 'package:archiver_ffi/models/is_archive_encrypted.dart';
-import 'package:archiver_ffi/models/list_archive.dart';
-import 'package:archiver_ffi/models/pack_files.dart';
-import 'package:archiver_ffi/models/unpack_files.dart';
-import 'package:archiver_ffi/utils/test_utils.dart';
+import 'package:archiver_ffi/src/archiver_ffi.dart';
+import 'package:archiver_ffi/src/models/is_archive_encrypted.dart';
+import 'package:archiver_ffi/src/models/list_archive.dart';
+import 'package:archiver_ffi/src/models/pack_files.dart';
+import 'package:archiver_ffi/src/models/unpack_files.dart';
+import 'package:archiver_ffi/src/utils/test_utils.dart';
 import 'package:meta/meta.dart';
 
 Future<void> main() async {

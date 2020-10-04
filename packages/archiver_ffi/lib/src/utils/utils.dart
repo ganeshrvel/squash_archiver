@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'package:archiver_ffi/constants/app_files.dart';
+import 'package:archiver_ffi/src/constants/app_files.dart';
 import 'package:path/path.dart' as path;
 
 String getNativeLibRoot() {
