@@ -1,71 +1,76 @@
 import 'package:archiver_ffi/archiver_ffi.dart';
-import 'package:archiver_ffi/exceptions/archiver_exception.dart';
 import 'package:archiver_ffi/models/archive_file_info.dart';
 import 'package:archiver_ffi/models/list_archive.dart';
 import 'package:data_channel/data_channel.dart';
 import 'package:flutter/foundation.dart';
 import 'package:injectable/injectable.dart';
+import 'package:squash_archiver/common/exceptions/task_in_progress_exception.dart';
+import 'package:squash_archiver/utils/archiver/archiver_lib.dart';
 import 'package:squash_archiver/utils/utils/files.dart';
 import 'package:squash_archiver/utils/utils/functs.dart';
 
-/// todo make ArchiverFfi into a singleton
-/// todo lock the ArchiverFfi actions. when some task is in progress then prevent the next task from occuring before the previous done is completed. (queue it?)
-///
 @lazySingleton
 class Archiver {
-  final ArchiverFfi _ffiLib;
-
-  Archiver(this._ffiLib);
+  final ArchiverFfi _ffiLib = archiverFfiLib;
 
   ListArchive _listArchiveParams;
 
   ListArchiveResult _listArchiveResult;
 
-  Future<DC<ArchiverException, List<ArchiveFileInfo>>> listFiles(
+  bool taskInProgress = false;
+
+  Future<DC<Exception, List<ArchiveFileInfo>>> listFiles(
     ListArchive params, {
     bool invalidateCache,
   }) async {
     assert(params != null);
 
+    if (taskInProgress) {
+      return DC.error(TaskInProgressException());
+    }
+
+    taskInProgress = true;
+
     final _invalidateCache = invalidateCache ?? false;
+
+    /// todo write test cases for listFiles
+    print('todo write test cases for listFiles');
 
     if (_invalidateCache) {
       _listArchiveParams = null;
       _listArchiveResult = null;
     }
 
-    DC<ArchiverException, ListArchiveResult> _result;
+    DC<Exception, List<ArchiveFileInfo>> _result;
 
-    if (_invalidateListingCache(params)) {
+    if (_shouldUseCache(params)) {
       // caching the results
       _listArchiveParams = params;
 
-      _result = await compute(_fetchFiles, params);
+      final _computedListArchiveResult = await compute(_fetchFiles, params);
 
-      if (_result.hasError) {
-        return DC.error(_result.error);
-      }
-
-      if (_result.hasData) {
-        _listArchiveResult = _result.data;
-
-        return DC.data(_listArchiveResult.files);
+      if (_computedListArchiveResult.hasError) {
+        _result = DC.error(_computedListArchiveResult.error);
+      } else if (_computedListArchiveResult.hasData) {
+        _listArchiveResult = _computedListArchiveResult.data;
 
         final _filteredPath = _getFilesList(
           listDirectoryPath: params.listDirectoryPath,
         );
 
-        return DC.data(_filteredPath);
+        _result = DC.data(_filteredPath);
       }
     } else {
       final _filteredPath = _getFilesList(
         listDirectoryPath: params.listDirectoryPath,
       );
 
-      return DC.data(_filteredPath);
+      _result = DC.data(_filteredPath);
     }
 
-    return DC.data([]);
+    taskInProgress = false;
+
+    return _result;
   }
 
   // filter files by their path
@@ -97,7 +102,7 @@ class Archiver {
     }).toList();
   }
 
-  bool _invalidateListingCache(ListArchive params) {
+  bool _shouldUseCache(ListArchive params) {
     if (isNull(params) || isNull(_listArchiveParams)) {
       return true;
     }
@@ -138,12 +143,8 @@ class Archiver {
   }
 }
 
-Future<DC<ArchiverException, ListArchiveResult>> _fetchFiles(
+Future<DC<Exception, ListArchiveResult>> _fetchFiles(
   ListArchive params,
 ) async {
-  /// todo see if ArchiverFfi in _fetchFiles can be accessed from provider
-  print('todo see if ArchiverFfi in _fetchFiles can be accessed from provider');
-  final _ffiLib = ArchiverFfi();
-
-  return _ffiLib.listArchive(params);
+  return archiverFfiLib.listArchive(params);
 }

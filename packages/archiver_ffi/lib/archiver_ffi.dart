@@ -24,14 +24,22 @@ import 'package:meta/meta.dart';
 class ArchiverFfi {
   SquashArchiverLib _squashArchiverLib;
 
-  ArchiverFfi({bool isTest}) {
+  static final ArchiverFfi _instance = ArchiverFfi._internal();
+
+  factory ArchiverFfi({bool isTest}) {
     final _isTest = isTest ?? false;
 
     final _dylib = DynamicLibrary.open(getNativeLib(fullPath: _isTest));
 
-    _squashArchiverLib = SquashArchiverLib(_dylib);
-    _squashArchiverLib.InitNewNativeDartPort(NativeApi.initializeApiDLData);
+    ArchiverFfi._instance._squashArchiverLib = SquashArchiverLib(_dylib);
+    ArchiverFfi._instance._squashArchiverLib.InitNewNativeDartPort(
+      NativeApi.initializeApiDLData,
+    );
+
+    return _instance;
   }
+
+  ArchiverFfi._internal();
 
   // List files in an archive
   Future<DC<ArchiverException, ListArchiveResult>> listArchive(
@@ -115,8 +123,6 @@ class ArchiverFfi {
         );
       }
 
-      _completer.complete(_dc);
-
       // free all FFI allocated values
       _ptrToFreeList.forEach(free);
       _squashArchiverLib.FreeListArchiveMemory(_address);
@@ -124,6 +130,8 @@ class ArchiverFfi {
       _requests.close();
       _requestsSub.cancel();
       _squashArchiverLib.CloseNativeDartPort(_nativePort);
+
+      _completer.complete(_dc);
     });
 
     return _completer.future;
@@ -148,7 +156,8 @@ class ArchiverFfi {
       _password,
     );
 
-    final _completer = Completer<DC<ArchiverException, IsArchiveEncryptedResult>>();
+    final _completer =
+        Completer<DC<ArchiverException, IsArchiveEncryptedResult>>();
 
     StreamSubscription _requestsSub;
 
@@ -178,8 +187,6 @@ class ArchiverFfi {
         );
       }
 
-      _completer.complete(_dc);
-
       // free all FFI allocated values
       _ptrToFreeList.forEach(free);
       _squashArchiverLib.FreeIsArchiveEncryptedMemory(_address);
@@ -187,6 +194,8 @@ class ArchiverFfi {
       _requests.close();
       _requestsSub.cancel();
       _squashArchiverLib.CloseNativeDartPort(_nativePort);
+
+      _completer.complete(_dc);
     });
 
     return _completer.future;
@@ -265,8 +274,6 @@ class ArchiverFfi {
 
       // free the memory and complete the task if [_ended] flag is true
       if (_ended) {
-        _completer.complete(_dc);
-
         // free all FFI allocated values
         _ptrToFreeList.forEach(free);
         _squashArchiverLib.FreePackFilesMemory(_address);
@@ -274,6 +281,8 @@ class ArchiverFfi {
         _requests.close();
         _requestsSub.cancel();
         _squashArchiverLib.CloseNativeDartPort(_nativePort);
+
+        _completer.complete(_dc);
       }
     });
 
@@ -355,8 +364,6 @@ class ArchiverFfi {
 
       // free the memory and complete the task if [_ended] flag is true
       if (_ended) {
-        _completer.complete(_dc);
-
         // free all FFI allocated values
         _ptrToFreeList.forEach(free);
         _squashArchiverLib.FreeUnpackFilesMemory(_address);
@@ -364,6 +371,8 @@ class ArchiverFfi {
         _requests.close();
         _requestsSub.cancel();
         _squashArchiverLib.CloseNativeDartPort(_nativePort);
+
+        _completer.complete(_dc);
       }
     });
 

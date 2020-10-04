@@ -77,25 +77,41 @@ class _FileExplorerScreenState extends SfWidget<FileExplorerScreen> {
                 icon: Icons.arrow_back,
                 iconButtonPadding: const EdgeInsets.all(20),
               ),
-              Button(
-                text: 'Refresh',
-                onPressed: () {
-                  _fileExplorerScreenStore.refreshFiles();
-                },
-                buttonType: ButtonTypes.ICON,
-                icon: Icons.refresh,
-                iconButtonPadding: const EdgeInsets.all(20),
-              ),
-              Button(
-                text: 'Force refresh',
-                onPressed: () {
-                  _fileExplorerScreenStore.refreshFiles(
-                    invalidateCache: true,
+              Observer(
+                builder: (_) {
+                  final _listFilesInProgress =
+                      _fileExplorerScreenStore.listFilesInProgress;
+
+                  return Button(
+                    text: 'Refresh',
+                    onPressed: () {
+                      _fileExplorerScreenStore.refreshFiles();
+                    },
+                    buttonType: ButtonTypes.ICON,
+                    icon: Icons.refresh,
+                    iconButtonPadding: const EdgeInsets.all(20),
+                    loading: _listFilesInProgress,
                   );
                 },
-                buttonType: ButtonTypes.ICON,
-                icon: Icons.replay_circle_filled,
-                iconButtonPadding: const EdgeInsets.all(20),
+              ),
+              Observer(
+                builder: (_) {
+                  final _listFilesInProgress =
+                      _fileExplorerScreenStore.listFilesInProgress;
+
+                  return Button(
+                    text: 'Force refresh',
+                    onPressed: () {
+                      _fileExplorerScreenStore.refreshFiles(
+                        invalidateCache: true,
+                      );
+                    },
+                    buttonType: ButtonTypes.ICON,
+                    icon: Icons.replay_circle_filled,
+                    iconButtonPadding: const EdgeInsets.all(20),
+                    loading: _listFilesInProgress,
+                  );
+                },
               ),
             ],
           ),
@@ -147,52 +163,6 @@ class _FileExplorerScreenState extends SfWidget<FileExplorerScreen> {
       ),
     );
   }
-
-  // Widget _buildFileExplorer({
-  //   @required List<ArchiveFileInfo> fileList,
-  // }) {
-  //   return FileExplorerTable(
-  //     fileList: fileList,
-  //   );
-  // }
-
-  //
-  // Widget _buildFileExplorer() {
-  //   return CustomScrollView(
-  //     controller: _scrollController,
-  //     physics: const ScrollPhysics(),
-  //     slivers: <Widget>[
-  //       _buildHeader(context),
-  //       SliverPadding(
-  //         padding: const EdgeInsets.fromLTRB(0, 0, 0, 15),
-  //         sliver: Observer(
-  //           builder: (_) {
-  //             final _fileList = _fileExplorerScreenStore.fileList;
-  //
-  //             return SliverList(
-  //               delegate: SliverChildListDelegate(
-  //                 [
-  //                   ListView.builder(
-  //                       itemCount: _fileList.length,
-  //                       itemBuilder: (BuildContext ctxt, int index) {
-  //                         return Text(_fileList[index].name);
-  //                       })
-  //
-  //                   // Padding(
-  //                   //   padding: const EdgeInsets.fromLTRB(0, 15, 0, 15),
-  //                   //   child: _buildFileExplorer(
-  //                   //     fileList: _fileList,
-  //                   //   ),
-  //                   // ),
-  //                 ],
-  //               ),
-  //             );
-  //           },
-  //         ),
-  //       ),
-  //     ],
-  //   );
-  // }
 
   List<Widget> _buildRows({@required List<ArchiveFileInfo> fileList}) {
     return fileList.map((file) {
@@ -255,8 +225,12 @@ class _FileExplorerScreenState extends SfWidget<FileExplorerScreen> {
       focusNode: FocusNode(),
       autofocus: true,
       onKey: (RawKeyEvent event) {
-        print(event.isControlPressed);
-        print(event.logicalKey.keyLabel);
+        // if (event.isKeyPressed(LogicalKeyboardKey.arrowDown)) {
+        //
+        // }
+        // if (event.isKeyPressed(LogicalKeyboardKey.arrowUp)) {
+        //
+        // }
       },
       child: CustomScrollView(
         controller: _scrollController,
@@ -269,65 +243,11 @@ class _FileExplorerScreenState extends SfWidget<FileExplorerScreen> {
               builder: (_) {
                 final _fileList = _fileExplorerScreenStore.fileList;
 
-                // return SliverList(
-                //   delegate: SliverChildListDelegate([
-                //     FileExplorerTable(
-                //       fileList: _fileList,
-                //     )
-                //   ]),
-                // );
-
-                ///
-                /// TODO use this:
-                ///
-                ///
                 return FilExplorerTable(
                   rows: _buildRows(fileList: _fileList),
                 );
-
-                ///
-                /// TODO use this^
-                ///
-
-                return SliverList(
-                  delegate: SliverChildListDelegate(
-                    [
-                      // Container(color: Colors.red, height: 150.0),
-                      // Container(color: Colors.purple, height: 150.0),
-                      // Container(color: Colors.green, height: 150.0),
-                      // FileExplorerTable(
-                      //   fileList: _fileList,
-                      // ),
-                      // ListView.builder(
-                      //     itemCount: _fileList.length,
-                      //     itemBuilder: (BuildContext ctxt, int index) {
-                      //       return Text(_fileList[index].name);
-                      //     })
-
-                      // Padding(
-                      //   padding: const EdgeInsets.fromLTRB(0, 15, 0, 15),
-                      //   child: _buildFileExplorer(
-                      //     fileList: _fileList,
-                      //   ),
-                      // ),
-                    ],
-                  ),
-                );
               },
             ),
-            // sliver: SliverList(
-            //   delegate: SliverChildListDelegate(
-            //     [
-            //
-            //       ListView.builder(
-            //         itemCount: _fileList.length,
-            //         itemBuilder: (BuildContext ctxt, int index) {
-            //           return Text(_fileList[index].name);
-            //         },),
-            //
-            //     ],
-            //   ),
-            // ),
           ),
         ],
       ),

@@ -9,6 +9,14 @@ part of 'file_explorer_screen_store.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$FileExplorerScreenStore on _FileExplorerScreenStoreBase, Store {
+  Computed<bool> _$listFilesInProgressComputed;
+
+  @override
+  bool get listFilesInProgress => (_$listFilesInProgressComputed ??=
+          Computed<bool>(() => super.listFilesInProgress,
+              name: '_FileExplorerScreenStoreBase.listFilesInProgress'))
+      .value;
+
   final _$currentPathAtom =
       Atom(name: '_FileExplorerScreenStoreBase.currentPath');
 
@@ -239,7 +247,8 @@ orderDir: ${orderDir},
 gitIgnorePattern: ${gitIgnorePattern},
 fileListFuture: ${fileListFuture},
 fileListException: ${fileListException},
-fileList: ${fileList}
+fileList: ${fileList},
+listFilesInProgress: ${listFilesInProgress}
     ''';
   }
 }

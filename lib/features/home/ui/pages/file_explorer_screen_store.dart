@@ -10,6 +10,7 @@ import 'package:squash_archiver/common/di/di.dart';
 import 'package:squash_archiver/utils/archiver/archiver.dart';
 import 'package:squash_archiver/utils/utils/files.dart';
 import 'package:squash_archiver/utils/utils/functs.dart';
+import 'package:squash_archiver/utils/utils/store_helper.dart';
 
 part 'file_explorer_screen_store.g.dart';
 
@@ -70,22 +71,14 @@ abstract class _FileExplorerScreenStoreBase with Store {
         )
       ];
 
-  // @computed
-  // void get _computedFiles {
-  //   if (isNullOrEmpty(currentArchiveFilename)) {
-  //     setFiles([]);
-  //     setPassword('');
-  //     setCurrentPath('');
-  //
-  //     return;
-  //   }
-  //
-  //   fetchFiles();
-  // }
+  @computed
+  bool get listFilesInProgress {
+    return isStateLoading(fileListFuture);
+  }
 
   @action
   Future<void> refreshFiles({bool invalidateCache}) async {
-    return fetchFiles(invalidateCache: true);
+    return fetchFiles(invalidateCache: invalidateCache);
   }
 
   @action

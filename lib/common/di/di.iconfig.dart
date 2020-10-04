@@ -5,8 +5,7 @@
 // **************************************************************************
 
 import 'package:squash_archiver/services/analytics_service.dart';
-import 'package:squash_archiver/common/di/archiver_ffi_di.dart';
-import 'package:archiver_ffi/archiver_ffi.dart';
+import 'package:squash_archiver/utils/archiver/archiver.dart';
 import 'package:squash_archiver/common/di/network_info_di.dart';
 import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:squash_archiver/utils/device_details/device_details.dart';
@@ -28,7 +27,6 @@ import 'package:squash_archiver/common/api_client/api_client.dart';
 import 'package:squash_archiver/features/app/data/data_sources/app_local_data_source.dart';
 import 'package:squash_archiver/utils/device_details/app_meta_info.dart';
 import 'package:squash_archiver/features/app/data/repositories/app_repository.dart';
-import 'package:squash_archiver/utils/archiver/archiver.dart';
 import 'package:squash_archiver/services/crashes_service.dart';
 import 'package:squash_archiver/utils/log/log.dart';
 import 'package:squash_archiver/utils/alerts/alerts_helper.dart';
@@ -38,7 +36,6 @@ import 'package:squash_archiver/features/app/ui/store/app_store.dart';
 import 'package:get_it/get_it.dart';
 
 Future<void> $initGetIt(GetIt g, {String environment}) async {
-  final archiverFfiDi = _$ArchiverFfiDi();
   final networkInfoDi = _$NetworkInfoDi();
   final dioDi = _$DioDi();
   final loggerDi = _$LoggerDi();
@@ -46,7 +43,7 @@ Future<void> $initGetIt(GetIt g, {String environment}) async {
   final sentryClientDI = _$SentryClientDI();
   final sharedPreferencesDi = _$SharedPreferencesDi();
   g.registerLazySingleton<AnalyticsService>(() => AnalyticsService());
-  g.registerLazySingleton<ArchiverFfi>(() => archiverFfiDi.archiverFfi);
+  g.registerLazySingleton<Archiver>(() => Archiver());
   g.registerLazySingleton<DataConnectionChecker>(
       () => networkInfoDi.dataConnectionChecker);
   g.registerLazySingleton<DeviceDetails>(() => DeviceDetails());
@@ -68,7 +65,6 @@ Future<void> $initGetIt(GetIt g, {String environment}) async {
   g.registerLazySingleton<AppMetaInfo>(() => AppMetaInfo(g<PackageInfo>()));
   g.registerLazySingleton<AppRepository>(
       () => AppRepository(g<AppLocalDataSource>()));
-  g.registerLazySingleton<Archiver>(() => Archiver(g<ArchiverFfi>()));
   g.registerLazySingleton<CrashesService>(
       () => CrashesService(g<SentryClient>()));
   g.registerLazySingleton<Log>(() => Log(g<Logger>(), g<CrashesService>()));
@@ -81,8 +77,6 @@ Future<void> $initGetIt(GetIt g, {String environment}) async {
   g.registerLazySingleton<AppStore>(
       () => AppStore(g<AppController>(), g<Alerts>()));
 }
-
-class _$ArchiverFfiDi extends ArchiverFfiDi {}
 
 class _$NetworkInfoDi extends NetworkInfoDi {}
 
