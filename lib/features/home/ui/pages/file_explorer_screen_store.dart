@@ -8,7 +8,6 @@ import 'package:mobx/mobx.dart';
 import 'package:squash_archiver/common/di/di.dart';
 import 'package:squash_archiver/utils/archiver/archiver.dart';
 import 'package:squash_archiver/utils/utils/files.dart';
-import 'package:squash_archiver/utils/utils/functs.dart';
 import 'package:squash_archiver/utils/utils/store_helper.dart';
 
 part 'file_explorer_screen_store.g.dart';
@@ -53,39 +52,27 @@ abstract class _FileExplorerScreenStoreBase with Store {
   @observable
   List<ArchiveFileInfo> fileList = ObservableList<ArchiveFileInfo>();
 
-  List<ReactionDisposer> get disposers => [
-        reaction(
-          (_) => currentArchiveFilename,
-          (String currentArchiveFilename) {
-            if (isNullOrEmpty(currentArchiveFilename)) {
-              setFiles([]);
-              setPassword('');
-              setCurrentPath('');
-
-              return;
-            }
-
-            fetchFiles();
-          },
-        )
-      ];
-
   @computed
   bool get listFilesInProgress {
     return isStateLoading(fileListFuture);
   }
 
   @action
-  Future<void> refreshFiles({bool invalidateCache}) async {
-    return fetchFiles(invalidateCache: invalidateCache);
-  }
-
-  @action
   Future<void> fetchFiles({bool invalidateCache}) async {
+    final _invalidateCache = invalidateCache ?? false;
+
+    var _currentPath = currentPath;
+    if (_invalidateCache) {
+      // [listDirectoryPath] should be left empty while invalidating the cache to assist the refetch of the whole archive again
+
+      _currentPath = '';
+      setCurrentPath('');
+    }
+
     final _params = ListArchive(
       filename: currentArchiveFilename,
       recursive: true,
-      listDirectoryPath: currentPath,
+      listDirectoryPath: _currentPath,
       password: password,
       gitIgnorePattern: gitIgnorePattern,
       orderBy: orderBy,
@@ -97,7 +84,7 @@ abstract class _FileExplorerScreenStoreBase with Store {
     fileListFuture = ObservableFuture(
       _archiver.listFiles(
         _params,
-        invalidateCache: invalidateCache,
+        invalidateCache: _invalidateCache,
       ),
     );
 
@@ -117,6 +104,11 @@ abstract class _FileExplorerScreenStoreBase with Store {
   }
 
   @action
+  Future<void> refreshFiles({bool invalidateCache}) async {
+    return fetchFiles(invalidateCache: invalidateCache);
+  }
+
+  @action
   void setCurrentPath(String value) {
     currentPath = value;
   }
@@ -129,10 +121,6 @@ abstract class _FileExplorerScreenStoreBase with Store {
   @action
   void setCurrentArchiveFilename(String value) {
     currentArchiveFilename = value;
-
-    //todo remove this. fix this
-    print('todo remove this. fix this');
-    fetchFiles();
   }
 
   @action

@@ -3,11 +3,13 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:mobx/mobx.dart' show reaction, ReactionDisposer;
 import 'package:squash_archiver/constants/colors.dart';
 import 'package:squash_archiver/features/home/ui/pages/file_explorer_screen_store.dart';
 import 'package:squash_archiver/features/home/ui/pages/widgets/file_explorer_table.dart';
 import 'package:squash_archiver/utils/utils/files.dart';
 import 'package:squash_archiver/utils/utils/filesizes.dart';
+import 'package:squash_archiver/utils/utils/functs.dart';
 import 'package:squash_archiver/utils/utils/store_helper.dart';
 import 'package:squash_archiver/widget_extends/sf_widget.dart';
 import 'package:squash_archiver/widgets/button/button.dart';
@@ -35,6 +37,8 @@ class _FileExplorerScreenState extends SfWidget<FileExplorerScreen> {
 
   FileExplorerScreenStore _fileExplorerScreenStore;
 
+  List<ReactionDisposer> _disposers;
+
   ScrollController _scrollController;
 
   @override
@@ -42,8 +46,14 @@ class _FileExplorerScreenState extends SfWidget<FileExplorerScreen> {
     _fileExplorerScreenStore ??= FileExplorerScreenStore();
     _scrollController ??= ScrollController();
 
-    _init();
     super.initState();
+  }
+
+  @override
+  void onInitApp() {
+    _init();
+
+    super.onInitApp();
   }
 
   void _init() {
@@ -53,8 +63,60 @@ class _FileExplorerScreenState extends SfWidget<FileExplorerScreen> {
   }
 
   @override
+  void didChangeDependencies() {
+    _disposers ??= [
+      reaction(
+        (_) => _fileExplorerScreenStore.currentArchiveFilename,
+        (String currentArchiveFilename) {
+          if (isNullOrEmpty(currentArchiveFilename)) {
+            _fileExplorerScreenStore.setFiles([]);
+            _fileExplorerScreenStore.setPassword('');
+            _fileExplorerScreenStore.setCurrentPath('');
+
+            return;
+          }
+
+          _fileExplorerScreenStore.fetchFiles();
+        },
+      ),
+      reaction(
+        (_) => _fileExplorerScreenStore.password,
+        (String password) {
+          _fileExplorerScreenStore.fetchFiles();
+        },
+      ),
+      reaction(
+        (_) => _fileExplorerScreenStore.orderBy,
+        (ArchiverOrderBy orderBy) {
+          _fileExplorerScreenStore.fetchFiles();
+        },
+      ),
+      reaction(
+        (_) => _fileExplorerScreenStore.orderDir,
+        (ArchiverOrderDir orderDir) {
+          _fileExplorerScreenStore.fetchFiles();
+        },
+      ),
+      reaction(
+        (_) => _fileExplorerScreenStore.currentPath,
+        (String currentPath) {
+          _fileExplorerScreenStore.fetchFiles();
+        },
+      ),
+      reaction(
+        (_) => _fileExplorerScreenStore.gitIgnorePattern,
+        (List<String> gitIgnorePattern) {
+          _fileExplorerScreenStore.fetchFiles();
+        },
+      ),
+    ];
+
+    super.didChangeDependencies();
+  }
+
+  @override
   void dispose() {
-    disposeStore(_fileExplorerScreenStore.disposers);
+    disposeStore(_disposers);
 
     super.dispose();
   }
@@ -187,7 +249,7 @@ class _FileExplorerScreenState extends SfWidget<FileExplorerScreen> {
         child: MouseRegion(
           child: GestureDetector(
             onDoubleTap: () {
-              print(file);
+              _fileExplorerScreenStore.setCurrentPath(file.fullPath);
             },
             child: ListTile(
               mouseCursor: SystemMouseCursors.basic,
@@ -197,19 +259,28 @@ class _FileExplorerScreenState extends SfWidget<FileExplorerScreen> {
               title: Row(
                 children: [
                   Expanded(
-                    child: Container(
-                      child: Textography(file.name),
+                    child: Row(
+                      children: [
+                        if (file.isDir)
+                          Icon(
+                            Icons.folder,
+                            color: AppColors.blue,
+                          )
+                        else
+                          const Icon(Icons.file_copy_rounded),
+                        const SizedBox(width: 5),
+                        Textography(
+                          file.name,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ],
                     ),
                   ),
                   Expanded(
-                    child: Container(
-                      child: Textography(filesize(file.size)),
-                    ),
+                    child: Textography(filesize(file.size)),
                   ),
                   Expanded(
-                    child: Container(
-                      child: Textography(file.mode.toString()),
-                    ),
+                    child: Textography(file.mode.toString()),
                   ),
                 ],
               ),

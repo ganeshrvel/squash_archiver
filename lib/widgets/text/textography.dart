@@ -24,6 +24,7 @@ class Textography extends StatelessWidget {
   final double fontSize;
   final TextDecoration decoration;
   final bool capitalize;
+  final TextOverflow overflow;
 
   const Textography(
     this.child, {
@@ -36,6 +37,7 @@ class Textography extends StatelessWidget {
     this.backgroundColor,
     this.fontSize,
     this.capitalize = false,
+    this.overflow,
   }) : super(key: key);
 
   @override
@@ -103,6 +105,7 @@ class Textography extends StatelessWidget {
         decoration: decoration,
       ),
       textAlign: textAlign,
+      overflow: overflow,
     );
   }
 }

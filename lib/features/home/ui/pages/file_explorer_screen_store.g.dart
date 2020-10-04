@@ -159,15 +159,6 @@ mixin _$FileExplorerScreenStore on _FileExplorerScreenStoreBase, Store {
     });
   }
 
-  final _$refreshFilesAsyncAction =
-      AsyncAction('_FileExplorerScreenStoreBase.refreshFiles');
-
-  @override
-  Future<void> refreshFiles({bool invalidateCache}) {
-    return _$refreshFilesAsyncAction
-        .run(() => super.refreshFiles(invalidateCache: invalidateCache));
-  }
-
   final _$fetchFilesAsyncAction =
       AsyncAction('_FileExplorerScreenStoreBase.fetchFiles');
 
@@ -175,6 +166,15 @@ mixin _$FileExplorerScreenStore on _FileExplorerScreenStoreBase, Store {
   Future<void> fetchFiles({bool invalidateCache}) {
     return _$fetchFilesAsyncAction
         .run(() => super.fetchFiles(invalidateCache: invalidateCache));
+  }
+
+  final _$refreshFilesAsyncAction =
+      AsyncAction('_FileExplorerScreenStoreBase.refreshFiles');
+
+  @override
+  Future<void> refreshFiles({bool invalidateCache}) {
+    return _$refreshFilesAsyncAction
+        .run(() => super.refreshFiles(invalidateCache: invalidateCache));
   }
 
   final _$_FileExplorerScreenStoreBaseActionController =

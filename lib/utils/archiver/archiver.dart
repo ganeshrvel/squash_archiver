@@ -37,6 +37,9 @@ class Archiver {
     if (_invalidateCache) {
       _listArchiveParams = null;
       _listArchiveResult = null;
+
+      // [listDirectoryPath] should be left empty while invalidating the cache to assist the refetch of the whole archive again
+      params.listDirectoryPath = '';
     }
 
     DC<Exception, List<ArchiveFileInfo>> _result;
