@@ -5,6 +5,7 @@ import 'package:squash_archiver/common/themes/hex_color.dart';
 class AppColors {
   AppColors._();
 
+  static const Color transparent = Colors.transparent;
   static const Color white = Colors.white;
   static final Color blue = HexColor('2262c6');
   static final Color black = HexColor('000000');

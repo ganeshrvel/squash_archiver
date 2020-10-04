@@ -8,6 +8,9 @@ import 'package:injectable/injectable.dart';
 import 'package:squash_archiver/utils/utils/files.dart';
 import 'package:squash_archiver/utils/utils/functs.dart';
 
+/// todo make ArchiverFfi into a singleton
+/// todo lock the ArchiverFfi actions. when some task is in progress then prevent the next task from occuring before the previous done is completed. (queue it?)
+///
 @lazySingleton
 class Archiver {
   final ArchiverFfi _ffiLib;
@@ -45,6 +48,8 @@ class Archiver {
 
       if (_result.hasData) {
         _listArchiveResult = _result.data;
+
+        return DC.data(_listArchiveResult.files);
 
         final _filteredPath = _getFilesList(
           listDirectoryPath: params.listDirectoryPath,

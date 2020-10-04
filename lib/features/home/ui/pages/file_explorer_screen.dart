@@ -1,8 +1,13 @@
+import 'package:archiver_ffi/models/archive_file_info.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:squash_archiver/constants/colors.dart';
 import 'package:squash_archiver/features/home/ui/pages/file_explorer_screen_store.dart';
+import 'package:squash_archiver/features/home/ui/pages/widgets/file_explorer_table.dart';
 import 'package:squash_archiver/utils/utils/files.dart';
+import 'package:squash_archiver/utils/utils/filesizes.dart';
 import 'package:squash_archiver/utils/utils/store_helper.dart';
 import 'package:squash_archiver/widget_extends/sf_widget.dart';
 import 'package:squash_archiver/widgets/button/button.dart';
@@ -23,7 +28,6 @@ class FileExplorerScreen extends StatefulWidget {
   State<StatefulWidget> createState() => _FileExplorerScreenState();
 }
 
-// class FileExplorerScreen extends HookWidget implements SfWidget<AlertsScreen> {
 class _FileExplorerScreenState extends SfWidget<FileExplorerScreen> {
   String get _redirectRouteName => widget.redirectRouteName;
 
@@ -190,8 +194,70 @@ class _FileExplorerScreenState extends SfWidget<FileExplorerScreen> {
   //   );
   // }
 
+  List<Widget> _buildRows({@required List<ArchiveFileInfo> fileList}) {
+    return fileList.map((file) {
+      return Listener(
+        onPointerDown: (PointerDownEvent event) {
+          if (event.buttons == 2) {
+            showMenu(
+              context: context,
+              position: RelativeRect.fromLTRB(
+                event.position.dx,
+                event.position.dy,
+                event.position.dx,
+                event.position.dy,
+              ),
+              items: const <PopupMenuItem<String>>[
+                PopupMenuItem(value: 'test1', child: Textography('test1')),
+                PopupMenuItem(value: 'test2', child: Textography('test2')),
+              ],
+            );
+          }
+        },
+        child: MouseRegion(
+          child: GestureDetector(
+            onDoubleTap: () {
+              print(file);
+            },
+            child: ListTile(
+              mouseCursor: SystemMouseCursors.basic,
+              hoverColor: AppColors.transparent,
+              focusColor: AppColors.transparent,
+              selectedTileColor: AppColors.blue,
+              title: Row(
+                children: [
+                  Expanded(
+                    child: Container(
+                      child: Textography(file.name),
+                    ),
+                  ),
+                  Expanded(
+                    child: Container(
+                      child: Textography(filesize(file.size)),
+                    ),
+                  ),
+                  Expanded(
+                    child: Container(
+                      child: Textography(file.mode.toString()),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      );
+    }).toList();
+  }
+
   Widget _buildFileExplorer() {
-    return Expanded(
+    return RawKeyboardListener(
+      focusNode: FocusNode(),
+      autofocus: true,
+      onKey: (RawKeyEvent event) {
+        print(event.isControlPressed);
+        print(event.logicalKey.keyLabel);
+      },
       child: CustomScrollView(
         controller: _scrollController,
         physics: const ScrollPhysics(),
@@ -215,20 +281,8 @@ class _FileExplorerScreenState extends SfWidget<FileExplorerScreen> {
                 /// TODO use this:
                 ///
                 ///
-                return SliverList(
-                  delegate: SliverChildBuilderDelegate((
-                    BuildContext context,
-                    int index,
-                  ) {
-                    if (index >= _fileList.length) {
-                      return null;
-                    }
-
-                    // To convert this infinite list to a list with three items,
-                    // uncomment the following line:
-                    // if (index > 3) return null;
-                    return Textography(_fileList[index].name);
-                  }),
+                return FilExplorerTable(
+                  rows: _buildRows(fileList: _fileList),
                 );
 
                 ///
@@ -284,7 +338,9 @@ class _FileExplorerScreenState extends SfWidget<FileExplorerScreen> {
     return Row(
       children: [
         _buildSidebar(),
-        _buildFileExplorer(),
+        Expanded(
+          child: _buildFileExplorer(),
+        ),
       ],
     );
   }
