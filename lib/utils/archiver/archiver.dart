@@ -1,17 +1,15 @@
 import 'package:archiver_ffi/archiver_ffi.dart';
-import 'package:archiver_ffi/models/archive_file_info.dart';
-import 'package:archiver_ffi/models/list_archive.dart';
 import 'package:data_channel/data_channel.dart';
 import 'package:flutter/foundation.dart';
 import 'package:injectable/injectable.dart';
+import 'package:squash_archiver/common/di/di.dart';
 import 'package:squash_archiver/common/exceptions/task_in_progress_exception.dart';
-import 'package:squash_archiver/utils/archiver/archiver_lib.dart';
 import 'package:squash_archiver/utils/utils/files.dart';
 import 'package:squash_archiver/utils/utils/functs.dart';
 
 @lazySingleton
 class Archiver {
-  final ArchiverFfi _ffiLib = archiverFfiLib;
+  final ArchiverFfi _ffiLib = getIt<ArchiverFfi>();
 
   ListArchive _listArchiveParams;
 
@@ -146,5 +144,7 @@ class Archiver {
 Future<DC<Exception, ListArchiveResult>> _fetchFiles(
   ListArchive params,
 ) async {
-  return archiverFfiLib.listArchive(params);
+  final _archiverFfi = ArchiverFfi();
+
+  return _archiverFfi.listArchive(params);
 }

@@ -1,4 +1,4 @@
-import 'package:archiver_ffi/models/archive_file_info.dart';
+import 'package:archiver_ffi/archiver_ffi.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
