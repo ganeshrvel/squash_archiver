@@ -2,26 +2,29 @@ import 'package:archiver_ffi/archiver_ffi.dart';
 import 'package:data_channel/data_channel.dart';
 import 'package:flutter/foundation.dart';
 import 'package:injectable/injectable.dart';
-import 'package:squash_archiver/common/di/di.dart';
 import 'package:squash_archiver/common/exceptions/task_in_progress_exception.dart';
 import 'package:squash_archiver/utils/utils/files.dart';
 import 'package:squash_archiver/utils/utils/functs.dart';
 
 @lazySingleton
-class Archiver {
-  final ArchiverFfi _ffiLib = getIt<ArchiverFfi>();
+class ArchiverDataSource {
+  final ArchiverFfi _ffiLib;
+
+  ArchiverDataSource(this._ffiLib);
 
   ListArchive _listArchiveParams;
 
   ListArchiveResult _listArchiveResult;
 
+  /// flag to check if any task is in progress.
+  /// spinning up multiple isolates might crash the app, so it's for the best to have a check
   bool taskInProgress = false;
 
-  Future<DC<Exception, List<ArchiveFileInfo>>> listFiles(
-    ListArchive params, {
+  Future<DC<Exception, List<FileInfo>>> listFiles({
+    @required ListArchive listArchiveRequest,
     bool invalidateCache,
   }) async {
-    assert(params != null);
+    assert(listArchiveRequest != null);
 
     if (taskInProgress) {
       return DC.error(TaskInProgressException());
@@ -39,16 +42,16 @@ class Archiver {
       _listArchiveResult = null;
 
       // [listDirectoryPath] should be left empty while invalidating the cache to assist the refetch of the whole archive again
-      params.listDirectoryPath = '';
+      listArchiveRequest.listDirectoryPath = '';
     }
 
-    DC<Exception, List<ArchiveFileInfo>> _result;
+    DC<Exception, List<FileInfo>> _result;
 
-    if (_shouldUseCache(params)) {
+    if (_shouldUseCache(listArchiveRequest)) {
       // caching the results
-      _listArchiveParams = params;
+      _listArchiveParams = listArchiveRequest;
 
-      final _computedListArchiveResult = await compute(_fetchFiles, params);
+      final _computedListArchiveResult = await compute(_fetchFiles, listArchiveRequest);
 
       if (_computedListArchiveResult.hasError) {
         _result = DC.error(_computedListArchiveResult.error);
@@ -56,14 +59,14 @@ class Archiver {
         _listArchiveResult = _computedListArchiveResult.data;
 
         final _filteredPath = _getFilesList(
-          listDirectoryPath: params.listDirectoryPath,
+          listDirectoryPath: listArchiveRequest.listDirectoryPath,
         );
 
         _result = DC.data(_filteredPath);
       }
     } else {
       final _filteredPath = _getFilesList(
-        listDirectoryPath: params.listDirectoryPath,
+        listDirectoryPath: listArchiveRequest.listDirectoryPath,
       );
 
       _result = DC.data(_filteredPath);
@@ -75,7 +78,7 @@ class Archiver {
   }
 
   // filter files by their path
-  List<ArchiveFileInfo> _getFilesList({
+  List<FileInfo> _getFilesList({
     @required String listDirectoryPath,
   }) {
     assert(listDirectoryPath != null);

@@ -73,3 +73,24 @@ String getParentPath(String fullPath) {
 
   return _parentDir;
 }
+
+List<FileSystemEntity> listDirectory(Directory dir, {bool recursive}) {
+  final _recursive = recursive ?? false;
+
+  final _files = <FileSystemEntity>[];
+
+  final _contents = dir.listSync(
+    recursive: _recursive,
+    followLinks: false,
+  );
+
+  for (final file in _contents) {
+    if (file is File) {
+      _files.add(file);
+    } else if (file is Directory) {
+      _files.add(file);
+    }
+  }
+
+  return _files;
+}

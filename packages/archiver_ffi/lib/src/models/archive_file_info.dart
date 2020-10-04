@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 
-class ArchiveFileInfo extends Equatable {
+class FileInfo extends Equatable {
   final int mode;
 
   final int size;
@@ -16,7 +16,7 @@ class ArchiveFileInfo extends Equatable {
 
   final String parentPath;
 
-  const ArchiveFileInfo({
+  const FileInfo({
     @required this.mode,
     @required this.size,
     @required this.isDir,

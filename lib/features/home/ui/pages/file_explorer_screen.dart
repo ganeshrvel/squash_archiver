@@ -4,10 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mobx/mobx.dart' show reaction, ReactionDisposer;
+import 'package:squash_archiver/constants/app_default_values.dart';
 import 'package:squash_archiver/constants/colors.dart';
+import 'package:squash_archiver/features/home/data/enums/file_explorer_source.dart';
 import 'package:squash_archiver/features/home/ui/pages/file_explorer_screen_store.dart';
 import 'package:squash_archiver/features/home/ui/pages/widgets/file_explorer_table.dart';
-import 'package:squash_archiver/utils/utils/files.dart';
 import 'package:squash_archiver/utils/utils/filesizes.dart';
 import 'package:squash_archiver/utils/utils/functs.dart';
 import 'package:squash_archiver/utils/utils/store_helper.dart';
@@ -57,8 +58,9 @@ class _FileExplorerScreenState extends SfWidget<FileExplorerScreen> {
   }
 
   void _init() {
-    _fileExplorerScreenStore.setCurrentArchiveFilename(
-      getDesktopFile('squash-test-assets/huge_file.zip'),
+    _fileExplorerScreenStore.newSource(
+      fullPath: AppDefaultValues.DEFAULT_FILE_EXPLORER_DIRECTORY,
+      source: FileExplorerSource.LOCAL,
     );
   }
 
@@ -87,13 +89,13 @@ class _FileExplorerScreenState extends SfWidget<FileExplorerScreen> {
       ),
       reaction(
         (_) => _fileExplorerScreenStore.orderBy,
-        (ArchiverOrderBy orderBy) {
+        (OrderBy orderBy) {
           _fileExplorerScreenStore.fetchFiles();
         },
       ),
       reaction(
         (_) => _fileExplorerScreenStore.orderDir,
-        (ArchiverOrderDir orderDir) {
+        (OrderDir orderDir) {
           _fileExplorerScreenStore.fetchFiles();
         },
       ),
@@ -226,7 +228,7 @@ class _FileExplorerScreenState extends SfWidget<FileExplorerScreen> {
     );
   }
 
-  List<Widget> _buildRows({@required List<ArchiveFileInfo> fileList}) {
+  List<Widget> _buildRows({@required List<FileInfo> fileList}) {
     return fileList.map((file) {
       return Listener(
         onPointerDown: (PointerDownEvent event) {
@@ -309,7 +311,7 @@ class _FileExplorerScreenState extends SfWidget<FileExplorerScreen> {
         slivers: <Widget>[
           _buildHeader(context),
           SliverPadding(
-            padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+            padding: EdgeInsets.zero,
             sliver: Observer(
               builder: (_) {
                 final _fileList = _fileExplorerScreenStore.fileList;

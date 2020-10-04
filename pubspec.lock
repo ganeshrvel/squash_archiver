@@ -16,7 +16,7 @@ packages:
     source: hosted
     version: "1.0.7+2"
   analyzer:
-    dependency: "direct overridden"
+    dependency: transitive
     description:
       name: analyzer
       url: "https://pub.dartlang.org"

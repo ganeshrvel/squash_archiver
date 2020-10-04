@@ -95,12 +95,12 @@ class ArchiverFfi {
         final filesPtr = _result.ref.files;
         final _totalFiles = _result.ref.totalFiles;
 
-        final _files = <ArchiveFileInfo>[];
+        final _files = <FileInfo>[];
 
         for (var i = 0; i < _totalFiles; i++) {
           final _value = filesPtr.elementAt(i).value;
 
-          final _file = ArchiveFileInfo(
+          final _file = FileInfo(
             mode: _value.ref.mode,
             size: _value.ref.size,
             isDir: fromFfiBool(_value.ref.isDir),

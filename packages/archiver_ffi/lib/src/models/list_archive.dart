@@ -3,14 +3,14 @@ import 'package:archiver_ffi/src/utils/functs.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 
-enum ArchiverOrderBy {
+enum OrderBy {
   size,
   modTime,
   name,
   fullPath,
 }
 
-enum ArchiverOrderDir {
+enum OrderDir {
   asc,
   desc,
   none,
@@ -20,8 +20,8 @@ enum ArchiverOrderDir {
 class ListArchive extends Equatable {
   final String filename;
   String password;
-  ArchiverOrderBy orderBy;
-  ArchiverOrderDir orderDir;
+  OrderBy orderBy;
+  OrderDir orderDir;
   String listDirectoryPath;
   List<String> gitIgnorePattern;
   bool recursive;
@@ -44,11 +44,11 @@ class ListArchive extends Equatable {
     }
 
     if (isNull(orderBy)) {
-      orderBy = ArchiverOrderBy.name;
+      orderBy = OrderBy.name;
     }
 
     if (isNull(orderDir)) {
-      orderDir = ArchiverOrderDir.none;
+      orderDir = OrderDir.none;
     }
 
     if (isNullOrEmpty(listDirectoryPath)) {
@@ -77,7 +77,7 @@ class ListArchive extends Equatable {
 }
 
 class ListArchiveResult extends Equatable {
-  final List<ArchiveFileInfo> files;
+  final List<FileInfo> files;
 
   final int totalFiles;
 

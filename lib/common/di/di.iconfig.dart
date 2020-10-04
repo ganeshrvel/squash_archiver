@@ -5,7 +5,6 @@
 // **************************************************************************
 
 import 'package:squash_archiver/services/analytics_service.dart';
-import 'package:squash_archiver/utils/archiver/archiver.dart';
 import 'package:squash_archiver/common/di/archiver_ffi_di.dart';
 import 'package:archiver_ffi/archiver_ffi.dart';
 import 'package:squash_archiver/common/di/network_info_di.dart';
@@ -15,6 +14,7 @@ import 'package:squash_archiver/common/di/dio_di.dart';
 import 'package:dio/dio.dart';
 import 'package:squash_archiver/constants/env.dart';
 import 'package:squash_archiver/common/helpers/flushbar_helper.dart';
+import 'package:squash_archiver/features/home/data/data_sources/local_data_source.dart';
 import 'package:squash_archiver/common/di/logger_di.dart';
 import 'package:logger/logger.dart';
 import 'package:squash_archiver/common/network/network_info.dart';
@@ -29,7 +29,9 @@ import 'package:squash_archiver/common/api_client/api_client.dart';
 import 'package:squash_archiver/features/app/data/data_sources/app_local_data_source.dart';
 import 'package:squash_archiver/utils/device_details/app_meta_info.dart';
 import 'package:squash_archiver/features/app/data/repositories/app_repository.dart';
+import 'package:squash_archiver/features/home/data/data_sources/archiver_data_source.dart';
 import 'package:squash_archiver/services/crashes_service.dart';
+import 'package:squash_archiver/features/home/data/controllers/file_explorer_controller.dart';
 import 'package:squash_archiver/utils/log/log.dart';
 import 'package:squash_archiver/utils/alerts/alerts_helper.dart';
 import 'package:squash_archiver/features/app/data/controllers/app_controller.dart';
@@ -46,7 +48,6 @@ Future<void> $initGetIt(GetIt g, {String environment}) async {
   final sentryClientDI = _$SentryClientDI();
   final sharedPreferencesDi = _$SharedPreferencesDi();
   g.registerLazySingleton<AnalyticsService>(() => AnalyticsService());
-  g.registerLazySingleton<Archiver>(() => Archiver());
   g.registerLazySingleton<ArchiverFfi>(() => archiverFfiDi.archiverFfi);
   g.registerLazySingleton<DataConnectionChecker>(
       () => networkInfoDi.dataConnectionChecker);
@@ -54,6 +55,7 @@ Future<void> $initGetIt(GetIt g, {String environment}) async {
   g.registerLazySingleton<Dio>(() => dioDi.dio);
   g.registerLazySingleton<Env>(() => Env());
   g.registerLazySingleton<FlushbarHelper>(() => FlushbarHelper());
+  g.registerLazySingleton<LocalDataSource>(() => LocalDataSource());
   g.registerLazySingleton<Logger>(() => loggerDi.logger);
   g.registerLazySingleton<NetworkInfo>(
       () => NetworkInfo(g<DataConnectionChecker>()));
@@ -69,8 +71,12 @@ Future<void> $initGetIt(GetIt g, {String environment}) async {
   g.registerLazySingleton<AppMetaInfo>(() => AppMetaInfo(g<PackageInfo>()));
   g.registerLazySingleton<AppRepository>(
       () => AppRepository(g<AppLocalDataSource>()));
+  g.registerLazySingleton<ArchiverDataSource>(
+      () => ArchiverDataSource(g<ArchiverFfi>()));
   g.registerLazySingleton<CrashesService>(
       () => CrashesService(g<SentryClient>()));
+  g.registerLazySingleton<FileExplorerController>(() =>
+      FileExplorerController(g<LocalDataSource>(), g<ArchiverDataSource>()));
   g.registerLazySingleton<Log>(() => Log(g<Logger>(), g<CrashesService>()));
   g.registerLazySingleton<AlertsHelper>(
       () => AlertsHelper(g<CrashesService>()));
