@@ -6,7 +6,6 @@ import 'package:injectable/injectable.dart';
 import 'package:meta/meta.dart';
 import 'package:path/path.dart';
 import 'package:squash_archiver/features/home/data/models/file_listing_request.dart';
-import 'package:squash_archiver/utils/log/log.dart';
 import 'package:squash_archiver/utils/utils/files.dart';
 
 @lazySingleton
@@ -34,8 +33,6 @@ class LocalDataSource {
         ));
       }
     } on Exception catch (e) {
-      log.error(title: 'LocalDataSource.listFiles', error: e);
-
       return DC.error(e);
     }
 

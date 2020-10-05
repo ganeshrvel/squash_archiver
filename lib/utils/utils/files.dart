@@ -56,6 +56,7 @@ String fixDirSlash({
   return _fullPath;
 }
 
+///todo write test cases
 String getParentPath(String fullPath) {
   if (isNullOrEmpty(fullPath)) {
     return '';

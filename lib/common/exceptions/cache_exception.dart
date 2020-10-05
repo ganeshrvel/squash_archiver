@@ -1,3 +1,4 @@
+import 'package:squash_archiver/utils/utils/error.dart';
 import 'package:meta/meta.dart';
 
 class CacheException implements Exception {
@@ -11,6 +12,10 @@ class CacheException implements Exception {
 
   @override
   String toString() {
-    return error.toString();
+    final _errorBody = getErrorBody({
+      'Error': error.toString(),
+    });
+
+    return _errorBody;
   }
 }

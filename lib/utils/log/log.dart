@@ -1,9 +1,10 @@
-import 'package:squash_archiver/constants/env.dart';
-import 'package:squash_archiver/services/crashes_service.dart';
+import 'package:flutter/foundation.dart' show debugPrint;
 import 'package:injectable/injectable.dart';
 import 'package:logger/logger.dart';
-import 'package:squash_archiver/common/di/di.dart';
 import 'package:meta/meta.dart';
+import 'package:squash_archiver/common/di/di.dart';
+import 'package:squash_archiver/constants/env.dart';
+import 'package:squash_archiver/services/crashes_service.dart';
 
 @lazySingleton
 class Log {
@@ -24,7 +25,12 @@ class Log {
       return;
     }
 
-    _crashesService.capture(title: title, error: error, stackTrace: stackTrace);
+    _crashesService.capture(
+      title: title,
+      error: error,
+      stackTrace: stackTrace,
+      fullStackTrace: StackTrace.current,
+    );
   }
 
   /// Log a message at level [Level.verbose].
@@ -151,6 +157,15 @@ class Log {
     }
 
     _logger.wtf(title, error, stackTrace);
+  }
+
+  /// Log a message at level [debugPrint].
+  void print(String title, String message) {
+    if (!env.config.showDebugLogs) {
+      return;
+    }
+
+    debugPrint('━━━━ $title => $message ━━━━');
   }
 }
 

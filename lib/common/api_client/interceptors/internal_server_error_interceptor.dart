@@ -1,12 +1,23 @@
 import 'package:dio/dio.dart';
 import 'package:squash_archiver/common/api_client/api_errors/internal_server_api_error.dart';
+import 'package:squash_archiver/constants/errors.dart';
+import 'package:squash_archiver/utils/utils/api.dart';
 
+// intercept statusCode >= 500 && < 600
 class InternalServerErrorInterceptor extends Interceptor {
   @override
-  Future onError(DioError error) async {
-    if (error.response != null) {
-      if (error.response.statusCode >= 500 && error.response.statusCode < 600) {
-        return InternalServerApiError();
+  Future onError(DioError _dioError) async {
+    if (_dioError.response != null) {
+      if (_dioError.response.statusCode >= 500 &&
+          _dioError.response.statusCode < 600) {
+        final _apiUrl = getApiUrl(_dioError);
+
+        return InternalServerApiError(
+          apiUrl: _apiUrl,
+          statusCode: _dioError?.response?.statusCode ?? 0,
+          error: Errors.INTERNAL_SERVER_MESSAGE,
+          errorMessage: Errors.INTERNAL_SERVER_MESSAGE,
+        );
       }
     }
 

@@ -15,6 +15,7 @@ class CrashesService {
     @required String title,
     @required dynamic error,
     @required StackTrace stackTrace,
+    @required StackTrace fullStackTrace,
     BuildContext context,
   }) {
     if (!env.config.reportCrashAnalytics) {

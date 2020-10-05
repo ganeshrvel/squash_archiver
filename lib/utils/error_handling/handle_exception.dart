@@ -1,10 +1,11 @@
+import 'package:archiver_ffi/archiver_ffi.dart';
 import 'package:squash_archiver/common/di/di.dart';
-import 'package:squash_archiver/common/exceptions/api_error_message_exceptions.dart';
 import 'package:squash_archiver/common/exceptions/bad_network_exception.dart';
 import 'package:squash_archiver/common/exceptions/cache_exception.dart';
 import 'package:squash_archiver/common/exceptions/dio_exception.dart';
 import 'package:squash_archiver/common/exceptions/internal_server_exception.dart';
 import 'package:squash_archiver/common/exceptions/network_404_exception.dart';
+import 'package:squash_archiver/common/exceptions/task_in_progress_exception.dart';
 import 'package:squash_archiver/common/exceptions/user_unauthenticated_exception.dart';
 import 'package:squash_archiver/common/models/handle_exception_model.dart';
 import 'package:squash_archiver/constants/errors.dart';
@@ -24,49 +25,55 @@ HandleExceptionModel handleException(
   var _exception = exception;
   final _allowLogging = allowLogging ?? true;
   String _body;
+  if (exception is TaskInProgressException) {
+    _body = Errors.TASK_IN_PROGRESS_MESSAGE;
+    _exception = exception;
 
-  if (exception is Network404Exception) {
+    _reportCrash = true;
+  } else if (exception is ArchiverException) {
+    _body = exception.error;
+    _exception = exception;
+
+    _reportCrash = true;
+  } else if (exception is CacheException) {
+    _body = Errors.CACHE_FAILURE_MESSAGE;
+    _stackTrace = exception.stackTrace;
+    _exception = exception;
+  } else if (exception is Network404Exception) {
     _body = Errors.NETWORK_404_MESSAGE;
     _stackTrace = exception.stackTrace;
     _exception = exception;
+
+    _reportCrash = false;
   } else if (exception is BadNetworkException) {
     _body = Errors.BAD_NETWORK_MESSAGE;
     _stackTrace = exception.stackTrace;
-    _exception = exception.error;
+    _exception = exception;
 
     _reportCrash = false;
   } else if (exception is UserUnauthenticatedException) {
     _body = Errors.INVALID_UNAUTHENTICATED_MESSAGE;
 
     _reportCrash = false;
-  } else if (exception is DioException) {
-    _body = Errors.DIO_EXCEPTION_MESSAGE;
-    _stackTrace = exception.stackTrace;
-    _exception = exception.error;
-  } else if (exception is CacheException) {
-    _body = Errors.CACHE_FAILURE_MESSAGE;
-    _stackTrace = exception.stackTrace;
-    _exception = exception.error;
-  }
-  if (exception is ApiErrorMessageException && exception.errorMessage != null) {
+  } else if (exception is InternalServerException) {
     _body = exception.errorMessage;
     _stackTrace = exception.stackTrace;
     _exception = exception;
-  } else if (exception is InternalServerException) {
-    _body = Errors.INTERNAL_SERVER_MESSAGE;
+  } else if (exception is DioException) {
+    _body = Errors.DIO_EXCEPTION_MESSAGE;
     _stackTrace = exception.stackTrace;
-    _exception = exception.error;
+    _exception = exception;
   } else {
     _body = Errors.UNKNOWN_FAILURE_MESSAGE;
   }
 
   if (_allowLogging) {
-    const _title = 'An exception was thrown';
+    final _title = _body ?? 'An exception was thrown';
 
     log.error(
       title: _title,
       error: _exception,
-      stackTrace: stackTrace,
+      stackTrace: _stackTrace,
       report: _reportCrash,
     );
   }

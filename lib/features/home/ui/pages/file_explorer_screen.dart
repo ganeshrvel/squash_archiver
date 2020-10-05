@@ -82,12 +82,6 @@ class _FileExplorerScreenState extends SfWidget<FileExplorerScreen> {
         },
       ),
       reaction(
-        (_) => _fileExplorerScreenStore.password,
-        (String password) {
-          _fileExplorerScreenStore.fetchFiles();
-        },
-      ),
-      reaction(
         (_) => _fileExplorerScreenStore.orderBy,
         (OrderBy orderBy) {
           _fileExplorerScreenStore.fetchFiles();

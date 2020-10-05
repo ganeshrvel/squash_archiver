@@ -1,8 +1,10 @@
+import 'package:squash_archiver/constants/errors.dart';
+
 class TaskInProgressException implements Exception {
   final String error;
 
   TaskInProgressException({
-    this.error = 'A similar task is already in progress',
+    this.error = Errors.TASK_IN_PROGRESS_MESSAGE,
   });
 
   @override
