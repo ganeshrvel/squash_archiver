@@ -6,7 +6,7 @@ bool isSupportedArchiveFormat(String format) {
     return false;
   }
 
-  final _supportedExtensions = AppDefaultValues.SUPPORTED_ARCHIVE_EXTENSIONS;
+  const _supportedExtensions = AppDefaultValues.SUPPORTED_ARCHIVE_EXTENSIONS;
 
   return _supportedExtensions.contains(format);
 }

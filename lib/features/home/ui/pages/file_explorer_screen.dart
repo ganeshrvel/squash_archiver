@@ -3,7 +3,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:mobx/mobx.dart' show reaction, ReactionDisposer;
+import 'package:mobx/mobx.dart' show ReactionDisposer;
 import 'package:squash_archiver/constants/app_default_values.dart';
 import 'package:squash_archiver/constants/colors.dart';
 import 'package:squash_archiver/features/home/data/enums/file_explorer_source.dart';

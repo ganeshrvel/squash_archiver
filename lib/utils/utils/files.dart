@@ -19,7 +19,9 @@ String getExtension(String filename) {
     return '';
   }
 
-  final _splittedFilename = filename.split('.');
+  final _filenameSlashSplitted = path.split(filename);
+
+  final _splittedFilename = _filenameSlashSplitted.last.split('.');
 
   var extension = '';
 
@@ -37,7 +39,7 @@ String homeDirectory() {
 }
 
 String rootDirectory() {
-  return '/';
+  return Platform.pathSeparator;
 }
 
 String desktopDirectory() {
@@ -71,7 +73,6 @@ String fixDirSlash({
   return _fullPath;
 }
 
-///todo write test cases
 String getParentPath(String fullPath) {
   if (isNullOrEmpty(fullPath)) {
     return '';
