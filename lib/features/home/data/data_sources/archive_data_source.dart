@@ -12,9 +12,9 @@ class ArchiveDataSource {
 
   ArchiveDataSource(this._ffiLib);
 
-  ListArchive _listArchiveParams;
+  ListArchive _cachedListArchiveParams;
 
-  ListArchiveResult _listArchiveResult;
+  ListArchiveResult _cachedListArchiveResult;
 
   /// flag to check if any task is in progress.
   /// spinning up multiple isolates might crash the app, so it's for the best to have a check
@@ -35,19 +35,19 @@ class ArchiveDataSource {
     final _invalidateCache = invalidateCache ?? false;
 
     /// todo write test cases for listFiles
+    /// test cases for clear results on error
+    /// when cache gets cleared
+    /// cases -> file name change, order change, password change etc
     print('todo write test cases for listFiles');
 
     if (_invalidateCache) {
-      _listArchiveParams = null;
-      _listArchiveResult = null;
+      _cachedListArchiveParams = null;
+      _cachedListArchiveResult = null;
     }
 
     DC<Exception, List<FileInfo>> _result;
 
     if (_shouldUseCache(listArchiveRequest)) {
-      // caching the results
-      _listArchiveParams = listArchiveRequest;
-
       /// [listDirectoryPath] should be left empty and [recursive] needs to be true
       /// as we need to fetch the whole file structure
       final _request = listArchiveRequest.copyWith(
@@ -57,17 +57,29 @@ class ArchiveDataSource {
 
       final _computedListArchiveResult = await compute(_fetchFiles, _request);
 
-      if (_computedListArchiveResult.hasError) {
-        _result = DC.error(_computedListArchiveResult.error);
-      } else if (_computedListArchiveResult.hasData) {
-        _listArchiveResult = _computedListArchiveResult.data;
+      _computedListArchiveResult.pick(
+        onError: (error) {
+          _result = DC.error(error);
 
-        final _filteredPath = _getFilesList(
-          listDirectoryPath: listArchiveRequest.listDirectoryPath,
-        );
+          _cachedListArchiveResult = null;
+          _cachedListArchiveParams = null;
+        },
+        onData: (data) {
+          // caching the results
+          _cachedListArchiveParams = listArchiveRequest;
+          _cachedListArchiveResult = data;
 
-        _result = DC.data(_filteredPath);
-      }
+          final _filteredPath = _getFilesList(
+            listDirectoryPath: listArchiveRequest.listDirectoryPath,
+          );
+
+          _result = DC.data(_filteredPath);
+        },
+        onNoData: () {
+          _cachedListArchiveResult = null;
+          _cachedListArchiveParams = null;
+        },
+      );
     } else {
       final _filteredPath = _getFilesList(
         listDirectoryPath: listArchiveRequest.listDirectoryPath,
@@ -87,7 +99,7 @@ class ArchiveDataSource {
   }) {
     assert(listDirectoryPath != null);
 
-    if (isNullOrEmpty(_listArchiveResult?.files)) {
+    if (isNullOrEmpty(_cachedListArchiveResult?.files)) {
       return [];
     }
 
@@ -100,7 +112,7 @@ class ArchiveDataSource {
       fullPath: listDirectoryPath,
     );
 
-    return _listArchiveResult.files.where((file) {
+    return _cachedListArchiveResult.files.where((file) {
       final _parentPath = fixDirSlash(
         isDir: file.isDir,
         fullPath: file.parentPath,
@@ -111,35 +123,36 @@ class ArchiveDataSource {
   }
 
   bool _shouldUseCache(ListArchive params) {
-    if (isNull(params) || isNull(_listArchiveParams)) {
+    if (isNull(params) || isNull(_cachedListArchiveParams)) {
       return true;
     }
 
-    if (params.filename != _listArchiveParams.filename) {
+    if (params.filename != _cachedListArchiveParams.filename) {
       return true;
     }
 
-    if (params.password != _listArchiveParams.password) {
+    if (params.password != _cachedListArchiveParams.password) {
       return true;
     }
 
-    if (params.orderDir != _listArchiveParams.orderDir) {
+    if (params.orderDir != _cachedListArchiveParams.orderDir) {
       return true;
     }
 
-    if (params.orderBy != _listArchiveParams.orderBy) {
+    if (params.orderBy != _cachedListArchiveParams.orderBy) {
       return true;
     }
 
     if (!listEquals(
       params.gitIgnorePattern,
-      _listArchiveParams.gitIgnorePattern,
+      _cachedListArchiveParams.gitIgnorePattern,
     )) {
       return true;
     }
 
     /// making sure that the archive walk through doesn't require a native call
-    if (params.listDirectoryPath != _listArchiveParams.listDirectoryPath) {
+    if (params.listDirectoryPath !=
+        _cachedListArchiveParams.listDirectoryPath) {
       return false;
     }
 
