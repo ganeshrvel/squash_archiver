@@ -143,9 +143,18 @@ mixin _$FileExplorerScreenStore on _FileExplorerScreenStoreBase, Store {
       AsyncAction('_FileExplorerScreenStoreBase._fetchFiles');
 
   @override
-  Future<void> _fetchFiles({bool invalidateCache}) {
-    return _$_fetchFilesAsyncAction
-        .run(() => super._fetchFiles(invalidateCache: invalidateCache));
+  Future<void> _fetchFiles({bool invalidateCache, bool popStackOnError}) {
+    return _$_fetchFilesAsyncAction.run(() => super._fetchFiles(
+        invalidateCache: invalidateCache, popStackOnError: popStackOnError));
+  }
+
+  final _$popFileListingRequestStackAsyncAction =
+      AsyncAction('_FileExplorerScreenStoreBase.popFileListingRequestStack');
+
+  @override
+  Future<void> popFileListingRequestStack() {
+    return _$popFileListingRequestStackAsyncAction
+        .run(() => super.popFileListingRequestStack());
   }
 
   final _$_FileExplorerScreenStoreBaseActionController =

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:archiver_ffi/archiver_ffi.dart';
 import 'package:data_channel/data_channel.dart';
 import 'package:flutter/foundation.dart';
@@ -98,6 +100,7 @@ abstract class _FileExplorerScreenStoreBase with Store {
       throw "'currentArchiveFilename' cannot be null if source is 'Archive'";
     }
 
+    // todo check is encrypted archive before opening
     // todo add toggle hidden files
     final _request = FileListingRequest(
       path: fullPath,
@@ -115,7 +118,10 @@ abstract class _FileExplorerScreenStoreBase with Store {
 
     _addToFileListingRequestStack(_request);
 
-    return _fetchFiles();
+    return _fetchFiles(
+      popStackOnError: source == FileExplorerSource.ARCHIVE,
+      invalidateCache: true,
+    );
   }
 
   @action
@@ -150,11 +156,7 @@ abstract class _FileExplorerScreenStoreBase with Store {
     /// this will navigate the user back to the previous source in the [_fileListingRequestStack]
     if (currentPath == _parentPath) {
       /// make sure that there always atleast one stack available in the stack
-      if (_fileListingRequestStack.length > 1) {
-        _fileListingRequestStack.removeLast();
-
-        return refreshFiles(invalidateCache: true);
-      }
+      return popFileListingRequestStack();
     }
 
     // update the last item in the stack
@@ -166,7 +168,11 @@ abstract class _FileExplorerScreenStoreBase with Store {
   @action
   Future<void> _fetchFiles({
     bool invalidateCache,
+    bool popStackOnError,
   }) async {
+    final c = Completer();
+
+    final _popStackOnError = popStackOnError ?? false;
     fileListException = null;
 
     fileListFuture = ObservableFuture(
@@ -179,18 +185,30 @@ abstract class _FileExplorerScreenStoreBase with Store {
     final _data = await fileListFuture;
 
     _data.pick(
-      onError: (error) {
+      onError: (error) async {
         fileListException = error;
+
+        if (_popStackOnError) {
+          await popFileListingRequestStack();
+        }
+
+        c.complete();
       },
       onData: (data) {
         fileList = data;
         fileListException = null;
+
+        c.complete();
       },
       onNoData: () {
         fileList = [];
         fileListException = null;
+
+        c.complete();
       },
     );
+
+    return c.future;
   }
 
   @action
@@ -207,5 +225,14 @@ abstract class _FileExplorerScreenStoreBase with Store {
     }
 
     _fileListingRequestStack.add(param);
+  }
+
+  @action
+  Future<void> popFileListingRequestStack() async {
+    if (_fileListingRequestStack.length > 1) {
+      _fileListingRequestStack.removeLast();
+
+      return refreshFiles(invalidateCache: true);
+    }
   }
 }
