@@ -143,13 +143,12 @@ class _FileExplorerScreenState extends SfWidget<FileExplorerScreen> {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-
               Observer(
                 builder: (_) {
                   final _listFilesInProgress =
                       _fileExplorerScreenStore.listFilesInProgress;
 
-                  return  Button(
+                  return Button(
                     text: 'Back',
                     onPressed: () {
                       _fileExplorerScreenStore.gotoPrevDirectory();
@@ -161,7 +160,7 @@ class _FileExplorerScreenState extends SfWidget<FileExplorerScreen> {
                   );
                 },
               ),
-               Observer(
+              Observer(
                 builder: (_) {
                   final _listFilesInProgress =
                       _fileExplorerScreenStore.listFilesInProgress;
@@ -311,7 +310,7 @@ class _FileExplorerScreenState extends SfWidget<FileExplorerScreen> {
                     ),
                   ),
                   Expanded(
-                    child: Textography(filesize(file.size)),
+                    child: Textography(!file.isDir ? filesize(file.size) : ''),
                   ),
                   Expanded(
                     child: Textography(file.mode.toString()),
