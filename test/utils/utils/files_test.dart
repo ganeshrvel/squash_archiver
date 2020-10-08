@@ -37,7 +37,11 @@ void main() {
     };
 
     for (final item in _mediaMap.entries) {
-      expect(getExtension(item.key), equals(item.value));
+      expect(
+        getExtension(item.key),
+        equals(item.value),
+        reason: 'failure: ${item.key.toString()}',
+      );
     }
   });
 
@@ -107,6 +111,8 @@ void main() {
           isDir: item.isDir,
         ),
         equals(item.processedPath),
+        reason:
+            'failure: ${item.fullPath.toString()} -> ${item.processedPath.toString()}',
       );
     }
   });
@@ -132,7 +138,8 @@ void main() {
     };
 
     for (final item in _mediaMap.entries) {
-      expect(getParentPath(item.key), equals(item.value));
+      expect(getParentPath(item.key), equals(item.value),
+          reason: 'failure: ${item.key}');
     }
   });
 }
