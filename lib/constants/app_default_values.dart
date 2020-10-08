@@ -12,6 +12,14 @@ class AppDefaultValues {
 
   static const List<String> SUPPORTED_ARCHIVE_EXTENSIONS = [
     'zip',
-    'rar'
+    'tar',
+    'tar.br',
+    'tar.bz2',
+    'tar.gz',
+    'tar.lz4',
+    'tar.sz',
+    'tar.xz',
+    'tar.zst',
+    'rar',
   ];
 }

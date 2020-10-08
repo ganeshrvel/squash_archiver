@@ -156,7 +156,7 @@ class _ImgState extends SfWidget<Img> {
       return Container();
     }
 
-    if (isSvg || getFileExtension(url) == 'svg') {
+    if (isSvg || getExtension(url) == 'svg') {
       return _buildSvg(url: url);
     }
 

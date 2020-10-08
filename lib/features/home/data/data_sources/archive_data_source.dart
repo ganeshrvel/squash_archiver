@@ -7,10 +7,10 @@ import 'package:squash_archiver/utils/utils/files.dart';
 import 'package:squash_archiver/utils/utils/functs.dart';
 
 @lazySingleton
-class ArchiverDataSource {
+class ArchiveDataSource {
   final ArchiverFfi _ffiLib;
 
-  ArchiverDataSource(this._ffiLib);
+  ArchiveDataSource(this._ffiLib);
 
   ListArchive _listArchiveParams;
 
@@ -87,7 +87,7 @@ class ArchiverDataSource {
   }) {
     assert(listDirectoryPath != null);
 
-    if (isNullOrEmpty(_listArchiveResult.files)) {
+    if (isNullOrEmpty(_listArchiveResult?.files)) {
       return [];
     }
 

@@ -29,7 +29,7 @@ import 'package:squash_archiver/common/api_client/api_client.dart';
 import 'package:squash_archiver/features/app/data/data_sources/app_local_data_source.dart';
 import 'package:squash_archiver/utils/device_details/app_meta_info.dart';
 import 'package:squash_archiver/features/app/data/repositories/app_repository.dart';
-import 'package:squash_archiver/features/home/data/data_sources/archiver_data_source.dart';
+import 'package:squash_archiver/features/home/data/data_sources/archive_data_source.dart';
 import 'package:squash_archiver/services/crashes_service.dart';
 import 'package:squash_archiver/features/home/data/repositories/file_explorer_repository.dart';
 import 'package:squash_archiver/utils/log/log.dart';
@@ -72,12 +72,12 @@ Future<void> $initGetIt(GetIt g, {String environment}) async {
   g.registerLazySingleton<AppMetaInfo>(() => AppMetaInfo(g<PackageInfo>()));
   g.registerLazySingleton<AppRepository>(
       () => AppRepository(g<AppLocalDataSource>()));
-  g.registerLazySingleton<ArchiverDataSource>(
-      () => ArchiverDataSource(g<ArchiverFfi>()));
+  g.registerLazySingleton<ArchiveDataSource>(
+      () => ArchiveDataSource(g<ArchiverFfi>()));
   g.registerLazySingleton<CrashesService>(
       () => CrashesService(g<SentryClient>()));
   g.registerLazySingleton<FileExplorerRepository>(() =>
-      FileExplorerRepository(g<LocalDataSource>(), g<ArchiverDataSource>()));
+      FileExplorerRepository(g<LocalDataSource>(), g<ArchiveDataSource>()));
   g.registerLazySingleton<Log>(() => Log(g<Logger>(), g<CrashesService>()));
   g.registerLazySingleton<AlertsHelper>(
       () => AlertsHelper(g<CrashesService>()));

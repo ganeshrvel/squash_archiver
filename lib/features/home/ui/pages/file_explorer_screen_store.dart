@@ -94,7 +94,7 @@ abstract class _FileExplorerScreenStoreBase with Store {
     assert(clearStack != null);
 
     if (source == FileExplorerSource.ARCHIVE &&
-        currentArchiveFilename != null) {
+        currentArchiveFilename == null) {
       throw "'currentArchiveFilename' cannot be null if source is 'Archive'";
     }
 

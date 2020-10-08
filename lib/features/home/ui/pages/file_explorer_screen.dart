@@ -8,6 +8,7 @@ import 'package:squash_archiver/constants/app_default_values.dart';
 import 'package:squash_archiver/constants/colors.dart';
 import 'package:squash_archiver/features/home/data/enums/file_explorer_source.dart';
 import 'package:squash_archiver/features/home/ui/pages/file_explorer_screen_store.dart';
+import 'package:squash_archiver/features/home/ui/pages/helpers/file_explorer_helper.dart';
 import 'package:squash_archiver/features/home/ui/pages/widgets/file_explorer_table.dart';
 import 'package:squash_archiver/utils/utils/files.dart';
 import 'package:squash_archiver/utils/utils/filesizes.dart';
@@ -118,12 +119,19 @@ class _FileExplorerScreenState extends SfWidget<FileExplorerScreen> {
     super.dispose();
   }
 
-  Future<void> _navigateToNextPath(FileInfo file) async{
-    if(file.isDir){
+  Future<void> _navigateToNextPath(FileInfo file) async {
+    if (file.isDir) {
       return _fileExplorerScreenStore.setCurrentPath(file.fullPath);
     }
 
-
+    if (isSupportedArchiveFormat(file.extension)) {
+      return _fileExplorerScreenStore.newSource(
+        fullPath: '',
+        currentArchiveFilename: file.fullPath,
+        source: FileExplorerSource.ARCHIVE,
+        clearStack: false,
+      );
+    }
   }
 
   SliverPersistentHeader _buildHeader(BuildContext context) {
@@ -135,16 +143,25 @@ class _FileExplorerScreenState extends SfWidget<FileExplorerScreen> {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Button(
-                text: 'Back',
-                onPressed: () {
-                  _fileExplorerScreenStore.gotoPrevDirectory();
-                },
-                buttonType: ButtonTypes.ICON,
-                icon: Icons.arrow_back,
-                iconButtonPadding: const EdgeInsets.all(20),
-              ),
+
               Observer(
+                builder: (_) {
+                  final _listFilesInProgress =
+                      _fileExplorerScreenStore.listFilesInProgress;
+
+                  return  Button(
+                    text: 'Back',
+                    onPressed: () {
+                      _fileExplorerScreenStore.gotoPrevDirectory();
+                    },
+                    buttonType: ButtonTypes.ICON,
+                    icon: Icons.arrow_back,
+                    iconButtonPadding: const EdgeInsets.all(20),
+                    loading: _listFilesInProgress,
+                  );
+                },
+              ),
+               Observer(
                 builder: (_) {
                   final _listFilesInProgress =
                       _fileExplorerScreenStore.listFilesInProgress;
@@ -198,7 +215,7 @@ class _FileExplorerScreenState extends SfWidget<FileExplorerScreen> {
         child: Column(
           children: [
             Button(
-              text: 'Home Directory',
+              text: 'Home',
               onPressed: () {
                 _fileExplorerScreenStore.newSource(
                   fullPath: AppDefaultValues.DEFAULT_FILE_EXPLORER_DIRECTORY,
@@ -211,7 +228,7 @@ class _FileExplorerScreenState extends SfWidget<FileExplorerScreen> {
               roundedEdge: false,
             ),
             Button(
-              text: 'Root Directory',
+              text: 'Root',
               onPressed: () {
                 _fileExplorerScreenStore.newSource(
                   fullPath: rootDirectory(),
@@ -224,15 +241,14 @@ class _FileExplorerScreenState extends SfWidget<FileExplorerScreen> {
               roundedEdge: false,
             ),
             Button(
-              text: 'Home Directory',
-              onPressed: () {},
-              buttonType: ButtonTypes.FLAT,
-              icon: Icons.home,
-              roundedEdge: false,
-            ),
-            Button(
-              text: 'Home Directory',
-              onPressed: () {},
+              text: 'Desktop',
+              onPressed: () {
+                _fileExplorerScreenStore.newSource(
+                  fullPath: desktopDirectory(),
+                  source: FileExplorerSource.LOCAL,
+                  clearStack: true,
+                );
+              },
               buttonType: ButtonTypes.FLAT,
               icon: Icons.home,
               roundedEdge: false,

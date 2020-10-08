@@ -35,7 +35,7 @@ class FileListingRequest extends Equatable {
     orderBy = orderBy ?? AppDefaultValues.DEFAULT_FILE_EXPLORER_ORDER_BY;
     orderDir = orderDir ?? AppDefaultValues.DEFAULT_FILE_EXPLORER_ORDER_DIR;
     gitIgnorePattern = gitIgnorePattern ?? [];
-    source = FileExplorerSource.LOCAL;
+    source = source ?? FileExplorerSource.LOCAL;
 
     assert(path != null);
     assert(archiveFilename != null);

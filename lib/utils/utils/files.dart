@@ -14,11 +14,22 @@ String getFileName(String pathName) {
   return path.basename(file.path) ?? '';
 }
 
-String getFileExtension(String pathName) {
-  final _baseName = getFileName(pathName);
-  final _ext = _baseName.split('.');
+String getExtension(String filename) {
+  if (isNullOrEmpty(filename)) {
+    return '';
+  }
 
-  return _ext?.last ?? '';
+  final _splittedFilename = filename.split('.');
+
+  var extension = '';
+
+  if (isNotNullOrEmpty(_splittedFilename)) {
+    _splittedFilename.removeAt(0);
+
+    extension = _splittedFilename.join('.');
+  }
+
+  return extension;
 }
 
 String homeDirectory() {
