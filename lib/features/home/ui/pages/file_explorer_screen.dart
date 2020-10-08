@@ -9,8 +9,8 @@ import 'package:squash_archiver/constants/colors.dart';
 import 'package:squash_archiver/features/home/data/enums/file_explorer_source.dart';
 import 'package:squash_archiver/features/home/ui/pages/file_explorer_screen_store.dart';
 import 'package:squash_archiver/features/home/ui/pages/widgets/file_explorer_table.dart';
+import 'package:squash_archiver/utils/utils/files.dart';
 import 'package:squash_archiver/utils/utils/filesizes.dart';
-import 'package:squash_archiver/utils/utils/functs.dart';
 import 'package:squash_archiver/utils/utils/store_helper.dart';
 import 'package:squash_archiver/widget_extends/sf_widget.dart';
 import 'package:squash_archiver/widgets/button/button.dart';
@@ -61,51 +61,52 @@ class _FileExplorerScreenState extends SfWidget<FileExplorerScreen> {
     _fileExplorerScreenStore.newSource(
       fullPath: AppDefaultValues.DEFAULT_FILE_EXPLORER_DIRECTORY,
       source: FileExplorerSource.LOCAL,
+      clearStack: true,
     );
   }
 
   @override
   void didChangeDependencies() {
-    _disposers ??= [
-      reaction(
-        (_) => _fileExplorerScreenStore.currentArchiveFilename,
-        (String currentArchiveFilename) {
-          if (isNullOrEmpty(currentArchiveFilename)) {
-            _fileExplorerScreenStore.setFiles([]);
-            _fileExplorerScreenStore.setPassword('');
-            _fileExplorerScreenStore.setCurrentPath('');
-
-            return;
-          }
-
-          _fileExplorerScreenStore.fetchFiles();
-        },
-      ),
-      reaction(
-        (_) => _fileExplorerScreenStore.orderBy,
-        (OrderBy orderBy) {
-          _fileExplorerScreenStore.fetchFiles();
-        },
-      ),
-      reaction(
-        (_) => _fileExplorerScreenStore.orderDir,
-        (OrderDir orderDir) {
-          _fileExplorerScreenStore.fetchFiles();
-        },
-      ),
-      reaction(
-        (_) => _fileExplorerScreenStore.currentPath,
-        (String currentPath) {
-          _fileExplorerScreenStore.fetchFiles();
-        },
-      ),
-      reaction(
-        (_) => _fileExplorerScreenStore.gitIgnorePattern,
-        (List<String> gitIgnorePattern) {
-          _fileExplorerScreenStore.fetchFiles();
-        },
-      ),
-    ];
+    // _disposers ??= [
+    //   reaction(
+    //     (_) => _fileExplorerScreenStore.currentArchiveFilename,
+    //     (String currentArchiveFilename) {
+    //       // if (isNullOrEmpty(currentArchiveFilename)) {
+    //       //   _fileExplorerScreenStore.setFiles([]);
+    //       //   _fileExplorerScreenStore.setPassword('');
+    //       //   _fileExplorerScreenStore.setCurrentPath('');
+    //       //
+    //       //   return;
+    //       // }
+    //
+    //       // _fileExplorerScreenStore.fetchFiles();
+    //     },
+    //   ),
+    //   reaction(
+    //     (_) => _fileExplorerScreenStore.orderBy,
+    //     (OrderBy orderBy) {
+    //       // _fileExplorerScreenStore.fetchFiles();
+    //     },
+    //   ),
+    //   reaction(
+    //     (_) => _fileExplorerScreenStore.orderDir,
+    //     (OrderDir orderDir) {
+    //       // _fileExplorerScreenStore.fetchFiles();
+    //     },
+    //   ),
+    //   reaction(
+    //     (_) => _fileExplorerScreenStore.currentPath,
+    //     (String currentPath) {
+    //       // _fileExplorerScreenStore.fetchFiles();
+    //     },
+    //   ),
+    //   reaction(
+    //     (_) => _fileExplorerScreenStore.gitIgnorePattern,
+    //     (List<String> gitIgnorePattern) {
+    //       //_fileExplorerScreenStore.fetchFiles();
+    //     },
+    //   ),
+    // ];
 
     super.didChangeDependencies();
   }
@@ -190,14 +191,26 @@ class _FileExplorerScreenState extends SfWidget<FileExplorerScreen> {
           children: [
             Button(
               text: 'Home Directory',
-              onPressed: () {},
+              onPressed: () {
+                _fileExplorerScreenStore.newSource(
+                  fullPath: AppDefaultValues.DEFAULT_FILE_EXPLORER_DIRECTORY,
+                  source: FileExplorerSource.LOCAL,
+                  clearStack: true,
+                );
+              },
               buttonType: ButtonTypes.FLAT,
               icon: Icons.home,
               roundedEdge: false,
             ),
             Button(
-              text: 'Home Directory',
-              onPressed: () {},
+              text: 'Root Directory',
+              onPressed: () {
+                _fileExplorerScreenStore.newSource(
+                  fullPath: rootDirectory(),
+                  source: FileExplorerSource.LOCAL,
+                  clearStack: true,
+                );
+              },
               buttonType: ButtonTypes.FLAT,
               icon: Icons.home,
               roundedEdge: false,
@@ -228,6 +241,7 @@ class _FileExplorerScreenState extends SfWidget<FileExplorerScreen> {
         onPointerDown: (PointerDownEvent event) {
           if (event.buttons == 2) {
             showMenu(
+              elevation: 2,
               context: context,
               position: RelativeRect.fromLTRB(
                 event.position.dx,
@@ -311,7 +325,9 @@ class _FileExplorerScreenState extends SfWidget<FileExplorerScreen> {
                 final _fileList = _fileExplorerScreenStore.fileList;
 
                 return FilExplorerTable(
-                  rows: _buildRows(fileList: _fileList),
+                  rows: _buildRows(
+                    fileList: _fileList,
+                  ),
                 );
               },
             ),

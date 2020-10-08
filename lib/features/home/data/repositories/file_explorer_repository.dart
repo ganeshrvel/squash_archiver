@@ -20,25 +20,14 @@ class FileExplorerRepository {
 
   Future<DC<Exception, List<FileInfo>>> listFiles({
     @required FileListingRequest request,
-    @required FileExplorerSource source,
     @required bool invalidateCache,
   }) async {
-    switch (source) {
-      case FileExplorerSource.ARCHIVER:
+    switch (request.source) {
+      case FileExplorerSource.ARCHIVE:
         try {
-          final _invalidateCache = invalidateCache ?? false;
-
-          var _currentPath = request.currentPath;
-
-          if (_invalidateCache) {
-            // [listDirectoryPath] should be left empty while invalidating the cache to assist the refetch of the whole archive again
-            _currentPath = '';
-          }
-
           final _params = ListArchive(
-            filename: request.archiveFilePath,
-            recursive: true,
-            listDirectoryPath: _currentPath,
+            filename: request.archiveFilename,
+            listDirectoryPath: request.path,
             password: request.password,
             gitIgnorePattern: request.gitIgnorePattern,
             orderBy: request.orderBy,

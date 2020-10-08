@@ -64,6 +64,26 @@ class ListArchive extends Equatable {
     }
   }
 
+  ListArchive copyWith({
+    String filename,
+    String password,
+    OrderBy orderBy,
+    OrderDir orderDir,
+    String listDirectoryPath,
+    List<String> gitIgnorePattern,
+    bool recursive,
+  }) {
+    return ListArchive(
+      filename: filename ?? this.filename,
+      password: password ?? this.password,
+      orderBy: orderBy ?? this.orderBy,
+      orderDir: orderDir ?? this.orderDir,
+      listDirectoryPath: listDirectoryPath ?? this.listDirectoryPath,
+      gitIgnorePattern: gitIgnorePattern ?? this.gitIgnorePattern,
+      recursive: recursive ?? this.recursive,
+    );
+  }
+
   @override
   List<Object> get props => [
         filename,
@@ -85,6 +105,16 @@ class ListArchiveResult extends Equatable {
     @required this.files,
     @required this.totalFiles,
   });
+
+  ListArchiveResult copyWith({
+    List<FileInfo> files,
+    int totalFiles,
+  }) {
+    return ListArchiveResult(
+      files: files ?? this.files,
+      totalFiles: totalFiles ?? this.totalFiles,
+    );
+  }
 
   @override
   List<Object> get props => [

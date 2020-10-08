@@ -57,6 +57,18 @@ class FilterPathNotFoundException implements ArchiverException {
   }
 }
 
+class PasswordRequiredException implements ArchiverException {
+  @override
+  final String error;
+
+  PasswordRequiredException(this.error);
+
+  @override
+  String toString() {
+    return error;
+  }
+}
+
 class InvalidPasswordException implements ArchiverException {
   @override
   final String error;

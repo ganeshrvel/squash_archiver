@@ -9,14 +9,6 @@ part of 'file_explorer_screen_store.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$FileExplorerScreenStore on _FileExplorerScreenStoreBase, Store {
-  Computed<FileListingRequest> _$_fileListingRequestComputed;
-
-  @override
-  FileListingRequest get _fileListingRequest =>
-      (_$_fileListingRequestComputed ??= Computed<FileListingRequest>(
-              () => super._fileListingRequest,
-              name: '_FileExplorerScreenStoreBase._fileListingRequest'))
-          .value;
   Computed<bool> _$listFilesInProgressComputed;
 
   @override
@@ -25,114 +17,18 @@ mixin _$FileExplorerScreenStore on _FileExplorerScreenStoreBase, Store {
               name: '_FileExplorerScreenStoreBase.listFilesInProgress'))
       .value;
 
-  final _$_fileListingRequestBucketAtom =
-      Atom(name: '_FileExplorerScreenStoreBase._fileListingRequestBucket');
+  final _$fileListAtom = Atom(name: '_FileExplorerScreenStoreBase.fileList');
 
   @override
-  List<FileListingRequest> get _fileListingRequestBucket {
-    _$_fileListingRequestBucketAtom.reportRead();
-    return super._fileListingRequestBucket;
+  List<FileInfo> get fileList {
+    _$fileListAtom.reportRead();
+    return super.fileList;
   }
 
   @override
-  set _fileListingRequestBucket(List<FileListingRequest> value) {
-    _$_fileListingRequestBucketAtom
-        .reportWrite(value, super._fileListingRequestBucket, () {
-      super._fileListingRequestBucket = value;
-    });
-  }
-
-  final _$currentPathAtom =
-      Atom(name: '_FileExplorerScreenStoreBase.currentPath');
-
-  @override
-  String get currentPath {
-    _$currentPathAtom.reportRead();
-    return super.currentPath;
-  }
-
-  @override
-  set currentPath(String value) {
-    _$currentPathAtom.reportWrite(value, super.currentPath, () {
-      super.currentPath = value;
-    });
-  }
-
-  final _$currentArchiveFilenameAtom =
-      Atom(name: '_FileExplorerScreenStoreBase.currentArchiveFilename');
-
-  @override
-  String get currentArchiveFilename {
-    _$currentArchiveFilenameAtom.reportRead();
-    return super.currentArchiveFilename;
-  }
-
-  @override
-  set currentArchiveFilename(String value) {
-    _$currentArchiveFilenameAtom
-        .reportWrite(value, super.currentArchiveFilename, () {
-      super.currentArchiveFilename = value;
-    });
-  }
-
-  final _$passwordAtom = Atom(name: '_FileExplorerScreenStoreBase.password');
-
-  @override
-  String get password {
-    _$passwordAtom.reportRead();
-    return super.password;
-  }
-
-  @override
-  set password(String value) {
-    _$passwordAtom.reportWrite(value, super.password, () {
-      super.password = value;
-    });
-  }
-
-  final _$orderByAtom = Atom(name: '_FileExplorerScreenStoreBase.orderBy');
-
-  @override
-  OrderBy get orderBy {
-    _$orderByAtom.reportRead();
-    return super.orderBy;
-  }
-
-  @override
-  set orderBy(OrderBy value) {
-    _$orderByAtom.reportWrite(value, super.orderBy, () {
-      super.orderBy = value;
-    });
-  }
-
-  final _$orderDirAtom = Atom(name: '_FileExplorerScreenStoreBase.orderDir');
-
-  @override
-  OrderDir get orderDir {
-    _$orderDirAtom.reportRead();
-    return super.orderDir;
-  }
-
-  @override
-  set orderDir(OrderDir value) {
-    _$orderDirAtom.reportWrite(value, super.orderDir, () {
-      super.orderDir = value;
-    });
-  }
-
-  final _$gitIgnorePatternAtom =
-      Atom(name: '_FileExplorerScreenStoreBase.gitIgnorePattern');
-
-  @override
-  List<String> get gitIgnorePattern {
-    _$gitIgnorePatternAtom.reportRead();
-    return super.gitIgnorePattern;
-  }
-
-  @override
-  set gitIgnorePattern(List<String> value) {
-    _$gitIgnorePatternAtom.reportWrite(value, super.gitIgnorePattern, () {
-      super.gitIgnorePattern = value;
+  set fileList(List<FileInfo> value) {
+    _$fileListAtom.reportWrite(value, super.fileList, () {
+      super.fileList = value;
     });
   }
 
@@ -168,28 +64,45 @@ mixin _$FileExplorerScreenStore on _FileExplorerScreenStoreBase, Store {
     });
   }
 
-  final _$fileListAtom = Atom(name: '_FileExplorerScreenStoreBase.fileList');
+  final _$_fileListingRequestStackAtom =
+      Atom(name: '_FileExplorerScreenStoreBase._fileListingRequestStack');
 
   @override
-  List<FileInfo> get fileList {
-    _$fileListAtom.reportRead();
-    return super.fileList;
+  List<FileListingRequest> get _fileListingRequestStack {
+    _$_fileListingRequestStackAtom.reportRead();
+    return super._fileListingRequestStack;
   }
 
   @override
-  set fileList(List<FileInfo> value) {
-    _$fileListAtom.reportWrite(value, super.fileList, () {
-      super.fileList = value;
+  set _fileListingRequestStack(List<FileListingRequest> value) {
+    _$_fileListingRequestStackAtom
+        .reportWrite(value, super._fileListingRequestStack, () {
+      super._fileListingRequestStack = value;
     });
   }
 
-  final _$_fetchFilesAsyncAction =
-      AsyncAction('_FileExplorerScreenStoreBase._fetchFiles');
+  final _$newSourceAsyncAction =
+      AsyncAction('_FileExplorerScreenStoreBase.newSource');
 
   @override
-  Future<void> _fetchFiles({bool invalidateCache}) {
-    return _$_fetchFilesAsyncAction
-        .run(() => super._fetchFiles(invalidateCache: invalidateCache));
+  Future<void> newSource(
+      {@required String fullPath,
+      @required FileExplorerSource source,
+      @required bool clearStack,
+      String currentArchiveFilename,
+      OrderBy orderBy,
+      OrderDir orderDir,
+      String password,
+      List<String> gitIgnorePattern}) {
+    return _$newSourceAsyncAction.run(() => super.newSource(
+        fullPath: fullPath,
+        source: source,
+        clearStack: clearStack,
+        currentArchiveFilename: currentArchiveFilename,
+        orderBy: orderBy,
+        orderDir: orderDir,
+        password: password,
+        gitIgnorePattern: gitIgnorePattern));
   }
 
   final _$refreshFilesAsyncAction =
@@ -201,106 +114,62 @@ mixin _$FileExplorerScreenStore on _FileExplorerScreenStoreBase, Store {
         .run(() => super.refreshFiles(invalidateCache: invalidateCache));
   }
 
-  final _$fetchFilesAsyncAction =
-      AsyncAction('_FileExplorerScreenStoreBase.fetchFiles');
+  final _$_updateFileListingRequestAsyncAction =
+      AsyncAction('_FileExplorerScreenStoreBase._updateFileListingRequest');
 
   @override
-  Future<void> fetchFiles(
-      {@required FileListingRequest request,
-      @required FileExplorerSource source,
-      bool invalidateCache}) {
-    return _$fetchFilesAsyncAction.run(() => super.fetchFiles(
-        request: request, source: source, invalidateCache: invalidateCache));
+  Future<void> _updateFileListingRequest(FileListingRequest request) {
+    return _$_updateFileListingRequestAsyncAction
+        .run(() => super._updateFileListingRequest(request));
   }
 
-  final _$newSourceAsyncAction =
-      AsyncAction('_FileExplorerScreenStoreBase.newSource');
+  final _$setCurrentPathAsyncAction =
+      AsyncAction('_FileExplorerScreenStoreBase.setCurrentPath');
 
   @override
-  Future<void> newSource(
-      {@required String fullPath, @required FileExplorerSource source}) {
-    return _$newSourceAsyncAction
-        .run(() => super.newSource(fullPath: fullPath, source: source));
+  Future<void> setCurrentPath(String value) {
+    return _$setCurrentPathAsyncAction.run(() => super.setCurrentPath(value));
+  }
+
+  final _$gotoPrevDirectoryAsyncAction =
+      AsyncAction('_FileExplorerScreenStoreBase.gotoPrevDirectory');
+
+  @override
+  Future<void> gotoPrevDirectory() {
+    return _$gotoPrevDirectoryAsyncAction.run(() => super.gotoPrevDirectory());
+  }
+
+  final _$_fetchFilesAsyncAction =
+      AsyncAction('_FileExplorerScreenStoreBase._fetchFiles');
+
+  @override
+  Future<void> _fetchFiles({bool invalidateCache}) {
+    return _$_fetchFilesAsyncAction
+        .run(() => super._fetchFiles(invalidateCache: invalidateCache));
   }
 
   final _$_FileExplorerScreenStoreBaseActionController =
       ActionController(name: '_FileExplorerScreenStoreBase');
 
   @override
-  void setCurrentPath(String value) {
-    final _$actionInfo = _$_FileExplorerScreenStoreBaseActionController
-        .startAction(name: '_FileExplorerScreenStoreBase.setCurrentPath');
-    try {
-      return super.setCurrentPath(value);
-    } finally {
-      _$_FileExplorerScreenStoreBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  void gotoPrevDirectory() {
-    final _$actionInfo = _$_FileExplorerScreenStoreBaseActionController
-        .startAction(name: '_FileExplorerScreenStoreBase.gotoPrevDirectory');
-    try {
-      return super.gotoPrevDirectory();
-    } finally {
-      _$_FileExplorerScreenStoreBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  void setCurrentArchiveFilename(String value) {
+  void _setFileListingRequestStack(FileListingRequest param) {
     final _$actionInfo =
         _$_FileExplorerScreenStoreBaseActionController.startAction(
-            name: '_FileExplorerScreenStoreBase.setCurrentArchiveFilename');
+            name: '_FileExplorerScreenStoreBase._setFileListingRequestStack');
     try {
-      return super.setCurrentArchiveFilename(value);
+      return super._setFileListingRequestStack(param);
     } finally {
       _$_FileExplorerScreenStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  void setPassword(String value) {
-    final _$actionInfo = _$_FileExplorerScreenStoreBaseActionController
-        .startAction(name: '_FileExplorerScreenStoreBase.setPassword');
-    try {
-      return super.setPassword(value);
-    } finally {
-      _$_FileExplorerScreenStoreBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  void setFiles(List<FileInfo> value) {
-    final _$actionInfo = _$_FileExplorerScreenStoreBaseActionController
-        .startAction(name: '_FileExplorerScreenStoreBase.setFiles');
-    try {
-      return super.setFiles(value);
-    } finally {
-      _$_FileExplorerScreenStoreBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  void _setFileListingRequestBucket(FileListingRequest param) {
+  void _addToFileListingRequestStack(FileListingRequest param) {
     final _$actionInfo =
         _$_FileExplorerScreenStoreBaseActionController.startAction(
-            name: '_FileExplorerScreenStoreBase._setFileListingRequestBucket');
+            name: '_FileExplorerScreenStoreBase._addToFileListingRequestStack');
     try {
-      return super._setFileListingRequestBucket(param);
-    } finally {
-      _$_FileExplorerScreenStoreBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  void _addFileListingRequestBucket(FileListingRequest param) {
-    final _$actionInfo =
-        _$_FileExplorerScreenStoreBaseActionController.startAction(
-            name: '_FileExplorerScreenStoreBase._addFileListingRequestBucket');
-    try {
-      return super._addFileListingRequestBucket(param);
+      return super._addToFileListingRequestStack(param);
     } finally {
       _$_FileExplorerScreenStoreBaseActionController.endAction(_$actionInfo);
     }
@@ -309,15 +178,9 @@ mixin _$FileExplorerScreenStore on _FileExplorerScreenStoreBase, Store {
   @override
   String toString() {
     return '''
-currentPath: ${currentPath},
-currentArchiveFilename: ${currentArchiveFilename},
-password: ${password},
-orderBy: ${orderBy},
-orderDir: ${orderDir},
-gitIgnorePattern: ${gitIgnorePattern},
+fileList: ${fileList},
 fileListFuture: ${fileListFuture},
 fileListException: ${fileListException},
-fileList: ${fileList},
 listFilesInProgress: ${listFilesInProgress}
     ''';
   }

@@ -54,6 +54,14 @@ class UnpackFilesResult extends Equatable {
     @required this.success,
   });
 
+  UnpackFilesResult copyWith({
+    bool success,
+  }) {
+    return UnpackFilesResult(
+      success: success ?? this.success,
+    );
+  }
+
   @override
   List<Object> get props => [success];
 }

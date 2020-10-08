@@ -26,6 +26,26 @@ class FileInfo extends Equatable {
     @required this.parentPath,
   });
 
+  FileInfo copyWith({
+    int mode,
+    int size,
+    bool isDir,
+    String modTime,
+    String name,
+    String fullPath,
+    String parentPath,
+  }) {
+    return FileInfo(
+      fullPath: fullPath ?? this.fullPath,
+      size: size ?? this.size,
+      parentPath: parentPath ?? this.parentPath,
+      modTime: modTime ?? this.modTime,
+      mode: mode ?? this.mode,
+      isDir: isDir ?? this.isDir,
+      name: name ?? this.name,
+    );
+  }
+
   @override
   List<Object> get props => [
         mode,

@@ -1,15 +1,11 @@
 import 'package:archiver_ffi/archiver_ffi.dart';
 import 'package:data_channel/data_channel.dart';
+import 'package:flutter/foundation.dart';
 import 'package:meta/meta.dart';
 
-///
-/// This is an app wide store
-///
 import 'package:mobx/mobx.dart';
 import 'package:squash_archiver/common/di/di.dart';
-import 'package:squash_archiver/constants/app_default_values.dart';
 import 'package:squash_archiver/features/home/data/controllers/file_explorer_controller.dart';
-import 'package:squash_archiver/features/home/data/data_sources/archiver_data_source.dart';
 import 'package:squash_archiver/features/home/data/enums/file_explorer_source.dart';
 import 'package:squash_archiver/features/home/data/models/file_listing_request.dart';
 import 'package:squash_archiver/utils/utils/files.dart';
@@ -21,54 +17,12 @@ part 'file_explorer_screen_store.g.dart';
 class FileExplorerScreenStore = _FileExplorerScreenStoreBase
     with _$FileExplorerScreenStore;
 
-// todo [chaining the explorer]  convert the whole fetchfiles params into a list.
-// pick the last array index and that shall be the files displayed on the explorer window
-// this way it is scalable and will support multitabs
-
 abstract class _FileExplorerScreenStoreBase with Store {
-  final _archiverDataSource = getIt<ArchiverDataSource>();
   final _fileExplorerController = getIt<FileExplorerController>();
 
   @observable
-  List<FileListingRequest> _fileListingRequestBucket = ObservableList();
+  List<FileInfo> fileList = ObservableList<FileInfo>();
 
-  @computed
-  FileListingRequest get _fileListingRequest {
-    if (isNullOrEmpty(_fileListingRequestBucket)) {
-      return FileListingRequest(
-        currentPath: AppDefaultValues.DEFAULT_FILE_EXPLORER_DIRECTORY,
-      );
-    }
-
-    return _fileListingRequestBucket.last;
-  }
-
-  //todo old -> @computed
-  @observable
-  String currentPath = '';
-
-  //todo old -> @computed
-  /// archiver [filename]
-  @observable
-  String currentArchiveFilename = '';
-
-  //todo old -> @computed
-  /// archiver [password]
-  @observable
-  String password = '';
-
-  @observable
-  OrderBy orderBy = AppDefaultValues.DEFAULT_FILE_EXPLORER_ORDER_BY;
-
-  //todo old -> @computed
-  @observable
-  OrderDir orderDir = AppDefaultValues.DEFAULT_FILE_EXPLORER_ORDER_DIR;
-
-  //todo old -> @computed
-  @observable
-  List<String> gitIgnorePattern = ObservableList();
-
-  //todo old -> @computed
   @observable
   ObservableFuture<DC<Exception, List<FileInfo>>> fileListFuture =
       ObservableFuture(Future.value());
@@ -76,78 +30,148 @@ abstract class _FileExplorerScreenStoreBase with Store {
   @observable
   Exception fileListException;
 
-  //todo old -> @computed
   @observable
-  List<FileInfo> fileList = ObservableList<FileInfo>();
+  List<FileListingRequest> _fileListingRequestStack = ObservableList();
+
+  FileListingRequest get _fileListingRequest {
+    if (isNullOrEmpty(_fileListingRequestStack)) {
+      return FileListingRequest(path: '');
+    }
+
+    return _fileListingRequestStack.last;
+  }
 
   @computed
   bool get listFilesInProgress {
     return isStateLoading(fileListFuture);
   }
 
-  //todo old
-  @action
-  Future<void> _fetchFiles({bool invalidateCache}) async {
-    final _invalidateCache = invalidateCache ?? false;
-
-    var _currentPath = currentPath;
-    if (_invalidateCache) {
-      // [listDirectoryPath] should be left empty while invalidating the cache to assist the refetch of the whole archive again
-
-      _currentPath = '';
-      setCurrentPath('');
-    }
-
-    final _params = ListArchive(
-      filename: currentArchiveFilename,
-      recursive: true,
-      listDirectoryPath: _currentPath,
-      password: password,
-      gitIgnorePattern: gitIgnorePattern,
-      orderBy: orderBy,
-      orderDir: orderDir,
-    );
-
-    fileListException = null;
-
-    fileListFuture = ObservableFuture(
-      _archiverDataSource.listFiles(
-        listArchiveRequest: _params,
-        invalidateCache: _invalidateCache,
-      ),
-    );
-
-    final _data = await fileListFuture;
-
-    _data.pick(
-      onError: (error) {
-        fileListException = error;
-      },
-      onData: (data) {
-        fileList = data;
-      },
-      onNoData: () {
-        fileList = [];
-      },
-    );
+  String get currentPath {
+    return _fileListingRequest.path;
   }
 
-  //todo old
+  String get currentArchiveFilename {
+    return _fileListingRequest.archiveFilename;
+  }
+
+  String get password {
+    return _fileListingRequest.password;
+  }
+
+  OrderBy get orderBy {
+    return _fileListingRequest.orderBy;
+  }
+
+  OrderDir get orderDir {
+    return _fileListingRequest.orderDir;
+  }
+
+  List<String> get gitIgnorePattern {
+    return _fileListingRequest.gitIgnorePattern;
+  }
+
+  FileExplorerSource get source {
+    return _fileListingRequest.source;
+  }
+
+  /// Adding a new [FileExplorerSource] will first add the request to the [_fileListingRequestStack]
+  /// and then fetch files from the respective source
+  @action
+  Future<void> newSource({
+    @required String fullPath,
+    @required FileExplorerSource source,
+
+    /// clearing stack will empty the [_fileListingRequestStack] first and then insert a new request
+    @required bool clearStack,
+    String currentArchiveFilename,
+    OrderBy orderBy,
+    OrderDir orderDir,
+    String password,
+    List<String> gitIgnorePattern,
+  }) async {
+    assert(fullPath != null);
+    assert(source != null);
+    assert(clearStack != null);
+
+    if (source == FileExplorerSource.ARCHIVE &&
+        currentArchiveFilename != null) {
+      throw "'currentArchiveFilename' cannot be null if source is 'Archive'";
+    }
+
+    // todo add toggle hidden files
+    final _request = FileListingRequest(
+      path: fullPath,
+      archiveFilename: currentArchiveFilename,
+      gitIgnorePattern: gitIgnorePattern,
+      orderDir: orderDir,
+      orderBy: orderBy,
+      password: password,
+      source: source,
+    );
+
+    if (clearStack) {
+      _fileListingRequestStack.clear();
+    }
+
+    _addToFileListingRequestStack(_request);
+
+    return _fetchFiles();
+  }
+
   @action
   Future<void> refreshFiles({bool invalidateCache}) async {
     return _fetchFiles(invalidateCache: invalidateCache);
   }
 
+  /// update the last item in the stack
   @action
-  Future<void> fetchFiles({
-    @required FileListingRequest request,
-    @required FileExplorerSource source,
+  Future<void> _updateFileListingRequest(FileListingRequest request) async {
+    _fileListingRequestStack.last = request;
+
+    return refreshFiles();
+  }
+
+  /// set the current path
+  @action
+  Future<void> setCurrentPath(String value) async {
+    assert(value != null);
+
+    return _updateFileListingRequest(
+      _fileListingRequest.copyWith(path: value),
+    );
+  }
+
+  /// navigate to the previous directory
+  @action
+  Future<void> gotoPrevDirectory() async {
+    final _parentPath = getParentPath(currentPath);
+
+    /// if the [currentPath] is the root path then pop the [_fileListingRequestStack]
+    /// this will navigate the user back to the previous source in the [_fileListingRequestStack]
+    if (currentPath == _parentPath) {
+      /// make sure that there always atleast one stack available in the stack
+      if (_fileListingRequestStack.length > 1) {
+        _fileListingRequestStack.removeLast();
+
+        return refreshFiles(invalidateCache: true);
+      }
+    }
+
+    // update the last item in the stack
+    return _updateFileListingRequest(
+      _fileListingRequest.copyWith(path: _parentPath),
+    );
+  }
+
+  @action
+  Future<void> _fetchFiles({
     bool invalidateCache,
   }) async {
+    fileListException = null;
+
     fileListFuture = ObservableFuture(
       _fileExplorerController.listFiles(
         request: _fileListingRequest,
-        source: source,
         invalidateCache: invalidateCache,
       ),
     );
@@ -160,80 +184,28 @@ abstract class _FileExplorerScreenStoreBase with Store {
       },
       onData: (data) {
         fileList = data;
+        fileListException = null;
       },
       onNoData: () {
         fileList = [];
+        fileListException = null;
       },
     );
   }
 
   @action
-  Future<void> newSource({
-    @required String fullPath,
-    @required FileExplorerSource source,
-  }) async {
-    assert(fullPath != null);
-    assert(source != null);
-
-    // todo add toggle hidden files
-    final _request = FileListingRequest(
-      currentPath: AppDefaultValues.DEFAULT_FILE_EXPLORER_DIRECTORY,
-      gitIgnorePattern: gitIgnorePattern,
-      orderDir: orderDir,
-      orderBy: orderBy,
-    );
-
-    _addFileListingRequestBucket(_request);
-
-    //todo remove
-    await fetchFiles(request: _request, source: source);
-  }
-
-  //todo old
-  @action
-  void setCurrentPath(String value) {
-    assert(value != null);
-
-    currentPath = value;
-  }
-
-  //todo old
-  @action
-  void gotoPrevDirectory() {
-    currentPath = getParentPath(currentPath);
-  }
-
-  //todo old
-  @action
-  void setCurrentArchiveFilename(String value) {
-    currentArchiveFilename = value;
-  }
-
-  //todo old
-  @action
-  void setPassword(String value) {
-    password = value;
-  }
-
-  //todo old
-  @action
-  void setFiles(List<FileInfo> value) {
-    fileList = value;
+  void _setFileListingRequestStack(FileListingRequest param) {
+    _fileListingRequestStack = [param];
   }
 
   @action
-  void _setFileListingRequestBucket(FileListingRequest param) {
-    _fileListingRequestBucket = [param];
-  }
-
-  @action
-  void _addFileListingRequestBucket(FileListingRequest param) {
-    if (isNullOrEmpty(_fileListingRequestBucket)) {
-      _setFileListingRequestBucket(param);
+  void _addToFileListingRequestStack(FileListingRequest param) {
+    if (isNullOrEmpty(_fileListingRequestStack)) {
+      _setFileListingRequestStack(param);
 
       return;
     }
 
-    _fileListingRequestBucket.add(param);
+    _fileListingRequestStack.add(param);
   }
 }

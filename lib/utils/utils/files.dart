@@ -25,6 +25,10 @@ String homeDirectory() {
   return Platform.environment['HOME'] ?? Platform.environment['USERPROFILE'];
 }
 
+String rootDirectory() {
+  return '/';
+}
+
 String desktopDirectory() {
   return path.join(homeDirectory(), 'Desktop');
 }

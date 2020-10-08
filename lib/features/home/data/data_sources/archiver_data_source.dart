@@ -40,9 +40,6 @@ class ArchiverDataSource {
     if (_invalidateCache) {
       _listArchiveParams = null;
       _listArchiveResult = null;
-
-      // [listDirectoryPath] should be left empty while invalidating the cache to assist the refetch of the whole archive again
-      listArchiveRequest.listDirectoryPath = '';
     }
 
     DC<Exception, List<FileInfo>> _result;
@@ -51,7 +48,14 @@ class ArchiverDataSource {
       // caching the results
       _listArchiveParams = listArchiveRequest;
 
-      final _computedListArchiveResult = await compute(_fetchFiles, listArchiveRequest);
+      /// [listDirectoryPath] should be left empty and [recursive] needs to be true
+      /// as we need to fetch the whole file structure
+      final _request = listArchiveRequest.copyWith(
+        listDirectoryPath: '',
+        recursive: true,
+      );
+
+      final _computedListArchiveResult = await compute(_fetchFiles, _request);
 
       if (_computedListArchiveResult.hasError) {
         _result = DC.error(_computedListArchiveResult.error);
@@ -124,10 +128,6 @@ class ArchiverDataSource {
     }
 
     if (params.orderBy != _listArchiveParams.orderBy) {
-      return true;
-    }
-
-    if (params.recursive != _listArchiveParams.recursive) {
       return true;
     }
 

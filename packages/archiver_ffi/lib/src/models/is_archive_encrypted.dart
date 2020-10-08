@@ -36,6 +36,16 @@ class IsArchiveEncryptedResult extends Equatable {
     @required this.isValidPassword,
   });
 
+  IsArchiveEncryptedResult copyWith({
+    bool isEncrypted,
+    bool isValidPassword,
+  }) {
+    return IsArchiveEncryptedResult(
+      isEncrypted: isEncrypted ?? this.isEncrypted,
+      isValidPassword: isValidPassword ?? this.isValidPassword,
+    );
+  }
+
   @override
   List<Object> get props => [
         isEncrypted,

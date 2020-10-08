@@ -48,6 +48,14 @@ class PackFilesResult extends Equatable {
     @required this.success,
   });
 
+  PackFilesResult copyWith({
+    bool success,
+  }) {
+    return PackFilesResult(
+      success: success ?? this.success,
+    );
+  }
+
   @override
   List<Object> get props => [success];
 }

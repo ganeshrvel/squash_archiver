@@ -18,7 +18,7 @@ class LocalDataSource {
     final _fileList = <FileInfo>[];
 
     try {
-      final _files = listDirectory(Directory(request.currentPath));
+      final _files = listDirectory(Directory(request.path));
 
       for (final file in _files) {
         _fileList.add(FileInfo(
