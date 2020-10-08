@@ -108,6 +108,7 @@ class ArchiverFfi {
             name: _value.ref.name.ref.toString(),
             fullPath: _value.ref.fullPath.ref.toString(),
             parentPath: _value.ref.parentPath.ref.toString(),
+            extension: _value.ref.extension.ref.toString(),
           );
 
           _files.add(_file);

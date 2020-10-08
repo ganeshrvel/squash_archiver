@@ -9,4 +9,9 @@ class AppDefaultValues {
   static const OrderBy DEFAULT_FILE_EXPLORER_ORDER_BY = OrderBy.fullPath;
 
   static const OrderDir DEFAULT_FILE_EXPLORER_ORDER_DIR = OrderDir.none;
+
+  static const List<String> SUPPORTED_ARCHIVE_EXTENSIONS = [
+    'zip',
+    'rar'
+  ];
 }

@@ -118,6 +118,14 @@ class _FileExplorerScreenState extends SfWidget<FileExplorerScreen> {
     super.dispose();
   }
 
+  Future<void> _navigateToNextPath(FileInfo file) async{
+    if(file.isDir){
+      return _fileExplorerScreenStore.setCurrentPath(file.fullPath);
+    }
+
+
+  }
+
   SliverPersistentHeader _buildHeader(BuildContext context) {
     return SliverPersistentHeader(
       pinned: true,
@@ -259,7 +267,7 @@ class _FileExplorerScreenState extends SfWidget<FileExplorerScreen> {
         child: MouseRegion(
           child: GestureDetector(
             onDoubleTap: () {
-              _fileExplorerScreenStore.setCurrentPath(file.fullPath);
+              _navigateToNextPath(file);
             },
             child: ListTile(
               mouseCursor: SystemMouseCursors.basic,

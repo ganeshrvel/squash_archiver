@@ -16,6 +16,8 @@ class FileInfo extends Equatable {
 
   final String parentPath;
 
+  final String extension;
+
   const FileInfo({
     @required this.mode,
     @required this.size,
@@ -24,6 +26,7 @@ class FileInfo extends Equatable {
     @required this.name,
     @required this.fullPath,
     @required this.parentPath,
+    @required this.extension,
   });
 
   FileInfo copyWith({
@@ -34,15 +37,17 @@ class FileInfo extends Equatable {
     String name,
     String fullPath,
     String parentPath,
+    String extension,
   }) {
     return FileInfo(
       fullPath: fullPath ?? this.fullPath,
       size: size ?? this.size,
-      parentPath: parentPath ?? this.parentPath,
       modTime: modTime ?? this.modTime,
       mode: mode ?? this.mode,
       isDir: isDir ?? this.isDir,
       name: name ?? this.name,
+      parentPath: parentPath ?? this.parentPath,
+      extension: extension ?? this.extension,
     );
   }
 
@@ -55,5 +60,6 @@ class FileInfo extends Equatable {
         name,
         fullPath,
         parentPath,
+        extension,
       ];
 }

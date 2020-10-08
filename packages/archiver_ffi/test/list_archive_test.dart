@@ -26,6 +26,7 @@ void testDataTypesOfArchivedFiles({
     expect(item.mode, isA<int>());
     expect(item.fullPath, isA<String>());
     expect(item.parentPath, isA<String>());
+    expect(item.extension, isA<String>());
     expect(item.modTime, isA<String>());
   }
 }
@@ -138,6 +139,7 @@ void main() {
       expect(_result.data.files[0].mode, equals(755));
       expect(_result.data.files[0].fullPath, equals('mock_dir1/'));
       expect(_result.data.files[0].parentPath, equals(''));
+      expect(_result.data.files[0].extension, equals(''));
       expect(_result.data.files[0].modTime, equals('2020-08-22T11:45:08.000Z'));
     });
 
@@ -164,7 +166,10 @@ void main() {
       expect(_result.data.files[0].mode, equals(755));
       expect(_result.data.files[0].fullPath, equals('mock_dir1/1/'));
       expect(_result.data.files[0].parentPath, equals('mock_dir1/'));
+      expect(_result.data.files[0].extension, equals(''));
       expect(_result.data.files[0].modTime, equals('2020-08-22T11:45:08.000Z'));
+
+      expect(_result.data.files[1].extension, equals('txt'));
     });
 
     test(
@@ -191,7 +196,10 @@ void main() {
       expect(_result.data.files[0].mode, equals(755));
       expect(_result.data.files[0].fullPath, equals('mock_dir1/1/'));
       expect(_result.data.files[0].parentPath, equals('mock_dir1/'));
+      expect(_result.data.files[0].extension, equals(''));
       expect(_result.data.files[0].modTime, equals('2020-08-22T11:45:08.000Z'));
+
+      expect(_result.data.files[1].extension, equals('txt'));
     });
 
     test(
@@ -218,6 +226,7 @@ void main() {
       expect(_result.data.files[0].mode, equals(644));
       expect(_result.data.files[0].fullPath, equals('mock_dir1/a.txt'));
       expect(_result.data.files[0].parentPath, equals('mock_dir1/'));
+      expect(_result.data.files[0].extension, equals('txt'));
       expect(_result.data.files[0].modTime, equals('2020-08-22T11:43:28.000Z'));
     });
   });
