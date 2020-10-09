@@ -24,5 +24,6 @@ class Errors {
 
   static const String INVALID_OTP_AUTHENTICATION_MESSAGE = 'Invalid OTP';
 
-  static const String TASK_IN_PROGRESS_MESSAGE = 'A similar task is already in progress';
+  static const String TASK_IN_PROGRESS_MESSAGE =
+      'A similar task is already in progress';
 }

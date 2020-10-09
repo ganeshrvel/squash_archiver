@@ -35,7 +35,7 @@ class _FilExplorerTableState<T> extends SfWidget<FilExplorerTable> {
           return null;
         }
 
-     //   final _key = ValueKey(media.id);
+        //   final _key = ValueKey(media.id);
 
         // To convert this infinite list to a list with three items,
         // uncomment the following line:
