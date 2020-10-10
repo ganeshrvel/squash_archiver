@@ -51,7 +51,7 @@ dependencies:
   url_launcher: ^5.4.10
 
   # Local cache
-  shared_preferences: ^0.5.7+1
+  shared_preferences: ^0.5.12
 
   # annotations
   meta: ^1.1.8
@@ -89,7 +89,7 @@ dependencies:
 
   #device info
   device_info: ^0.4.2+3
-  package_info: ^0.4.1
+  package_info: ^0.4.3
 
   # loading
   cached_network_image: ^2.2.0+1
@@ -121,6 +121,9 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
+  # testing
+  mockito: ^4.1.2
 
   # Linting
   lint: ^1.1.1

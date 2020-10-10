@@ -3,6 +3,7 @@ import 'package:data_channel/data_channel.dart';
 import 'package:flutter/foundation.dart';
 import 'package:injectable/injectable.dart';
 import 'package:squash_archiver/common/exceptions/task_in_progress_exception.dart';
+import 'package:squash_archiver/features/home/data/models/archive_data_source_listing_request.dart';
 import 'package:squash_archiver/utils/utils/files.dart';
 import 'package:squash_archiver/utils/utils/functs.dart';
 
@@ -23,8 +24,12 @@ class ArchiveDataSource {
   Future<DC<Exception, List<FileInfo>>> listFiles({
     @required ListArchive listArchiveRequest,
     bool invalidateCache,
+    bool isTest,
   }) async {
     assert(listArchiveRequest != null);
+
+    print('=====');
+    print(_ffiLib);
 
     if (taskInProgress) {
       return DC.error(TaskInProgressException());
@@ -33,6 +38,7 @@ class ArchiveDataSource {
     taskInProgress = true;
 
     final _invalidateCache = invalidateCache ?? false;
+    final _isTest = isTest ?? false;
 
     /// todo write test cases for listFiles
     /// test cases for clear results on error
@@ -55,7 +61,12 @@ class ArchiveDataSource {
         recursive: true,
       );
 
-      final _computedListArchiveResult = await compute(_fetchFiles, _request);
+      final _param = ArchiveDataSourceListingRequest(
+        request: _request,
+        isTest: _isTest,
+      );
+
+      final _computedListArchiveResult = await compute(_fetchFiles, _param);
 
       _computedListArchiveResult.pick(
         onError: (error) {
@@ -161,9 +172,11 @@ class ArchiveDataSource {
 }
 
 Future<DC<Exception, ListArchiveResult>> _fetchFiles(
-  ListArchive params,
+  ArchiveDataSourceListingRequest params,
 ) async {
-  final _archiverFfi = ArchiverFfi();
+  assert(params != null);
 
-  return _archiverFfi.listArchive(params);
+  final _archiverFfi = ArchiverFfi(isTest: params.isTest);
+
+  return _archiverFfi.listArchive(params.request);
 }

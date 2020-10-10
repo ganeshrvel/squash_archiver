@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:isolate';
 
 import 'package:flutter/material.dart';
+import 'package:injectable/injectable.dart';
 import 'package:mobx/mobx.dart';
 import 'package:squash_archiver/common/di/di.dart' show getItInit;
 import 'package:squash_archiver/constants/env.dart';
@@ -26,7 +27,7 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   // register all dependecy injection
-  await getItInit();
+  await getItInit(Environment.dev);
 
   Crashlytics.instance.enableInDevMode =
       env.config.enableCrashAnalyticsInDevMode;

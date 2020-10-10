@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:meta/meta.dart';
+import 'package:squash_archiver/constants/app_files.dart';
 import 'package:squash_archiver/utils/utils/functs.dart';
 import 'package:path/path.dart' as path;
 
@@ -110,4 +111,11 @@ List<FileSystemEntity> listDirectory(Directory dir, {bool recursive}) {
   }
 
   return _files;
+}
+
+String getNativeLib() {
+  final _archiverLibRoot = path.join(
+      Directory.current.path, 'packages/archiver_ffi/native/archiver_lib/');
+
+  return path.join(_archiverLibRoot, 'build/', AppFiles.ARCHIVER_FFI_LIB);
 }

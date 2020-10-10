@@ -24,10 +24,15 @@ import 'package:meta/meta.dart';
 class ArchiverFfi {
   SquashArchiverLib _squashArchiverLib;
 
-  factory ArchiverFfi({bool isTest}) {
+  factory ArchiverFfi({bool isTest, String libAbsPath}) {
     final _isTest = isTest ?? false;
 
-    final _dylib = DynamicLibrary.open(getNativeLib(fullPath: _isTest));
+    DynamicLibrary _dylib;
+    if (isNotNullOrEmpty(libAbsPath)) {
+      _dylib = DynamicLibrary.open(libAbsPath);
+    } else {
+      _dylib = DynamicLibrary.open(getNativeLib(fullPath: _isTest));
+    }
 
     ArchiverFfi._instance._squashArchiverLib = SquashArchiverLib(_dylib);
     ArchiverFfi._instance._squashArchiverLib.InitNewNativeDartPort(

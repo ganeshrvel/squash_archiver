@@ -18,8 +18,6 @@ import 'package:squash_archiver/features/home/data/data_sources/local_data_sourc
 import 'package:squash_archiver/common/di/logger_di.dart';
 import 'package:logger/logger.dart';
 import 'package:squash_archiver/common/network/network_info.dart';
-import 'package:package_info/package_info.dart';
-import 'package:squash_archiver/common/di/package_info_di.dart';
 import 'package:squash_archiver/services/pushes_service.dart';
 import 'package:squash_archiver/common/di/sentry_di.dart';
 import 'package:sentry/src/base.dart';
@@ -27,7 +25,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:squash_archiver/common/di/shared_preferences_di.dart';
 import 'package:squash_archiver/common/api_client/api_client.dart';
 import 'package:squash_archiver/features/app/data/data_sources/app_local_data_source.dart';
-import 'package:squash_archiver/utils/device_details/app_meta_info.dart';
 import 'package:squash_archiver/features/app/data/repositories/app_repository.dart';
 import 'package:squash_archiver/features/home/data/data_sources/archive_data_source.dart';
 import 'package:squash_archiver/services/crashes_service.dart';
@@ -45,11 +42,9 @@ Future<void> $initGetIt(GetIt g, {String environment}) async {
   final networkInfoDi = _$NetworkInfoDi();
   final dioDi = _$DioDi();
   final loggerDi = _$LoggerDi();
-  final packageInfoDi = _$PackageInfoDi();
   final sentryClientDI = _$SentryClientDI();
   final sharedPreferencesDi = _$SharedPreferencesDi();
   g.registerLazySingleton<AnalyticsService>(() => AnalyticsService());
-  g.registerLazySingleton<ArchiverFfi>(() => archiverFfiDi.archiverFfi);
   g.registerLazySingleton<DataConnectionChecker>(
       () => networkInfoDi.dataConnectionChecker);
   g.registerLazySingleton<DeviceDetails>(() => DeviceDetails());
@@ -60,8 +55,6 @@ Future<void> $initGetIt(GetIt g, {String environment}) async {
   g.registerLazySingleton<Logger>(() => loggerDi.logger);
   g.registerLazySingleton<NetworkInfo>(
       () => NetworkInfo(g<DataConnectionChecker>()));
-  final packageInfo = await packageInfoDi.packageInfo;
-  g.registerFactory<PackageInfo>(() => packageInfo);
   g.registerLazySingleton<PushesService>(() => PushesService());
   g.registerLazySingleton<SentryClient>(() => sentryClientDI.sentryClient);
   final sharedPreferences = await sharedPreferencesDi.sharedPreferences;
@@ -69,7 +62,6 @@ Future<void> $initGetIt(GetIt g, {String environment}) async {
   g.registerLazySingleton<ApiClient>(() => ApiClient(g<Dio>()));
   g.registerLazySingleton<AppLocalDataSource>(
       () => AppLocalDataSource(g<SharedPreferences>()));
-  g.registerLazySingleton<AppMetaInfo>(() => AppMetaInfo(g<PackageInfo>()));
   g.registerLazySingleton<AppRepository>(
       () => AppRepository(g<AppLocalDataSource>()));
   g.registerLazySingleton<ArchiveDataSource>(
@@ -89,6 +81,16 @@ Future<void> $initGetIt(GetIt g, {String environment}) async {
       () => Alerts(g<AlertsHelper>(), g<FlushbarHelper>()));
   g.registerLazySingleton<AppStore>(
       () => AppStore(g<AppController>(), g<Alerts>()));
+
+  //Register dev Dependencies --------
+  if (environment == 'dev') {
+    g.registerLazySingleton<ArchiverFfi>(() => archiverFfiDi.archiverFfi);
+  }
+
+  //Register test Dependencies --------
+  if (environment == 'test') {
+    g.registerLazySingleton<ArchiverFfi>(() => archiverFfiDi.archiverFfiTest);
+  }
 }
 
 class _$ArchiverFfiDi extends ArchiverFfiDi {}
@@ -98,8 +100,6 @@ class _$NetworkInfoDi extends NetworkInfoDi {}
 class _$DioDi extends DioDi {}
 
 class _$LoggerDi extends LoggerDi {}
-
-class _$PackageInfoDi extends PackageInfoDi {}
 
 class _$SentryClientDI extends SentryClientDI {}
 
