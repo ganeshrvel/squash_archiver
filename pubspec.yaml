@@ -40,8 +40,8 @@ dependencies:
   flutter_hooks: ^0.14.1
 
   # Service locator
-  get_it: ^4.0.2
-  injectable: ^0.4.0+1
+  get_it: ^5.0.1
+  injectable: ^1.0.5
   provider: ^4.3.2+2
 
   # data channel
@@ -68,7 +68,7 @@ dependencies:
   sentry: ^3.0.1
 
   # Routing
-  auto_route: ^0.5.0
+  auto_route: ^0.6.9
 
   # Json
   json_annotation: ^3.0.1
@@ -128,23 +128,20 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  # testing
-  mockito: ^4.1.2
-
   # Linting
   lint: ^1.1.1
 
   # Build runner
-  build_runner: ^1.9.0
+  build_runner: ^1.10.3
 
   # Service locator
-  injectable_generator: ^0.4.1
+  injectable_generator: ^1.0.6
 
   # MobX
   mobx_codegen: ^1.0.3
 
   # Routing
-  auto_route_generator: ^0.5.0
+  auto_route_generator: ^0.6.10
 
   # Json
   json_serializable: ^3.3.0

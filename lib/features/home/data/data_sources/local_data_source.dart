@@ -10,6 +10,8 @@ import 'package:squash_archiver/utils/utils/files.dart';
 
 @lazySingleton
 class LocalDataSource {
+  LocalDataSource();
+
   Future<DC<Exception, List<FileInfo>>> listFiles({
     @required FileListingRequest request,
   }) async {

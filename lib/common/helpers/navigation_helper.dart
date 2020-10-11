@@ -38,20 +38,19 @@ Future<T> navigateToRoute<T>(
       _routeArgs = routeArgs;
     }
 
-    return navigateToFileExplorerScreen<T>(context, routeArgs: _routeArgs);
+    return navigateToFileExplorerScreen<T>(routeArgs: _routeArgs);
   }
 
   if (routeArgs != null) {
-    return ExtendedNavigator?.rootNavigator?.pushNamed<T>(
+    return ExtendedNavigator?.root?.push<T>(
       routeName,
       arguments: routeArgs,
     );
   }
-  return ExtendedNavigator?.rootNavigator?.pushNamed<T>(routeName);
+  return ExtendedNavigator?.root?.push<T>(routeName);
 }
 
 Future<T> navigateToRouteAndReplace<T>(
-  BuildContext context,
   String routeName, {
   Object routeArgs,
 }) async {
@@ -62,61 +61,51 @@ Future<T> navigateToRouteAndReplace<T>(
       _routeArgs = routeArgs;
     }
 
-    return navigateToFileExplorerScreen<T>(context, routeArgs: _routeArgs);
+    return navigateToFileExplorerScreen<T>(routeArgs: _routeArgs);
   }
 
   if (routeArgs != null) {
-    return ExtendedNavigator?.rootNavigator?.pushReplacementNamed(
+    return ExtendedNavigator?.root?.replace(
       routeName,
       arguments: routeArgs,
     );
   }
 
-  return ExtendedNavigator?.rootNavigator?.pushReplacementNamed(
+  return ExtendedNavigator?.root?.replace(
     routeName,
   );
 }
 
 Future<T> navigateToRouteAndRemoveUntil<T>(
-  BuildContext context,
   String routeName, {
   Object routeArgs,
 }) async {
   if (routeArgs != null) {
-    return ExtendedNavigator?.rootNavigator?.pushNamedAndRemoveUntil<T>(
+    return ExtendedNavigator?.root?.pushAndRemoveUntil<T>(
       routeName,
       (final route) => false,
       arguments: routeArgs,
     );
   }
 
-  return ExtendedNavigator?.rootNavigator?.pushNamedAndRemoveUntil<T>(
+  return ExtendedNavigator?.root?.pushAndRemoveUntil<T>(
     routeName,
     (final route) => false,
   );
 }
 
-void popCurrentRoute<T>(
-  BuildContext context, {
-  T result,
-}) {
-  return ExtendedNavigator?.rootNavigator?.pop<T>(result);
+void popCurrentRoute<T>({T result}) {
+  return ExtendedNavigator?.root?.pop<T>(result);
 }
 
-bool canPopCurrentRoute<T>(BuildContext context) {
-  return ExtendedNavigator?.rootNavigator?.canPop();
+bool canPopCurrentRoute<T>() {
+  return ExtendedNavigator?.root?.canPop();
 }
 
-Future<T> pushRoute<T>(BuildContext context, Route route) async {
-  return ExtendedNavigator?.rootNavigator?.push<dynamic>(route) as Future<T>;
-}
-
-Future<T> navigateToFileExplorerScreen<T>(
-  BuildContext context, {
+Future<T> navigateToFileExplorerScreen<T>({
   @required FileExplorerScreenArguments routeArgs,
 }) async {
   return navigateToRouteAndRemoveUntil<T>(
-    context,
     Routes.fileExplorerScreen,
     routeArgs: routeArgs,
   );
