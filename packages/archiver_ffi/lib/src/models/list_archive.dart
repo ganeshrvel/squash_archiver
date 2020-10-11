@@ -94,6 +94,21 @@ class ListArchive extends Equatable {
         gitIgnorePattern,
         recursive,
       ];
+
+  @override
+  String toString() {
+    super.toString();
+
+    return '''
+        filename: $filename,
+        password: $password,
+        orderBy: $orderBy,
+        orderDir: $orderDir,
+        listDirectoryPath: $listDirectoryPath,
+        gitIgnorePattern: $gitIgnorePattern,
+        recursive: $recursive,
+        ''';
+  }
 }
 
 class ListArchiveResult extends Equatable {
@@ -121,4 +136,14 @@ class ListArchiveResult extends Equatable {
         files,
         totalFiles,
       ];
+
+  @override
+  String toString() {
+    super.toString();
+
+    return '''
+        files: $files,
+        totalFiles: $totalFiles,
+        ''';
+  }
 }

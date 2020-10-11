@@ -1,4 +1,3 @@
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/widgets.dart';
 import 'package:squash_archiver/constants/env.dart';
 import 'package:injectable/injectable.dart';
@@ -33,10 +32,10 @@ class CrashesService {
       stackTrace: stackTrace,
     );
 
-    Crashlytics.instance.recordError(
-      _errorBody,
-      stackTrace,
-      context: context,
-    );
+    // todo add firebase
+    // FirebaseCrashlytics.instance.recordError(
+    //   _errorBody,
+    //   stackTrace,
+    // );
   }
 }

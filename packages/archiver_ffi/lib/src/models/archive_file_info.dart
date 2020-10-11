@@ -62,4 +62,20 @@ class FileInfo extends Equatable {
         parentPath,
         extension,
       ];
+
+  @override
+  String toString() {
+    super.toString();
+
+    return '''
+        mode: $mode,
+        size: $size,
+        isDir: $isDir,
+        modTime: $modTime,
+        name: $name,
+        fullPath: $fullPath,
+        parentPath: $parentPath,
+        extension: $extension,
+        ''';
+  }
 }

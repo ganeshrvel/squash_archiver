@@ -46,3 +46,4 @@ android/key.properties
 .gradle
 .android
 !vendors/.gitkeep
+mocks_build

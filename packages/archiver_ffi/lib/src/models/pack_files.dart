@@ -39,6 +39,18 @@ class PackFiles extends Equatable {
         gitIgnorePattern,
         fileList,
       ];
+
+  @override
+  String toString() {
+    super.toString();
+
+    return '''
+        filename: $filename,
+        password: $password,
+        password: $gitIgnorePattern,
+        password: $fileList,
+        ''';
+  }
 }
 
 class PackFilesResult extends Equatable {
@@ -57,5 +69,16 @@ class PackFilesResult extends Equatable {
   }
 
   @override
-  List<Object> get props => [success];
+  List<Object> get props => [
+        success,
+      ];
+
+  @override
+  String toString() {
+    super.toString();
+
+    return '''
+        success: $success,
+        ''';
+  }
 }

@@ -25,6 +25,16 @@ class IsArchiveEncrypted extends Equatable {
         filename,
         password,
       ];
+
+  @override
+  String toString() {
+    super.toString();
+
+    return '''
+        filename: $filename,
+        password: $password,
+        ''';
+  }
 }
 
 class IsArchiveEncryptedResult extends Equatable {
@@ -51,4 +61,14 @@ class IsArchiveEncryptedResult extends Equatable {
         isEncrypted,
         isValidPassword,
       ];
+
+  @override
+  String toString() {
+    super.toString();
+
+    return '''
+        isEncrypted: $isEncrypted,
+        isValidPassword: $isValidPassword,
+        ''';
+  }
 }

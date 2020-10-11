@@ -8,6 +8,7 @@ abstract class ArchiverFfiDi {
   @lazySingleton
   ArchiverFfi get archiverFfi => ArchiverFfi();
 
+  /// for testing [libAbsPath] has to be passed through the constructor of [ArchiverFfi]
   @test
   @lazySingleton
   ArchiverFfi get archiverFfiTest => ArchiverFfi(libAbsPath: getNativeLib());

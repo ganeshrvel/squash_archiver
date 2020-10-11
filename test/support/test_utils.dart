@@ -2,10 +2,28 @@ import 'dart:async';
 import 'dart:io';
 import 'package:path/path.dart' as path;
 
-import 'constants.dart';
+String getTestMocksAsset(String filename, {bool isDir}) {
+  final _isDir = isDir ?? false;
 
-String getTestMocksAsset(String filename) {
-  return path.join(Directory.current.path, 'test_assets/' 'mocks/', filename);
+  final _filePath = path.join(
+    Directory.current.path,
+    'test',
+    'test_assets/',
+    'mocks/',
+    filename,
+  );
+
+  if (_isDir) {
+    if (!Directory(_filePath).existsSync()) {
+      throw "The mock directory '${filename}' does not exists";
+    }
+  } else {
+    if (!File(_filePath).existsSync()) {
+      throw "The mock file '${filename}' does not exists";
+    }
+  }
+
+  return _filePath;
 }
 
 String getTestMocksBuildAsset(String filename, {bool delete, bool isDir}) {
@@ -14,7 +32,9 @@ String getTestMocksBuildAsset(String filename, {bool delete, bool isDir}) {
 
   final _output = path.join(
     Directory.current.path,
-    'test_assets/' 'mocks_build/',
+    'test',
+    'test_assets/',
+    'mocks_build/',
     filename,
   );
 

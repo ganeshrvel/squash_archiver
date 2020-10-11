@@ -19,6 +19,8 @@ analyzer:
     avoid_classes_with_only_static_members: ignore
     prefer_const_declarations: error
     constant_identifier_names: ignore
+    unnecessary_statements: error
+    invalid_use_of_visible_for_testing_member: error
     missing_required_param: error
     parameter_assignments: error
     prefer_const_constructors: error

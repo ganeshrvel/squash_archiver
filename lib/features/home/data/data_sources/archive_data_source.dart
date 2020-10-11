@@ -2,8 +2,10 @@ import 'package:archiver_ffi/archiver_ffi.dart';
 import 'package:data_channel/data_channel.dart';
 import 'package:flutter/foundation.dart';
 import 'package:injectable/injectable.dart';
+import 'package:meta/meta.dart';
 import 'package:squash_archiver/common/exceptions/task_in_progress_exception.dart';
 import 'package:squash_archiver/features/home/data/models/archive_data_source_listing_request.dart';
+import 'package:squash_archiver/utils/compute_in_background.dart';
 import 'package:squash_archiver/utils/utils/files.dart';
 import 'package:squash_archiver/utils/utils/functs.dart';
 
@@ -13,9 +15,11 @@ class ArchiveDataSource {
 
   ArchiveDataSource(this._ffiLib);
 
-  ListArchive _cachedListArchiveParams;
+  @visibleForTesting
+  ListArchive cachedListArchiveParams;
 
-  ListArchiveResult _cachedListArchiveResult;
+  @visibleForTesting
+  ListArchiveResult cachedListArchiveResult;
 
   /// flag to check if any task is in progress.
   /// spinning up multiple isolates might crash the app, so it's for the best to have a check
@@ -24,12 +28,8 @@ class ArchiveDataSource {
   Future<DC<Exception, List<FileInfo>>> listFiles({
     @required ListArchive listArchiveRequest,
     bool invalidateCache,
-    bool isTest,
   }) async {
     assert(listArchiveRequest != null);
-
-    print('=====');
-    print(_ffiLib);
 
     if (taskInProgress) {
       return DC.error(TaskInProgressException());
@@ -38,7 +38,6 @@ class ArchiveDataSource {
     taskInProgress = true;
 
     final _invalidateCache = invalidateCache ?? false;
-    final _isTest = isTest ?? false;
 
     /// todo write test cases for listFiles
     /// test cases for clear results on error
@@ -47,8 +46,7 @@ class ArchiveDataSource {
     print('todo write test cases for listFiles');
 
     if (_invalidateCache) {
-      _cachedListArchiveParams = null;
-      _cachedListArchiveResult = null;
+      _resetListFilesResultsCache();
     }
 
     DC<Exception, List<FileInfo>> _result;
@@ -63,22 +61,23 @@ class ArchiveDataSource {
 
       final _param = ArchiveDataSourceListingRequest(
         request: _request,
-        isTest: _isTest,
       );
 
-      final _computedListArchiveResult = await compute(_fetchFiles, _param);
+      final _computedListArchiveResult = await computeInBackground(
+        _fetchFiles,
+        _param,
+      );
 
       _computedListArchiveResult.pick(
         onError: (error) {
           _result = DC.error(error);
 
-          _cachedListArchiveResult = null;
-          _cachedListArchiveParams = null;
+          _resetListFilesResultsCache();
         },
         onData: (data) {
           // caching the results
-          _cachedListArchiveParams = listArchiveRequest;
-          _cachedListArchiveResult = data;
+          cachedListArchiveParams = listArchiveRequest;
+          cachedListArchiveResult = data;
 
           final _filteredPath = _getFilesList(
             listDirectoryPath: listArchiveRequest.listDirectoryPath,
@@ -87,8 +86,7 @@ class ArchiveDataSource {
           _result = DC.data(_filteredPath);
         },
         onNoData: () {
-          _cachedListArchiveResult = null;
-          _cachedListArchiveParams = null;
+          _resetListFilesResultsCache();
         },
       );
     } else {
@@ -110,7 +108,7 @@ class ArchiveDataSource {
   }) {
     assert(listDirectoryPath != null);
 
-    if (isNullOrEmpty(_cachedListArchiveResult?.files)) {
+    if (isNullOrEmpty(cachedListArchiveResult?.files)) {
       return [];
     }
 
@@ -123,7 +121,7 @@ class ArchiveDataSource {
       fullPath: listDirectoryPath,
     );
 
-    return _cachedListArchiveResult.files.where((file) {
+    return cachedListArchiveResult.files.where((file) {
       final _parentPath = fixDirSlash(
         isDir: file.isDir,
         fullPath: file.parentPath,
@@ -134,40 +132,44 @@ class ArchiveDataSource {
   }
 
   bool _shouldUseCache(ListArchive params) {
-    if (isNull(params) || isNull(_cachedListArchiveParams)) {
+    if (isNull(params) || isNull(cachedListArchiveParams)) {
       return true;
     }
 
-    if (params.filename != _cachedListArchiveParams.filename) {
+    if (params.filename != cachedListArchiveParams.filename) {
       return true;
     }
 
-    if (params.password != _cachedListArchiveParams.password) {
+    if (params.password != cachedListArchiveParams.password) {
       return true;
     }
 
-    if (params.orderDir != _cachedListArchiveParams.orderDir) {
+    if (params.orderDir != cachedListArchiveParams.orderDir) {
       return true;
     }
 
-    if (params.orderBy != _cachedListArchiveParams.orderBy) {
+    if (params.orderBy != cachedListArchiveParams.orderBy) {
       return true;
     }
 
     if (!listEquals(
       params.gitIgnorePattern,
-      _cachedListArchiveParams.gitIgnorePattern,
+      cachedListArchiveParams.gitIgnorePattern,
     )) {
       return true;
     }
 
     /// making sure that the archive walk through doesn't require a native call
-    if (params.listDirectoryPath !=
-        _cachedListArchiveParams.listDirectoryPath) {
+    if (params.listDirectoryPath != cachedListArchiveParams.listDirectoryPath) {
       return false;
     }
 
     return false;
+  }
+
+  void _resetListFilesResultsCache() {
+    cachedListArchiveResult = null;
+    cachedListArchiveParams = null;
   }
 }
 
@@ -176,7 +178,7 @@ Future<DC<Exception, ListArchiveResult>> _fetchFiles(
 ) async {
   assert(params != null);
 
-  final _archiverFfi = ArchiverFfi(isTest: params.isTest);
+  final _archiverFfi = ArchiverFfi();
 
   return _archiverFfi.listArchive(params.request);
 }

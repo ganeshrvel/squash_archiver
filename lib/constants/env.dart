@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/foundation.dart' as foundation;
 import 'package:squash_archiver/common/di/di.dart';
 import 'package:injectable/injectable.dart';
@@ -8,6 +10,8 @@ class Env {
   final bool IS_RELEASE = foundation.kReleaseMode;
 
   final bool IS_DEBUG = !foundation.kReleaseMode;
+
+  final bool IS_TEST = Platform.environment.containsKey('FLUTTER_TEST');
 
   _EnvData get config => IS_RELEASE ? prod : dev;
 

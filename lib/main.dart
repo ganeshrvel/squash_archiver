@@ -8,13 +8,13 @@ import 'package:mobx/mobx.dart';
 import 'package:squash_archiver/common/di/di.dart' show getItInit;
 import 'package:squash_archiver/constants/env.dart';
 import 'package:squash_archiver/features/app/ui/pages/app_screen.dart';
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:squash_archiver/utils/log/log.dart';
 
 Future<void> _logFlutterOnError(FlutterErrorDetails details) async {
   Zone.current.handleUncaughtError(details.exception, details.stack);
 
-  Crashlytics.instance.recordFlutterError(details);
+  // todo add firebase
+  // FirebaseCrashlytics.instance.recordFlutterError(details);
 
   log.error(
     title: 'A crash was captured by main._logFlutterOnError',
@@ -29,8 +29,12 @@ Future<void> main() async {
   // register all dependecy injection
   await getItInit(Environment.dev);
 
-  Crashlytics.instance.enableInDevMode =
-      env.config.enableCrashAnalyticsInDevMode;
+  // todo add firebase
+  // await Firebase.initializeApp();
+
+  // FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(
+  //   env.config.enableCrashAnalyticsInDevMode,
+  // );
 
   FlutterError.onError = _logFlutterOnError;
 

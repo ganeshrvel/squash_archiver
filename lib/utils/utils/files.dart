@@ -113,6 +113,8 @@ List<FileSystemEntity> listDirectory(Directory dir, {bool recursive}) {
   return _files;
 }
 
+/// path to the native lib.
+/// currently used for writing the test cases
 String getNativeLib() {
   final _archiverLibRoot = path.join(
       Directory.current.path, 'packages/archiver_ffi/native/archiver_lib/');
