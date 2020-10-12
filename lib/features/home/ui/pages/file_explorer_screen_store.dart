@@ -44,7 +44,7 @@ abstract class _FileExplorerScreenStoreBase with Store {
   }
 
   @computed
-  bool get listFilesInProgress {
+  bool get fileListingInProgress {
     return isStateLoading(fileListFuture);
   }
 
@@ -147,6 +147,22 @@ abstract class _FileExplorerScreenStoreBase with Store {
     );
   }
 
+  /// set [orderDir] and [orderBy]
+  @action
+  Future<void> setOrderDirOrderBy({
+    @required OrderDir orderDir,
+    @required OrderBy orderBy,
+  }) async {
+    /// todo dont invalidate the cache for archive [orderDir] and [orderBy] sorting
+
+    return _updateFileListingRequest(
+      _fileListingRequest.copyWith(
+        orderDir: orderDir ?? this.orderDir,
+        orderBy: orderBy ?? this.orderBy,
+      ),
+    );
+  }
+
   /// navigate to the previous directory
   @action
   Future<void> gotoPrevDirectory() async {
@@ -163,6 +179,15 @@ abstract class _FileExplorerScreenStoreBase with Store {
     return _updateFileListingRequest(
       _fileListingRequest.copyWith(path: _parentPath),
     );
+  }
+
+  @action
+  Future<void> popFileListingRequestStack() async {
+    if (_fileListingRequestStack.length > 1) {
+      _fileListingRequestStack.removeLast();
+
+      return refreshFiles(invalidateCache: true);
+    }
   }
 
   @action
@@ -225,14 +250,5 @@ abstract class _FileExplorerScreenStoreBase with Store {
     }
 
     _fileListingRequestStack.add(param);
-  }
-
-  @action
-  Future<void> popFileListingRequestStack() async {
-    if (_fileListingRequestStack.length > 1) {
-      _fileListingRequestStack.removeLast();
-
-      return refreshFiles(invalidateCache: true);
-    }
   }
 }

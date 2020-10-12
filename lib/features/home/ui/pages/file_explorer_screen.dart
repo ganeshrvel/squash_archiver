@@ -10,9 +10,11 @@ import 'package:squash_archiver/features/home/data/enums/file_explorer_source.da
 import 'package:squash_archiver/features/home/ui/pages/file_explorer_screen_store.dart';
 import 'package:squash_archiver/features/home/ui/pages/helpers/file_explorer_helper.dart';
 import 'package:squash_archiver/features/home/ui/pages/widgets/file_explorer_table.dart';
+import 'package:squash_archiver/features/home/ui/pages/widgets/file_explorer_table_header.dart';
 import 'package:squash_archiver/utils/utils/files.dart';
 import 'package:squash_archiver/utils/utils/filesizes.dart';
 import 'package:squash_archiver/utils/utils/store_helper.dart';
+import 'package:squash_archiver/utils/utils/strings.dart';
 import 'package:squash_archiver/widget_extends/sf_widget.dart';
 import 'package:squash_archiver/widgets/button/button.dart';
 import 'package:squash_archiver/widgets/sliver/app_sliver_header.dart';
@@ -124,6 +126,8 @@ class _FileExplorerScreenState extends SfWidget<FileExplorerScreen> {
       return _fileExplorerScreenStore.setCurrentPath(file.fullPath);
     }
 
+    // todo move this check into the data sources for both local and archive
+    // and it will remove the o(n) check each time the explorer is scrolled
     if (isSupportedArchiveFormat(file.extension)) {
       return _fileExplorerScreenStore.newSource(
         fullPath: '',
@@ -134,73 +138,85 @@ class _FileExplorerScreenState extends SfWidget<FileExplorerScreen> {
     }
   }
 
-  SliverPersistentHeader _buildHeader(BuildContext context) {
+  void _handleTableHeaderCellSorting({
+    @required OrderDir orderDir,
+    @required OrderBy orderBy,
+  }) {
+    _fileExplorerScreenStore.setOrderDirOrderBy(
+      orderBy: orderBy,
+      orderDir: orderDir,
+    );
+  }
+
+  SliverPersistentHeader _buildToolbar() {
     return SliverPersistentHeader(
       pinned: true,
       delegate: AppSliverHeader(
         child: Padding(
           padding: EdgeInsets.zero,
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Observer(
-                builder: (_) {
-                  final _listFilesInProgress =
-                      _fileExplorerScreenStore.listFilesInProgress;
+          child: Center(
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Observer(
+                  builder: (_) {
+                    final _listFilesInProgress =
+                        _fileExplorerScreenStore.fileListingInProgress;
 
-                  return Button(
-                    text: 'Back',
-                    onPressed: () {
-                      _fileExplorerScreenStore.gotoPrevDirectory();
-                    },
-                    buttonType: ButtonTypes.ICON,
-                    icon: Icons.arrow_back,
-                    iconButtonPadding: const EdgeInsets.all(20),
-                    loading: _listFilesInProgress,
-                  );
-                },
-              ),
-              Observer(
-                builder: (_) {
-                  final _listFilesInProgress =
-                      _fileExplorerScreenStore.listFilesInProgress;
+                    return Button(
+                      text: 'Back',
+                      onPressed: () {
+                        _fileExplorerScreenStore.gotoPrevDirectory();
+                      },
+                      buttonType: ButtonTypes.ICON,
+                      icon: Icons.arrow_back,
+                      iconButtonPadding: const EdgeInsets.all(20),
+                      loading: _listFilesInProgress,
+                    );
+                  },
+                ),
+                Observer(
+                  builder: (_) {
+                    final _listFilesInProgress =
+                        _fileExplorerScreenStore.fileListingInProgress;
 
-                  return Button(
-                    text: 'Refresh',
-                    onPressed: () {
-                      _fileExplorerScreenStore.refreshFiles();
-                    },
-                    buttonType: ButtonTypes.ICON,
-                    icon: Icons.refresh,
-                    iconButtonPadding: const EdgeInsets.all(20),
-                    loading: _listFilesInProgress,
-                  );
-                },
-              ),
-              Observer(
-                builder: (_) {
-                  final _listFilesInProgress =
-                      _fileExplorerScreenStore.listFilesInProgress;
+                    return Button(
+                      text: 'Refresh',
+                      onPressed: () {
+                        _fileExplorerScreenStore.refreshFiles();
+                      },
+                      buttonType: ButtonTypes.ICON,
+                      icon: Icons.refresh,
+                      iconButtonPadding: const EdgeInsets.all(20),
+                      loading: _listFilesInProgress,
+                    );
+                  },
+                ),
+                Observer(
+                  builder: (_) {
+                    final _listFilesInProgress =
+                        _fileExplorerScreenStore.fileListingInProgress;
 
-                  return Button(
-                    text: 'Force refresh',
-                    onPressed: () {
-                      _fileExplorerScreenStore.refreshFiles(
-                        invalidateCache: true,
-                      );
-                    },
-                    buttonType: ButtonTypes.ICON,
-                    icon: Icons.replay_circle_filled,
-                    iconButtonPadding: const EdgeInsets.all(20),
-                    loading: _listFilesInProgress,
-                  );
-                },
-              ),
-            ],
+                    return Button(
+                      text: 'Force refresh',
+                      onPressed: () {
+                        _fileExplorerScreenStore.refreshFiles(
+                          invalidateCache: true,
+                        );
+                      },
+                      buttonType: ButtonTypes.ICON,
+                      icon: Icons.replay_circle_filled,
+                      iconButtonPadding: const EdgeInsets.all(20),
+                      loading: _listFilesInProgress,
+                    );
+                  },
+                ),
+              ],
+            ),
           ),
         ),
-        maximumExtent: 100,
-        minimumExtent: 70,
+        maximumExtent: 70,
+        minimumExtent: 50,
       ),
     );
   }
@@ -258,6 +274,71 @@ class _FileExplorerScreenState extends SfWidget<FileExplorerScreen> {
     );
   }
 
+  SliverPersistentHeader _buildTableHeader() {
+    return SliverPersistentHeader(
+      pinned: true,
+      delegate: AppSliverHeader(
+        child: Padding(
+          padding: EdgeInsets.zero,
+          child: Center(
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Observer(
+                  builder: (_) {
+                    final _orderDir = _fileExplorerScreenStore.orderDir;
+                    final _listFilesInProgress =
+                        _fileExplorerScreenStore.fileListingInProgress;
+
+                    return FileExplorerTableHeaderCell(
+                      isLoading: _listFilesInProgress,
+                      title: 'Name',
+                      orderBy: OrderBy.name,
+                      currentOrderDir: _orderDir,
+                      onTap: _handleTableHeaderCellSorting,
+                    );
+                  },
+                ),
+                Observer(
+                  builder: (_) {
+                    final _orderDir = _fileExplorerScreenStore.orderDir;
+                    final _listFilesInProgress =
+                        _fileExplorerScreenStore.fileListingInProgress;
+
+                    return FileExplorerTableHeaderCell(
+                      isLoading: _listFilesInProgress,
+                      title: 'Size',
+                      orderBy: OrderBy.size,
+                      currentOrderDir: _orderDir,
+                      onTap: _handleTableHeaderCellSorting,
+                    );
+                  },
+                ),
+                Observer(
+                  builder: (_) {
+                    final _orderDir = _fileExplorerScreenStore.orderDir;
+                    final _listFilesInProgress =
+                        _fileExplorerScreenStore.fileListingInProgress;
+
+                    return FileExplorerTableHeaderCell(
+                      isLoading: _listFilesInProgress,
+                      title: 'Date',
+                      orderBy: OrderBy.modTime,
+                      currentOrderDir: _orderDir,
+                      onTap: _handleTableHeaderCellSorting,
+                    );
+                  },
+                ),
+              ],
+            ),
+          ),
+        ),
+        maximumExtent: 30,
+        minimumExtent: 30,
+      ),
+    );
+  }
+
   List<Widget> _buildRows({@required List<FileInfo> fileList}) {
     return fileList.map((file) {
       return Listener(
@@ -310,10 +391,12 @@ class _FileExplorerScreenState extends SfWidget<FileExplorerScreen> {
                     ),
                   ),
                   Expanded(
+                    /// todo move the filesize calculation to a common place, this will remove the unneccessary function calls
                     child: Textography(!file.isDir ? filesize(file.size) : ''),
                   ),
                   Expanded(
-                    child: Textography(file.mode.toString()),
+                    /// todo move the file.modTime formatting to a common place, this will remove the unneccessary function calls
+                    child: Textography(file.modTime),
                   ),
                 ],
               ),
@@ -340,7 +423,8 @@ class _FileExplorerScreenState extends SfWidget<FileExplorerScreen> {
         controller: _scrollController,
         physics: const ScrollPhysics(),
         slivers: <Widget>[
-          _buildHeader(context),
+          _buildToolbar(),
+          _buildTableHeader(),
           SliverPadding(
             padding: EdgeInsets.zero,
             sliver: Observer(

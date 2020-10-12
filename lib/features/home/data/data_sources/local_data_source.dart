@@ -99,10 +99,10 @@ class LocalDataSource {
       case OrderBy.name:
       default:
         if (orderDir == OrderDir.asc) {
-          return files.sortedBy((file) => file.name);
+          return files.sortedBy((file) => file.name.toLowerCase());
         }
 
-        return files.sortedByDescending((file) => file.name);
+        return files.sortedByDescending((file) => file.name.toLowerCase());
 
         break;
     }

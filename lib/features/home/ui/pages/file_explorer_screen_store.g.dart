@@ -9,12 +9,12 @@ part of 'file_explorer_screen_store.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$FileExplorerScreenStore on _FileExplorerScreenStoreBase, Store {
-  Computed<bool> _$listFilesInProgressComputed;
+  Computed<bool> _$fileListingInProgressComputed;
 
   @override
-  bool get listFilesInProgress => (_$listFilesInProgressComputed ??=
-          Computed<bool>(() => super.listFilesInProgress,
-              name: '_FileExplorerScreenStoreBase.listFilesInProgress'))
+  bool get fileListingInProgress => (_$fileListingInProgressComputed ??=
+          Computed<bool>(() => super.fileListingInProgress,
+              name: '_FileExplorerScreenStoreBase.fileListingInProgress'))
       .value;
 
   final _$fileListAtom = Atom(name: '_FileExplorerScreenStoreBase.fileList');
@@ -131,21 +131,22 @@ mixin _$FileExplorerScreenStore on _FileExplorerScreenStoreBase, Store {
     return _$setCurrentPathAsyncAction.run(() => super.setCurrentPath(value));
   }
 
+  final _$setOrderDirOrderByAsyncAction =
+      AsyncAction('_FileExplorerScreenStoreBase.setOrderDirOrderBy');
+
+  @override
+  Future<void> setOrderDirOrderBy(
+      {@required OrderDir orderDir, @required OrderBy orderBy}) {
+    return _$setOrderDirOrderByAsyncAction.run(
+        () => super.setOrderDirOrderBy(orderDir: orderDir, orderBy: orderBy));
+  }
+
   final _$gotoPrevDirectoryAsyncAction =
       AsyncAction('_FileExplorerScreenStoreBase.gotoPrevDirectory');
 
   @override
   Future<void> gotoPrevDirectory() {
     return _$gotoPrevDirectoryAsyncAction.run(() => super.gotoPrevDirectory());
-  }
-
-  final _$_fetchFilesAsyncAction =
-      AsyncAction('_FileExplorerScreenStoreBase._fetchFiles');
-
-  @override
-  Future<void> _fetchFiles({bool invalidateCache, bool popStackOnError}) {
-    return _$_fetchFilesAsyncAction.run(() => super._fetchFiles(
-        invalidateCache: invalidateCache, popStackOnError: popStackOnError));
   }
 
   final _$popFileListingRequestStackAsyncAction =
@@ -155,6 +156,15 @@ mixin _$FileExplorerScreenStore on _FileExplorerScreenStoreBase, Store {
   Future<void> popFileListingRequestStack() {
     return _$popFileListingRequestStackAsyncAction
         .run(() => super.popFileListingRequestStack());
+  }
+
+  final _$_fetchFilesAsyncAction =
+      AsyncAction('_FileExplorerScreenStoreBase._fetchFiles');
+
+  @override
+  Future<void> _fetchFiles({bool invalidateCache, bool popStackOnError}) {
+    return _$_fetchFilesAsyncAction.run(() => super._fetchFiles(
+        invalidateCache: invalidateCache, popStackOnError: popStackOnError));
   }
 
   final _$_FileExplorerScreenStoreBaseActionController =
@@ -190,7 +200,7 @@ mixin _$FileExplorerScreenStore on _FileExplorerScreenStoreBase, Store {
 fileList: ${fileList},
 fileListFuture: ${fileListFuture},
 fileListException: ${fileListException},
-listFilesInProgress: ${listFilesInProgress}
+fileListingInProgress: ${fileListingInProgress}
     ''';
   }
 }
