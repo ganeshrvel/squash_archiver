@@ -7,6 +7,7 @@ import 'package:meta/meta.dart';
 import 'package:path/path.dart' as path;
 import 'package:squash_archiver/features/home/data/models/file_listing_request.dart';
 import 'package:squash_archiver/utils/utils/files.dart';
+import 'package:dartx/dartx.dart';
 
 @lazySingleton
 class LocalDataSource {
@@ -17,7 +18,7 @@ class LocalDataSource {
   }) async {
     assert(request != null);
 
-    final _fileList = <FileInfo>[];
+    var _fileList = <FileInfo>[];
 
     try {
       final _files = listDirectory(Directory(request.path));
@@ -25,7 +26,7 @@ class LocalDataSource {
       for (final file in _files) {
         final _name = path.basename(file.path);
 
-        _fileList.add(FileInfo(
+        final _fileInfoResult = FileInfo(
           fullPath: file.path,
           //todo fix this
           modTime: file.statSync().modified.toString(),
@@ -37,14 +38,60 @@ class LocalDataSource {
           name: _name,
           isDir: file.statSync().type == FileSystemEntityType.directory,
           extension: getExtension(_name),
-        ));
+        );
+
+        _fileList.add(_fileInfoResult);
       }
+
+      _fileList = _sortFiles(
+        files: _fileList,
+        orderDir: request.orderDir,
+        orderBy: request.orderBy,
+      );
     } on Exception catch (e) {
       return DC.error(e);
     }
 
     return DC.data(_fileList);
+  }
 
-    //todo implement sorting and write test case for sorting
+  List<FileInfo> _sortFiles({
+    @required List<FileInfo> files,
+    @required OrderBy orderBy,
+    @required OrderDir orderDir,
+  }) {
+    if (orderDir == OrderDir.none) {
+      return files;
+    }
+
+    switch (orderBy) {
+      case OrderBy.size:
+        if (orderDir == OrderDir.asc) {
+          return files.sortedBy((file) => file.size);
+        }
+
+        return files.sortedByDescending((file) => file.size);
+
+        break;
+
+      case OrderBy.modTime:
+        if (orderDir == OrderDir.asc) {
+          return files.sortedBy((file) => file.modTime);
+        }
+
+        return files.sortedByDescending((file) => file.modTime);
+
+        break;
+
+      case OrderBy.name:
+      default:
+        if (orderDir == OrderDir.asc) {
+          return files.sortedBy((file) => file.name);
+        }
+
+        return files.sortedByDescending((file) => file.name);
+
+        break;
+    }
   }
 }

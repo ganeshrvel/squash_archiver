@@ -42,11 +42,6 @@ class ArchiveDataSource {
 
     final _invalidateCache = invalidateCache ?? false;
 
-    /// todo write test cases for listFiles
-    /// test cases for clear results on error
-    /// when cache gets cleared
-    /// cases -> file name change, order change, password change etc
-
     if (_invalidateCache) {
       _resetListFilesResultsCache();
     }
