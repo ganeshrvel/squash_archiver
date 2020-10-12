@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:injectable/injectable.dart';
 import 'package:meta/meta.dart';
 import 'package:squash_archiver/common/exceptions/task_in_progress_exception.dart';
+import 'package:squash_archiver/features/home/data/helpers.dart';
 import 'package:squash_archiver/features/home/data/models/archive_data_source_listing_request.dart';
 import 'package:squash_archiver/utils/compute_in_background.dart';
 import 'package:squash_archiver/utils/utils/files.dart';
@@ -122,7 +123,7 @@ class ArchiveDataSource {
       fullPath: listDirectoryPath,
     );
 
-    return cachedListArchiveResult.files.where((file) {
+    final _fileListResult = cachedListArchiveResult.files.where((file) {
       final _parentPath = fixDirSlash(
         isDir: file.isDir,
         fullPath: file.parentPath,
@@ -130,6 +131,10 @@ class ArchiveDataSource {
 
       return _parentPath == _listDirectoryPath;
     }).toList();
+
+    return sortFileExplorerEntities(
+      files: _fileListResult,
+    );
   }
 
   bool _skipUsingCache(ListArchive params) {

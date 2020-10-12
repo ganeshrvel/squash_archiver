@@ -18,7 +18,7 @@ void main() {
 
     test('DEFAULT_FILE_EXPLORER_ORDER_DIR', () async {
       expect(AppDefaultValues.DEFAULT_FILE_EXPLORER_ORDER_DIR,
-          equals(OrderDir.none));
+          equals(OrderDir.asc));
     });
 
     test('SUPPORTED_ARCHIVE_EXTENSIONS', () async {

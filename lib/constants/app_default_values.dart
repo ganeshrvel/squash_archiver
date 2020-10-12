@@ -11,7 +11,8 @@ class AppDefaultValues {
 
   static const OrderDir DEFAULT_FILE_EXPLORER_ORDER_DIR = OrderDir.asc;
 
-  static const FileExplorerEntitiesSortBy DEFAULT_FILE_EXPLORER_ENTITIES_SORT_BY =
+  static const FileExplorerEntitiesSortBy
+      DEFAULT_FILE_EXPLORER_ENTITIES_SORT_BY =
       FileExplorerEntitiesSortBy.directory;
 
   static const List<String> SUPPORTED_ARCHIVE_EXTENSIONS = [
