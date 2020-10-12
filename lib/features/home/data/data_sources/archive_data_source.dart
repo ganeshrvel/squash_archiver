@@ -21,6 +21,9 @@ class ArchiveDataSource {
   @visibleForTesting
   ListArchiveResult cachedListArchiveResult;
 
+  @visibleForTesting
+  int listArchiveCacheResultResetCount = 0;
+
   /// flag to check if any task is in progress.
   /// spinning up multiple isolates might crash the app, so it's for the best to have a check
   bool taskInProgress = false;
@@ -43,7 +46,6 @@ class ArchiveDataSource {
     /// test cases for clear results on error
     /// when cache gets cleared
     /// cases -> file name change, order change, password change etc
-    print('todo write test cases for listFiles');
 
     if (_invalidateCache) {
       _resetListFilesResultsCache();
@@ -51,7 +53,11 @@ class ArchiveDataSource {
 
     DC<Exception, List<FileInfo>> _result;
 
-    if (_shouldUseCache(listArchiveRequest)) {
+    if (_skipUsingCache(listArchiveRequest)) {
+      // this is purely for testing purposes only
+      // the count will be incremented by 1 everytime the cache is invalidated.
+      listArchiveCacheResultResetCount += 1;
+
       /// [listDirectoryPath] should be left empty and [recursive] needs to be true
       /// as we need to fetch the whole file structure
       final _request = listArchiveRequest.copyWith(
@@ -131,7 +137,7 @@ class ArchiveDataSource {
     }).toList();
   }
 
-  bool _shouldUseCache(ListArchive params) {
+  bool _skipUsingCache(ListArchive params) {
     if (isNull(params) || isNull(cachedListArchiveParams)) {
       return true;
     }
