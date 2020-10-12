@@ -30,6 +30,7 @@ List<FileInfo> sortFileExplorerEntities({
 
   switch (AppDefaultValues.DEFAULT_FILE_EXPLORER_ENTITIES_SORT_BY) {
     case FileExplorerEntitiesSortBy.file:
+      // preserve the order
       _sortedFiles.addAll(_fileBucket);
       _sortedFiles.addAll(_folderBucket);
 
@@ -38,6 +39,7 @@ List<FileInfo> sortFileExplorerEntities({
       break;
     case FileExplorerEntitiesSortBy.directory:
     default:
+      // preserve the order
       _sortedFiles.addAll(_folderBucket);
       _sortedFiles.addAll(_fileBucket);
 

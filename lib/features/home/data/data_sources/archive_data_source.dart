@@ -13,9 +13,7 @@ import 'package:squash_archiver/utils/utils/functs.dart';
 
 @lazySingleton
 class ArchiveDataSource {
-  final ArchiverFfi _ffiLib;
-
-  ArchiveDataSource(this._ffiLib);
+  ArchiveDataSource();
 
   @visibleForTesting
   ListArchive cachedListArchiveParams;

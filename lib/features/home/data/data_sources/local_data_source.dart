@@ -34,14 +34,15 @@ class LocalDataSource {
           }
         }
 
+        final _mode = file.statSync().mode;
+        final _modeFix = _mode.toRadixString(8).padLeft(4, '0');
+        final _modeOctal = _modeFix.substring(_modeFix.length - 4).toInt();
+
         final _fileInfoResult = FileInfo(
           fullPath: file.path,
-          //todo fix this
           modTime: file.statSync().modified.toString(),
           parentPath: getParentPath(file.path),
-
-          //todo fix this
-          mode: file.statSync().mode,
+          mode: _modeOctal,
           size: file.statSync().size,
           name: _name,
           isDir: file.statSync().type == FileSystemEntityType.directory,
