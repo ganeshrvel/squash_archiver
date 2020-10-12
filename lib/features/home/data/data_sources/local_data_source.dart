@@ -5,6 +5,7 @@ import 'package:data_channel/data_channel.dart';
 import 'package:injectable/injectable.dart';
 import 'package:meta/meta.dart';
 import 'package:path/path.dart' as path;
+import 'package:squash_archiver/constants/app_default_values.dart';
 import 'package:squash_archiver/features/home/data/helpers.dart';
 import 'package:squash_archiver/features/home/data/models/file_listing_request.dart';
 import 'package:squash_archiver/utils/utils/files.dart';
@@ -26,6 +27,12 @@ class LocalDataSource {
 
       for (final file in _files) {
         final _name = path.basename(file.path);
+
+        if (!AppDefaultValues.SHOW_HIDDEN_FILES) {
+          if (_name.startsWith('.')) {
+            continue;
+          }
+        }
 
         final _fileInfoResult = FileInfo(
           fullPath: file.path,

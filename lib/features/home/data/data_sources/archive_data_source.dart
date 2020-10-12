@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:injectable/injectable.dart';
 import 'package:meta/meta.dart';
 import 'package:squash_archiver/common/exceptions/task_in_progress_exception.dart';
+import 'package:squash_archiver/constants/app_default_values.dart';
 import 'package:squash_archiver/features/home/data/helpers.dart';
 import 'package:squash_archiver/features/home/data/models/archive_data_source_listing_request.dart';
 import 'package:squash_archiver/utils/compute_in_background.dart';
@@ -128,6 +129,12 @@ class ArchiveDataSource {
         isDir: file.isDir,
         fullPath: file.parentPath,
       );
+
+      if (!AppDefaultValues.SHOW_HIDDEN_FILES) {
+        if (file.name.startsWith('.')) {
+          return false;
+        }
+      }
 
       return _parentPath == _listDirectoryPath;
     }).toList();

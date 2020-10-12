@@ -4,40 +4,39 @@
 // InjectableConfigGenerator
 // **************************************************************************
 
+import 'package:squash_archiver/utils/alerts/alerts.dart';
+import 'package:squash_archiver/utils/alerts/alerts_helper.dart';
+import 'package:squash_archiver/services/analytics_service.dart';
+import 'package:squash_archiver/common/api_client/api_client.dart';
+import 'package:squash_archiver/features/app/data/controllers/app_controller.dart';
+import 'package:squash_archiver/features/app/data/data_sources/app_local_data_source.dart';
+import 'package:squash_archiver/features/app/data/repositories/app_repository.dart';
+import 'package:squash_archiver/features/app/ui/store/app_store.dart';
+import 'package:squash_archiver/features/home/data/data_sources/archive_data_source.dart';
 import 'package:archiver_ffi/archiver_ffi.dart';
+import 'package:squash_archiver/common/di/archiver_ffi_di.dart';
+import 'package:squash_archiver/services/crashes_service.dart';
 import 'package:data_connection_checker/data_connection_checker.dart';
+import 'package:squash_archiver/utils/device_details/device_details.dart';
 import 'package:dio/dio.dart';
+import 'package:squash_archiver/common/di/dio_di.dart';
+import 'package:squash_archiver/constants/env.dart';
+import 'package:squash_archiver/features/home/data/controllers/file_explorer_controller.dart';
+import 'package:squash_archiver/features/home/data/repositories/file_explorer_repository.dart';
+import 'package:squash_archiver/common/helpers/flushbar_helper.dart';
 import 'package:get_it/get_it.dart';
 import 'package:injectable/injectable.dart';
+import 'package:squash_archiver/features/home/data/data_sources/local_data_source.dart';
+import 'package:squash_archiver/utils/log/log.dart';
 import 'package:logger/logger.dart';
+import 'package:squash_archiver/common/di/logger_di.dart';
+import 'package:squash_archiver/common/network/network_info.dart';
+import 'package:squash_archiver/common/di/network_info_di.dart';
+import 'package:squash_archiver/services/pushes_service.dart';
 import 'package:sentry/sentry.dart';
+import 'package:squash_archiver/common/di/sentry_di.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import '../../utils/alerts/alerts.dart';
-import '../../utils/alerts/alerts_helper.dart';
-import '../../services/analytics_service.dart';
-import '../api_client/api_client.dart';
-import '../../features/app/data/controllers/app_controller.dart';
-import '../../features/app/data/data_sources/app_local_data_source.dart';
-import '../../features/app/data/repositories/app_repository.dart';
-import '../../features/app/ui/store/app_store.dart';
-import '../../features/home/data/data_sources/archive_data_source.dart';
-import 'archiver_ffi_di.dart';
-import '../../services/crashes_service.dart';
-import '../../utils/device_details/device_details.dart';
-import 'dio_di.dart';
-import '../../constants/env.dart';
-import '../../features/home/data/controllers/file_explorer_controller.dart';
-import '../../features/home/data/repositories/file_explorer_repository.dart';
-import '../helpers/flushbar_helper.dart';
-import '../../features/home/data/data_sources/local_data_source.dart';
-import '../../utils/log/log.dart';
-import 'logger_di.dart';
-import '../network/network_info.dart';
-import 'network_info_di.dart';
-import '../../services/pushes_service.dart';
-import 'sentry_di.dart';
-import 'shared_preferences_di.dart';
+import 'package:squash_archiver/common/di/shared_preferences_di.dart';
 
 /// Environment names
 const _dev = 'dev';
