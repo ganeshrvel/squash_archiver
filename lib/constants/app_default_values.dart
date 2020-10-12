@@ -6,7 +6,7 @@ class AppDefaultValues {
 
   static final String DEFAULT_FILE_EXPLORER_DIRECTORY = homeDirectory();
 
-  static const OrderBy DEFAULT_FILE_EXPLORER_ORDER_BY = OrderBy.fullPath;
+  static const OrderBy DEFAULT_FILE_EXPLORER_ORDER_BY = OrderBy.name;
 
   static const OrderDir DEFAULT_FILE_EXPLORER_ORDER_DIR = OrderDir.none;
 

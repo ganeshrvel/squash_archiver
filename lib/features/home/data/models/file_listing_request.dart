@@ -44,6 +44,10 @@ class FileListingRequest extends Equatable {
     assert(orderDir != null);
     assert(gitIgnorePattern != null);
     assert(source != null);
+
+    if (orderBy == OrderBy.fullPath) {
+      throw "'orderBy.fullPath' isn't supported";
+    }
   }
 
   FileListingRequest copyWith({

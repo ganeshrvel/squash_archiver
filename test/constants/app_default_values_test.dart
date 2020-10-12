@@ -13,7 +13,7 @@ void main() {
 
     test('DEFAULT_FILE_EXPLORER_ORDER_BY', () async {
       expect(AppDefaultValues.DEFAULT_FILE_EXPLORER_ORDER_BY,
-          equals(OrderBy.fullPath));
+          equals(OrderBy.name));
     });
 
     test('DEFAULT_FILE_EXPLORER_ORDER_DIR', () async {
