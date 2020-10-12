@@ -1,4 +1,5 @@
 import 'package:archiver_ffi/archiver_ffi.dart';
+import 'package:squash_archiver/features/home/data/enums/file_explorer_entities_sort_by.dart';
 import 'package:squash_archiver/utils/utils/files.dart';
 
 class AppDefaultValues {
@@ -8,7 +9,10 @@ class AppDefaultValues {
 
   static const OrderBy DEFAULT_FILE_EXPLORER_ORDER_BY = OrderBy.name;
 
-  static const OrderDir DEFAULT_FILE_EXPLORER_ORDER_DIR = OrderDir.none;
+  static const OrderDir DEFAULT_FILE_EXPLORER_ORDER_DIR = OrderDir.asc;
+
+  static const FileExplorerEntitiesSortBy DEFAULT_FILE_EXPLORER_ENTITIES_SORT_BY =
+      FileExplorerEntitiesSortBy.directory;
 
   static const List<String> SUPPORTED_ARCHIVE_EXTENSIONS = [
     'zip',

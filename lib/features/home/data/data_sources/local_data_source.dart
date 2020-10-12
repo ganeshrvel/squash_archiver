@@ -5,6 +5,7 @@ import 'package:data_channel/data_channel.dart';
 import 'package:injectable/injectable.dart';
 import 'package:meta/meta.dart';
 import 'package:path/path.dart' as path;
+import 'package:squash_archiver/features/home/data/helpers.dart';
 import 'package:squash_archiver/features/home/data/models/file_listing_request.dart';
 import 'package:squash_archiver/utils/utils/files.dart';
 import 'package:dartx/dartx.dart';
@@ -47,6 +48,10 @@ class LocalDataSource {
         files: _fileList,
         orderDir: request.orderDir,
         orderBy: request.orderBy,
+      );
+
+      _fileList = sortFileExplorerEntities(
+        files: _fileList,
       );
     } on Exception catch (e) {
       return DC.error(e);
