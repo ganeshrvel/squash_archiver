@@ -20,13 +20,13 @@ dev_dependencies:
   # test
   test: ^1.14.5
 
-  ffigen: ^1.0.1
+  ffigen: ^1.2.0
 
   # Linting
   lint: ^1.1.1
 
 ffigen:
-  output: './lib/generated/bindings.dart'
+  output: './lib/src/generated/bindings.dart'
   headers:
     entry-points:
       - './native/archiver_lib/build/archiver_lib.h'

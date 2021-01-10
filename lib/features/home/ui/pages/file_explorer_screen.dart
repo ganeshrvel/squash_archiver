@@ -14,7 +14,6 @@ import 'package:squash_archiver/features/home/ui/pages/widgets/file_explorer_tab
 import 'package:squash_archiver/utils/utils/files.dart';
 import 'package:squash_archiver/utils/utils/filesizes.dart';
 import 'package:squash_archiver/utils/utils/store_helper.dart';
-import 'package:squash_archiver/utils/utils/strings.dart';
 import 'package:squash_archiver/widget_extends/sf_widget.dart';
 import 'package:squash_archiver/widgets/button/button.dart';
 import 'package:squash_archiver/widgets/sliver/app_sliver_header.dart';

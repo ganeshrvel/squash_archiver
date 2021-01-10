@@ -16,8 +16,8 @@ void main() {
         filename: getTestMocksAsset('to_file.zip'),
         password: '',
         destination: getTestMocksBuildAsset('mock_test_file1', isDir: true),
-        gitIgnorePattern: [],
-        fileList: [],
+        gitIgnorePattern: const [],
+        fileList: const [],
       );
 
       final _result = await _archiverFfi.unpackFiles(
@@ -36,8 +36,8 @@ void main() {
         filename: getTestMocksAsset('to_file.tar'),
         password: '',
         destination: getTestMocksBuildAsset('mock_test_file1', isDir: true),
-        gitIgnorePattern: [],
-        fileList: [],
+        gitIgnorePattern: const [],
+        fileList: const [],
       );
 
       final _result = await _archiverFfi.unpackFiles(
@@ -57,8 +57,8 @@ void main() {
         filename: getTestMocksAsset('to_file.test'),
         password: '',
         destination: getTestMocksBuildAsset('mock_test_file1', isDir: true),
-        gitIgnorePattern: [],
-        fileList: [],
+        gitIgnorePattern: const [],
+        fileList: const [],
       );
 
       final _result = await _archiverFfi.unpackFiles(
@@ -77,7 +77,7 @@ void main() {
       final _param = UnpackFiles(
         filename: getTestMocksAsset('mock_enc_test_file1.zip'),
         destination: getTestMocksBuildAsset('mock_test_file1', isDir: true),
-        gitIgnorePattern: [],
+        gitIgnorePattern: const [],
       );
 
       final _result = await _archiverFfi.unpackFiles(_param);
@@ -95,8 +95,8 @@ void main() {
 
       final _param = UnpackFiles(
         filename: _filename,
-        gitIgnorePattern: [],
-        fileList: [],
+        gitIgnorePattern: const [],
+        fileList: const [],
         destination: _destination,
       );
 
@@ -121,8 +121,8 @@ void main() {
       final _param = UnpackFiles(
         filename: _filename,
         password: _password,
-        gitIgnorePattern: [],
-        fileList: [],
+        gitIgnorePattern: const [],
+        fileList: const [],
         destination: _destination,
       );
 
@@ -146,8 +146,8 @@ void main() {
       final _param = UnpackFiles(
         filename: _filename,
         password: '',
-        gitIgnorePattern: [],
-        fileList: ['mock_dir1/1'],
+        gitIgnorePattern: const [],
+        fileList: const ['mock_dir1/1'],
         destination: _destination,
       );
 
@@ -171,8 +171,8 @@ void main() {
       final _param = UnpackFiles(
         filename: _filename,
         password: '',
-        gitIgnorePattern: [],
-        fileList: [
+        gitIgnorePattern: const [],
+        fileList: const [
           'mock_dir1/1',
           'mock_dir1/2',
         ],
@@ -199,8 +199,8 @@ void main() {
       final _param = UnpackFiles(
         filename: _filename,
         password: '',
-        gitIgnorePattern: [],
-        fileList: [
+        gitIgnorePattern: const [],
+        fileList: const [
           'dummy/path/mock_dir1/1',
         ],
         destination: _destination,
@@ -226,8 +226,8 @@ void main() {
       final _param = UnpackFiles(
         filename: _filename,
         password: '',
-        gitIgnorePattern: ['a.txt'],
-        fileList: [],
+        gitIgnorePattern: const ['a.txt'],
+        fileList: const [],
         destination: _destination,
       );
 
@@ -251,8 +251,8 @@ void main() {
       final _param = UnpackFiles(
         filename: _filename,
         password: '',
-        gitIgnorePattern: [],
-        fileList: [],
+        gitIgnorePattern: const [],
+        fileList: const [],
         destination: _destination,
       );
 

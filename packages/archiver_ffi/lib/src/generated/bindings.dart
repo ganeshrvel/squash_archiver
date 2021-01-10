@@ -222,9 +222,9 @@ class GoSlice extends ffi.Struct {
 
 const int __DARWIN_ONLY_64_BIT_INO_T = 0;
 
-const int __DARWIN_ONLY_VERS_1050 = 0;
-
 const int __DARWIN_ONLY_UNIX_CONFORMANCE = 1;
+
+const int __DARWIN_ONLY_VERS_1050 = 0;
 
 const int __DARWIN_UNIX03 = 1;
 

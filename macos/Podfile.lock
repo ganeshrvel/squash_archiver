@@ -1,17 +1,45 @@
 PODS:
+  - Firebase/Analytics (6.34.0):
+    - Firebase/Core
+  - Firebase/Core (6.34.0):
+    - Firebase/CoreOnly
+    - FirebaseAnalytics (= 6.9.0)
+  - Firebase/CoreOnly (6.34.0):
+    - FirebaseCore (= 6.10.4)
+  - FirebaseCore (6.10.4):
+    - FirebaseCoreDiagnostics (~> 1.6)
+    - GoogleUtilities/Environment (~> 6.7)
+    - GoogleUtilities/Logger (~> 6.7)
+  - FirebaseCoreDiagnostics (1.7.0):
+    - GoogleDataTransport (~> 7.4)
+    - GoogleUtilities/Environment (~> 6.7)
+    - GoogleUtilities/Logger (~> 6.7)
+    - nanopb (~> 1.30906.0)
   - FlutterMacOS (1.0.0)
   - FMDB (2.7.5):
     - FMDB/standard (= 2.7.5)
   - FMDB/standard (2.7.5)
+  - GoogleDataTransport (7.5.1):
+    - nanopb (~> 1.30906.0)
+  - GoogleUtilities/Environment (6.7.2):
+    - PromisesObjC (~> 1.2)
+  - GoogleUtilities/Logger (6.7.2):
+    - GoogleUtilities/Environment
+  - nanopb (1.30906.0):
+    - nanopb/decode (= 1.30906.0)
+    - nanopb/encode (= 1.30906.0)
+  - nanopb/decode (1.30906.0)
+  - nanopb/encode (1.30906.0)
   - package_info (0.0.1):
     - FlutterMacOS
   - path_provider (0.0.1)
   - path_provider_macos (0.0.1):
     - FlutterMacOS
+  - PromisesObjC (1.2.12)
   - shared_preferences (0.0.1)
   - shared_preferences_macos (0.0.1):
     - FlutterMacOS
-  - Sparkle (1.23.0)
+  - Sparkle (1.24.0)
   - sqflite (0.0.1):
     - FlutterMacOS
     - FMDB (~> 2.7.2)
@@ -20,6 +48,7 @@ PODS:
     - FlutterMacOS
 
 DEPENDENCIES:
+  - Firebase/Analytics
   - FlutterMacOS (from `Flutter/ephemeral/.symlinks/flutter/darwin-x64`)
   - package_info (from `Flutter/ephemeral/.symlinks/plugins/package_info/macos`)
   - path_provider (from `Flutter/ephemeral/.symlinks/plugins/path_provider/macos`)
@@ -33,7 +62,14 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
+    - Firebase
+    - FirebaseCore
+    - FirebaseCoreDiagnostics
     - FMDB
+    - GoogleDataTransport
+    - GoogleUtilities
+    - nanopb
+    - PromisesObjC
     - Sparkle
 
 EXTERNAL SOURCES:
@@ -57,18 +93,25 @@ EXTERNAL SOURCES:
     :path: Flutter/ephemeral/.symlinks/plugins/url_launcher_macos/macos
 
 SPEC CHECKSUMS:
+  Firebase: c23a36d9e4cdf7877dfcba8dd0c58add66358999
+  FirebaseCore: d3a978a3cfa3240bf7e4ba7d137fdf5b22b628ec
+  FirebaseCoreDiagnostics: 770ac5958e1372ce67959ae4b4f31d8e127c3ac1
   FlutterMacOS: 15bea8a44d2fa024068daa0140371c020b4b6ff9
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
+  GoogleDataTransport: f56af7caa4ed338dc8e138a5d7c5973e66440833
+  GoogleUtilities: 7f2f5a07f888cdb145101d6042bc4422f57e70b3
+  nanopb: 59317e09cf1f1a0af72f12af412d54edf52603fc
   package_info: 6eba2fd8d3371dda2d85c8db6fe97488f24b74b2
   path_provider: e0848572d1d38b9a7dd099e79cf83f5b7e2cde9f
   path_provider_macos: a0a3fd666cb7cd0448e936fb4abad4052961002b
+  PromisesObjC: 3113f7f76903778cf4a0586bd1ab89329a0b7b97
   shared_preferences: 9fec34d1bd906196a4da48fcf6c3ad521cc00b8d
   shared_preferences_macos: 480ce071d0666e37cef23fe6c702293a3d21799e
-  Sparkle: 55b1a87ba69d56913375a281546b7c82dec95bb0
+  Sparkle: 270cd27377bf04e9c128af06e3a22d0f572d6ee3
   sqflite: 6c1f07e1d4399d619ea619fea9171251dd24d058
   url_launcher: af78307ef9bafff91273b34f1c6c0c86a0004fd7
   url_launcher_macos: 45af3d61de06997666568a7149c1be98b41c95d4
 
-PODFILE CHECKSUM: db62a7c9f1488231773afacb71c525a5fd4de876
+PODFILE CHECKSUM: e52e28fe6d06f9674bb3305d1f4a384c8eec814f
 
-COCOAPODS: 1.10.0.rc.1
+COCOAPODS: 1.10.1

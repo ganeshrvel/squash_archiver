@@ -21,7 +21,7 @@ Future<void> _listArchive() async {
       filename: getTestMocksAsset('mock_test_file1.zip'),
       recursive: true,
       listDirectoryPath: '',
-      gitIgnorePattern: []);
+      gitIgnorePattern: const []);
 
   final _result = await _archiverFfi.listArchive(_param);
 
@@ -68,8 +68,8 @@ Future<void> _unpackFiles() async {
     filename: getTestMocksAsset('mock_test_file1.zip'),
     password: '',
     destination: getTestMocksBuildAsset('mock_test_file1'),
-    gitIgnorePattern: [],
-    fileList: [],
+    gitIgnorePattern: const [],
+    fileList: const [],
   );
 
   final _result = await _archiverFfi.unpackFiles(
@@ -91,7 +91,7 @@ Future<void> _packFiles() async {
   final _param = PackFiles(
     filename: getTestMocksBuildAsset('mock_test_file1.zip'),
     password: '',
-    gitIgnorePattern: [],
+    gitIgnorePattern: const [],
     fileList: [getTestMocksAsset('mock_dir1')],
   );
 

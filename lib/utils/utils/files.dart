@@ -15,6 +15,7 @@ String getFileName(String pathName) {
   return path.basename(file.path) ?? '';
 }
 
+// todo fix this. add a whitelist for allowed second extension
 String getExtension(String filename) {
   if (isNullOrEmpty(filename)) {
     return '';

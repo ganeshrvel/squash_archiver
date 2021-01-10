@@ -19,7 +19,7 @@ Future<void> _testPackedArchive({
     password: password,
     recursive: true,
     listDirectoryPath: '',
-    gitIgnorePattern: [],
+    gitIgnorePattern: const [],
   );
 
   final _result = await archiverFfi.listArchive(_param);
@@ -38,7 +38,7 @@ void main() {
       final _param = PackFiles(
         filename: getTestMocksBuildAsset('mock_test_file1.zip'),
         password: '',
-        gitIgnorePattern: [],
+        gitIgnorePattern: const [],
         fileList: [
           getTestMocksAsset('mock_dir1'),
           getTestMocksAsset('no_folder'),
@@ -62,7 +62,7 @@ void main() {
       final _param = PackFiles(
         filename: getTestMocksBuildAsset('mock_test_file1.test'),
         password: '',
-        gitIgnorePattern: [],
+        gitIgnorePattern: const [],
         fileList: [
           getTestMocksAsset('mock_dir1'),
           getTestMocksAsset('no_folder'),
@@ -87,7 +87,7 @@ void main() {
       final _param = PackFiles(
         filename: _filename,
         password: '',
-        gitIgnorePattern: [],
+        gitIgnorePattern: const [],
         fileList: [
           getTestMocksAsset('mock_dir1'),
         ],
@@ -115,7 +115,7 @@ void main() {
       final _param = PackFiles(
         filename: _filename,
         password: _password,
-        gitIgnorePattern: [],
+        gitIgnorePattern: const [],
         fileList: [
           getTestMocksAsset('mock_dir1'),
         ],
@@ -143,7 +143,7 @@ void main() {
       final _param = PackFiles(
         filename: _filename,
         password: '',
-        gitIgnorePattern: [],
+        gitIgnorePattern: const [],
         fileList: [
           getTestMocksAsset('mock_dir1'),
           getTestMocksAsset('mock_dir2'),
@@ -171,7 +171,7 @@ void main() {
       final _param = PackFiles(
         filename: _filename,
         password: '',
-        gitIgnorePattern: ['a.txt'],
+        gitIgnorePattern: const ['a.txt'],
         fileList: [
           getTestMocksAsset('mock_dir1'),
         ],
@@ -198,7 +198,7 @@ void main() {
       final _param = PackFiles(
         filename: _filename,
         password: '',
-        gitIgnorePattern: [],
+        gitIgnorePattern: const [],
         fileList: [
           getTestMocksAsset('mock_dir1'),
         ],

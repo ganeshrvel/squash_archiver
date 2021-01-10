@@ -15,7 +15,10 @@ class _TestFixDirSlash {
 }
 
 void main() {
+  //// todo fix this. add a whitelist for allowed second extension
   test('getExtension', () async {
+    throw '// todo fix this. add a whitelist for allowed second extension';
+
     const _mediaMap = {
       'file.jpg': 'jpg',
       'file.rar': 'rar',

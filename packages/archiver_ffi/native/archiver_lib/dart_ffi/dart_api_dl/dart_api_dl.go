@@ -15,12 +15,17 @@ import (
 #include "include/dart_api_dl.c"
 	// Go does not allow calling C function pointers directly. So we are
 	// forced to provide a trampoline.
-	bool GoDart_PostCObject(Dart_Port_DL port, Dart_CObject* obj) {
-	  return Dart_PostCObject_DL(port, obj);
+	bool GoDart_PostCObject(Dart_Port_DL port, int64_t ptrAddr) {
+  		Dart_CObject dartObj;
+  		dartObj.type = Dart_CObject_kInt64;
+
+		dartObj.value.as_int64 = ptrAddr;
+
+	    return Dart_PostCObject_DL(port, &dartObj);
 	}
 
 	bool GoDart_CloseNativePort(Dart_Port_DL port) {
-	  return Dart_CloseNativePort_DL(port);
+	  	return Dart_CloseNativePort_DL(port);
 	}
 
 	typedef struct ErrorInfo{
@@ -170,8 +175,8 @@ func GetStringList(stringListPtrAddr int64) []string {
 
 // List the archive
 func SendArchiveListing(port int64, err error, result *[]onearchiver.ArchiveFileInfo) {
-	var dartObj C.Dart_CObject
-	dartObj._type = C.Dart_CObject_kInt64
+	//var dartObj C.Dart_CObject
+	//dartObj._type = C.Dart_CObject_kTypedData
 
 	// Parse errors
 	var ei C.struct_ErrorInfo
@@ -218,8 +223,7 @@ func SendArchiveListing(port int64, err error, result *[]onearchiver.ArchiveFile
 
 	ptrAddr := C.GetArcFileInfoResultAddr(air)
 
-	*(*C.int64_t)(unsafe.Pointer(&dartObj.value[0])) = C.int64_t(ptrAddr)
-	C.GoDart_PostCObject(C.int64_t(port), &dartObj)
+	C.GoDart_PostCObject(C.int64_t(port), C.int64_t(ptrAddr))
 }
 
 func FreeListArchiveMemory(ptrAddr int64) {
@@ -245,8 +249,8 @@ func SendIsArchiveEncrypted(port int64, err error, result *onearchiver.Encrypted
 	eai.error = &ei
 
 	ptrAddr := C.GetEncryptedArchiveResultAddr(eai)
-	*(*C.int64_t)(unsafe.Pointer(&dartObj.value[0])) = C.int64_t(ptrAddr)
-	C.GoDart_PostCObject(C.int64_t(port), &dartObj)
+
+	C.GoDart_PostCObject(C.int64_t(port), C.int64_t(ptrAddr))
 }
 
 func FreeIsArchiveEncryptedMemory(ptrAddr int64) {
@@ -276,8 +280,7 @@ func SendPackFiles(port int64, err error, pInfo *onearchiver.ProgressInfo, packi
 
 	ptrAddr := C.GetPackFilesResultAddr(pf)
 
-	*(*C.int64_t)(unsafe.Pointer(&dartObj.value[0])) = C.int64_t(ptrAddr)
-	C.GoDart_PostCObject(C.int64_t(port), &dartObj)
+	C.GoDart_PostCObject(C.int64_t(port), C.int64_t(ptrAddr))
 }
 
 func FreePackFilesMemory(ptrAddr int64) {
@@ -307,8 +310,7 @@ func SendUnpackFiles(port int64, err error, pInfo *onearchiver.ProgressInfo, pac
 
 	ptrAddr := C.GetUnpackFilesResultAddr(pf)
 
-	*(*C.int64_t)(unsafe.Pointer(&dartObj.value[0])) = C.int64_t(ptrAddr)
-	C.GoDart_PostCObject(C.int64_t(port), &dartObj)
+	C.GoDart_PostCObject(C.int64_t(port), C.int64_t(ptrAddr))
 }
 
 func FreeUnpackFilesMemory(ptrAddr int64) {

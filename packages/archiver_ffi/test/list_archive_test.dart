@@ -40,7 +40,7 @@ void main() {
         filename: getTestMocksAsset('no_file.zip'),
         recursive: true,
         listDirectoryPath: '',
-        gitIgnorePattern: [],
+        gitIgnorePattern: const [],
       );
 
       final _result = await _archiverFfi.listArchive(_param);
@@ -56,7 +56,7 @@ void main() {
         filename: getTestMocksAsset('no_file.tar'),
         recursive: true,
         listDirectoryPath: '',
-        gitIgnorePattern: [],
+        gitIgnorePattern: const [],
       );
 
       final _result = await _archiverFfi.listArchive(_param);
@@ -73,7 +73,7 @@ void main() {
         filename: getTestMocksAsset('no_file.test'),
         recursive: true,
         listDirectoryPath: '',
-        gitIgnorePattern: [],
+        gitIgnorePattern: const [],
       );
 
       final _result = await _archiverFfi.listArchive(_param);
@@ -90,7 +90,7 @@ void main() {
         filename: getTestMocksAsset('no_file.zip'),
         recursive: true,
         listDirectoryPath: '',
-        gitIgnorePattern: [],
+        gitIgnorePattern: const [],
       );
 
       final _result = await _archiverFfi.listArchive(_param);
@@ -106,7 +106,7 @@ void main() {
         filename: getTestMocksAsset('mock_enc_test_file1.zip'),
         recursive: true,
         listDirectoryPath: '',
-        gitIgnorePattern: [],
+        gitIgnorePattern: const [],
       );
 
       final _result = await _archiverFfi.listArchive(_param);
@@ -122,7 +122,7 @@ void main() {
         filename: getTestMocksAsset('mock_test_file1.zip'),
         recursive: true,
         listDirectoryPath: '',
-        gitIgnorePattern: [],
+        gitIgnorePattern: const [],
       );
 
       final _result = await _archiverFfi.listArchive(_param);
@@ -149,7 +149,7 @@ void main() {
         filename: getTestMocksAsset('mock_test_file1.zip'),
         recursive: true,
         listDirectoryPath: 'mock_dir1/',
-        gitIgnorePattern: [],
+        gitIgnorePattern: const [],
       );
 
       final _result = await _archiverFfi.listArchive(_param);
@@ -179,7 +179,7 @@ void main() {
         filename: getTestMocksAsset('mock_test_file1.zip'),
         recursive: false,
         listDirectoryPath: 'mock_dir1/',
-        gitIgnorePattern: [],
+        gitIgnorePattern: const [],
       );
 
       final _result = await _archiverFfi.listArchive(_param);
@@ -209,7 +209,7 @@ void main() {
         filename: getTestMocksAsset('mock_test_file1.zip'),
         recursive: true,
         listDirectoryPath: 'mock_dir1',
-        gitIgnorePattern: ['mock_dir1/1/'],
+        gitIgnorePattern: const ['mock_dir1/1/'],
       );
 
       final _result = await _archiverFfi.listArchive(_param);
