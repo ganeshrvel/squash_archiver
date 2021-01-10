@@ -118,6 +118,7 @@ class ArchiverFfi {
 
           _files.add(_file);
         }
+
         final _listArchiveResult = ListArchiveResult(
           totalFiles: _result.ref.totalFiles,
           files: _files,

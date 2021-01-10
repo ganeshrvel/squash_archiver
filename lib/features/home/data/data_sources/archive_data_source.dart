@@ -185,8 +185,7 @@ class ArchiveDataSource {
 }
 
 Future<DC<Exception, ListArchiveResult>> _fetchFiles(
-  ArchiveDataSourceListingRequest params,
-) async {
+    ArchiveDataSourceListingRequest params,) async {
   assert(params != null);
 
   final _archiverFfi = ArchiverFfi();

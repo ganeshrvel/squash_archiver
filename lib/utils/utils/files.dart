@@ -86,7 +86,7 @@ String getParentPath(String fullPath) {
 
   final _parentDir = Directory(fullPath).parent.path;
 
-  if (_parentDir == '.') {
+  if (_parentDir == '.' || _parentDir == './') {
     return '';
   }
 
