@@ -38,4 +38,12 @@ void main() {
           equals(true));
     });
   });
+
+  test('ALLOWED_SECOND_EXTENSIONS', () async {
+    expect(
+        listEquals(AppDefaultValues.ALLOWED_SECOND_EXTENSIONS.toList(), [
+          'tar',
+        ]),
+        equals(true));
+  });
 }
