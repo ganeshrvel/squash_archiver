@@ -100,7 +100,10 @@ abstract class _FileExplorerScreenStoreBase with Store {
       throw "'currentArchiveFilename' cannot be null if source is 'Archive'";
     }
 
-    // todo check is encrypted archive before opening
+    // todo check if archive encrypted before opening
+    //  todo:    if is encrypted error received then show the popup for password
+    // todo:     if password invalid error received then show the popup for password with validation error text
+
     // todo add toggle hidden files
     final _request = FileListingRequest(
       path: fullPath,
@@ -153,8 +156,6 @@ abstract class _FileExplorerScreenStoreBase with Store {
     @required OrderDir orderDir,
     @required OrderBy orderBy,
   }) async {
-    /// todo dont invalidate the cache for archive [orderDir] and [orderBy] sorting
-
     return _updateFileListingRequest(
       _fileListingRequest.copyWith(
         orderDir: orderDir ?? this.orderDir,

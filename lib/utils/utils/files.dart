@@ -16,7 +16,6 @@ String getFileName(String pathName) {
   return path.basename(file.path) ?? '';
 }
 
-// todo fix this. add a whitelist for allowed second extension
 String getExtension(String filename) {
   const extension = '';
 
@@ -132,7 +131,9 @@ List<FileSystemEntity> listDirectory(Directory dir, {bool recursive}) {
 /// currently used for writing the test cases
 String getNativeLib() {
   final _archiverLibRoot = path.join(
-      Directory.current.path, 'packages/archiver_ffi/native/archiver_lib/');
+    Directory.current.path,
+    'packages/archiver_ffi/native/archiver_lib/',
+  );
 
   return path.join(_archiverLibRoot, 'build/', AppFiles.ARCHIVER_FFI_LIB);
 }
