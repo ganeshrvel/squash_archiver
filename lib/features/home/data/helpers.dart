@@ -3,6 +3,7 @@ import 'package:meta/meta.dart';
 import 'package:squash_archiver/constants/app_default_values.dart';
 import 'package:squash_archiver/features/home/data/enums/file_explorer_entities_sort_by.dart';
 import 'package:squash_archiver/utils/utils/functs.dart';
+import 'package:dartx/dartx.dart';
 
 List<FileInfo> sortFileExplorerEntities({
   @required List<FileInfo> files,
@@ -44,6 +45,46 @@ List<FileInfo> sortFileExplorerEntities({
       _sortedFiles.addAll(_fileBucket);
 
       return _sortedFiles;
+
+      break;
+  }
+}
+
+List<FileInfo> sortFiles({
+  @required List<FileInfo> files,
+  @required OrderBy orderBy,
+  @required OrderDir orderDir,
+}) {
+  if (orderDir == OrderDir.none) {
+    return files;
+  }
+
+  switch (orderBy) {
+    case OrderBy.size:
+      if (orderDir == OrderDir.asc) {
+        return files.sortedBy((file) => file.size);
+      }
+
+      return files.sortedByDescending((file) => file.size);
+
+      break;
+
+    case OrderBy.modTime:
+      if (orderDir == OrderDir.asc) {
+        return files.sortedBy((file) => file.modTime);
+      }
+
+      return files.sortedByDescending((file) => file.modTime);
+
+      break;
+
+    case OrderBy.name:
+    default:
+      if (orderDir == OrderDir.asc) {
+        return files.sortedBy((file) => file.name.toLowerCase());
+      }
+
+      return files.sortedByDescending((file) => file.name.toLowerCase());
 
       break;
   }

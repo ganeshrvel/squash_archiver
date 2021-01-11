@@ -20,9 +20,8 @@ class LocalDataSource {
   }) async {
     assert(request != null);
 
-    var _fileList = <FileInfo>[];
-
     try {
+      var _fileList = <FileInfo>[];
       final _files = listDirectory(Directory(request.path));
 
       for (final file in _files) {
@@ -52,7 +51,7 @@ class LocalDataSource {
         _fileList.add(_fileInfoResult);
       }
 
-      _fileList = _sortFiles(
+      _fileList = sortFiles(
         files: _fileList,
         orderDir: request.orderDir,
         orderBy: request.orderBy,
@@ -61,50 +60,10 @@ class LocalDataSource {
       _fileList = sortFileExplorerEntities(
         files: _fileList,
       );
+
+      return DC.data(_fileList);
     } on Exception catch (e) {
       return DC.error(e);
-    }
-
-    return DC.data(_fileList);
-  }
-
-  List<FileInfo> _sortFiles({
-    @required List<FileInfo> files,
-    @required OrderBy orderBy,
-    @required OrderDir orderDir,
-  }) {
-    if (orderDir == OrderDir.none) {
-      return files;
-    }
-
-    switch (orderBy) {
-      case OrderBy.size:
-        if (orderDir == OrderDir.asc) {
-          return files.sortedBy((file) => file.size);
-        }
-
-        return files.sortedByDescending((file) => file.size);
-
-        break;
-
-      case OrderBy.modTime:
-        if (orderDir == OrderDir.asc) {
-          return files.sortedBy((file) => file.modTime);
-        }
-
-        return files.sortedByDescending((file) => file.modTime);
-
-        break;
-
-      case OrderBy.name:
-      default:
-        if (orderDir == OrderDir.asc) {
-          return files.sortedBy((file) => file.name.toLowerCase());
-        }
-
-        return files.sortedByDescending((file) => file.name.toLowerCase());
-
-        break;
     }
   }
 }

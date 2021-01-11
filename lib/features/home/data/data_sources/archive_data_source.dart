@@ -82,6 +82,8 @@ class ArchiveDataSource {
 
           final _filteredPath = _getFilesList(
             listDirectoryPath: listArchiveRequest.listDirectoryPath,
+            orderBy: listArchiveRequest.orderBy,
+            orderDir: listArchiveRequest.orderDir,
           );
 
           _result = DC.data(_filteredPath);
@@ -93,6 +95,8 @@ class ArchiveDataSource {
     } else {
       final _filteredPath = _getFilesList(
         listDirectoryPath: listArchiveRequest.listDirectoryPath,
+        orderBy: listArchiveRequest.orderBy,
+        orderDir: listArchiveRequest.orderDir,
       );
 
       _result = DC.data(_filteredPath);
@@ -106,6 +110,8 @@ class ArchiveDataSource {
   // filter files by their path
   List<FileInfo> _getFilesList({
     @required String listDirectoryPath,
+    @required OrderBy orderBy,
+    @required OrderDir orderDir,
   }) {
     assert(listDirectoryPath != null);
 
@@ -122,7 +128,7 @@ class ArchiveDataSource {
       fullPath: listDirectoryPath,
     );
 
-    final _fileListResult = cachedListArchiveResult.files.where((file) {
+    var _fileListResult = cachedListArchiveResult.files.where((file) {
       final _parentPath = fixDirSlash(
         isDir: file.isDir,
         fullPath: file.parentPath,
@@ -136,6 +142,12 @@ class ArchiveDataSource {
 
       return _parentPath == _listDirectoryPath;
     }).toList();
+
+    _fileListResult = sortFiles(
+      files: _fileListResult,
+      orderDir: orderDir,
+      orderBy: orderBy,
+    );
 
     return sortFileExplorerEntities(
       files: _fileListResult,
@@ -155,14 +167,6 @@ class ArchiveDataSource {
       return true;
     }
 
-    if (params.orderDir != cachedListArchiveParams.orderDir) {
-      return true;
-    }
-
-    if (params.orderBy != cachedListArchiveParams.orderBy) {
-      return true;
-    }
-
     if (!listEquals(
       params.gitIgnorePattern,
       cachedListArchiveParams.gitIgnorePattern,
@@ -172,6 +176,16 @@ class ArchiveDataSource {
 
     /// making sure that the archive walk through doesn't require a native call
     if (params.listDirectoryPath != cachedListArchiveParams.listDirectoryPath) {
+      return false;
+    }
+
+    /// if [orderDir] is changed pick it up from cache
+    if (params.orderDir != cachedListArchiveParams.orderDir) {
+      return false;
+    }
+
+    /// if [orderDir] is changed pick it up from cache
+    if (params.orderBy != cachedListArchiveParams.orderBy) {
       return false;
     }
 
@@ -185,7 +199,8 @@ class ArchiveDataSource {
 }
 
 Future<DC<Exception, ListArchiveResult>> _fetchFiles(
-    ArchiveDataSourceListingRequest params,) async {
+  ArchiveDataSourceListingRequest params,
+) async {
   assert(params != null);
 
   final _archiverFfi = ArchiverFfi();
