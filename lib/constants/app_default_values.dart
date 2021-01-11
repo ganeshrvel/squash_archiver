@@ -29,4 +29,8 @@ class AppDefaultValues {
     'tar.zst',
     'rar',
   ];
+
+  static const ALLOWED_SECOND_EXTENSIONS = {
+    'tar',
+  };
 }

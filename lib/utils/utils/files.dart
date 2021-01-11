@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:meta/meta.dart';
+import 'package:squash_archiver/constants/app_default_values.dart';
 import 'package:squash_archiver/constants/app_files.dart';
 import 'package:squash_archiver/utils/utils/functs.dart';
 import 'package:path/path.dart' as path;
@@ -17,20 +18,33 @@ String getFileName(String pathName) {
 
 // todo fix this. add a whitelist for allowed second extension
 String getExtension(String filename) {
+  const extension = '';
+
   if (isNullOrEmpty(filename)) {
-    return '';
+    return extension;
   }
 
   final _filenameSlashSplitted = path.split(filename);
-
   final _splittedFilename = _filenameSlashSplitted.last.split('.');
 
-  var extension = '';
+  if (isNullOrEmpty(_splittedFilename)) {
+    return extension;
+  }
 
-  if (isNotNullOrEmpty(_splittedFilename)) {
-    _splittedFilename.removeAt(0);
+  final length = _splittedFilename.length;
 
-    extension = _splittedFilename.join('.');
+  if (_splittedFilename.length > 2) {
+    final _exts = _splittedFilename.sublist(length - 2);
+
+    if (AppDefaultValues.ALLOWED_SECOND_EXTENSIONS.contains(_exts[0])) {
+      return _exts.join('.');
+    }
+  }
+
+  if (length > 1) {
+    final _exts = _splittedFilename.sublist(length - 1);
+
+    return _exts[0];
   }
 
   return extension;

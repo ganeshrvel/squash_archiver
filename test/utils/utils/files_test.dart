@@ -15,25 +15,39 @@ class _TestFixDirSlash {
 }
 
 void main() {
-  //// todo fix this. add a whitelist for allowed second extension
   test('getExtension', () async {
-   // throw '// todo fix this. add a whitelist for allowed second extension';
-
     const _mediaMap = {
+      '': '',
+      'abc.xyz.tar.gz': 'tar.gz',
+      'abc.xyz.tar.tar': 'tar.tar',
+      'xyz.tar.gz': 'tar.gz',
+      'tar.gz': 'gz',
+      'abc.gz': 'gz',
+      '.gz': 'gz',
+      '.tar': 'tar',
+      '.tar.gz': 'tar.gz',
+      'tar.tar.gz': 'tar.gz',
+      '.htaccess': 'htaccess',
+      'abc.txt': 'txt',
+      'abc': '',
+      'github.com/ganeshrvel/one-archiver/e2e_list_test.go': 'go',
+      'one-archiver/e2e_list_test.go': 'go',
+      'e2e_list_test.go/.go.psd': 'psd',
       'file.jpg': 'jpg',
       'file.rar': 'rar',
       'file.tar.gz': 'tar.gz',
       'file.12': '12',
       'path/to/file.23': '23',
+      'path/to/123.file.23': '23',
+      'path/to/.123.file.23': '23',
+      'path/to/.123...23': '23',
       'path/to/file.tar.34': 'tar.34',
       'path/to.get/file.tar.56': 'tar.56',
       'path/to/file./78': '',
       'path/to/file./.89': '89',
       'qwerty': '',
-      '.htaccess': 'htaccess',
-      '..htaccess': '.htaccess',
+      '..htaccess': 'htaccess',
       '.': '',
-      '': '',
       null: '',
       ' ': '',
       ' . ': ' ',
