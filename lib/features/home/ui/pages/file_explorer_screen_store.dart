@@ -34,14 +34,14 @@ abstract class _FileExplorerScreenStoreBase with Store {
   Exception fileListException;
 
   @observable
-  List<FileListingRequest> _fileListingRequestStack = ObservableList();
+  List<FileListingRequest> _fileListingSourceStack = ObservableList();
 
-  FileListingRequest get _fileListingRequest {
-    if (isNullOrEmpty(_fileListingRequestStack)) {
+  FileListingRequest get _fileListingSource {
+    if (isNullOrEmpty(_fileListingSourceStack)) {
       return FileListingRequest(path: '');
     }
 
-    return _fileListingRequestStack.last;
+    return _fileListingSourceStack.last;
   }
 
   @computed
@@ -49,44 +49,50 @@ abstract class _FileExplorerScreenStoreBase with Store {
     return isStateLoading(fileListFuture);
   }
 
+  /// current path in the file explorer; path of the last item in [_fileListingSourceStack]
   String get currentPath {
-    return _fileListingRequest.path;
+    return _fileListingSource.path;
   }
 
-  String get currentArchiveFilename {
-    return _fileListingRequest.archiveFilename;
+  /// full path to the currently opened archive file in the file explorer; [archiveFilepath] of the last item in [_fileListingSourceStack]
+  String get currentArchiveFilepath {
+    return _fileListingSource.archiveFilepath;
   }
 
+  /// password of the currently opened file in the file explorer (if any); [password] of the last item in [_fileListingSourceStack]
   String get password {
-    return _fileListingRequest.password;
+    return _fileListingSource.password;
   }
 
   OrderBy get orderBy {
-    return _fileListingRequest.orderBy;
+    return _fileListingSource.orderBy;
   }
 
   OrderDir get orderDir {
-    return _fileListingRequest.orderDir;
+    return _fileListingSource.orderDir;
   }
 
   List<String> get gitIgnorePattern {
-    return _fileListingRequest.gitIgnorePattern;
+    return _fileListingSource.gitIgnorePattern;
   }
 
+  /// [source] of the last item in [_fileListingSourceStack]
   FileExplorerSource get source {
-    return _fileListingRequest.source;
+    return _fileListingSource.source;
   }
 
-  /// Adding a new [FileExplorerSource] will first add the request to the [_fileListingRequestStack]
+  /// Adding a new [FileExplorerSource] will first add the request to the [_fileListingSourceStack]
   /// and then fetch files from the respective source
   @action
-  Future<void> newSource({
+  Future<void> navigateToSource({
     @required String fullPath,
     @required FileExplorerSource source,
 
-    /// clearing stack will empty the [_fileListingRequestStack] first and then insert a new request
+    /// clearing stack will empty [_fileListingSourceStack] first and then insert a new request
     @required bool clearStack,
-    String currentArchiveFilename,
+
+    /// the full path to the archive file
+    String currentArchiveFilepath,
     OrderBy orderBy,
     OrderDir orderDir,
     String password,
@@ -97,18 +103,19 @@ abstract class _FileExplorerScreenStoreBase with Store {
     assert(clearStack != null);
 
     if (source == FileExplorerSource.ARCHIVE &&
-        currentArchiveFilename == null) {
-      throw "'currentArchiveFilename' cannot be null if source is 'Archive'";
+        currentArchiveFilepath == null) {
+      throw "'currentArchiveFilepath' cannot be null if source is 'Archive'";
     }
 
-    // todo check if archive encrypted before opening
-    //  todo:    if is encrypted error received then show the popup for password
-    // todo:     if password invalid error received then show the popup for password with validation error text
+    // todo: check if archive encrypted before opening
+    // todo:    if is encrypted error received then show the popup for password
+    // todo:    if password invalid error received then show the popup for password with validation error text
+    // todo:    write test cases for the same
 
     // todo add toggle hidden files
     final _request = FileListingRequest(
       path: fullPath,
-      archiveFilename: currentArchiveFilename,
+      archiveFilepath: currentArchiveFilepath,
       gitIgnorePattern: gitIgnorePattern,
       orderDir: orderDir,
       orderBy: orderBy,
@@ -117,7 +124,7 @@ abstract class _FileExplorerScreenStoreBase with Store {
     );
 
     if (clearStack) {
-      _fileListingRequestStack.clear();
+      _fileListingSourceStack.clear();
     }
 
     _addToFileListingRequestStack(_request);
@@ -136,7 +143,7 @@ abstract class _FileExplorerScreenStoreBase with Store {
   /// update the last item in the stack
   @action
   Future<void> _updateFileListingRequest(FileListingRequest request) async {
-    _fileListingRequestStack.last = request;
+    _fileListingSourceStack.last = request;
 
     return refreshFiles();
   }
@@ -147,7 +154,7 @@ abstract class _FileExplorerScreenStoreBase with Store {
     assert(value != null);
 
     return _updateFileListingRequest(
-      _fileListingRequest.copyWith(path: value),
+      _fileListingSource.copyWith(path: value),
     );
   }
 
@@ -158,7 +165,7 @@ abstract class _FileExplorerScreenStoreBase with Store {
     @required OrderBy orderBy,
   }) async {
     return _updateFileListingRequest(
-      _fileListingRequest.copyWith(
+      _fileListingSource.copyWith(
         orderDir: orderDir ?? this.orderDir,
         orderBy: orderBy ?? this.orderBy,
       ),
@@ -179,14 +186,14 @@ abstract class _FileExplorerScreenStoreBase with Store {
 
     // update the last item in the stack
     return _updateFileListingRequest(
-      _fileListingRequest.copyWith(path: _parentPath),
+      _fileListingSource.copyWith(path: _parentPath),
     );
   }
 
   @action
   Future<void> popFileListingRequestStack() async {
-    if (_fileListingRequestStack.length > 1) {
-      _fileListingRequestStack.removeLast();
+    if (_fileListingSourceStack.length > 1) {
+      _fileListingSourceStack.removeLast();
 
       return refreshFiles(invalidateCache: true);
     }
@@ -204,7 +211,7 @@ abstract class _FileExplorerScreenStoreBase with Store {
 
     fileListFuture = ObservableFuture(
       _fileExplorerController.listFiles(
-        request: _fileListingRequest,
+        request: _fileListingSource,
         invalidateCache: invalidateCache,
       ),
     );
@@ -240,17 +247,17 @@ abstract class _FileExplorerScreenStoreBase with Store {
 
   @action
   void _setFileListingRequestStack(FileListingRequest param) {
-    _fileListingRequestStack = [param];
+    _fileListingSourceStack = [param];
   }
 
   @action
   void _addToFileListingRequestStack(FileListingRequest param) {
-    if (isNullOrEmpty(_fileListingRequestStack)) {
+    if (isNullOrEmpty(_fileListingSourceStack)) {
       _setFileListingRequestStack(param);
 
       return;
     }
 
-    _fileListingRequestStack.add(param);
+    _fileListingSourceStack.add(param);
   }
 }

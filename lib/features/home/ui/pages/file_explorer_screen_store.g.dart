@@ -66,41 +66,41 @@ mixin _$FileExplorerScreenStore on _FileExplorerScreenStoreBase, Store {
     });
   }
 
-  final _$_fileListingRequestStackAtom =
-      Atom(name: '_FileExplorerScreenStoreBase._fileListingRequestStack');
+  final _$_fileListingSourceStackAtom =
+      Atom(name: '_FileExplorerScreenStoreBase._fileListingSourceStack');
 
   @override
-  List<FileListingRequest> get _fileListingRequestStack {
-    _$_fileListingRequestStackAtom.reportRead();
-    return super._fileListingRequestStack;
+  List<FileListingRequest> get _fileListingSourceStack {
+    _$_fileListingSourceStackAtom.reportRead();
+    return super._fileListingSourceStack;
   }
 
   @override
-  set _fileListingRequestStack(List<FileListingRequest> value) {
-    _$_fileListingRequestStackAtom
-        .reportWrite(value, super._fileListingRequestStack, () {
-      super._fileListingRequestStack = value;
+  set _fileListingSourceStack(List<FileListingRequest> value) {
+    _$_fileListingSourceStackAtom
+        .reportWrite(value, super._fileListingSourceStack, () {
+      super._fileListingSourceStack = value;
     });
   }
 
-  final _$newSourceAsyncAction =
-      AsyncAction('_FileExplorerScreenStoreBase.newSource');
+  final _$navigateToSourceAsyncAction =
+      AsyncAction('_FileExplorerScreenStoreBase.navigateToSource');
 
   @override
-  Future<void> newSource(
+  Future<void> navigateToSource(
       {@required String fullPath,
       @required FileExplorerSource source,
       @required bool clearStack,
-      String currentArchiveFilename,
+      String currentArchiveFilepath,
       OrderBy orderBy,
       OrderDir orderDir,
       String password,
       List<String> gitIgnorePattern}) {
-    return _$newSourceAsyncAction.run(() => super.newSource(
+    return _$navigateToSourceAsyncAction.run(() => super.navigateToSource(
         fullPath: fullPath,
         source: source,
         clearStack: clearStack,
-        currentArchiveFilename: currentArchiveFilename,
+        currentArchiveFilepath: currentArchiveFilepath,
         orderBy: orderBy,
         orderDir: orderDir,
         password: password,

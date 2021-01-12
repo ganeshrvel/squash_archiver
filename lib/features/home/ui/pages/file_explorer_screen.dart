@@ -59,7 +59,7 @@ class _FileExplorerScreenState extends SfWidget<FileExplorerScreen> {
   }
 
   void _init() {
-    _fileExplorerScreenStore.newSource(
+    _fileExplorerScreenStore.navigateToSource(
       fullPath: AppDefaultValues.DEFAULT_FILE_EXPLORER_DIRECTORY,
       source: FileExplorerSource.LOCAL,
       clearStack: true,
@@ -70,9 +70,9 @@ class _FileExplorerScreenState extends SfWidget<FileExplorerScreen> {
   void didChangeDependencies() {
     // _disposers ??= [
     //   reaction(
-    //     (_) => _fileExplorerScreenStore.currentArchiveFilename,
-    //     (String currentArchiveFilename) {
-    //       // if (isNullOrEmpty(currentArchiveFilename)) {
+    //     (_) => _fileExplorerScreenStore.currentArchiveFilepath,
+    //     (String currentArchiveFilepath) {
+    //       // if (isNullOrEmpty(currentArchiveFilepath)) {
     //       //   _fileExplorerScreenStore.setFiles([]);
     //       //   _fileExplorerScreenStore.setPassword('');
     //       //   _fileExplorerScreenStore.setCurrentPath('');
@@ -127,9 +127,9 @@ class _FileExplorerScreenState extends SfWidget<FileExplorerScreen> {
 
     /// if the file extension is supported by the archiver then open the archive
     if (fileResponse.isSupported) {
-      return _fileExplorerScreenStore.newSource(
+      return _fileExplorerScreenStore.navigateToSource(
         fullPath: '',
-        currentArchiveFilename: fileResponse.file.fullPath,
+        currentArchiveFilepath: fileResponse.file.fullPath,
         source: FileExplorerSource.ARCHIVE,
         clearStack: false,
       );
@@ -230,7 +230,7 @@ class _FileExplorerScreenState extends SfWidget<FileExplorerScreen> {
             Button(
               text: 'Home',
               onPressed: () {
-                _fileExplorerScreenStore.newSource(
+                _fileExplorerScreenStore.navigateToSource(
                   fullPath: AppDefaultValues.DEFAULT_FILE_EXPLORER_DIRECTORY,
                   source: FileExplorerSource.LOCAL,
                   clearStack: true,
@@ -243,7 +243,7 @@ class _FileExplorerScreenState extends SfWidget<FileExplorerScreen> {
             Button(
               text: 'Root',
               onPressed: () {
-                _fileExplorerScreenStore.newSource(
+                _fileExplorerScreenStore.navigateToSource(
                   fullPath: rootDirectory(),
                   source: FileExplorerSource.LOCAL,
                   clearStack: true,
@@ -256,7 +256,7 @@ class _FileExplorerScreenState extends SfWidget<FileExplorerScreen> {
             Button(
               text: 'Desktop',
               onPressed: () {
-                _fileExplorerScreenStore.newSource(
+                _fileExplorerScreenStore.navigateToSource(
                   fullPath: desktopDirectory(),
                   source: FileExplorerSource.LOCAL,
                   clearStack: true,

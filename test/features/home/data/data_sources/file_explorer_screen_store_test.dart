@@ -1,0 +1,80 @@
+import 'dart:async';
+
+import 'package:flutter_test/flutter_test.dart';
+import 'package:injectable/injectable.dart' show Environment;
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:squash_archiver/common/di/di.dart';
+import 'package:squash_archiver/constants/app_default_values.dart';
+import 'package:squash_archiver/features/home/data/enums/file_explorer_source.dart';
+import 'package:squash_archiver/features/home/ui/pages/file_explorer_screen_store.dart';
+
+import '../../../../support/test_utils.dart';
+
+Future<void> main() async {
+  TestWidgetsFlutterBinding.ensureInitialized();
+  SharedPreferences.setMockInitialValues({});
+  await getItInit(Environment.test);
+
+  setUpAll(() async {});
+
+  final _fileExplorerScreenStore = FileExplorerScreenStore();
+
+  group('FileExplorerScreenStore', () {
+    test('setting a new local source', () async {
+      _fileExplorerScreenStore.navigateToSource(
+        fullPath: AppDefaultValues.DEFAULT_FILE_EXPLORER_DIRECTORY,
+        source: FileExplorerSource.LOCAL,
+        clearStack: true,
+      );
+
+      expect(
+        _fileExplorerScreenStore.currentPath,
+        equals(AppDefaultValues.DEFAULT_FILE_EXPLORER_DIRECTORY),
+      );
+
+      expect(
+        _fileExplorerScreenStore.source,
+        equals(FileExplorerSource.LOCAL),
+      );
+
+      expect(
+        _fileExplorerScreenStore.orderBy,
+        equals(AppDefaultValues.DEFAULT_FILE_EXPLORER_ORDER_BY),
+      );
+
+      expect(
+        _fileExplorerScreenStore.orderDir,
+        equals(AppDefaultValues.DEFAULT_FILE_EXPLORER_ORDER_DIR),
+      );
+    });
+  });
+
+  test('setting a new archive source', () async {
+    _fileExplorerScreenStore.navigateToSource(
+      fullPath: '/',
+      source: FileExplorerSource.ARCHIVE,
+      clearStack: true,
+      currentArchiveFilepath: getTestMocksAsset('mock_test_file1.zip'),
+    );
+
+    expect(
+      _fileExplorerScreenStore.currentPath,
+      equals('/'),
+    );
+
+    expect(
+      _fileExplorerScreenStore.source,
+      equals(FileExplorerSource.ARCHIVE),
+    );
+
+    expect(
+      _fileExplorerScreenStore.orderBy,
+      equals(AppDefaultValues.DEFAULT_FILE_EXPLORER_ORDER_BY),
+    );
+
+    expect(
+      _fileExplorerScreenStore.orderDir,
+      equals(AppDefaultValues.DEFAULT_FILE_EXPLORER_ORDER_DIR),
+    );
+  });
+}

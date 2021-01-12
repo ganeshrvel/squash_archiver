@@ -6,9 +6,12 @@ import 'package:squash_archiver/features/home/data/enums/file_explorer_source.da
 
 // ignore: must_be_immutable
 class FileListingRequest extends Equatable {
+  /// path to the directory to list files
   String path;
 
-  String archiveFilename;
+  /// only used for listing archives
+  /// the full path to the archive file
+  String archiveFilepath;
 
   String password;
 
@@ -22,7 +25,7 @@ class FileListingRequest extends Equatable {
 
   FileListingRequest({
     @required this.path,
-    this.archiveFilename,
+    this.archiveFilepath,
     this.password,
     this.orderBy,
     this.orderDir,
@@ -30,7 +33,7 @@ class FileListingRequest extends Equatable {
     this.source,
   }) {
     path = path ?? '';
-    archiveFilename = archiveFilename ?? '';
+    archiveFilepath = archiveFilepath ?? '';
     password = password ?? '';
     orderBy = orderBy ?? AppDefaultValues.DEFAULT_FILE_EXPLORER_ORDER_BY;
     orderDir = orderDir ?? AppDefaultValues.DEFAULT_FILE_EXPLORER_ORDER_DIR;
@@ -38,7 +41,7 @@ class FileListingRequest extends Equatable {
     source = source ?? FileExplorerSource.LOCAL;
 
     assert(path != null);
-    assert(archiveFilename != null);
+    assert(archiveFilepath != null);
     assert(password != null);
     assert(orderBy != null);
     assert(orderDir != null);
@@ -52,7 +55,7 @@ class FileListingRequest extends Equatable {
 
   FileListingRequest copyWith({
     String path,
-    String archiveFilename,
+    String archiveFilepath,
     String password,
     OrderBy orderBy,
     OrderDir orderDir,
@@ -61,7 +64,7 @@ class FileListingRequest extends Equatable {
   }) {
     return FileListingRequest(
       path: path ?? this.path,
-      archiveFilename: archiveFilename ?? this.archiveFilename,
+      archiveFilepath: archiveFilepath ?? this.archiveFilepath,
       password: password ?? this.password,
       orderBy: orderBy ?? this.orderBy,
       orderDir: orderDir ?? this.orderDir,
@@ -73,7 +76,7 @@ class FileListingRequest extends Equatable {
   @override
   List<Object> get props => [
         path,
-        archiveFilename,
+        archiveFilepath,
         password,
         orderBy,
         orderDir,

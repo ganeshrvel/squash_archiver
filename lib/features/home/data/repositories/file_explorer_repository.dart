@@ -27,7 +27,7 @@ class FileExplorerRepository {
       case FileExplorerSource.ARCHIVE:
         try {
           final _params = ListArchive(
-            filename: request.archiveFilename,
+            filename: request.archiveFilepath,
             listDirectoryPath: request.path,
             password: request.password,
             gitIgnorePattern: request.gitIgnorePattern,
