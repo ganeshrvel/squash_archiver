@@ -151,13 +151,13 @@ mixin _$FileExplorerScreenStore on _FileExplorerScreenStoreBase, Store {
     return _$gotoPrevDirectoryAsyncAction.run(() => super.gotoPrevDirectory());
   }
 
-  final _$popFileListingRequestStackAsyncAction =
-      AsyncAction('_FileExplorerScreenStoreBase.popFileListingRequestStack');
+  final _$_popFileListingSourceStackAsyncAction =
+      AsyncAction('_FileExplorerScreenStoreBase._popFileListingSourceStack');
 
   @override
-  Future<void> popFileListingRequestStack() {
-    return _$popFileListingRequestStackAsyncAction
-        .run(() => super.popFileListingRequestStack());
+  Future<void> _popFileListingSourceStack() {
+    return _$_popFileListingSourceStackAsyncAction
+        .run(() => super._popFileListingSourceStack());
   }
 
   final _$_fetchFilesAsyncAction =

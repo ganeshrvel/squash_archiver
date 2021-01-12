@@ -182,7 +182,7 @@ abstract class _FileExplorerScreenStoreBase with Store {
     /// this will navigate the user back to the previous source in the [_fileListingRequestStack]
     if (currentPath == _parentPath) {
       /// make sure that there always atleast one stack available in the stack
-      return popFileListingRequestStack();
+      return _popFileListingSourceStack();
     }
 
     // update the last item in the stack
@@ -192,7 +192,7 @@ abstract class _FileExplorerScreenStoreBase with Store {
   }
 
   @action
-  Future<void> popFileListingRequestStack() async {
+  Future<void> _popFileListingSourceStack() async {
     if (fileListingSourceStack.length > 1) {
       fileListingSourceStack.removeLast();
 
@@ -224,7 +224,7 @@ abstract class _FileExplorerScreenStoreBase with Store {
         fileListException = error;
 
         if (_popStackOnError) {
-          await popFileListingRequestStack();
+          await _popFileListingSourceStack();
         }
 
         c.complete();
