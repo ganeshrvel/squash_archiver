@@ -66,18 +66,18 @@ mixin _$FileExplorerScreenStore on _FileExplorerScreenStoreBase, Store {
     });
   }
 
-  final _$_fileListingSourceStackAtom =
-      Atom(name: '_FileExplorerScreenStoreBase._fileListingSourceStack');
+  final _$fileListingSourceStackAtom =
+      Atom(name: '_FileExplorerScreenStoreBase.fileListingSourceStack');
 
   @override
   List<FileListingRequest> get fileListingSourceStack {
-    _$_fileListingSourceStackAtom.reportRead();
+    _$fileListingSourceStackAtom.reportRead();
     return super.fileListingSourceStack;
   }
 
   @override
   set fileListingSourceStack(List<FileListingRequest> value) {
-    _$_fileListingSourceStackAtom
+    _$fileListingSourceStackAtom
         .reportWrite(value, super.fileListingSourceStack, () {
       super.fileListingSourceStack = value;
     });
@@ -202,6 +202,7 @@ mixin _$FileExplorerScreenStore on _FileExplorerScreenStoreBase, Store {
 fileList: ${fileList},
 fileListFuture: ${fileListFuture},
 fileListException: ${fileListException},
+fileListingSourceStack: ${fileListingSourceStack},
 fileListingInProgress: ${fileListingInProgress}
     ''';
   }

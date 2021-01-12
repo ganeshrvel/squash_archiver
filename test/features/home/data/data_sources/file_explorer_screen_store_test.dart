@@ -23,7 +23,7 @@ Future<void> main() async {
   group('FileExplorerScreenStore', () {
     test('setting a new local source', () async {
       expect(
-        _fileExplorerScreenStore.fileListingSourceStack,
+        _fileExplorerScreenStore.fileListingSourceStack.length,
         equals(0),
       );
 
@@ -54,7 +54,7 @@ Future<void> main() async {
       );
 
       expect(
-        _fileExplorerScreenStore.fileListingSourceStack,
+        _fileExplorerScreenStore.fileListingSourceStack.length,
         equals(1),
       );
     });
@@ -64,7 +64,7 @@ Future<void> main() async {
     _fileExplorerScreenStore.navigateToSource(
       fullPath: '/',
       source: FileExplorerSource.ARCHIVE,
-      clearStack: true,
+      clearStack: false,
       currentArchiveFilepath: getTestMocksAsset('mock_test_file1.zip'),
     );
 
@@ -89,7 +89,7 @@ Future<void> main() async {
     );
 
     expect(
-      _fileExplorerScreenStore.fileListingSourceStack,
+      _fileExplorerScreenStore.fileListingSourceStack.length,
       equals(2),
     );
   });
@@ -99,7 +99,7 @@ Future<void> main() async {
 
     expect(
       _fileExplorerScreenStore.currentPath,
-      equals('mock_dir1'),
+      equals('mock_dir1/'),
     );
 
     expect(
@@ -118,7 +118,7 @@ Future<void> main() async {
     );
 
     expect(
-      _fileExplorerScreenStore.fileListingSourceStack,
+      _fileExplorerScreenStore.fileListingSourceStack.length,
       equals(2),
     );
 
@@ -147,17 +147,18 @@ Future<void> main() async {
     );
 
     expect(
-      _fileExplorerScreenStore.fileListingSourceStack,
+      _fileExplorerScreenStore.fileListingSourceStack.length,
       equals(2),
     );
   });
 
   test('changing the orderDir and orderBy', () async {
-    _fileExplorerScreenStore.setOrderDirOrderBy(orderDir: OrderDir.desc, orderBy: OrderBy.fullPath);
+    _fileExplorerScreenStore.setOrderDirOrderBy(
+        orderDir: OrderDir.desc, orderBy: OrderBy.size);
 
     expect(
       _fileExplorerScreenStore.currentPath,
-      equals('mock_dir1'),
+      equals('1'),
     );
 
     expect(
@@ -167,16 +168,16 @@ Future<void> main() async {
 
     expect(
       _fileExplorerScreenStore.orderBy,
-      equals(AppDefaultValues.DEFAULT_FILE_EXPLORER_ORDER_BY),
+      equals(OrderBy.size),
     );
 
     expect(
       _fileExplorerScreenStore.orderDir,
-      equals(AppDefaultValues.DEFAULT_FILE_EXPLORER_ORDER_DIR),
+      equals(OrderDir.desc),
     );
 
     expect(
-      _fileExplorerScreenStore.fileListingSourceStack,
+      _fileExplorerScreenStore.fileListingSourceStack.length,
       equals(2),
     );
   });
