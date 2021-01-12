@@ -7,6 +7,7 @@ import 'package:squash_archiver/common/exceptions/task_in_progress_exception.dar
 import 'package:squash_archiver/constants/app_default_values.dart';
 import 'package:squash_archiver/features/home/data/helpers.dart';
 import 'package:squash_archiver/features/home/data/models/archive_data_source_listing_request.dart';
+import 'package:squash_archiver/features/home/data/models/file_listing_response.dart';
 import 'package:squash_archiver/utils/utils/files.dart';
 import 'package:squash_archiver/utils/utils/functs.dart';
 
@@ -29,7 +30,7 @@ class ArchiveDataSource {
   /// spinning up multiple isolates might crash the app, so it's for the best to have a check
   bool taskInProgress = false;
 
-  Future<DC<Exception, List<FileInfo>>> listFiles({
+  Future<DC<Exception, List<FileListingResponse>>> listFiles({
     @required ListArchive listArchiveRequest,
     bool invalidateCache,
   }) async {
@@ -47,7 +48,7 @@ class ArchiveDataSource {
       _resetListFilesResultsCache();
     }
 
-    DC<Exception, List<FileInfo>> _result;
+    DC<Exception, List<FileListingResponse>> _result;
 
     if (_fetchFromFfi(listArchiveRequest)) {
       // this is for testing purposes only
@@ -110,7 +111,7 @@ class ArchiveDataSource {
   }
 
   // filter files by their path
-  List<FileInfo> _getFilesList({
+  List<FileListingResponse> _getFilesList({
     @required String listDirectoryPath,
     @required OrderBy orderBy,
     @required OrderDir orderDir,
@@ -153,7 +154,7 @@ class ArchiveDataSource {
 
     return sortFileExplorerEntities(
       files: _fileListResult,
-    );
+    ).map((file) => FileListingResponse(file: file)).toList();
   }
 
   bool _fetchFromFfi(ListArchive params) {

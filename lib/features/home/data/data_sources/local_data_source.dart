@@ -8,6 +8,7 @@ import 'package:path/path.dart' as path;
 import 'package:squash_archiver/constants/app_default_values.dart';
 import 'package:squash_archiver/features/home/data/helpers.dart';
 import 'package:squash_archiver/features/home/data/models/file_listing_request.dart';
+import 'package:squash_archiver/features/home/data/models/file_listing_response.dart';
 import 'package:squash_archiver/utils/utils/files.dart';
 import 'package:dartx/dartx.dart';
 
@@ -15,13 +16,13 @@ import 'package:dartx/dartx.dart';
 class LocalDataSource {
   LocalDataSource();
 
-  Future<DC<Exception, List<FileInfo>>> listFiles({
+  Future<DC<Exception, List<FileListingResponse>>> listFiles({
     @required FileListingRequest request,
   }) async {
     assert(request != null);
 
     try {
-      var _fileList = <FileInfo>[];
+      final _fileListResult = <FileInfo>[];
       final _files = listDirectory(Directory(request.path));
 
       for (final file in _files) {
@@ -48,20 +49,20 @@ class LocalDataSource {
           extension: getExtension(_name),
         );
 
-        _fileList.add(_fileInfoResult);
+        _fileListResult.add(_fileInfoResult);
       }
 
-      _fileList = sortFiles(
-        files: _fileList,
+      final _fileList = sortFiles(
+        files: _fileListResult,
         orderDir: request.orderDir,
         orderBy: request.orderBy,
       );
 
-      _fileList = sortFileExplorerEntities(
+      final _fileListingResponse = sortFileExplorerEntities(
         files: _fileList,
-      );
+      ).map((file) => FileListingResponse(file: file)).toList();
 
-      return DC.data(_fileList);
+      return DC.data(_fileListingResponse);
     } on Exception catch (e) {
       return DC.error(e);
     }

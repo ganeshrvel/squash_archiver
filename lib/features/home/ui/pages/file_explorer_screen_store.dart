@@ -10,6 +10,7 @@ import 'package:squash_archiver/common/di/di.dart';
 import 'package:squash_archiver/features/home/data/controllers/file_explorer_controller.dart';
 import 'package:squash_archiver/features/home/data/enums/file_explorer_source.dart';
 import 'package:squash_archiver/features/home/data/models/file_listing_request.dart';
+import 'package:squash_archiver/features/home/data/models/file_listing_response.dart';
 import 'package:squash_archiver/utils/utils/files.dart';
 import 'package:squash_archiver/utils/utils/functs.dart';
 import 'package:squash_archiver/utils/utils/store_helper.dart';
@@ -23,10 +24,10 @@ abstract class _FileExplorerScreenStoreBase with Store {
   final _fileExplorerController = getIt<FileExplorerController>();
 
   @observable
-  List<FileInfo> fileList = ObservableList<FileInfo>();
+  List<FileListingResponse> fileList = ObservableList<FileListingResponse>();
 
   @observable
-  ObservableFuture<DC<Exception, List<FileInfo>>> fileListFuture =
+  ObservableFuture<DC<Exception, List<FileListingResponse>>> fileListFuture =
       ObservableFuture(Future.value());
 
   @observable

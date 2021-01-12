@@ -6,6 +6,7 @@ import 'package:squash_archiver/features/home/data/data_sources/archive_data_sou
 import 'package:squash_archiver/features/home/data/data_sources/local_data_source.dart';
 import 'package:squash_archiver/features/home/data/enums/file_explorer_source.dart';
 import 'package:squash_archiver/features/home/data/models/file_listing_request.dart';
+import 'package:squash_archiver/features/home/data/models/file_listing_response.dart';
 import 'package:squash_archiver/utils/error_handling/handle_exception.dart';
 
 @lazySingleton
@@ -18,7 +19,7 @@ class FileExplorerRepository {
     this._archiveDataSource,
   );
 
-  Future<DC<Exception, List<FileInfo>>> listFiles({
+  Future<DC<Exception, List<FileListingResponse>>> listFiles({
     @required FileListingRequest request,
     @required bool invalidateCache,
   }) async {

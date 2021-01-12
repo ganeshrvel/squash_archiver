@@ -20,13 +20,13 @@ mixin _$FileExplorerScreenStore on _FileExplorerScreenStoreBase, Store {
   final _$fileListAtom = Atom(name: '_FileExplorerScreenStoreBase.fileList');
 
   @override
-  List<FileInfo> get fileList {
+  List<FileListingResponse> get fileList {
     _$fileListAtom.reportRead();
     return super.fileList;
   }
 
   @override
-  set fileList(List<FileInfo> value) {
+  set fileList(List<FileListingResponse> value) {
     _$fileListAtom.reportWrite(value, super.fileList, () {
       super.fileList = value;
     });
@@ -36,13 +36,15 @@ mixin _$FileExplorerScreenStore on _FileExplorerScreenStoreBase, Store {
       Atom(name: '_FileExplorerScreenStoreBase.fileListFuture');
 
   @override
-  ObservableFuture<DC<Exception, List<FileInfo>>> get fileListFuture {
+  ObservableFuture<DC<Exception, List<FileListingResponse>>>
+      get fileListFuture {
     _$fileListFutureAtom.reportRead();
     return super.fileListFuture;
   }
 
   @override
-  set fileListFuture(ObservableFuture<DC<Exception, List<FileInfo>>> value) {
+  set fileListFuture(
+      ObservableFuture<DC<Exception, List<FileListingResponse>>> value) {
     _$fileListFutureAtom.reportWrite(value, super.fileListFuture, () {
       super.fileListFuture = value;
     });

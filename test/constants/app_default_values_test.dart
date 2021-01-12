@@ -23,7 +23,7 @@ void main() {
 
     test('SUPPORTED_ARCHIVE_EXTENSIONS', () async {
       expect(
-          listEquals(AppDefaultValues.SUPPORTED_ARCHIVE_EXTENSIONS, [
+          listEquals(AppDefaultValues.SUPPORTED_ARCHIVE_EXTENSIONS.toList(), [
             'zip',
             'tar',
             'tar.br',

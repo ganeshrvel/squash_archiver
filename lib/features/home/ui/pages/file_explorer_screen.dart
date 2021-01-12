@@ -7,12 +7,11 @@ import 'package:mobx/mobx.dart' show ReactionDisposer;
 import 'package:squash_archiver/constants/app_default_values.dart';
 import 'package:squash_archiver/constants/colors.dart';
 import 'package:squash_archiver/features/home/data/enums/file_explorer_source.dart';
+import 'package:squash_archiver/features/home/data/models/file_listing_response.dart';
 import 'package:squash_archiver/features/home/ui/pages/file_explorer_screen_store.dart';
-import 'package:squash_archiver/features/home/ui/pages/helpers/file_explorer_helper.dart';
 import 'package:squash_archiver/features/home/ui/pages/widgets/file_explorer_table.dart';
 import 'package:squash_archiver/features/home/ui/pages/widgets/file_explorer_table_header.dart';
 import 'package:squash_archiver/utils/utils/files.dart';
-import 'package:squash_archiver/utils/utils/filesizes.dart';
 import 'package:squash_archiver/utils/utils/store_helper.dart';
 import 'package:squash_archiver/widget_extends/sf_widget.dart';
 import 'package:squash_archiver/widgets/button/button.dart';
@@ -120,17 +119,17 @@ class _FileExplorerScreenState extends SfWidget<FileExplorerScreen> {
     super.dispose();
   }
 
-  Future<void> _navigateToNextPath(FileInfo file) async {
-    if (file.isDir) {
-      return _fileExplorerScreenStore.setCurrentPath(file.fullPath);
+  Future<void> _navigateToNextPath(FileListingResponse fileResponse) async {
+    if (fileResponse.file.isDir) {
+      return _fileExplorerScreenStore
+          .setCurrentPath(fileResponse.file.fullPath);
     }
 
-    // todo move this check into the data sources for both local and archive
-    // and it will remove the o(n) check each time the explorer is scrolled
-    if (isSupportedArchiveFormat(file.extension)) {
+    /// if the file extension is supported by the archiver then open the archive
+    if (fileResponse.isSupported) {
       return _fileExplorerScreenStore.newSource(
         fullPath: '',
-        currentArchiveFilename: file.fullPath,
+        currentArchiveFilename: fileResponse.file.fullPath,
         source: FileExplorerSource.ARCHIVE,
         clearStack: false,
       );
@@ -338,8 +337,8 @@ class _FileExplorerScreenState extends SfWidget<FileExplorerScreen> {
     );
   }
 
-  List<Widget> _buildRows({@required List<FileInfo> fileList}) {
-    return fileList.map((file) {
+  List<Widget> _buildRows({@required List<FileListingResponse> fileList}) {
+    return fileList.map((fileResponse) {
       return Listener(
         onPointerDown: (PointerDownEvent event) {
           if (event.buttons == 2) {
@@ -362,7 +361,7 @@ class _FileExplorerScreenState extends SfWidget<FileExplorerScreen> {
         child: MouseRegion(
           child: GestureDetector(
             onDoubleTap: () {
-              _navigateToNextPath(file);
+              _navigateToNextPath(fileResponse);
             },
             child: ListTile(
               mouseCursor: SystemMouseCursors.basic,
@@ -374,7 +373,7 @@ class _FileExplorerScreenState extends SfWidget<FileExplorerScreen> {
                   Expanded(
                     child: Row(
                       children: [
-                        if (file.isDir)
+                        if (fileResponse.file.isDir)
                           Icon(
                             Icons.folder,
                             color: AppColors.blue,
@@ -383,19 +382,17 @@ class _FileExplorerScreenState extends SfWidget<FileExplorerScreen> {
                           const Icon(Icons.file_copy_rounded),
                         const SizedBox(width: 5),
                         Textography(
-                          file.name,
+                          fileResponse.file.name,
                           overflow: TextOverflow.ellipsis,
                         ),
                       ],
                     ),
                   ),
                   Expanded(
-                    /// todo move the filesize calculation to a common place, this will remove the unneccessary function calls
-                    child: Textography(!file.isDir ? filesize(file.size) : ''),
+                    child: Textography(fileResponse.prettyFileSize),
                   ),
                   Expanded(
-                    /// todo move the file.modTime formatting to a common place, this will remove the unneccessary function calls
-                    child: Textography(file.modTime),
+                    child: Textography(fileResponse.prettyDate),
                   ),
                 ],
               ),
