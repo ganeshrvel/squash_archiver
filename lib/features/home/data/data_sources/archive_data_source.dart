@@ -49,8 +49,8 @@ class ArchiveDataSource {
 
     DC<Exception, List<FileInfo>> _result;
 
-    if (_skipUsingCache(listArchiveRequest)) {
-      // this is purely for testing purposes only
+    if (_fetchFromFfi(listArchiveRequest)) {
+      // this is for testing purposes only
       // the count will be incremented by 1 everytime the cache is invalidated.
       listArchiveCacheResultResetCount += 1;
 
@@ -94,10 +94,12 @@ class ArchiveDataSource {
         },
       );
     } else {
+      cachedListArchiveParams = listArchiveRequest;
+
       final _filteredPath = _getFilesList(
-        listDirectoryPath: listArchiveRequest.listDirectoryPath,
-        orderBy: listArchiveRequest.orderBy,
-        orderDir: listArchiveRequest.orderDir,
+        listDirectoryPath: cachedListArchiveParams.listDirectoryPath,
+        orderBy: cachedListArchiveParams.orderBy,
+        orderDir: cachedListArchiveParams.orderDir,
       );
 
       _result = DC.data(_filteredPath);
@@ -155,7 +157,7 @@ class ArchiveDataSource {
     );
   }
 
-  bool _skipUsingCache(ListArchive params) {
+  bool _fetchFromFfi(ListArchive params) {
     if (isNull(params) || isNull(cachedListArchiveParams)) {
       return true;
     }
@@ -204,9 +206,8 @@ Future<DC<Exception, ListArchiveResult>> _fetchFiles(
 ) async {
   assert(params != null);
 
-
   String libAbsPath;
-  if (env.IS_TEST) {
+  if (Env.IS_TEST) {
     // this is to assist the unit tests
     // for unit tests we need to supply the absolute path of the library
     libAbsPath = getNativeLib();

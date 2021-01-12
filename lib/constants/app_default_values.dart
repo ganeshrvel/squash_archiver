@@ -15,7 +15,7 @@ class AppDefaultValues {
       DEFAULT_FILE_EXPLORER_ENTITIES_SORT_BY =
       FileExplorerEntitiesSortBy.directory;
 
-  static const bool SHOW_HIDDEN_FILES = true;
+  static const bool SHOW_HIDDEN_FILES = false; //todo move this into a setting
 
   static const List<String> SUPPORTED_ARCHIVE_EXTENSIONS = [
     'zip',

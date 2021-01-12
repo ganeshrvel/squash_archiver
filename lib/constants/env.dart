@@ -11,7 +11,7 @@ class Env {
 
   final bool IS_DEBUG = !foundation.kReleaseMode;
 
-  final bool IS_TEST = Platform.environment.containsKey('FLUTTER_TEST');
+  static final bool IS_TEST = Platform.environment.containsKey('FLUTTER_TEST');
 
   _EnvData get config => IS_RELEASE ? prod : dev;
 

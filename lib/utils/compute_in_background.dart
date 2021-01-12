@@ -7,7 +7,7 @@ import 'package:squash_archiver/constants/env.dart';
 /// workaround: https://github.com/flutter/flutter/issues/24703#issuecomment-473335593
 Future<R> computeInBackground<Q, R>(
     flutter.ComputeCallback<Q, R> callback, Q message) async {
-  if (env.IS_TEST) {
+  if (Env.IS_TEST) {
     return callback(message);
   }
 
