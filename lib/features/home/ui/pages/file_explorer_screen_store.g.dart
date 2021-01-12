@@ -70,16 +70,16 @@ mixin _$FileExplorerScreenStore on _FileExplorerScreenStoreBase, Store {
       Atom(name: '_FileExplorerScreenStoreBase._fileListingSourceStack');
 
   @override
-  List<FileListingRequest> get _fileListingSourceStack {
+  List<FileListingRequest> get fileListingSourceStack {
     _$_fileListingSourceStackAtom.reportRead();
-    return super._fileListingSourceStack;
+    return super.fileListingSourceStack;
   }
 
   @override
-  set _fileListingSourceStack(List<FileListingRequest> value) {
+  set fileListingSourceStack(List<FileListingRequest> value) {
     _$_fileListingSourceStackAtom
-        .reportWrite(value, super._fileListingSourceStack, () {
-      super._fileListingSourceStack = value;
+        .reportWrite(value, super.fileListingSourceStack, () {
+      super.fileListingSourceStack = value;
     });
   }
 

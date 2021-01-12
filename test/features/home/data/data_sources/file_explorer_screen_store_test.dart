@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:archiver_ffi/archiver_ffi.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:injectable/injectable.dart' show Environment;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -21,6 +22,11 @@ Future<void> main() async {
 
   group('FileExplorerScreenStore', () {
     test('setting a new local source', () async {
+      expect(
+        _fileExplorerScreenStore.fileListingSourceStack,
+        equals(0),
+      );
+
       _fileExplorerScreenStore.navigateToSource(
         fullPath: AppDefaultValues.DEFAULT_FILE_EXPLORER_DIRECTORY,
         source: FileExplorerSource.LOCAL,
@@ -45,6 +51,11 @@ Future<void> main() async {
       expect(
         _fileExplorerScreenStore.orderDir,
         equals(AppDefaultValues.DEFAULT_FILE_EXPLORER_ORDER_DIR),
+      );
+
+      expect(
+        _fileExplorerScreenStore.fileListingSourceStack,
+        equals(1),
       );
     });
   });
@@ -75,6 +86,98 @@ Future<void> main() async {
     expect(
       _fileExplorerScreenStore.orderDir,
       equals(AppDefaultValues.DEFAULT_FILE_EXPLORER_ORDER_DIR),
+    );
+
+    expect(
+      _fileExplorerScreenStore.fileListingSourceStack,
+      equals(2),
+    );
+  });
+
+  test('changing the current path', () async {
+    _fileExplorerScreenStore.setCurrentPath('mock_dir1/');
+
+    expect(
+      _fileExplorerScreenStore.currentPath,
+      equals('mock_dir1'),
+    );
+
+    expect(
+      _fileExplorerScreenStore.source,
+      equals(FileExplorerSource.ARCHIVE),
+    );
+
+    expect(
+      _fileExplorerScreenStore.orderBy,
+      equals(AppDefaultValues.DEFAULT_FILE_EXPLORER_ORDER_BY),
+    );
+
+    expect(
+      _fileExplorerScreenStore.orderDir,
+      equals(AppDefaultValues.DEFAULT_FILE_EXPLORER_ORDER_DIR),
+    );
+
+    expect(
+      _fileExplorerScreenStore.fileListingSourceStack,
+      equals(2),
+    );
+
+    /// to next directory
+
+    _fileExplorerScreenStore.setCurrentPath('1');
+
+    expect(
+      _fileExplorerScreenStore.currentPath,
+      equals('1'),
+    );
+
+    expect(
+      _fileExplorerScreenStore.source,
+      equals(FileExplorerSource.ARCHIVE),
+    );
+
+    expect(
+      _fileExplorerScreenStore.orderBy,
+      equals(AppDefaultValues.DEFAULT_FILE_EXPLORER_ORDER_BY),
+    );
+
+    expect(
+      _fileExplorerScreenStore.orderDir,
+      equals(AppDefaultValues.DEFAULT_FILE_EXPLORER_ORDER_DIR),
+    );
+
+    expect(
+      _fileExplorerScreenStore.fileListingSourceStack,
+      equals(2),
+    );
+  });
+
+  test('changing the orderDir and orderBy', () async {
+    _fileExplorerScreenStore.setOrderDirOrderBy(orderDir: OrderDir.desc, orderBy: OrderBy.fullPath);
+
+    expect(
+      _fileExplorerScreenStore.currentPath,
+      equals('mock_dir1'),
+    );
+
+    expect(
+      _fileExplorerScreenStore.source,
+      equals(FileExplorerSource.ARCHIVE),
+    );
+
+    expect(
+      _fileExplorerScreenStore.orderBy,
+      equals(AppDefaultValues.DEFAULT_FILE_EXPLORER_ORDER_BY),
+    );
+
+    expect(
+      _fileExplorerScreenStore.orderDir,
+      equals(AppDefaultValues.DEFAULT_FILE_EXPLORER_ORDER_DIR),
+    );
+
+    expect(
+      _fileExplorerScreenStore.fileListingSourceStack,
+      equals(2),
     );
   });
 }

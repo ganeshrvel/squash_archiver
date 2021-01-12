@@ -34,14 +34,15 @@ abstract class _FileExplorerScreenStoreBase with Store {
   Exception fileListException;
 
   @observable
-  List<FileListingRequest> _fileListingSourceStack = ObservableList();
+  @visibleForTesting
+  List<FileListingRequest> fileListingSourceStack = ObservableList();
 
   FileListingRequest get _fileListingSource {
-    if (isNullOrEmpty(_fileListingSourceStack)) {
+    if (isNullOrEmpty(fileListingSourceStack)) {
       return FileListingRequest(path: '');
     }
 
-    return _fileListingSourceStack.last;
+    return fileListingSourceStack.last;
   }
 
   @computed
@@ -49,17 +50,17 @@ abstract class _FileExplorerScreenStoreBase with Store {
     return isStateLoading(fileListFuture);
   }
 
-  /// current path in the file explorer; path of the last item in [_fileListingSourceStack]
+  /// current path in the file explorer; path of the last item in [fileListingSourceStack]
   String get currentPath {
     return _fileListingSource.path;
   }
 
-  /// full path to the currently opened archive file in the file explorer; [archiveFilepath] of the last item in [_fileListingSourceStack]
+  /// full path to the currently opened archive file in the file explorer; [archiveFilepath] of the last item in [fileListingSourceStack]
   String get currentArchiveFilepath {
     return _fileListingSource.archiveFilepath;
   }
 
-  /// password of the currently opened file in the file explorer (if any); [password] of the last item in [_fileListingSourceStack]
+  /// password of the currently opened file in the file explorer (if any); [password] of the last item in [fileListingSourceStack]
   String get password {
     return _fileListingSource.password;
   }
@@ -76,19 +77,19 @@ abstract class _FileExplorerScreenStoreBase with Store {
     return _fileListingSource.gitIgnorePattern;
   }
 
-  /// [source] of the last item in [_fileListingSourceStack]
+  /// [source] of the last item in [fileListingSourceStack]
   FileExplorerSource get source {
     return _fileListingSource.source;
   }
 
-  /// Adding a new [FileExplorerSource] will first add the request to the [_fileListingSourceStack]
+  /// Adding a new [FileExplorerSource] will first add the request to the [fileListingSourceStack]
   /// and then fetch files from the respective source
   @action
   Future<void> navigateToSource({
     @required String fullPath,
     @required FileExplorerSource source,
 
-    /// clearing stack will empty [_fileListingSourceStack] first and then insert a new request
+    /// clearing stack will empty [fileListingSourceStack] first and then insert a new request
     @required bool clearStack,
 
     /// the full path to the archive file
@@ -124,7 +125,7 @@ abstract class _FileExplorerScreenStoreBase with Store {
     );
 
     if (clearStack) {
-      _fileListingSourceStack.clear();
+      fileListingSourceStack.clear();
     }
 
     _addToFileListingRequestStack(_request);
@@ -143,7 +144,7 @@ abstract class _FileExplorerScreenStoreBase with Store {
   /// update the last item in the stack
   @action
   Future<void> _updateFileListingRequest(FileListingRequest request) async {
-    _fileListingSourceStack.last = request;
+    fileListingSourceStack.last = request;
 
     return refreshFiles();
   }
@@ -192,8 +193,8 @@ abstract class _FileExplorerScreenStoreBase with Store {
 
   @action
   Future<void> popFileListingRequestStack() async {
-    if (_fileListingSourceStack.length > 1) {
-      _fileListingSourceStack.removeLast();
+    if (fileListingSourceStack.length > 1) {
+      fileListingSourceStack.removeLast();
 
       return refreshFiles(invalidateCache: true);
     }
@@ -247,17 +248,17 @@ abstract class _FileExplorerScreenStoreBase with Store {
 
   @action
   void _setFileListingRequestStack(FileListingRequest param) {
-    _fileListingSourceStack = [param];
+    fileListingSourceStack = [param];
   }
 
   @action
   void _addToFileListingRequestStack(FileListingRequest param) {
-    if (isNullOrEmpty(_fileListingSourceStack)) {
+    if (isNullOrEmpty(fileListingSourceStack)) {
       _setFileListingRequestStack(param);
 
       return;
     }
 
-    _fileListingSourceStack.add(param);
+    fileListingSourceStack.add(param);
   }
 }
