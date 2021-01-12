@@ -17,7 +17,7 @@ Future<void> _logFlutterOnError(FlutterErrorDetails details) async {
   // FirebaseCrashlytics.instance.recordFlutterError(details);
 
   log.error(
-    title: 'A crash was captured by main._logFlutterOnError',
+    title: 'An error was captured by main._logFlutterOnError',
     error: details.exception,
     stackTrace: details.stack,
   );
@@ -69,7 +69,7 @@ Future<void> main() async {
     // Dart errors to the dev console or Sentry depending on the environment.
     log.error(
       title:
-          'A Flutter crash occured and it was captured by main.runZonedGuarded',
+          'A Flutter error occured and it was captured by main.runZonedGuarded',
       error: error,
       stackTrace: stackTrace,
     );
@@ -79,7 +79,7 @@ Future<void> main() async {
     final errorAndStacktrace = pair as List;
 
     log.error(
-      title: 'A crash was captured by main.Isolate.current.addErrorListener',
+      title: 'An error was captured by main.Isolate.current.addErrorListener',
       error: errorAndStacktrace.first,
       stackTrace: errorAndStacktrace.last as StackTrace,
     );
