@@ -5,16 +5,16 @@ import 'package:injectable/injectable.dart';
 import 'package:meta/meta.dart';
 import 'package:squash_archiver/common/exceptions/task_in_progress_exception.dart';
 import 'package:squash_archiver/constants/app_default_values.dart';
-import 'package:squash_archiver/constants/env.dart';
 import 'package:squash_archiver/features/home/data/helpers.dart';
 import 'package:squash_archiver/features/home/data/models/archive_data_source_listing_request.dart';
-import 'package:squash_archiver/utils/compute_in_background.dart';
 import 'package:squash_archiver/utils/utils/files.dart';
 import 'package:squash_archiver/utils/utils/functs.dart';
 
 @lazySingleton
 class ArchiveDataSource {
-  ArchiveDataSource();
+  final ArchiverFfi _archiverFfi;
+
+  ArchiveDataSource(this._archiverFfi);
 
   @visibleForTesting
   ListArchive cachedListArchiveParams;
@@ -65,9 +65,8 @@ class ArchiveDataSource {
         request: _request,
       );
 
-      final _computedListArchiveResult = await computeInBackground(
-        _fetchFiles,
-        _param,
+      final _computedListArchiveResult = await _archiverFfi.listArchive(
+        _param.request,
       );
 
       _computedListArchiveResult.pick(
@@ -199,23 +198,4 @@ class ArchiveDataSource {
     cachedListArchiveResult = null;
     cachedListArchiveParams = null;
   }
-}
-
-Future<DC<Exception, ListArchiveResult>> _fetchFiles(
-  ArchiveDataSourceListingRequest params,
-) async {
-  assert(params != null);
-
-  String libAbsPath;
-  if (Env.IS_TEST) {
-    // this is to assist the unit tests
-    // for unit tests we need to supply the absolute path of the library
-    libAbsPath = getNativeLib();
-  }
-
-  final _archiverFfi = ArchiverFfi(
-    libAbsPath: libAbsPath,
-  );
-
-  return _archiverFfi.listArchive(params.request);
 }

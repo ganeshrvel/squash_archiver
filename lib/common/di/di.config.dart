@@ -58,7 +58,6 @@ Future<GetIt> $initGetIt(
   final sentryClientDI = _$SentryClientDI();
   final sharedPreferencesDi = _$SharedPreferencesDi();
   gh.lazySingleton<AnalyticsService>(() => AnalyticsService());
-  gh.lazySingleton<ArchiveDataSource>(() => ArchiveDataSource());
   gh.lazySingleton<ArchiverFfi>(() => archiverFfiDi.archiverFfi,
       registerFor: {_dev});
   gh.lazySingleton<ArchiverFfi>(() => archiverFfiDi.archiverFfiTest,
@@ -82,6 +81,8 @@ Future<GetIt> $initGetIt(
       () => AppLocalDataSource(get<SharedPreferences>()));
   gh.lazySingleton<AppRepository>(
       () => AppRepository(get<AppLocalDataSource>()));
+  gh.lazySingleton<ArchiveDataSource>(
+      () => ArchiveDataSource(get<ArchiverFfi>()));
   gh.lazySingleton<CrashesService>(() => CrashesService(get<SentryClient>()));
   gh.lazySingleton<FileExplorerRepository>(() =>
       FileExplorerRepository(get<LocalDataSource>(), get<ArchiveDataSource>()));
