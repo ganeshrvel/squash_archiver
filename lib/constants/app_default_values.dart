@@ -32,6 +32,8 @@ class AppDefaultValues {
     'rar',
   };
 
+  // this is used for parsing file extensions
+  // some files may have dual file extensions such as tar.gz.
   static const ALLOWED_SECOND_EXTENSIONS = {
     'tar',
   };

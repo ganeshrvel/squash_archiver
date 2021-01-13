@@ -48,7 +48,7 @@ Future<void> main() async {
     // Whenever an error occurs, call the `_reportError` function. This sends
     // Dart errors to the dev console or Sentry depending on the environment.
     log.error(
-      title: 'A crash was captured by main.runZonedGuarded',
+      title: 'An error was captured by main.runZonedGuarded',
       error: error,
       stackTrace: stackTrace,
     );

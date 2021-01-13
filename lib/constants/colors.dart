@@ -7,7 +7,7 @@ class AppColors {
 
   static const Color transparent = Colors.transparent;
   static const Color white = Colors.white;
-  static final Color blue = HexColor('2262c6');
+  static final Color blue = HexColor('017AFF');
   static final Color black = HexColor('000000');
   static final Color disabled = HexColor('CBCBCB');
   static final Color splash = Colors.white10;
@@ -15,5 +15,6 @@ class AppColors {
   static final Color warn = Colors.orange.shade500;
   static final Color info = Colors.blue.shade500;
   static final Color success = Colors.green.shade500;
+  static final Color colorF5F = HexColor('f5f5f5');
   static final Color colorF1F = HexColor('F1F1F1');
 }

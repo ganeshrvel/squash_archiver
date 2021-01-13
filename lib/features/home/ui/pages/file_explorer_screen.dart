@@ -15,6 +15,7 @@ import 'package:squash_archiver/utils/utils/files.dart';
 import 'package:squash_archiver/utils/utils/store_helper.dart';
 import 'package:squash_archiver/widget_extends/sf_widget.dart';
 import 'package:squash_archiver/widgets/button/button.dart';
+import 'package:squash_archiver/widgets/shadows/box_shadow_card_1.dart';
 import 'package:squash_archiver/widgets/sliver/app_sliver_header.dart';
 import 'package:squash_archiver/widgets/text/textography.dart';
 
@@ -150,7 +151,13 @@ class _FileExplorerScreenState extends SfWidget<FileExplorerScreen> {
     return SliverPersistentHeader(
       pinned: true,
       delegate: AppSliverHeader(
-        child: Padding(
+        child: Container(
+          decoration: BoxDecoration(
+            color: AppColors.white,
+            boxShadow: [
+              BoxShadowCard1(),
+            ],
+          ),
           padding: EdgeInsets.zero,
           child: Center(
             child: Row(
@@ -224,7 +231,7 @@ class _FileExplorerScreenState extends SfWidget<FileExplorerScreen> {
       width: 300,
       child: Container(
         padding: const EdgeInsets.only(top: 100),
-        color: AppColors.blue,
+        color: AppColors.colorF5F.withOpacity(0.9),
         child: Column(
           children: [
             Button(
@@ -276,8 +283,9 @@ class _FileExplorerScreenState extends SfWidget<FileExplorerScreen> {
     return SliverPersistentHeader(
       pinned: true,
       delegate: AppSliverHeader(
-        child: Padding(
+        child: Container(
           padding: EdgeInsets.zero,
+          color: AppColors.white,
           child: Center(
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -403,6 +411,23 @@ class _FileExplorerScreenState extends SfWidget<FileExplorerScreen> {
     }).toList();
   }
 
+  Widget _buildFileExplorerPane() {
+    return SliverPadding(
+      padding: EdgeInsets.zero,
+      sliver: Observer(
+        builder: (_) {
+          final _fileList = _fileExplorerScreenStore.fileList;
+
+          return FilExplorerTable(
+            rows: _buildRows(
+              fileList: _fileList,
+            ),
+          );
+        },
+      ),
+    );
+  }
+
   Widget _buildFileExplorer() {
     return RawKeyboardListener(
       focusNode: FocusNode(),
@@ -415,27 +440,17 @@ class _FileExplorerScreenState extends SfWidget<FileExplorerScreen> {
         //
         // }
       },
-      child: CustomScrollView(
-        controller: _scrollController,
-        physics: const ScrollPhysics(),
-        slivers: <Widget>[
-          _buildToolbar(),
-          _buildTableHeader(),
-          SliverPadding(
-            padding: EdgeInsets.zero,
-            sliver: Observer(
-              builder: (_) {
-                final _fileList = _fileExplorerScreenStore.fileList;
-
-                return FilExplorerTable(
-                  rows: _buildRows(
-                    fileList: _fileList,
-                  ),
-                );
-              },
-            ),
-          ),
-        ],
+      child: Container(
+        color: AppColors.white,
+        child: CustomScrollView(
+          controller: _scrollController,
+          physics: const ScrollPhysics(),
+          slivers: <Widget>[
+            _buildToolbar(),
+            _buildTableHeader(),
+            _buildFileExplorerPane(),
+          ],
+        ),
       ),
     );
   }
@@ -456,6 +471,7 @@ class _FileExplorerScreenState extends SfWidget<FileExplorerScreen> {
     return SafeArea(
       top: true,
       child: Scaffold(
+        backgroundColor: Colors.transparent,
         body: _buildBody(),
       ),
     );
