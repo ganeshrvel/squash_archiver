@@ -24,7 +24,6 @@ enum ButtonColorTypes {
 
 enum ButtonSizeTypes {
   SMALL,
-  MEDIUM,
   LARGE,
 }
 
@@ -429,18 +428,15 @@ class Button extends StatelessWidget {
   }
 
   _ButtonHeight getButtonHeight() {
-    var _minHeight = 40.0;
-    var _maxHeight = 40.0;
+    var _minHeight = 28.0;
+    var _maxHeight = 28.0;
 
     if (buttonSize == ButtonSizeTypes.SMALL) {
       _minHeight = 20;
       _maxHeight = 20;
-    } else if (buttonSize == ButtonSizeTypes.MEDIUM) {
-      _minHeight = 30;
-      _maxHeight = 30;
     } else if (buttonSize == ButtonSizeTypes.LARGE) {
-      _minHeight = 40;
-      _maxHeight = 40;
+      _minHeight = 28;
+      _maxHeight = 28;
     }
 
     _minHeight = height ?? _minHeight;

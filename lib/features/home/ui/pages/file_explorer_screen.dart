@@ -15,7 +15,8 @@ import 'package:squash_archiver/utils/utils/files.dart';
 import 'package:squash_archiver/utils/utils/store_helper.dart';
 import 'package:squash_archiver/widget_extends/sf_widget.dart';
 import 'package:squash_archiver/widgets/button/button.dart';
-import 'package:squash_archiver/widgets/shadows/box_shadow_card_1.dart';
+import 'package:squash_archiver/widgets/shadows/box_shadow_1.dart';
+import 'package:squash_archiver/widgets/shadows/box_shadow_card_4.dart';
 import 'package:squash_archiver/widgets/sliver/app_sliver_header.dart';
 import 'package:squash_archiver/widgets/text/textography.dart';
 
@@ -155,7 +156,7 @@ class _FileExplorerScreenState extends SfWidget<FileExplorerScreen> {
           decoration: BoxDecoration(
             color: AppColors.white,
             boxShadow: [
-              BoxShadowCard1(),
+              BoxShadow5(),
             ],
           ),
           padding: EdgeInsets.zero,
