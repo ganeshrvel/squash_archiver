@@ -471,18 +471,8 @@ class _FileExplorerScreenState extends SfWidget<FileExplorerScreen> {
     return SafeArea(
       top: true,
       child: Scaffold(
-        //backgroundColor: Colors.transparent,//todo
-        backgroundColor: Colors.white, //todo
-        body: Center(
-          child: Button(
-            text: 'text',
-            onPressed: () {},
-            buttonColor: ButtonColorType.BLUE,
-            buttonSize: ButtonSizeType.SMALL,
-            buttonType: ButtonType.FLAT,
-          ),
-        ),
-        //body: _buildBody(),
+        backgroundColor: Colors.transparent,
+        body: _buildBody(),
       ),
     );
   }
