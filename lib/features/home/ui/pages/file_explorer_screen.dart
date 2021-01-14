@@ -1,4 +1,5 @@
 import 'package:archiver_ffi/archiver_ffi.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -7,10 +8,12 @@ import 'package:mobx/mobx.dart' show ReactionDisposer;
 import 'package:squash_archiver/constants/app_default_values.dart';
 import 'package:squash_archiver/constants/colors.dart';
 import 'package:squash_archiver/features/home/data/enums/file_explorer_source.dart';
+import 'package:squash_archiver/features/home/data/models/file_explorer_sidebar.dart';
 import 'package:squash_archiver/features/home/data/models/file_listing_response.dart';
 import 'package:squash_archiver/features/home/ui/pages/file_explorer_screen_store.dart';
-import 'package:squash_archiver/features/home/ui/pages/widgets/file_explorer_table.dart';
-import 'package:squash_archiver/features/home/ui/pages/widgets/file_explorer_table_header.dart';
+import 'package:squash_archiver/features/home/ui/widgets/file_explorer_table.dart';
+import 'package:squash_archiver/features/home/ui/widgets/file_explorer_table_header.dart';
+import 'package:squash_archiver/features/home/ui/widgets/sidebar.dart';
 import 'package:squash_archiver/utils/utils/files.dart';
 import 'package:squash_archiver/utils/utils/store_helper.dart';
 import 'package:squash_archiver/widget_extends/sf_widget.dart';
@@ -229,52 +232,25 @@ class _FileExplorerScreenState extends SfWidget<FileExplorerScreen> {
   Widget _buildSidebar() {
     return SizedBox(
       width: 300,
-      child: Container(
-        padding: const EdgeInsets.only(top: 100),
-        color: AppColors.colorF5F.withOpacity(0.9),
-        child: Column(
-          children: [
-            Button(
-              text: 'Home',
-              onPressed: () {
-                _fileExplorerScreenStore.navigateToSource(
-                  fullPath: AppDefaultValues.DEFAULT_FILE_EXPLORER_DIRECTORY,
-                  source: FileExplorerSource.LOCAL,
-                  clearStack: true,
-                );
-              },
-              buttonType: ButtonType.FLAT,
-              icon: Icons.home,
-              roundedEdge: false,
-            ),
-            Button(
-              text: 'Root',
-              onPressed: () {
-                _fileExplorerScreenStore.navigateToSource(
-                  fullPath: rootDirectory(),
-                  source: FileExplorerSource.LOCAL,
-                  clearStack: true,
-                );
-              },
-              buttonType: ButtonType.FLAT,
-              icon: Icons.home,
-              roundedEdge: false,
-            ),
-            Button(
-              text: 'Desktop',
-              onPressed: () {
-                _fileExplorerScreenStore.navigateToSource(
-                  fullPath: desktopDirectory(),
-                  source: FileExplorerSource.LOCAL,
-                  clearStack: true,
-                );
-              },
-              buttonType: ButtonType.FLAT,
-              icon: Icons.home,
-              roundedEdge: false,
-            ),
-          ],
-        ),
+      child: Sidebar(
+        items: [
+          FileExplorerSidebarItem(
+            label: 'Home',
+            path: AppDefaultValues.DEFAULT_FILE_EXPLORER_DIRECTORY,
+            icon: CupertinoIcons.home,
+          ),
+          FileExplorerSidebarItem(
+            label: 'Desktop',
+            path: desktopDirectory(),
+            icon: CupertinoIcons.desktopcomputer,
+          ),
+          FileExplorerSidebarItem(
+            label: 'Download',
+            path: AppDefaultValues.DEFAULT_FILE_EXPLORER_DIRECTORY,
+            icon: CupertinoIcons.arrow_down_circle,
+          ),
+        ],
+        fileExplorerScreenStore: _fileExplorerScreenStore,
       ),
     );
   }
@@ -429,27 +405,29 @@ class _FileExplorerScreenState extends SfWidget<FileExplorerScreen> {
   }
 
   Widget _buildFileExplorer() {
-    return RawKeyboardListener(
-      focusNode: FocusNode(),
-      autofocus: true,
-      onKey: (RawKeyEvent event) {
-        // if (event.isKeyPressed(LogicalKeyboardKey.arrowDown)) {
-        //
-        // }
-        // if (event.isKeyPressed(LogicalKeyboardKey.arrowUp)) {
-        //
-        // }
-      },
-      child: Container(
-        color: AppColors.white,
-        child: CustomScrollView(
-          controller: _scrollController,
-          physics: const ScrollPhysics(),
-          slivers: <Widget>[
-            _buildToolbar(),
-            _buildTableHeader(),
-            _buildFileExplorerPane(),
-          ],
+    return Expanded(
+      child: RawKeyboardListener(
+        focusNode: FocusNode(),
+        autofocus: true,
+        onKey: (RawKeyEvent event) {
+          // if (event.isKeyPressed(LogicalKeyboardKey.arrowDown)) {
+          //
+          // }
+          // if (event.isKeyPressed(LogicalKeyboardKey.arrowUp)) {
+          //
+          // }
+        },
+        child: Container(
+          color: AppColors.white,
+          child: CustomScrollView(
+            controller: _scrollController,
+            physics: const ScrollPhysics(),
+            slivers: <Widget>[
+              _buildToolbar(),
+              _buildTableHeader(),
+              _buildFileExplorerPane(),
+            ],
+          ),
         ),
       ),
     );
@@ -459,9 +437,7 @@ class _FileExplorerScreenState extends SfWidget<FileExplorerScreen> {
     return Row(
       children: [
         _buildSidebar(),
-        Expanded(
-          child: _buildFileExplorer(),
-        ),
+        _buildFileExplorer(),
       ],
     );
   }
