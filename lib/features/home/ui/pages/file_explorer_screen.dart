@@ -16,7 +16,6 @@ import 'package:squash_archiver/utils/utils/store_helper.dart';
 import 'package:squash_archiver/widget_extends/sf_widget.dart';
 import 'package:squash_archiver/widgets/button/button.dart';
 import 'package:squash_archiver/widgets/shadows/box_shadow_1.dart';
-import 'package:squash_archiver/widgets/shadows/box_shadow_card_4.dart';
 import 'package:squash_archiver/widgets/sliver/app_sliver_header.dart';
 import 'package:squash_archiver/widgets/text/textography.dart';
 
@@ -174,7 +173,7 @@ class _FileExplorerScreenState extends SfWidget<FileExplorerScreen> {
                       onPressed: () {
                         _fileExplorerScreenStore.gotoPrevDirectory();
                       },
-                      buttonType: ButtonTypes.ICON,
+                      buttonType: ButtonType.ICON,
                       icon: Icons.arrow_back,
                       iconButtonPadding: const EdgeInsets.all(20),
                       loading: _listFilesInProgress,
@@ -191,7 +190,7 @@ class _FileExplorerScreenState extends SfWidget<FileExplorerScreen> {
                       onPressed: () {
                         _fileExplorerScreenStore.refreshFiles();
                       },
-                      buttonType: ButtonTypes.ICON,
+                      buttonType: ButtonType.ICON,
                       icon: Icons.refresh,
                       iconButtonPadding: const EdgeInsets.all(20),
                       loading: _listFilesInProgress,
@@ -210,7 +209,7 @@ class _FileExplorerScreenState extends SfWidget<FileExplorerScreen> {
                           invalidateCache: true,
                         );
                       },
-                      buttonType: ButtonTypes.ICON,
+                      buttonType: ButtonType.ICON,
                       icon: Icons.replay_circle_filled,
                       iconButtonPadding: const EdgeInsets.all(20),
                       loading: _listFilesInProgress,
@@ -244,7 +243,7 @@ class _FileExplorerScreenState extends SfWidget<FileExplorerScreen> {
                   clearStack: true,
                 );
               },
-              buttonType: ButtonTypes.FLAT,
+              buttonType: ButtonType.FLAT,
               icon: Icons.home,
               roundedEdge: false,
             ),
@@ -257,7 +256,7 @@ class _FileExplorerScreenState extends SfWidget<FileExplorerScreen> {
                   clearStack: true,
                 );
               },
-              buttonType: ButtonTypes.FLAT,
+              buttonType: ButtonType.FLAT,
               icon: Icons.home,
               roundedEdge: false,
             ),
@@ -270,7 +269,7 @@ class _FileExplorerScreenState extends SfWidget<FileExplorerScreen> {
                   clearStack: true,
                 );
               },
-              buttonType: ButtonTypes.FLAT,
+              buttonType: ButtonType.FLAT,
               icon: Icons.home,
               roundedEdge: false,
             ),
@@ -472,8 +471,18 @@ class _FileExplorerScreenState extends SfWidget<FileExplorerScreen> {
     return SafeArea(
       top: true,
       child: Scaffold(
-        backgroundColor: Colors.transparent,
-        body: _buildBody(),
+        //backgroundColor: Colors.transparent,//todo
+        backgroundColor: Colors.white, //todo
+        body: Center(
+          child: Button(
+            text: 'text',
+            onPressed: () {},
+            buttonColor: ButtonColorType.BLUE,
+            buttonSize: ButtonSizeType.SMALL,
+            buttonType: ButtonType.FLAT,
+          ),
+        ),
+        //body: _buildBody(),
       ),
     );
   }

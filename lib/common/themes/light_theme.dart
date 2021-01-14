@@ -28,7 +28,7 @@ class LightTheme {
         color: AppColors.black,
       ),
       button: originalBodyText1.copyWith(
-        fontSize: 16.0,
+        fontSize: 14.0,
         fontWeight: FontWeight.w900,
         color: AppColors.black,
       ),

@@ -4,7 +4,7 @@ import 'package:squash_archiver/utils/utils/functs.dart';
 import 'package:squash_archiver/widgets/img/img.dart';
 import 'package:squash_archiver/widgets/text/textography.dart';
 
-enum ButtonTypes {
+enum ButtonType {
   FLAT,
   RAISED,
   ICON,
@@ -13,7 +13,7 @@ enum ButtonTypes {
   IMAGE,
 }
 
-enum ButtonColorTypes {
+enum ButtonColorType {
   WHITE,
   BLACK,
   BLUE,
@@ -22,7 +22,7 @@ enum ButtonColorTypes {
   ColorF1F,
 }
 
-enum ButtonSizeTypes {
+enum ButtonSizeType {
   SMALL,
   LARGE,
 }
@@ -39,17 +39,17 @@ class Button extends StatelessWidget {
   final EdgeInsetsGeometry imageButtonPadding;
   final EdgeInsetsGeometry textButtonPadding;
   final VoidCallback onPressed;
-  final ButtonTypes buttonType;
+  final ButtonType buttonType;
   final double height;
   final double width;
-  final ButtonColorTypes buttonColor;
+  final ButtonColorType buttonColor;
   final double elevation;
   final double iconButtonIconSize;
   final Color iconColor;
-  final ButtonColorTypes buttonTextColor;
+  final ButtonColorType buttonTextColor;
   final bool roundedEdge;
   final double radius;
-  final ButtonSizeTypes buttonSize;
+  final ButtonSizeType buttonSize;
   final bool textAutoCapitalize;
   final bool underline;
   final TextVariants textVariant;
@@ -70,17 +70,17 @@ class Button extends StatelessWidget {
     this.iconButtonPadding,
     this.imageButtonPadding,
     this.textButtonPadding,
-    this.buttonType = ButtonTypes.RAISED,
+    this.buttonType = ButtonType.RAISED,
     this.height,
     this.width,
     this.fullWidth = false,
     this.buttonColor,
     this.buttonTextColor,
-    this.elevation = 2,
-    this.roundedEdge = false,
-    this.radius = 8.0,
-    this.buttonSize = ButtonSizeTypes.LARGE,
-    this.textAutoCapitalize = true,
+    this.elevation = 1,
+    this.roundedEdge = true,
+    this.radius = 6.0,
+    this.buttonSize = ButtonSizeType.LARGE,
+    this.textAutoCapitalize = false,
     this.iconButtonIconSize = 30.0,
     this.underline = true,
     this.textVariant,
@@ -113,24 +113,24 @@ class Button extends StatelessWidget {
   }
 
   // add new ButtonColorTypes colors here
-  Color _buttonColorMapping(ButtonColorTypes _colorType) {
+  Color _buttonColorMapping(ButtonColorType _colorType) {
     switch (_colorType) {
-      case ButtonColorTypes.WHITE:
+      case ButtonColorType.WHITE:
         return AppColors.white;
 
-      case ButtonColorTypes.BLACK:
+      case ButtonColorType.BLACK:
         return AppColors.black;
 
-      case ButtonColorTypes.ColorF1F:
+      case ButtonColorType.ColorF1F:
         return AppColors.colorF1F;
 
-      case ButtonColorTypes.INFO:
+      case ButtonColorType.INFO:
         return AppColors.info;
 
-      case ButtonColorTypes.TRANSPARENT:
+      case ButtonColorType.TRANSPARENT:
         return Colors.transparent;
 
-      case ButtonColorTypes.BLUE:
+      case ButtonColorType.BLUE:
       default:
         return AppColors.blue;
     }
@@ -139,23 +139,23 @@ class Button extends StatelessWidget {
   Color getButtonBgColor() {
     if (isNotNull(buttonColor)) {
       return _buttonColorMapping(buttonColor);
-    } else if (buttonType == ButtonTypes.ICON ||
-        buttonType == ButtonTypes.TEXT ||
-        buttonType == ButtonTypes.IMAGE) {
+    } else if (buttonType == ButtonType.ICON ||
+        buttonType == ButtonType.TEXT ||
+        buttonType == ButtonType.IMAGE) {
       return Colors.transparent;
     }
 
     if (isNotNull(buttonTextColor)) {
       switch (buttonTextColor) {
-        case ButtonColorTypes.WHITE:
-          return AppColors.blue;
+        case ButtonColorType.WHITE:
+          return AppColors.black;
 
         default:
           return AppColors.white;
       }
     }
 
-    if (buttonType == ButtonTypes.TEXT) {
+    if (buttonType == ButtonType.TEXT) {
       return AppColors.white;
     }
 
@@ -164,9 +164,9 @@ class Button extends StatelessWidget {
 
   Color getButtonTextColor() {
     switch (buttonType) {
-      case ButtonTypes.TEXT:
-      case ButtonTypes.ICON:
-      case ButtonTypes.TILE:
+      case ButtonType.TEXT:
+      case ButtonType.ICON:
+      case ButtonType.TILE:
         if (isButtonDisabled()) {
           return AppColors.disabled;
         }
@@ -180,28 +180,28 @@ class Button extends StatelessWidget {
       return _buttonColorMapping(buttonTextColor);
     }
 
-    if (buttonType == ButtonTypes.ICON) {
+    if (buttonType == ButtonType.ICON) {
       return AppColors.black;
     }
 
     if (isNotNull(buttonColor)) {
       switch (buttonColor) {
-        case ButtonColorTypes.WHITE:
-          return AppColors.blue;
+        case ButtonColorType.WHITE:
+          return AppColors.black;
 
         default:
           return AppColors.white;
       }
     }
 
-    if (buttonType == ButtonTypes.TEXT) {
+    if (buttonType == ButtonType.TEXT) {
       return AppColors.blue;
     }
 
     return AppColors.white;
   }
 
-  ShapeBorder getBtnShape() {
+  OutlinedBorder getBtnShape() {
     final _roundedEdge = roundedEdge ?? false;
 
     if (!_roundedEdge) {
@@ -235,16 +235,15 @@ class Button extends StatelessWidget {
     final _textVariant = textVariant ?? TextVariants.button;
 
     switch (buttonType) {
-      case ButtonTypes.FLAT:
-        const highlightColor = Color.fromRGBO(0, 0, 0, 0.05);
-
+      case ButtonType.FLAT:
         return isNull(icon)
-            ? FlatButton(
-                highlightColor: highlightColor,
-                color: getButtonBgColor(),
+            ? TextButton(
+                style: ElevatedButton.styleFrom(
+                  elevation: elevation,
+                  primary: getButtonBgColor(),
+                  shape: getBtnShape(),
+                ),
                 onPressed: isButtonDisabled() ? null : onPressed,
-                shape: getBtnShape(),
-                splashColor: splashColor,
                 child: Textography(
                   getButtonText(),
                   variant: _textVariant,
@@ -252,14 +251,18 @@ class Button extends StatelessWidget {
                   fontWeight: buttonStyle.fontWeight,
                 ),
               )
-            : FlatButton.icon(
-                highlightColor: highlightColor,
+            : TextButton.icon(
+                style: ElevatedButton.styleFrom(
+                  elevation: elevation,
+                  primary: iconColor ?? getButtonTextColor(),
+                  shape: getBtnShape(),
+                  textStyle:
+                      TextStyle(color: iconColor ?? getButtonTextColor()),
+                ),
                 icon: Icon(
                   icon,
                   textDirection: iconTextDirection,
                 ),
-                color: getButtonBgColor(),
-                shape: getBtnShape(),
                 onPressed: isButtonDisabled() ? null : onPressed,
                 label: Textography(
                   getButtonText(),
@@ -267,11 +270,10 @@ class Button extends StatelessWidget {
                   color: buttonStyle.color,
                   fontWeight: buttonStyle.fontWeight,
                 ),
-                textColor: iconColor ?? getButtonTextColor(),
               );
         break;
 
-      case ButtonTypes.ICON:
+      case ButtonType.ICON:
         if (isNull(icon)) {
           throw 'icon cannot be empty';
         }
@@ -299,7 +301,7 @@ class Button extends StatelessWidget {
           ),
         );
 
-      case ButtonTypes.IMAGE:
+      case ButtonType.IMAGE:
         if (isNull(image)) {
           throw 'image cannot be empty';
         }
@@ -323,7 +325,7 @@ class Button extends StatelessWidget {
           ),
         );
 
-      case ButtonTypes.TILE:
+      case ButtonType.TILE:
         if (isNull(icon)) {
           throw 'icon cannot be empty';
         }
@@ -370,7 +372,7 @@ class Button extends StatelessWidget {
           ),
         );
 
-      case ButtonTypes.TEXT:
+      case ButtonType.TEXT:
         final _textButtonPadding = textButtonPadding ?? EdgeInsets.zero;
 
         return InkWell(
@@ -392,51 +394,53 @@ class Button extends StatelessWidget {
           ),
         );
 
-      case ButtonTypes.RAISED:
+      case ButtonType.RAISED:
       default:
         return isNull(icon)
-            ? RaisedButton(
-                elevation: elevation,
-                color: getButtonBgColor(),
+            ? ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  elevation: elevation,
+                  primary: getButtonBgColor(),
+                  shape: getBtnShape(),
+                ),
                 onPressed: isButtonDisabled() ? null : onPressed,
-                shape: getBtnShape(),
                 child: Textography(
                   getButtonText(),
-                  variant: textVariant,
+                  variant: _textVariant,
                   color: buttonStyle.color,
                   fontWeight: buttonStyle.fontWeight,
                 ),
               )
-            : RaisedButton.icon(
-                elevation: elevation,
+            : ElevatedButton.icon(
                 icon: Icon(
                   icon,
                   textDirection: iconTextDirection,
                 ),
-                color: getButtonBgColor(),
-                shape: getBtnShape(),
+                style: ElevatedButton.styleFrom(
+                    elevation: elevation,
+                    primary: getButtonBgColor(),
+                    shape: getBtnShape(),
+                    enableFeedback: true,
+                    textStyle:
+                        TextStyle(color: iconColor ?? getButtonTextColor())),
                 onPressed: isButtonDisabled() ? null : onPressed,
                 label: Textography(
                   getButtonText(),
-                  variant: textVariant,
+                  variant: _textVariant,
                   color: buttonStyle.color,
                   fontWeight: buttonStyle.fontWeight,
                 ),
-                textColor: iconColor ?? getButtonTextColor(),
               );
     }
   }
 
   _ButtonHeight getButtonHeight() {
-    var _minHeight = 28.0;
-    var _maxHeight = 28.0;
+    var _minHeight = 30.0;
+    var _maxHeight = 30.0;
 
-    if (buttonSize == ButtonSizeTypes.SMALL) {
-      _minHeight = 20;
-      _maxHeight = 20;
-    } else if (buttonSize == ButtonSizeTypes.LARGE) {
-      _minHeight = 28;
-      _maxHeight = 28;
+    if (buttonSize == ButtonSizeType.SMALL) {
+      _minHeight = 24;
+      _maxHeight = 24;
     }
 
     _minHeight = height ?? _minHeight;
@@ -447,10 +451,10 @@ class Button extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var _minWidth = 300.0;
+    var _minWidth = 200.0;
     var _maxWidth = double.infinity;
 
-    if (buttonType == ButtonTypes.ICON) {
+    if (buttonType == ButtonType.ICON) {
       _minWidth = 0.0;
     }
 
@@ -465,9 +469,9 @@ class Button extends StatelessWidget {
     }
 
     switch (buttonType) {
-      case ButtonTypes.TEXT:
-      case ButtonTypes.ICON:
-      case ButtonTypes.TILE:
+      case ButtonType.TEXT:
+      case ButtonType.ICON:
+      case ButtonType.TILE:
         return getButton();
 
       default:
@@ -475,10 +479,10 @@ class Button extends StatelessWidget {
     }
 
     if (disableAutoBoxConstraints == true ||
-        buttonType == ButtonTypes.TEXT ||
-        buttonType == ButtonTypes.ICON ||
-        buttonType == ButtonTypes.TILE ||
-        buttonType == ButtonTypes.IMAGE) {
+        buttonType == ButtonType.TEXT ||
+        buttonType == ButtonType.ICON ||
+        buttonType == ButtonType.TILE ||
+        buttonType == ButtonType.IMAGE) {
       return getButton();
     }
 
