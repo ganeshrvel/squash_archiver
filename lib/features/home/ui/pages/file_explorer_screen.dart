@@ -422,7 +422,7 @@ class _FileExplorerScreenState extends SfWidget<FileExplorerScreen> {
           // }
         },
         child: Container(
-          padding: const EdgeInsets.only(top: Sizes.TITLE_BAR_CLEARANCE),
+          padding: const EdgeInsets.only(top: Sizes.TITLE_BAR_PADDING),
           color: AppColors.white,
           child: CustomScrollView(
             controller: _scrollController,

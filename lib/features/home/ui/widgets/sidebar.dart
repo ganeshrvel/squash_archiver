@@ -85,7 +85,7 @@ class _SidebarState extends SfWidget<Sidebar> {
       ),
       color: AppColors.colorE6E3E3,
       child: Container(
-        margin: const EdgeInsets.only(top: Sizes.TITLE_BAR_CLEARANCE),
+        margin: const EdgeInsets.only(top: Sizes.TITLE_BAR_PADDING),
         child: Column(
           children: [
             _buildFavorites(),
