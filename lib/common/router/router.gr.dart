@@ -7,7 +7,6 @@
 // ignore_for_file: public_member_api_docs
 
 import 'package:auto_route/auto_route.dart';
-import 'package:flutter/material.dart';
 
 import '../../features/home/ui/pages/file_explorer_screen.dart';
 import '../../features/page_not_found/ui/pages/page_not_found_screen.dart';
@@ -42,15 +41,8 @@ class Router extends RouterBase {
       );
     },
     FileExplorerScreen: (data) {
-      final args = data.getArgs<FileExplorerScreenArguments>(
-        orElse: () => FileExplorerScreenArguments(),
-      );
       return buildAdaptivePageRoute<dynamic>(
-        builder: (context) => FileExplorerScreen(
-          key: args.key,
-          redirectRouteName: args.redirectRouteName,
-          redirectRouteArgs: args.redirectRouteArgs,
-        ),
+        builder: (context) => const FileExplorerScreen(),
         settings: data,
       );
     },
@@ -67,15 +59,6 @@ class Router extends RouterBase {
 /// ************************************************************************
 /// Arguments holder classes
 /// *************************************************************************
-
-/// FileExplorerScreen arguments holder class
-class FileExplorerScreenArguments {
-  final Key key;
-  final String redirectRouteName;
-  final Object redirectRouteArgs;
-  FileExplorerScreenArguments(
-      {this.key, this.redirectRouteName, this.redirectRouteArgs});
-}
 
 /// PageNotFoundScreen arguments holder class
 class PageNotFoundScreenArguments {

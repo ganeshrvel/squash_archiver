@@ -30,7 +30,12 @@ class FileExplorerTableHeaderCell extends StatelessWidget {
     @required this.onTap,
     @required this.isLoading,
     @required this.currentOrderDir,
-  }) : super(key: key);
+  })  : assert(title != null),
+        assert(orderBy != null),
+        assert(onTap != null),
+        assert(isLoading != null),
+        assert(currentOrderDir != null),
+        super(key: key);
 
   bool get _isLoading => isLoading ?? false;
 
