@@ -1,23 +1,23 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:squash_archiver/constants/app_default_values.dart';
 import 'package:squash_archiver/constants/colors.dart';
 import 'package:squash_archiver/constants/sizes.dart';
 import 'package:squash_archiver/features/home/data/enums/file_explorer_source.dart';
 import 'package:squash_archiver/features/home/data/models/file_explorer_entity.dart';
 import 'package:squash_archiver/features/home/ui/pages/file_explorer_screen_store.dart';
+import 'package:squash_archiver/utils/utils/files.dart';
 import 'package:squash_archiver/widget_extends/sf_widget.dart';
 import 'package:squash_archiver/widgets/app_list_tile/app_list_tile.dart';
 import 'package:squash_archiver/widgets/text/textography.dart';
 
 class Sidebar extends StatefulWidget {
-  final List<FileExplorerSidebarEntity> entities;
   final FileExplorerScreenStore fileExplorerScreenStore;
 
   const Sidebar({
     Key key,
-    @required this.entities,
     @required this.fileExplorerScreenStore,
-  })  : assert(entities != null),
-        assert(fileExplorerScreenStore != null),
+  })  : assert(fileExplorerScreenStore != null),
         super(key: key);
 
   @override
@@ -25,8 +25,6 @@ class Sidebar extends StatefulWidget {
 }
 
 class _SidebarState extends SfWidget<Sidebar> {
-  List<FileExplorerSidebarEntity> get _items => widget.entities;
-
   FileExplorerScreenStore get _fileExplorerScreenStore =>
       widget.fileExplorerScreenStore;
 
@@ -39,6 +37,27 @@ class _SidebarState extends SfWidget<Sidebar> {
   }
 
   Widget _buildFavorites() {
+    final _entities = [
+      FileExplorerSidebarEntity(
+        label: 'Home',
+        path: AppDefaultValues.DEFAULT_FILE_EXPLORER_DIRECTORY,
+        icon: CupertinoIcons.home,
+        selected: true,
+      ),
+      FileExplorerSidebarEntity(
+        label: 'Desktop',
+        path: desktopDirectory(),
+        icon: CupertinoIcons.desktopcomputer,
+        selected: false,
+      ),
+      FileExplorerSidebarEntity(
+        label: 'Download',
+        path: AppDefaultValues.DEFAULT_FILE_EXPLORER_DIRECTORY,
+        icon: CupertinoIcons.arrow_down_circle,
+        selected: false,
+      ),
+    ];
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -58,16 +77,16 @@ class _SidebarState extends SfWidget<Sidebar> {
             vertical: 6,
           ),
           child: Column(
-            children: List.generate(_items.length, (index) {
-              final item = _items[index];
+            children: List.generate(_entities.length, (index) {
+              final entity = _entities[index];
 
               return AppListTile(
                 onTap: () {
-                  _handleOnTap(item.path);
+                  _handleOnTap(entity.path);
                 },
-                selected: item.selected,
-                icon: item.icon,
-                label: item.label,
+                selected: entity.selected,
+                icon: entity.icon,
+                label: entity.label,
               );
             }),
           ),
@@ -83,7 +102,7 @@ class _SidebarState extends SfWidget<Sidebar> {
         horizontal: 10,
         vertical: 11,
       ),
-      color: AppColors.colorE6E3E3,
+      color: AppColors.colorE6E3E3.withOpacity(0.97),
       child: Container(
         margin: const EdgeInsets.only(top: Sizes.TITLE_BAR_PADDING),
         child: Column(

@@ -1,27 +1,21 @@
 import 'package:archiver_ffi/archiver_ffi.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mobx/mobx.dart' show ReactionDisposer;
 import 'package:squash_archiver/constants/app_default_values.dart';
 import 'package:squash_archiver/constants/colors.dart';
-import 'package:squash_archiver/constants/sizes.dart';
 import 'package:squash_archiver/features/home/data/enums/file_explorer_source.dart';
-import 'package:squash_archiver/features/home/data/models/file_explorer_entity.dart';
-import 'package:squash_archiver/features/home/data/models/file_listing_response.dart';
 import 'package:squash_archiver/features/home/ui/pages/file_explorer_screen_store.dart';
-import 'package:squash_archiver/features/home/ui/widgets/file_explorer_table.dart';
+import 'package:squash_archiver/features/home/ui/widgets/file_explorer_pane.dart';
 import 'package:squash_archiver/features/home/ui/widgets/file_explorer_table_header.dart';
 import 'package:squash_archiver/features/home/ui/widgets/sidebar.dart';
-import 'package:squash_archiver/utils/utils/files.dart';
 import 'package:squash_archiver/utils/utils/store_helper.dart';
 import 'package:squash_archiver/widget_extends/sf_widget.dart';
 import 'package:squash_archiver/widgets/button/button.dart';
 import 'package:squash_archiver/widgets/shadows/box_shadow_1.dart';
 import 'package:squash_archiver/widgets/sliver/app_sliver_header.dart';
-import 'package:squash_archiver/widgets/text/textography.dart';
 
 class FileExplorerScreen extends StatefulWidget {
   final String redirectRouteName;
@@ -124,23 +118,6 @@ class _FileExplorerScreenState extends SfWidget<FileExplorerScreen> {
     super.dispose();
   }
 
-  Future<void> _navigateToNextPath(FileListingResponse fileResponse) async {
-    if (fileResponse.file.isDir) {
-      return _fileExplorerScreenStore
-          .setCurrentPath(fileResponse.file.fullPath);
-    }
-
-    /// if the file extension is supported by the archiver then open the archive
-    if (fileResponse.isSupported) {
-      return _fileExplorerScreenStore.navigateToSource(
-        fullPath: '',
-        currentArchiveFilepath: fileResponse.file.fullPath,
-        source: FileExplorerSource.ARCHIVE,
-        clearStack: false,
-      );
-    }
-  }
-
   void _handleTableHeaderCellSorting({
     @required OrderDir orderDir,
     @required OrderBy orderBy,
@@ -233,27 +210,8 @@ class _FileExplorerScreenState extends SfWidget<FileExplorerScreen> {
   Widget _buildSidebar() {
     return SizedBox(
       width: 250,
+      //todo add a store for current path
       child: Sidebar(
-        entities: [
-          FileExplorerSidebarEntity(
-            label: 'Home',
-            path: AppDefaultValues.DEFAULT_FILE_EXPLORER_DIRECTORY,
-            icon: CupertinoIcons.home,
-            selected: true,
-          ),
-          FileExplorerSidebarEntity(
-            label: 'Desktop',
-            path: desktopDirectory(),
-            icon: CupertinoIcons.desktopcomputer,
-            selected: false,
-          ),
-          FileExplorerSidebarEntity(
-            label: 'Download',
-            path: AppDefaultValues.DEFAULT_FILE_EXPLORER_DIRECTORY,
-            icon: CupertinoIcons.arrow_down_circle,
-            selected: false,
-          ),
-        ],
         fileExplorerScreenStore: _fileExplorerScreenStore,
       ),
     );
@@ -325,86 +283,9 @@ class _FileExplorerScreenState extends SfWidget<FileExplorerScreen> {
     );
   }
 
-  List<Widget> _buildRows({@required List<FileListingResponse> fileList}) {
-    return fileList.map((fileResponse) {
-      return Listener(
-        onPointerDown: (PointerDownEvent event) {
-          if (event.buttons == 2) {
-            showMenu(
-              elevation: 2,
-              context: context,
-              position: RelativeRect.fromLTRB(
-                event.position.dx,
-                event.position.dy,
-                event.position.dx,
-                event.position.dy,
-              ),
-              items: const <PopupMenuItem<String>>[
-                PopupMenuItem(value: 'test1', child: Textography('test1')),
-                PopupMenuItem(value: 'test2', child: Textography('test2')),
-              ],
-            );
-          }
-        },
-        child: MouseRegion(
-          child: GestureDetector(
-            onDoubleTap: () {
-              _navigateToNextPath(fileResponse);
-            },
-            child: ListTile(
-              mouseCursor: SystemMouseCursors.basic,
-              hoverColor: AppColors.transparent,
-              focusColor: AppColors.transparent,
-              selectedTileColor: AppColors.blue,
-              title: Row(
-                children: [
-                  Expanded(
-                    child: Row(
-                      children: [
-                        if (fileResponse.file.isDir)
-                          Icon(
-                            Icons.folder,
-                            color: AppColors.blue,
-                          )
-                        else
-                          const Icon(Icons.file_copy_rounded),
-                        const SizedBox(width: 5),
-                        Textography(
-                          fileResponse.file.name,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ],
-                    ),
-                  ),
-                  Expanded(
-                    child: Textography(fileResponse.prettyFileSize),
-                  ),
-                  Expanded(
-                    child: Textography(fileResponse.prettyDate),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-      );
-    }).toList();
-  }
-
   Widget _buildFileExplorerPane() {
-    return SliverPadding(
-      padding: EdgeInsets.zero,
-      sliver: Observer(
-        builder: (_) {
-          final _fileList = _fileExplorerScreenStore.fileList;
-
-          return FilExplorerTable(
-            rows: _buildRows(
-              fileList: _fileList,
-            ),
-          );
-        },
-      ),
+    return FileExplorerPane(
+      fileExplorerScreenStore: _fileExplorerScreenStore,
     );
   }
 
@@ -422,7 +303,7 @@ class _FileExplorerScreenState extends SfWidget<FileExplorerScreen> {
           // }
         },
         child: Container(
-          padding: const EdgeInsets.only(top: Sizes.TITLE_BAR_PADDING),
+          padding: const EdgeInsets.only(top: 10),
           color: AppColors.white,
           child: CustomScrollView(
             controller: _scrollController,

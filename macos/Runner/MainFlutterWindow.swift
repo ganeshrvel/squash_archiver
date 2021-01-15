@@ -22,8 +22,8 @@ class MainFlutterWindow: NSWindow {
         self.setFrame(windowFrame, display: true)
         
         // Transparent view
-//        self.isOpaque = false
-//        self.backgroundColor = .clear
+        self.isOpaque = false
+        self.backgroundColor = .clear
 
         RegisterGeneratedPlugins(registry: flutterViewController)
     

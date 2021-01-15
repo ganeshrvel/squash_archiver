@@ -74,8 +74,8 @@ Future<GetIt> $initGetIt(
       () => NetworkInfo(get<DataConnectionChecker>()));
   gh.lazySingleton<PushesService>(() => PushesService());
   gh.lazySingleton<SentryClient>(() => sentryClientDI.sentryClient);
-  final sharedPreferences = await sharedPreferencesDi.sharedPreferences;
-  gh.factory<SharedPreferences>(() => sharedPreferences);
+  final resolvedSharedPreferences = await sharedPreferencesDi.sharedPreferences;
+  gh.factory<SharedPreferences>(() => resolvedSharedPreferences);
   gh.lazySingleton<ApiClient>(() => ApiClient(get<Dio>()));
   gh.lazySingleton<AppLocalDataSource>(
       () => AppLocalDataSource(get<SharedPreferences>()));

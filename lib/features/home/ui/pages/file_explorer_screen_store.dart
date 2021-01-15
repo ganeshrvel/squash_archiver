@@ -24,10 +24,10 @@ abstract class _FileExplorerScreenStoreBase with Store {
   final _fileExplorerController = getIt<FileExplorerController>();
 
   @observable
-  List<FileListingResponse> fileList = ObservableList<FileListingResponse>();
+  List<FileListingResponse> files = ObservableList<FileListingResponse>();
 
   @observable
-  ObservableFuture<DC<Exception, List<FileListingResponse>>> fileListFuture =
+  ObservableFuture<DC<Exception, List<FileListingResponse>>> filesFuture =
       ObservableFuture(Future.value());
 
   @observable
@@ -47,7 +47,7 @@ abstract class _FileExplorerScreenStoreBase with Store {
 
   @computed
   bool get fileListingInProgress {
-    return isStateLoading(fileListFuture);
+    return isStateLoading(filesFuture);
   }
 
   /// current path in the file explorer; path of the last item in [fileListingSourceStack]
@@ -210,14 +210,14 @@ abstract class _FileExplorerScreenStoreBase with Store {
     final _popStackOnError = popStackOnError ?? false;
     fileListException = null;
 
-    fileListFuture = ObservableFuture(
+    filesFuture = ObservableFuture(
       _fileExplorerController.listFiles(
         request: _fileListingSource,
         invalidateCache: invalidateCache,
       ),
     );
 
-    final _data = await fileListFuture;
+    final _data = await filesFuture;
 
     _data.pick(
       onError: (error) async {
@@ -230,13 +230,13 @@ abstract class _FileExplorerScreenStoreBase with Store {
         c.complete();
       },
       onData: (data) {
-        fileList = data;
+        files = data;
         fileListException = null;
 
         c.complete();
       },
       onNoData: () {
-        fileList = [];
+        files = [];
         fileListException = null;
 
         c.complete();

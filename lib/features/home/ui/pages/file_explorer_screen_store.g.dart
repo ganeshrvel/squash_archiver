@@ -17,36 +17,35 @@ mixin _$FileExplorerScreenStore on _FileExplorerScreenStoreBase, Store {
               name: '_FileExplorerScreenStoreBase.fileListingInProgress'))
       .value;
 
-  final _$fileListAtom = Atom(name: '_FileExplorerScreenStoreBase.fileList');
+  final _$filesAtom = Atom(name: '_FileExplorerScreenStoreBase.files');
 
   @override
-  List<FileListingResponse> get fileList {
-    _$fileListAtom.reportRead();
-    return super.fileList;
+  List<FileListingResponse> get files {
+    _$filesAtom.reportRead();
+    return super.files;
   }
 
   @override
-  set fileList(List<FileListingResponse> value) {
-    _$fileListAtom.reportWrite(value, super.fileList, () {
-      super.fileList = value;
+  set files(List<FileListingResponse> value) {
+    _$filesAtom.reportWrite(value, super.files, () {
+      super.files = value;
     });
   }
 
-  final _$fileListFutureAtom =
-      Atom(name: '_FileExplorerScreenStoreBase.fileListFuture');
+  final _$filesFutureAtom =
+      Atom(name: '_FileExplorerScreenStoreBase.filesFuture');
 
   @override
-  ObservableFuture<DC<Exception, List<FileListingResponse>>>
-      get fileListFuture {
-    _$fileListFutureAtom.reportRead();
-    return super.fileListFuture;
+  ObservableFuture<DC<Exception, List<FileListingResponse>>> get filesFuture {
+    _$filesFutureAtom.reportRead();
+    return super.filesFuture;
   }
 
   @override
-  set fileListFuture(
+  set filesFuture(
       ObservableFuture<DC<Exception, List<FileListingResponse>>> value) {
-    _$fileListFutureAtom.reportWrite(value, super.fileListFuture, () {
-      super.fileListFuture = value;
+    _$filesFutureAtom.reportWrite(value, super.filesFuture, () {
+      super.filesFuture = value;
     });
   }
 
@@ -199,8 +198,8 @@ mixin _$FileExplorerScreenStore on _FileExplorerScreenStoreBase, Store {
   @override
   String toString() {
     return '''
-fileList: ${fileList},
-fileListFuture: ${fileListFuture},
+files: ${files},
+filesFuture: ${filesFuture},
 fileListException: ${fileListException},
 fileListingSourceStack: ${fileListingSourceStack},
 fileListingInProgress: ${fileListingInProgress}
