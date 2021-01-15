@@ -24,7 +24,7 @@ class AppScreen extends StatelessWidget {
         body: Center(
           child: Textography(
             'Oops.. Some error occured.',
-            variant: TextVariants.body1,
+            variant: TextVariant.body1,
           ),
         ),
       );

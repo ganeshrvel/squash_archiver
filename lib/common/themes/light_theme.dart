@@ -6,22 +6,22 @@ import 'package:squash_archiver/constants/colors.dart';
 class LightTheme {
   static final TextTheme originalTextTheme = ThemeData.light().textTheme;
   static final IconThemeData originalIconTheme = ThemeData.light().iconTheme;
-  static final TextStyle originalBodyText1 = GoogleFonts.raleway();
+  static final TextStyle originalBodyText1 = GoogleFonts.openSans();
 
   static final MaterialColor _primarySwatch =
-      hexColor2MaterialColor(color: AppColors.black);
-  static final Color primaryColor = AppColors.black;
+      hexColor2MaterialColor(color: AppColors.blue);
+  static const Color primaryColor = AppColors.white;
   static final Color accentColor = AppColors.blue;
   static const Color _scaffoldBackgroundColor = AppColors.white;
-  static final Color _hintColor = AppColors.black;
+  static const Color _hintColor = AppColors.white;
 
   static final AppBarTheme _appBarTheme = AppBarTheme(
     color: AppColors.white,
     elevation: 2,
     brightness: Brightness.light,
-    iconTheme: IconThemeData(color: AppColors.black),
-    actionsIconTheme: IconThemeData(color: AppColors.black),
-    textTheme: GoogleFonts.ralewayTextTheme(originalTextTheme).copyWith(
+    iconTheme: IconThemeData(color: AppColors.color797),
+    actionsIconTheme: IconThemeData(color: AppColors.color797),
+    textTheme: GoogleFonts.openSansTextTheme(originalTextTheme).copyWith(
       subtitle1: originalBodyText1.copyWith(
         fontSize: 18.0,
         fontWeight: FontWeight.w800,
@@ -58,7 +58,10 @@ class LightTheme {
       headline2: originalBodyText1.copyWith(),
       headline5: originalBodyText1.copyWith(),
       subtitle2: originalBodyText1.copyWith(),
-      caption: originalBodyText1.copyWith(),
+      caption: originalBodyText1.copyWith(
+        fontSize: 12.0,
+        color: AppColors.color797,
+      ),
       overline: originalBodyText1.copyWith(),
     ),
   );
@@ -81,10 +84,10 @@ class LightTheme {
     hintColor: _hintColor,
     indicatorColor: AppColors.blue,
     scaffoldBackgroundColor: _scaffoldBackgroundColor,
-    fontFamily: 'Raleway',
+    fontFamily: 'Open Sans',
     backgroundColor: AppColors.white,
     unselectedWidgetColor: AppColors.white,
-    textTheme: GoogleFonts.ralewayTextTheme(originalTextTheme).copyWith(
+    textTheme: GoogleFonts.openSansTextTheme(originalTextTheme).copyWith(
       headline1: originalBodyText1.copyWith(
         fontSize: 24.0,
         fontWeight: FontWeight.w800,
@@ -115,11 +118,11 @@ class LightTheme {
       ),
       caption: originalBodyText1.copyWith(
         fontSize: 12.0,
-        fontWeight: FontWeight.normal,
-        color: AppColors.black,
+        color: AppColors.color797,
+        fontWeight: FontWeight.w700,
       ),
       button: originalBodyText1.copyWith(
-        fontSize: 16.0,
+        fontSize: 15.0,
         fontWeight: FontWeight.w900,
         color: AppColors.black,
       ),

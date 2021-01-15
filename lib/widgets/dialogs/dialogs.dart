@@ -12,17 +12,17 @@ class DialogAlert extends AlertDialog {
               ? null
               : Textography(
                   title,
-                  variant: TextVariants.body1,
+                  variant: TextVariant.body1,
                 ),
           content: Textography(
             content,
-            variant: TextVariants.body1,
+            variant: TextVariant.body1,
           ),
           actions: <Widget>[
             Button(
               text: 'Ok',
               onPressed: () => Navigator.of(context).pop(),
-              textVariant: TextVariants.body1,
+              textVariant: TextVariant.body1,
               buttonType: ButtonType.FLAT,
             ),
           ],
@@ -49,11 +49,11 @@ class DialogConfirm extends AlertDialog {
               ? null
               : Textography(
                   title,
-                  variant: TextVariants.body1,
+                  variant: TextVariant.body1,
                 ),
           content: Textography(
             content,
-            variant: TextVariants.body1,
+            variant: TextVariant.body1,
           ),
           actions: <Widget>[
             Button(

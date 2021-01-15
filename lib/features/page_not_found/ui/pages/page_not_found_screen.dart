@@ -24,7 +24,7 @@ class PageNotFoundScreen extends StatelessWidget {
               padding: const EdgeInsets.all(8),
               child: Textography(
                 ln(context, 'pnf_body_text'),
-                variant: TextVariants.body1,
+                variant: TextVariant.body1,
               ),
             ),
           ],

@@ -52,7 +52,7 @@ class Button extends StatelessWidget {
   final ButtonSizeType buttonSize;
   final bool textAutoCapitalize;
   final bool underline;
-  final TextVariants textVariant;
+  final TextVariant textVariant;
   final FontWeight fontWeight;
   final bool disableAutoBoxConstraints;
   final Color splashColor;
@@ -232,7 +232,7 @@ class Button extends StatelessWidget {
 
   Widget getButton() {
     final buttonStyle = getButtonTextStyle();
-    final _textVariant = textVariant ?? TextVariants.button;
+    final _textVariant = textVariant ?? TextVariant.button;
 
     switch (buttonType) {
       case ButtonType.FLAT:

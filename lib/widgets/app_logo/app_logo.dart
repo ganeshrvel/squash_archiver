@@ -21,7 +21,7 @@ class AppLogo extends StatelessWidget {
         const SizedBox(width: 7),
         Textography(
           _appName,
-          variant: TextVariants.headline3,
+          variant: TextVariant.headline3,
         )
       ],
     );

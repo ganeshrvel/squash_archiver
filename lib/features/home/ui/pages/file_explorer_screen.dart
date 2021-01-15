@@ -8,7 +8,7 @@ import 'package:mobx/mobx.dart' show ReactionDisposer;
 import 'package:squash_archiver/constants/app_default_values.dart';
 import 'package:squash_archiver/constants/colors.dart';
 import 'package:squash_archiver/features/home/data/enums/file_explorer_source.dart';
-import 'package:squash_archiver/features/home/data/models/file_explorer_sidebar.dart';
+import 'package:squash_archiver/features/home/data/models/file_explorer_entity.dart';
 import 'package:squash_archiver/features/home/data/models/file_listing_response.dart';
 import 'package:squash_archiver/features/home/ui/pages/file_explorer_screen_store.dart';
 import 'package:squash_archiver/features/home/ui/widgets/file_explorer_table.dart';
@@ -231,23 +231,26 @@ class _FileExplorerScreenState extends SfWidget<FileExplorerScreen> {
 
   Widget _buildSidebar() {
     return SizedBox(
-      width: 300,
+      width: 250,
       child: Sidebar(
-        items: [
-          FileExplorerSidebarItem(
+        entities: [
+          FileExplorerSidebarEntity(
             label: 'Home',
             path: AppDefaultValues.DEFAULT_FILE_EXPLORER_DIRECTORY,
             icon: CupertinoIcons.home,
+            selected: true,
           ),
-          FileExplorerSidebarItem(
+          FileExplorerSidebarEntity(
             label: 'Desktop',
             path: desktopDirectory(),
             icon: CupertinoIcons.desktopcomputer,
+            selected: false,
           ),
-          FileExplorerSidebarItem(
+          FileExplorerSidebarEntity(
             label: 'Download',
             path: AppDefaultValues.DEFAULT_FILE_EXPLORER_DIRECTORY,
             icon: CupertinoIcons.arrow_down_circle,
+            selected: false,
           ),
         ],
         fileExplorerScreenStore: _fileExplorerScreenStore,

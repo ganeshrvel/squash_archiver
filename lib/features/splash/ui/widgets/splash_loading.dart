@@ -26,7 +26,7 @@ class SplashLoading extends StatelessWidget {
           const SizedBox(height: 24),
           Textography(
             appName,
-            variant: TextVariants.headline3,
+            variant: TextVariant.headline3,
           )
         ],
       ),

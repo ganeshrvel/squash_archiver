@@ -23,7 +23,7 @@ class HomeToolbar extends StatelessWidget {
       textAutoCapitalize: false,
       width: 80,
       height: 80,
-      textVariant: TextVariants.caption,
+      textVariant: TextVariant.caption,
       fontWeight: FontWeight.w400,
     );
   }

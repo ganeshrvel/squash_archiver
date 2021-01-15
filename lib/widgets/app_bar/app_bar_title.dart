@@ -13,7 +13,7 @@ class AppBarTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     return Textography(
       text,
-      variant: TextVariants.headline6,
+      variant: TextVariant.headline6,
       fontWeight: FontWeight.normal,
     );
   }

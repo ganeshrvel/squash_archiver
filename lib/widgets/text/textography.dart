@@ -23,7 +23,7 @@ import 'package:squash_archiver/utils/utils/functs.dart';
 ///
 ///  button: Font size 16.0
 ///
-enum TextVariants {
+enum TextVariant {
   /// Font size 24.0
   headline1,
 
@@ -60,7 +60,7 @@ enum TextVariants {
 
 class Textography extends StatelessWidget {
   final String child;
-  final TextVariants variant;
+  final TextVariant variant;
   final Color color;
   final Color backgroundColor;
   final TextAlign textAlign;
@@ -86,7 +86,7 @@ class Textography extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _variant = variant ?? TextVariants.body1;
+    final _variant = variant ?? TextVariant.body1;
     var _fontWeight = FontWeight.normal;
     var _child = child ?? '';
     double _fontSize;
@@ -94,47 +94,47 @@ class Textography extends StatelessWidget {
     const _corrector = 1;
 
     switch (_variant) {
-      case TextVariants.headline1:
+      case TextVariant.headline1:
         _fontWeight = FontWeight.w800;
         _fontSize = 24.0;
         break;
-      case TextVariants.headline3:
+      case TextVariant.headline3:
         _fontWeight = FontWeight.bold;
         _fontSize = 22.0;
         break;
-      case TextVariants.headline6:
+      case TextVariant.headline6:
         _fontWeight = FontWeight.w800;
         _fontSize = 20.0;
         break;
-      case TextVariants.subtitle1:
+      case TextVariant.subtitle1:
         _fontWeight = FontWeight.w800;
         _fontSize = 16.0;
         break;
-      case TextVariants.subtitle2:
+      case TextVariant.subtitle2:
         _fontWeight = FontWeight.normal;
         _fontSize = 18.0;
         break;
-      case TextVariants.caption:
-        _fontWeight = FontWeight.normal;
+      case TextVariant.caption:
+        _fontWeight = FontWeight.w700;
         _fontSize = 12.0;
         break;
-      case TextVariants.button:
+      case TextVariant.button:
         _fontWeight = FontWeight.w900;
         _fontSize = 15.0;
         break;
-      case TextVariants.body2:
+      case TextVariant.body2:
         _fontWeight = FontWeight.normal;
         _fontSize = 13.0;
         break;
-      case TextVariants.body3:
+      case TextVariant.body3:
         _fontWeight = FontWeight.normal;
         _fontSize = 14.0;
         break;
-      case TextVariants.body1:
+      case TextVariant.body1:
         _fontWeight = FontWeight.normal;
         _fontSize = 16.0;
         break;
-      case TextVariants.none:
+      case TextVariant.none:
       default:
         _fontWeight = null;
         _fontSize = null;
