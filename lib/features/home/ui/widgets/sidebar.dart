@@ -4,6 +4,7 @@ import 'package:squash_archiver/features/home/data/enums/file_explorer_source.da
 import 'package:squash_archiver/features/home/data/models/file_explorer_entity.dart';
 import 'package:squash_archiver/features/home/ui/pages/file_explorer_screen_store.dart';
 import 'package:squash_archiver/widget_extends/sf_widget.dart';
+import 'package:squash_archiver/widgets/app_list_tile/app_list_tile.dart';
 import 'package:squash_archiver/widgets/text/textography.dart';
 
 class Sidebar extends StatefulWidget {
@@ -58,45 +59,14 @@ class _SidebarState extends SfWidget<Sidebar> {
           child: Column(
             children: List.generate(_items.length, (index) {
               final item = _items[index];
-              final _iconColor =
-                  item.selected ? AppColors.white : AppColors.blue;
-              final _tileColor = item.selected ? AppColors.blue : null;
-              final _tileTextColor =
-                  item.selected ? AppColors.white : AppColors.black.withOpacity(0.8);
 
-              return InkWell(
+              return AppListTile(
                 onTap: () {
                   _handleOnTap(item.path);
                 },
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: _tileColor,
-                    borderRadius: BorderRadius.circular(6),
-                  ),
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 10,
-                    horizontal: 10,
-                  ),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Icon(
-                        item.icon,
-                        size: 16,
-                        color: _iconColor,
-                      ),
-                      const SizedBox(
-                        width: 7,
-                      ),
-                      Textography(
-                        item.label,
-                        variant: TextVariant.body2,
-                        fontWeight: FontWeight.w600,
-                        color: _tileTextColor,
-                      ),
-                    ],
-                  ),
-                ),
+                selected: item.selected,
+                icon: item.icon,
+                label: item.label,
               );
             }),
           ),
