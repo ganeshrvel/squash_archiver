@@ -280,6 +280,11 @@ class Button extends StatelessWidget {
           throw 'icon cannot be empty';
         }
 
+        var _color = iconColor ?? getButtonTextColor();
+        if (disabled) {
+          _color = AppColors.disabled;
+        }
+
         return ClipRRect(
           borderRadius: BorderRadius.circular(roundedEdge ? radius : 0),
           child: Material(
@@ -297,7 +302,7 @@ class Button extends StatelessWidget {
                   child: Icon(
                     icon,
                     textDirection: iconTextDirection,
-                    color: iconColor ?? getButtonTextColor(),
+                    color: _color,
                     size: iconButtonIconSize,
                     semanticLabel: text,
                   ),
