@@ -121,7 +121,7 @@ class _FileExplorerScreenState extends SfWidget<FileExplorerScreen> {
           // }
         },
         child: Container(
-          padding: const EdgeInsets.only(top: 10),
+          padding: EdgeInsets.zero,
           color: AppColors.white,
           child: CustomScrollView(
             controller: _scrollController,

@@ -1,9 +1,10 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:squash_archiver/constants/colors.dart';
 import 'package:squash_archiver/features/home/ui/pages/file_explorer_screen_store.dart';
 import 'package:squash_archiver/widget_extends/sf_widget.dart';
-import 'package:squash_archiver/widgets/button/button.dart';
+import 'package:squash_archiver/widgets/button/action_bar_button.dart';
 import 'package:squash_archiver/widgets/shadows/box_shadow_1.dart';
 
 class FileExplorerToolbar extends StatefulWidget {
@@ -32,66 +33,42 @@ class FileExplorerToolbarState extends SfWidget<FileExplorerToolbar> {
           BoxShadow5(),
         ],
       ),
-      padding: EdgeInsets.zero,
-      child: Center(
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Observer(
-              builder: (_) {
-                final _listFilesInProgress =
-                    _fileExplorerScreenStore.fileListingInProgress;
+      padding: const EdgeInsets.symmetric(horizontal: 18),
+      child: Observer(
+        builder: (_) {
+          final _listFilesInProgress =
+              _fileExplorerScreenStore.fileListingInProgress;
 
-                return Button(
+          return Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.only(right: 5),
+                child: ActionBarButton(
                   text: 'Back',
                   onPressed: () {
                     _fileExplorerScreenStore.gotoPrevDirectory();
                   },
-                  buttonType: ButtonType.ICON,
-                  icon: Icons.arrow_back,
-                  iconButtonPadding: const EdgeInsets.all(20),
+                  icon: CupertinoIcons.back,
                   loading: _listFilesInProgress,
-                );
-              },
-            ),
-            Observer(
-              builder: (_) {
-                final _listFilesInProgress =
-                    _fileExplorerScreenStore.fileListingInProgress;
-
-                return Button(
+                  iconSize: 23,
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(right: 5),
+                child: ActionBarButton(
                   text: 'Refresh',
                   onPressed: () {
                     _fileExplorerScreenStore.refreshFiles();
                   },
-                  buttonType: ButtonType.ICON,
-                  icon: Icons.refresh,
-                  iconButtonPadding: const EdgeInsets.all(20),
+                  icon: CupertinoIcons.refresh_circled,
                   loading: _listFilesInProgress,
-                );
-              },
-            ),
-            Observer(
-              builder: (_) {
-                final _listFilesInProgress =
-                    _fileExplorerScreenStore.fileListingInProgress;
-
-                return Button(
-                  text: 'Force refresh',
-                  onPressed: () {
-                    _fileExplorerScreenStore.refreshFiles(
-                      invalidateCache: true,
-                    );
-                  },
-                  buttonType: ButtonType.ICON,
-                  icon: Icons.replay_circle_filled,
-                  iconButtonPadding: const EdgeInsets.all(20),
-                  loading: _listFilesInProgress,
-                );
-              },
-            ),
-          ],
-        ),
+                ),
+              ),
+            ],
+          );
+        },
       ),
     );
   }

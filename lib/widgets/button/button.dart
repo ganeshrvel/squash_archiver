@@ -57,6 +57,7 @@ class Button extends StatelessWidget {
   final bool disableAutoBoxConstraints;
   final Color splashColor;
   final Color highlightColor;
+  final Color hoverColor;
   final Img image;
 
   const Button({
@@ -88,6 +89,7 @@ class Button extends StatelessWidget {
     this.iconColor,
     this.disableAutoBoxConstraints,
     this.splashColor,
+    this.hoverColor,
     this.image,
     this.highlightColor,
   });
@@ -278,11 +280,14 @@ class Button extends StatelessWidget {
           throw 'icon cannot be empty';
         }
 
-        return ClipOval(
+        return ClipRRect(
+          borderRadius: BorderRadius.circular(roundedEdge ? radius : 0),
           child: Material(
+            shape: getBtnShape(),
             color: getButtonBgColor(),
             child: InkWell(
-              splashColor: AppColors.splash,
+              splashColor: splashColor ?? AppColors.splash,
+              hoverColor: hoverColor ?? AppColors.hover,
               onTap: isButtonDisabled() ? null : onPressed,
               child: SizedBox(
                 width: width,
@@ -294,6 +299,7 @@ class Button extends StatelessWidget {
                     textDirection: iconTextDirection,
                     color: iconColor ?? getButtonTextColor(),
                     size: iconButtonIconSize,
+                    semanticLabel: text,
                   ),
                 ),
               ),

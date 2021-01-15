@@ -10,7 +10,8 @@ class AppColors {
   static final Color blue = HexColor('017AFF');
   static final Color black = HexColor('232526');
   static final Color disabled = HexColor('E5E5E5');
-  static final Color splash = Colors.white10;
+  static final Color splash = Colors.black.withOpacity(0.02);
+  static final Color hover = Colors.black.withOpacity(0.05);
   static final Color error = Colors.red.shade500;
   static final Color warn = Colors.orange.shade500;
   static final Color info = Colors.blue.shade500;
