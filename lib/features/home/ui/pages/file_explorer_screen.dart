@@ -9,7 +9,7 @@ import 'package:squash_archiver/features/home/ui/pages/file_explorer_screen_stor
 import 'package:squash_archiver/features/home/ui/widgets/file_explorer_pane.dart';
 import 'package:squash_archiver/features/home/ui/widgets/file_explorer_table_header.dart';
 import 'package:squash_archiver/features/home/ui/widgets/file_explorer_toolbar.dart';
-import 'package:squash_archiver/features/home/ui/widgets/sidebar.dart';
+import 'package:squash_archiver/features/home/ui/widgets/file_explorer_sidebar.dart';
 import 'package:squash_archiver/utils/utils/store_helper.dart';
 import 'package:squash_archiver/widget_extends/sf_widget.dart';
 import 'package:squash_archiver/widgets/sliver/app_sliver_header.dart';
@@ -82,7 +82,7 @@ class _FileExplorerScreenState extends SfWidget<FileExplorerScreen> {
     return SizedBox(
       width: 250,
       //todo add a store for current path
-      child: Sidebar(
+      child: FileExplorerSidebar(
         fileExplorerScreenStore: _fileExplorerScreenStore,
       ),
     );

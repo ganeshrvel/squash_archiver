@@ -61,6 +61,10 @@ String desktopDirectory() {
   return path.join(homeDirectory(), 'Desktop');
 }
 
+String downloadsDirectory() {
+  return path.join(homeDirectory(), 'Downloads');
+}
+
 String getDesktopFile(String filename) {
   return path.join(desktopDirectory(), filename);
 }

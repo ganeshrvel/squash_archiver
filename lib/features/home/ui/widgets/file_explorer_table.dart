@@ -127,11 +127,6 @@ class _FileExplorerTableState extends SfWidget<FileExplorerTable> {
             return null;
           }
 
-          //   final _key = ValueKey(media.id);
-
-          // To convert this infinite list to a list with three items,
-          // uncomment the following line:
-          // if (index > 3) return null;
           return _rows[index];
         }),
       );
