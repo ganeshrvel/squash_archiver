@@ -18,13 +18,8 @@ import 'package:squash_archiver/widgets/shadows/box_shadow_1.dart';
 import 'package:squash_archiver/widgets/sliver/app_sliver_header.dart';
 
 class FileExplorerScreen extends StatefulWidget {
-  final String redirectRouteName;
-  final Object redirectRouteArgs;
-
   const FileExplorerScreen({
     Key key,
-    this.redirectRouteName,
-    this.redirectRouteArgs,
   }) : super(key: key);
 
   @override
@@ -32,10 +27,6 @@ class FileExplorerScreen extends StatefulWidget {
 }
 
 class _FileExplorerScreenState extends SfWidget<FileExplorerScreen> {
-  String get _redirectRouteName => widget.redirectRouteName;
-
-  Object get _redirectRouteArgs => widget.redirectRouteArgs;
-
   FileExplorerScreenStore _fileExplorerScreenStore;
 
   List<ReactionDisposer> _disposers;
@@ -67,47 +58,6 @@ class _FileExplorerScreenState extends SfWidget<FileExplorerScreen> {
 
   @override
   void didChangeDependencies() {
-    // _disposers ??= [
-    //   reaction(
-    //     (_) => _fileExplorerScreenStore.currentArchiveFilepath,
-    //     (String currentArchiveFilepath) {
-    //       // if (isNullOrEmpty(currentArchiveFilepath)) {
-    //       //   _fileExplorerScreenStore.setFiles([]);
-    //       //   _fileExplorerScreenStore.setPassword('');
-    //       //   _fileExplorerScreenStore.setCurrentPath('');
-    //       //
-    //       //   return;
-    //       // }
-    //
-    //       // _fileExplorerScreenStore.fetchFiles();
-    //     },
-    //   ),
-    //   reaction(
-    //     (_) => _fileExplorerScreenStore.orderBy,
-    //     (OrderBy orderBy) {
-    //       // _fileExplorerScreenStore.fetchFiles();
-    //     },
-    //   ),
-    //   reaction(
-    //     (_) => _fileExplorerScreenStore.orderDir,
-    //     (OrderDir orderDir) {
-    //       // _fileExplorerScreenStore.fetchFiles();
-    //     },
-    //   ),
-    //   reaction(
-    //     (_) => _fileExplorerScreenStore.currentPath,
-    //     (String currentPath) {
-    //       // _fileExplorerScreenStore.fetchFiles();
-    //     },
-    //   ),
-    //   reaction(
-    //     (_) => _fileExplorerScreenStore.gitIgnorePattern,
-    //     (List<String> gitIgnorePattern) {
-    //       //_fileExplorerScreenStore.fetchFiles();
-    //     },
-    //   ),
-    // ];
-
     super.didChangeDependencies();
   }
 
@@ -116,16 +66,6 @@ class _FileExplorerScreenState extends SfWidget<FileExplorerScreen> {
     disposeStore(_disposers);
 
     super.dispose();
-  }
-
-  void _handleTableHeaderCellSorting({
-    @required OrderDir orderDir,
-    @required OrderBy orderBy,
-  }) {
-    _fileExplorerScreenStore.setOrderDirOrderBy(
-      orderBy: orderBy,
-      orderDir: orderDir,
-    );
   }
 
   SliverPersistentHeader _buildToolbar() {
@@ -221,61 +161,8 @@ class _FileExplorerScreenState extends SfWidget<FileExplorerScreen> {
     return SliverPersistentHeader(
       pinned: true,
       delegate: AppSliverHeader(
-        child: Container(
-          padding: EdgeInsets.zero,
-          color: AppColors.white,
-          child: Center(
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Observer(
-                  builder: (_) {
-                    final _orderDir = _fileExplorerScreenStore.orderDir;
-                    final _listFilesInProgress =
-                        _fileExplorerScreenStore.fileListingInProgress;
-
-                    return FileExplorerTableHeaderCell(
-                      isLoading: _listFilesInProgress,
-                      title: 'Name',
-                      orderBy: OrderBy.name,
-                      currentOrderDir: _orderDir,
-                      onTap: _handleTableHeaderCellSorting,
-                    );
-                  },
-                ),
-                Observer(
-                  builder: (_) {
-                    final _orderDir = _fileExplorerScreenStore.orderDir;
-                    final _listFilesInProgress =
-                        _fileExplorerScreenStore.fileListingInProgress;
-
-                    return FileExplorerTableHeaderCell(
-                      isLoading: _listFilesInProgress,
-                      title: 'Size',
-                      orderBy: OrderBy.size,
-                      currentOrderDir: _orderDir,
-                      onTap: _handleTableHeaderCellSorting,
-                    );
-                  },
-                ),
-                Observer(
-                  builder: (_) {
-                    final _orderDir = _fileExplorerScreenStore.orderDir;
-                    final _listFilesInProgress =
-                        _fileExplorerScreenStore.fileListingInProgress;
-
-                    return FileExplorerTableHeaderCell(
-                      isLoading: _listFilesInProgress,
-                      title: 'Date',
-                      orderBy: OrderBy.modTime,
-                      currentOrderDir: _orderDir,
-                      onTap: _handleTableHeaderCellSorting,
-                    );
-                  },
-                ),
-              ],
-            ),
-          ),
+        child: FileExplorerTableHeader(
+          fileExplorerScreenStore: _fileExplorerScreenStore,
         ),
         maximumExtent: 30,
         minimumExtent: 30,

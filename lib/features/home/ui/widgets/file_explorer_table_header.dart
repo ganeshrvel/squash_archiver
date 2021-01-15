@@ -1,75 +1,93 @@
 import 'package:archiver_ffi/archiver_ffi.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:squash_archiver/constants/colors.dart';
-import 'package:squash_archiver/utils/utils/functs.dart';
-import 'package:squash_archiver/widgets/text/textography.dart';
+import 'package:squash_archiver/features/home/ui/pages/file_explorer_screen_store.dart';
+import 'package:squash_archiver/features/home/ui/widgets/file_explorer_table_header_cell.dart';
+import 'package:squash_archiver/widget_extends/sf_widget.dart';
 
-class FileExplorerTableHeaderCell extends StatelessWidget {
-  /// title of the cell
-  final String title;
+class FileExplorerTableHeader extends StatefulWidget {
+  final FileExplorerScreenStore fileExplorerScreenStore;
 
-  /// the [OrderBy] type of the cell
-  final OrderBy orderBy;
+  const FileExplorerTableHeader({
+    Key key,
+    @required this.fileExplorerScreenStore,
+  })  : assert(fileExplorerScreenStore != null),
+        super(key: key);
 
-  /// on tap action return the next [OrderDir] and [OrderBy] to sort to
-  final Function({
+  @override
+  State<StatefulWidget> createState() => FileExplorerTableHeaderState();
+}
+
+class FileExplorerTableHeaderState extends SfWidget<FileExplorerTableHeader> {
+  FileExplorerScreenStore get _fileExplorerScreenStore =>
+      widget.fileExplorerScreenStore;
+
+  void _handleTableHeaderCellSorting({
     @required OrderDir orderDir,
     @required OrderBy orderBy,
-  }) onTap;
-
-  /// disable actions if the loading is true
-  final bool isLoading;
-
-  /// the current [OrderDir] state
-  final OrderDir currentOrderDir;
-
-  const FileExplorerTableHeaderCell({
-    Key key,
-    @required this.title,
-    @required this.orderBy,
-    @required this.onTap,
-    @required this.isLoading,
-    @required this.currentOrderDir,
-  }) : super(key: key);
-
-  bool get _isLoading => isLoading ?? false;
-
-  void _handleOnTap() {
-    if (isNull(onTap)) {
-      return;
-    }
-
-    OrderDir _nextOrderDir;
-
-    switch (currentOrderDir) {
-      case OrderDir.asc:
-        _nextOrderDir = OrderDir.desc;
-
-        break;
-      case OrderDir.desc:
-        _nextOrderDir = OrderDir.none;
-
-        break;
-      case OrderDir.none:
-        _nextOrderDir = OrderDir.asc;
-
-        break;
-    }
-
-    onTap(
+  }) {
+    _fileExplorerScreenStore.setOrderDirOrderBy(
       orderBy: orderBy,
-      orderDir: _nextOrderDir,
+      orderDir: orderDir,
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: InkWell(
-        onTap: _handleOnTap,
-        child: Container(
-          color: AppColors.colorF1F,
-          child: Textography(title),
+    return Container(
+      padding: EdgeInsets.zero,
+      color: AppColors.white,
+      child: Center(
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Observer(
+              builder: (_) {
+                final _orderDir = _fileExplorerScreenStore.orderDir;
+                final _listFilesInProgress =
+                    _fileExplorerScreenStore.fileListingInProgress;
+
+                return FileExplorerTableHeaderCell(
+                  isLoading: _listFilesInProgress,
+                  title: 'Name',
+                  orderBy: OrderBy.name,
+                  currentOrderDir: _orderDir,
+                  onTap: _handleTableHeaderCellSorting,
+                );
+              },
+            ),
+            Observer(
+              builder: (_) {
+                final _orderDir = _fileExplorerScreenStore.orderDir;
+                final _listFilesInProgress =
+                    _fileExplorerScreenStore.fileListingInProgress;
+
+                return FileExplorerTableHeaderCell(
+                  isLoading: _listFilesInProgress,
+                  title: 'Size',
+                  orderBy: OrderBy.size,
+                  currentOrderDir: _orderDir,
+                  onTap: _handleTableHeaderCellSorting,
+                );
+              },
+            ),
+            Observer(
+              builder: (_) {
+                final _orderDir = _fileExplorerScreenStore.orderDir;
+                final _listFilesInProgress =
+                    _fileExplorerScreenStore.fileListingInProgress;
+
+                return FileExplorerTableHeaderCell(
+                  isLoading: _listFilesInProgress,
+                  title: 'Date',
+                  orderBy: OrderBy.modTime,
+                  currentOrderDir: _orderDir,
+                  onTap: _handleTableHeaderCellSorting,
+                );
+              },
+            ),
+          ],
         ),
       ),
     );
