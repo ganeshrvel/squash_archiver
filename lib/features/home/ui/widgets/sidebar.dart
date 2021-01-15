@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:squash_archiver/constants/colors.dart';
+import 'package:squash_archiver/constants/sizes.dart';
 import 'package:squash_archiver/features/home/data/enums/file_explorer_source.dart';
 import 'package:squash_archiver/features/home/data/models/file_explorer_entity.dart';
 import 'package:squash_archiver/features/home/ui/pages/file_explorer_screen_store.dart';
@@ -82,11 +83,14 @@ class _SidebarState extends SfWidget<Sidebar> {
         horizontal: 10,
         vertical: 11,
       ),
-      color: AppColors.colorE6E3E3.withOpacity(0.97),
-      child: Column(
-        children: [
-          _buildFavorites(),
-        ],
+      color: AppColors.colorE6E3E3,
+      child: Container(
+        margin: const EdgeInsets.only(top: Sizes.TITLE_BAR_CLEARANCE),
+        child: Column(
+          children: [
+            _buildFavorites(),
+          ],
+        ),
       ),
     );
   }

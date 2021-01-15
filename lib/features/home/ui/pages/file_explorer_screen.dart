@@ -7,6 +7,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mobx/mobx.dart' show ReactionDisposer;
 import 'package:squash_archiver/constants/app_default_values.dart';
 import 'package:squash_archiver/constants/colors.dart';
+import 'package:squash_archiver/constants/sizes.dart';
 import 'package:squash_archiver/features/home/data/enums/file_explorer_source.dart';
 import 'package:squash_archiver/features/home/data/models/file_explorer_entity.dart';
 import 'package:squash_archiver/features/home/data/models/file_listing_response.dart';
@@ -421,6 +422,7 @@ class _FileExplorerScreenState extends SfWidget<FileExplorerScreen> {
           // }
         },
         child: Container(
+          padding: const EdgeInsets.only(top: Sizes.TITLE_BAR_CLEARANCE),
           color: AppColors.white,
           child: CustomScrollView(
             controller: _scrollController,
