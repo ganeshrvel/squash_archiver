@@ -64,7 +64,6 @@ class FileExplorerToolbarState extends SfWidget<FileExplorerToolbar> {
                   },
                   icon: CupertinoIcons.refresh_circled,
                   loading: _listFilesInProgress,
-                  disabled: true,
                 ),
               ),
             ],
