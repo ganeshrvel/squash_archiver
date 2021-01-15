@@ -1,6 +1,5 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:squash_archiver/common/di/di.dart';
@@ -15,25 +14,25 @@ import 'package:squash_archiver/features/app/ui/store/app_store.dart';
 import 'package:squash_archiver/widgets/common_widget/custom_scroll_behavior.dart';
 import 'package:squash_archiver/widgets/text/textography.dart';
 
-class AppScreen extends HookWidget {
+class AppScreen extends StatelessWidget {
+  final _appStore = getIt<AppStore>();
+
+  void setErrorBuilder() {
+    ErrorWidget.builder = (FlutterErrorDetails errorDetails) {
+      // @todo add oops something went wrong screen
+      return const Scaffold(
+        body: Center(
+          child: Textography(
+            'Oops.. Some error occured.',
+            variant: TextVariants.body1,
+          ),
+        ),
+      );
+    };
+  }
+
   @override
   Widget build(BuildContext context) {
-    final _appStore = getIt<AppStore>();
-
-    void setErrorBuilder() {
-      ErrorWidget.builder = (FlutterErrorDetails errorDetails) {
-        // @todo add oops something went wrong screen
-        return const Scaffold(
-          body: Center(
-            child: Textography(
-              'Oops.. Some error occured.',
-              variant: TextVariants.body1,
-            ),
-          ),
-        );
-      };
-    }
-
     return Observer(
       builder: (context) {
         if (!_appStore.isAppSettingsLoaded) {

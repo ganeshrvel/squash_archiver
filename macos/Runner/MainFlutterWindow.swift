@@ -7,26 +7,26 @@ class MainFlutterWindow: NSWindow {
         return Bundle.main.object(forInfoDictionaryKey: "SUFeedURL") as? String
     }
 
-	@IBAction func checkForUpdates(_ sender: Any) {
+    @IBAction func checkForUpdates(_ sender: Any) {
         if SUFeedURL != nil {
             let updater = SUUpdater.shared()
             updater?.feedURL = URL(string: SUFeedURL!)
             updater?.checkForUpdates(self)
         }
-	}
+    }
 
-	override func awakeFromNib() {
-		let flutterViewController = FlutterViewController.init()
-		let windowFrame = self.frame
+    override func awakeFromNib() {
+        let flutterViewController = FlutterViewController.init()
+        let windowFrame = self.frame
         self.contentViewController = flutterViewController
-		self.setFrame(windowFrame, display: true)
+        self.setFrame(windowFrame, display: true)
         
         // Transparent view
         self.isOpaque = false
         self.backgroundColor = .clear
 
-		RegisterGeneratedPlugins(registry: flutterViewController)
+        RegisterGeneratedPlugins(registry: flutterViewController)
     
-		super.awakeFromNib()
-	}
+        super.awakeFromNib()
+    }
 }
