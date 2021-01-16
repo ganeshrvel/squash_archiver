@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:squash_archiver/constants/colors.dart';
+import 'package:squash_archiver/widgets/app_tooltip/app_tooltip.dart';
 import 'package:squash_archiver/widgets/button/button.dart';
-import 'package:squash_archiver/widgets/shadows/box_shadow_3.dart';
 
 class ActionBarButton extends StatelessWidget {
   final String text;
@@ -37,21 +37,8 @@ class ActionBarButton extends StatelessWidget {
     final _iconColor = iconColor ?? AppColors.color797;
     final _iconPadding = iconPadding ?? const EdgeInsets.all(5);
 
-    return Tooltip(
+    return AppTooltip(
       message: text,
-      decoration: BoxDecoration(
-        color: AppColors.colorE6E3E3,
-        borderRadius: BorderRadius.circular(4),
-        boxShadow: [
-          BoxShadow3(),
-        ],
-      ),
-      padding: const EdgeInsets.symmetric(vertical: 1, horizontal: 7),
-      textStyle: TextStyle(
-        color: AppColors.black,
-        fontSize: 11,
-        fontWeight: FontWeight.w700,
-      ),
       child: Button(
         text: text,
         onPressed: onPressed,

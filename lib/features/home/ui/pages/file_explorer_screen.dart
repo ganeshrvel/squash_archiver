@@ -72,7 +72,7 @@ class _FileExplorerScreenState extends SfWidget<FileExplorerScreen> {
         child: FileExplorerToolbar(
           fileExplorerScreenStore: _fileExplorerScreenStore,
         ),
-        maximumExtent: 70,
+        maximumExtent: 55,
         minimumExtent: 50,
       ),
     );
