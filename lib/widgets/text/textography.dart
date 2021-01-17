@@ -59,7 +59,7 @@ enum TextVariant {
 }
 
 class Textography extends StatelessWidget {
-  final String child;
+  final String text;
   final TextVariant variant;
   final Color color;
   final Color backgroundColor;
@@ -71,7 +71,7 @@ class Textography extends StatelessWidget {
   final TextOverflow overflow;
 
   const Textography(
-    this.child, {
+    this.text, {
     Key key,
     this.variant,
     this.color,
@@ -88,7 +88,7 @@ class Textography extends StatelessWidget {
   Widget build(BuildContext context) {
     final _variant = variant ?? TextVariant.body1;
     var _fontWeight = FontWeight.normal;
-    var _child = child ?? '';
+    var _child = text ?? '';
     double _fontSize;
 
     const _corrector = 1;

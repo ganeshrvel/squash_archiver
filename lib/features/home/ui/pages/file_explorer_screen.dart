@@ -15,8 +15,13 @@ import 'package:squash_archiver/widget_extends/sf_widget.dart';
 import 'package:squash_archiver/widgets/sliver/app_sliver_header.dart';
 
 class FileExplorerScreen extends StatefulWidget {
+  /// this is a dummy variable
+  /// this is to assist auto argument generation
+  final String dummy;
+
   const FileExplorerScreen({
     Key key,
+    this.dummy,
   }) : super(key: key);
 
   @override

@@ -5,7 +5,7 @@ import 'package:injectable/injectable.dart';
 import 'package:meta/meta.dart';
 import 'package:squash_archiver/common/exceptions/task_in_progress_exception.dart';
 import 'package:squash_archiver/constants/app_default_values.dart';
-import 'package:squash_archiver/features/home/data/helpers.dart';
+import 'package:squash_archiver/features/home/data/helpers/helpers.dart';
 import 'package:squash_archiver/features/home/data/models/archive_data_source_listing_request.dart';
 import 'package:squash_archiver/features/home/data/models/file_listing_response.dart';
 import 'package:squash_archiver/utils/utils/files.dart';
