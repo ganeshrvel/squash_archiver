@@ -244,6 +244,7 @@ class Button extends StatelessWidget {
                   elevation: elevation,
                   primary: getButtonBgColor(),
                   shape: getBtnShape(),
+                  onPrimary: AppColors.colorF1F.withOpacity(0.1)
                 ),
                 onPressed: isButtonDisabled() ? null : onPressed,
                 child: Textography(

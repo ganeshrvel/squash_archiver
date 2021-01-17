@@ -12,6 +12,8 @@ import 'package:squash_archiver/features/home/ui/widgets/file_explorer_toolbar.d
 import 'package:squash_archiver/features/home/ui/widgets/file_explorer_sidebar.dart';
 import 'package:squash_archiver/utils/utils/store_helper.dart';
 import 'package:squash_archiver/widget_extends/sf_widget.dart';
+import 'package:squash_archiver/widgets/dialogs/app_dialog.dart';
+import 'package:squash_archiver/widgets/dialogs/dialogs.dart';
 import 'package:squash_archiver/widgets/sliver/app_sliver_header.dart';
 
 class FileExplorerScreen extends StatefulWidget {
@@ -46,6 +48,8 @@ class _FileExplorerScreenState extends SfWidget<FileExplorerScreen> {
   @override
   void onInitApp() {
     _init();
+
+    DialogConfirm.show(context, title: "This is a text title", content: "I've a SingleChildScrollView and inside that a Container. What I want to achieve is that a Container's height should be a full viewport height.");
 
     super.onInitApp();
   }

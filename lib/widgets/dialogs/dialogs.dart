@@ -1,75 +1,65 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:squash_archiver/utils/utils/functs.dart';
 import 'package:squash_archiver/widgets/button/button.dart';
-import 'package:squash_archiver/widgets/text/textography.dart';
-
-class DialogAlert extends AlertDialog {
-  static void show(BuildContext context, String content, {String title}) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: title == null
-              ? null
-              : Textography(
-                  title,
-                  variant: TextVariant.body1,
-                ),
-          content: Textography(
-            content,
-            variant: TextVariant.body1,
-          ),
-          actions: <Widget>[
-            Button(
-              text: 'Ok',
-              onPressed: () => Navigator.of(context).pop(),
-              textVariant: TextVariant.body1,
-              buttonType: ButtonType.FLAT,
-            ),
-          ],
-        );
-      },
-    );
-  }
-}
+import 'package:squash_archiver/widgets/dialogs/app_dialog.dart';
 
 class DialogConfirm extends AlertDialog {
   static void show(
-    BuildContext context,
-    String content,
-    Function() onYes, {
+    BuildContext context, {
     String title,
-    String yes,
-    String no,
+    String content,
+    String okText,
+    String cancelText,
+    VoidCallback onOk,
+    VoidCallback onCancel,
+    IconData iconData,
   }) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return AlertDialog(
-          title: title == null
-              ? null
-              : Textography(
-                  title,
-                  variant: TextVariant.body1,
+        return AppDialog(
+          title: title,
+          content: content,
+          iconData: iconData,
+          actionContainer: Row(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Expanded(
+                child: Button(
+                  text: cancelText ?? 'Cancel',
+                  onPressed: () {
+                    if (isNotNull(onCancel)) {
+                      onCancel();
+                    }
+
+                    Navigator.of(context).pop();
+                  },
+                  buttonType: ButtonType.FLAT,
+                  buttonColor: ButtonColorType.WHITE,
+                  disableAutoBoxConstraints: true,
                 ),
-          content: Textography(
-            content,
-            variant: TextVariant.body1,
+              ),
+              const SizedBox(
+                width: 10,
+              ),
+              Expanded(
+                child: Button(
+                  text: okText ?? 'Ok',
+                  onPressed: () {
+                    if (isNotNull(onOk)) {
+                      onOk();
+                    }
+
+                    Navigator.of(context).pop();
+                  },
+                  buttonType: ButtonType.FLAT,
+                  disableAutoBoxConstraints: true,
+                ),
+              ),
+            ],
           ),
-          actions: <Widget>[
-            Button(
-              text: 'No',
-              onPressed: () => Navigator.of(context).pop(),
-              buttonType: ButtonType.FLAT,
-            ),
-            Button(
-              text: 'Yes',
-              onPressed: () {
-                Navigator.of(context).pop();
-                onYes();
-              },
-              buttonType: ButtonType.FLAT,
-            ),
-          ],
         );
       },
     );

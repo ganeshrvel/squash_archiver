@@ -19,7 +19,9 @@ import 'package:squash_archiver/utils/utils/functs.dart';
 ///
 /// caption: Font size 12.0
 ///
-/// small: Font size 10.0
+/// small1: Font size 11.0
+///
+/// small2: Font size 10.0
 ///
 ///  button: Font size 16.0
 ///
@@ -50,6 +52,12 @@ enum TextVariant {
 
   /// Font size 12.0
   caption,
+
+  /// Font size 11.0
+  small1,
+
+  /// Font size 10.0
+  small2,
 
   /// Font size 15.0
   button,
@@ -116,6 +124,14 @@ class Textography extends StatelessWidget {
         break;
       case TextVariant.caption:
         _fontWeight = FontWeight.w700;
+        _fontSize = 12.0;
+        break;
+      case TextVariant.small1:
+        _fontWeight = FontWeight.w500;
+        _fontSize = 11.0;
+        break;
+      case TextVariant.small2:
+        _fontWeight = FontWeight.w500;
         _fontSize = 12.0;
         break;
       case TextVariant.button:
