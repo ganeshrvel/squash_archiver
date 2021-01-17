@@ -122,19 +122,38 @@ class _FileExplorerTableState extends SfWidget<FileExplorerTable> {
                     ),
                   ),
                   Expanded(
-                    child: Textography(
-                      fileResponse.prettyFileSize,
-                      variant: _textFontVariant,
-                      fontWeight: _textFontWeight,
-                      color: _metaDataTextColor,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: Sizes.FILE_EXPLORER_ROW_HORZ_PADDING,
+                      ),
+                      child: AppTooltip(
+                        message: fileResponse.prettyFileSize,
+                        child: Textography(
+                          fileResponse.prettyFileSize,
+                          variant: _textFontVariant,
+                          fontWeight: _textFontWeight,
+                          color: _metaDataTextColor,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
                     ),
                   ),
                   Expanded(
-                    child: Textography(
-                      fileResponse.prettyDate,
-                      variant: _textFontVariant,
-                      fontWeight: _textFontWeight,
-                      color: _metaDataTextColor,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                        /// correcting the padding for date column
+                        horizontal: Sizes.FILE_EXPLORER_ROW_HORZ_PADDING * 2,
+                      ),
+                      child: AppTooltip(
+                        message: fileResponse.prettyDate,
+                        child: Textography(
+                          fileResponse.prettyDate,
+                          variant: _textFontVariant,
+                          fontWeight: _textFontWeight,
+                          color: _metaDataTextColor,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
                     ),
                   ),
                 ],
