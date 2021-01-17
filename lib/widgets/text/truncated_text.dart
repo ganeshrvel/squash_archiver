@@ -36,7 +36,7 @@ class TruncatedText extends StatelessWidget {
       children: [
         Flexible(
           child: Text(
-            _truncatedText.firstChunk,
+            Characters(_truncatedText.firstChunk).toList().join('\u{200B}'),
             style: TextStyle(
               fontSize: fontSize,
               fontWeight: fontWeight,
@@ -47,6 +47,7 @@ class TruncatedText extends StatelessWidget {
             maxLines: 1,
             textAlign: textAlign,
             overflow: overflow ?? TextOverflow.ellipsis,
+            softWrap: true,
           ),
         ),
         Text(
