@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:squash_archiver/utils/utils/files.dart';
+import 'package:squash_archiver/utils/utils/strings.dart';
 import 'package:squash_archiver/widgets/text/textography.dart';
 
-class TruncatedFilenameText extends StatelessWidget {
+class TruncatedText extends StatelessWidget {
   final String text;
   final TextVariant variant;
   final Color color;
@@ -13,7 +13,7 @@ class TruncatedFilenameText extends StatelessWidget {
   final TextAlign textAlign;
   final TextOverflow overflow;
 
-  const TruncatedFilenameText(
+  const TruncatedText(
     this.text, {
     Key key,
     this.variant,
@@ -29,7 +29,7 @@ class TruncatedFilenameText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final _text = text ?? '';
-    final _truncatedText = truncatedFilename(text: _text);
+    final _truncatedText = truncatedString(text: _text);
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,

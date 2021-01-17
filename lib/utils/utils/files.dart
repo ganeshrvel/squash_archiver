@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:meta/meta.dart';
-import 'package:squash_archiver/common/models/truncated_filename.dart';
 import 'package:squash_archiver/constants/app_default_values.dart';
 import 'package:squash_archiver/constants/app_files.dart';
 import 'package:squash_archiver/utils/utils/functs.dart';
@@ -144,36 +143,3 @@ String getNativeLib() {
 }
 
 
-/// returns truncated filename
-/// [offset] minimum number of chars to be displayed in the last chunk
-/// [offset] is exclusive of extension
-TruncatedFilename truncatedFilename({@required String text, int offset}) {
-  assert(text != null);
-
-  final _offset = offset ?? 5;
-  assert(_offset >= 0);
-
-  final _length = text.length;
-
-  /// if extension is available then pick that up
-  final _ext = getExtension(text);
-  final _extLength = _ext.length;
-
-  /// last chunk will contain extension(if any) + chars of offset length
-  final _lastChunkLength = _extLength + _offset;
-  var _firstChunkLength = 0;
-
-  if (_length - _lastChunkLength > 0) {
-    _firstChunkLength = _length - _lastChunkLength;
-  }
-
-  // first chunk will contain chars starting from beginning to lastChunkLength
-  final _firstChunk = text.substring(0, _firstChunkLength);
-  final _lastChunk = text.substring(_firstChunkLength, _length);
-
-  return TruncatedFilename(
-    original: text,
-    firstChunk: _firstChunk,
-    lastChunk: _lastChunk,
-  );
-}

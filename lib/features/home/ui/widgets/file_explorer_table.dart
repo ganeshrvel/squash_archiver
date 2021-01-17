@@ -11,7 +11,7 @@ import 'package:squash_archiver/widget_extends/sf_widget.dart';
 import 'package:squash_archiver/widgets/app_tooltip/app_tooltip.dart';
 import 'package:squash_archiver/widgets/text/textography.dart';
 import 'package:dartx/dartx.dart';
-import 'package:squash_archiver/features/home/data/helpers/truncated_filename_text.dart';
+import 'package:squash_archiver/widgets/text/truncated_text.dart';
 
 class FileExplorerTable extends StatefulWidget {
   final FileExplorerScreenStore fileExplorerScreenStore;
@@ -110,7 +110,7 @@ class _FileExplorerTableState extends SfWidget<FileExplorerTable> {
                         Flexible(
                           child: AppTooltip(
                             message: fileResponse.file.name,
-                            child: TruncatedFilenameText(
+                            child: TruncatedText(
                               fileResponse.file.name,
                               overflow: TextOverflow.ellipsis,
                               variant: _textFontVariant,
