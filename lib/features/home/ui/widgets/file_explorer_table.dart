@@ -8,6 +8,7 @@ import 'package:squash_archiver/features/home/data/enums/file_explorer_source.da
 import 'package:squash_archiver/features/home/data/models/file_listing_response.dart';
 import 'package:squash_archiver/features/home/ui/pages/file_explorer_screen_store.dart';
 import 'package:squash_archiver/widget_extends/sf_widget.dart';
+import 'package:squash_archiver/widgets/app_tooltip/app_tooltip.dart';
 import 'package:squash_archiver/widgets/text/textography.dart';
 import 'package:dartx/dartx.dart';
 
@@ -105,11 +106,16 @@ class _FileExplorerTableState extends SfWidget<FileExplorerTable> {
                             size: 20,
                           ),
                         const SizedBox(width: 5),
-                        Textography(
-                          fileResponse.file.name,
-                          overflow: TextOverflow.ellipsis,
-                          variant: _textFontVariant,
-                          fontWeight: _textFontWeight,
+                        Flexible(
+                          child: AppTooltip(
+                            message: fileResponse.file.name,
+                            child: Textography(
+                              fileResponse.file.name,
+                              overflow: TextOverflow.ellipsis,
+                              variant: _textFontVariant,
+                              fontWeight: _textFontWeight,
+                            ),
+                          ),
                         ),
                       ],
                     ),
@@ -133,14 +139,6 @@ class _FileExplorerTableState extends SfWidget<FileExplorerTable> {
                 ],
               ),
             ),
-            // child: ListTile(
-            //   minVerticalPadding: 0,
-            //   mouseCursor: SystemMouseCursors.basic,
-            //   hoverColor: AppColors.transparent,
-            //   focusColor: AppColors.transparent,
-            //   selectedTileColor: AppColors.transparent,
-            //   title: ,
-            // ),
           ),
         ),
       );
@@ -151,7 +149,6 @@ class _FileExplorerTableState extends SfWidget<FileExplorerTable> {
   Widget build(BuildContext context) {
     return Observer(builder: (_) {
       final _files = _fileExplorerScreenStore.files;
-
       final _rows = _buildRows(files: _files);
       final _rowsLength = _rows.length;
 
