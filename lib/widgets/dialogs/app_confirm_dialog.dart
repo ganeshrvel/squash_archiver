@@ -4,7 +4,7 @@ import 'package:squash_archiver/utils/utils/functs.dart';
 import 'package:squash_archiver/widgets/button/button.dart';
 import 'package:squash_archiver/widgets/dialogs/app_dialog.dart';
 
-class DialogConfirm extends AlertDialog {
+class AppConfirmDialog extends AlertDialog {
   static void show(
     BuildContext context, {
     String title,
@@ -14,14 +14,19 @@ class DialogConfirm extends AlertDialog {
     VoidCallback onOk,
     VoidCallback onCancel,
     IconData iconData,
+    bool barrierDismissible,
   }) {
+   final _barrierDismissible = barrierDismissible??true;
+
     showDialog(
       context: context,
+      barrierDismissible: _barrierDismissible,
       builder: (BuildContext context) {
         return AppDialog(
           title: title,
           content: content,
           iconData: iconData,
+          size: DialogSize.sm,
           actionContainer: Row(
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.center,
