@@ -12,7 +12,9 @@ enum DialogSize {
 class AppDialog extends StatelessWidget {
   final String title;
 
-  final String content;
+  final String body;
+
+  final Widget content;
 
   final Widget actionContainer;
 
@@ -23,6 +25,7 @@ class AppDialog extends StatelessWidget {
   const AppDialog({
     this.iconData,
     this.title,
+    this.body,
     this.content,
     this.actionContainer,
     this.size,
@@ -98,18 +101,27 @@ class AppDialog extends StatelessWidget {
                           ),
                         ],
                       ),
-                    if (isNotNullOrEmpty(content))
+                    if (isNotNullOrEmpty(body))
                       Column(
                         children: [
                           const SizedBox(
                             height: 10,
                           ),
                           Textography(
-                            content,
+                            body,
                             variant: TextVariant.small1,
                             fontWeight: FontWeight.w300,
                             textAlign: TextAlign.center,
                           ),
+                        ],
+                      ),
+                    if (isNotNull(content))
+                      Column(
+                        children: [
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          content,
                         ],
                       ),
                   ],

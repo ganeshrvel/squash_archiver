@@ -19,6 +19,7 @@ class AppColors {
   static final Color success = Colors.green.shade500;
   static final Color colorF5F = HexColor('F5F5F5');
   static final Color colorE6E3E3 = HexColor('E6E3E3');
+  static final Color colorE5E = HexColor('E5E5E5');
   static final Color color797 = HexColor('797979');
   static final Color colorF1F = HexColor('F1F1F1');
 }

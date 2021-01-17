@@ -10,9 +10,7 @@ class AppAlertDialog extends AlertDialog {
     String title,
     String content,
     String okText,
-    String cancelText,
     VoidCallback onOk,
-    VoidCallback onCancel,
     IconData iconData,
     bool barrierDismissible,
   }) {
@@ -24,7 +22,7 @@ class AppAlertDialog extends AlertDialog {
       builder: (BuildContext context) {
         return AppDialog(
           title: title,
-          content: content,
+          body: content,
           iconData: iconData,
           size: DialogSize.sm,
           actionContainer: Row(

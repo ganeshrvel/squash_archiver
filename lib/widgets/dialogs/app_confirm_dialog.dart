@@ -24,7 +24,7 @@ class AppConfirmDialog extends AlertDialog {
       builder: (BuildContext context) {
         return AppDialog(
           title: title,
-          content: content,
+          body: content,
           iconData: iconData,
           size: DialogSize.sm,
           actionContainer: Row(
