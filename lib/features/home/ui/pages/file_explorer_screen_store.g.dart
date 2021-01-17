@@ -9,6 +9,13 @@ part of 'file_explorer_screen_store.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$FileExplorerScreenStore on _FileExplorerScreenStoreBase, Store {
+  Computed<FileListingRequest> _$fileListingSourceComputed;
+
+  @override
+  FileListingRequest get fileListingSource => (_$fileListingSourceComputed ??=
+          Computed<FileListingRequest>(() => super.fileListingSource,
+              name: '_FileExplorerScreenStoreBase.fileListingSource'))
+      .value;
   Computed<bool> _$fileListingInProgressComputed;
 
   @override
@@ -16,6 +23,55 @@ mixin _$FileExplorerScreenStore on _FileExplorerScreenStoreBase, Store {
           Computed<bool>(() => super.fileListingInProgress,
               name: '_FileExplorerScreenStoreBase.fileListingInProgress'))
       .value;
+  Computed<String> _$currentPathComputed;
+
+  @override
+  String get currentPath =>
+      (_$currentPathComputed ??= Computed<String>(() => super.currentPath,
+              name: '_FileExplorerScreenStoreBase.currentPath'))
+          .value;
+  Computed<String> _$currentArchiveFilepathComputed;
+
+  @override
+  String get currentArchiveFilepath => (_$currentArchiveFilepathComputed ??=
+          Computed<String>(() => super.currentArchiveFilepath,
+              name: '_FileExplorerScreenStoreBase.currentArchiveFilepath'))
+      .value;
+  Computed<String> _$passwordComputed;
+
+  @override
+  String get password =>
+      (_$passwordComputed ??= Computed<String>(() => super.password,
+              name: '_FileExplorerScreenStoreBase.password'))
+          .value;
+  Computed<OrderBy> _$orderByComputed;
+
+  @override
+  OrderBy get orderBy =>
+      (_$orderByComputed ??= Computed<OrderBy>(() => super.orderBy,
+              name: '_FileExplorerScreenStoreBase.orderBy'))
+          .value;
+  Computed<OrderDir> _$orderDirComputed;
+
+  @override
+  OrderDir get orderDir =>
+      (_$orderDirComputed ??= Computed<OrderDir>(() => super.orderDir,
+              name: '_FileExplorerScreenStoreBase.orderDir'))
+          .value;
+  Computed<List<String>> _$gitIgnorePatternComputed;
+
+  @override
+  List<String> get gitIgnorePattern => (_$gitIgnorePatternComputed ??=
+          Computed<List<String>>(() => super.gitIgnorePattern,
+              name: '_FileExplorerScreenStoreBase.gitIgnorePattern'))
+      .value;
+  Computed<FileExplorerSource> _$sourceComputed;
+
+  @override
+  FileExplorerSource get source =>
+      (_$sourceComputed ??= Computed<FileExplorerSource>(() => super.source,
+              name: '_FileExplorerScreenStoreBase.source'))
+          .value;
 
   final _$filesAtom = Atom(name: '_FileExplorerScreenStoreBase.files');
 
@@ -202,7 +258,15 @@ files: ${files},
 filesFuture: ${filesFuture},
 fileListException: ${fileListException},
 fileListingSourceStack: ${fileListingSourceStack},
-fileListingInProgress: ${fileListingInProgress}
+fileListingSource: ${fileListingSource},
+fileListingInProgress: ${fileListingInProgress},
+currentPath: ${currentPath},
+currentArchiveFilepath: ${currentArchiveFilepath},
+password: ${password},
+orderBy: ${orderBy},
+orderDir: ${orderDir},
+gitIgnorePattern: ${gitIgnorePattern},
+source: ${source}
     ''';
   }
 }

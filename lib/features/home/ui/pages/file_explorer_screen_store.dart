@@ -37,7 +37,8 @@ abstract class _FileExplorerScreenStoreBase with Store {
   @visibleForTesting
   List<FileListingRequest> fileListingSourceStack = ObservableList();
 
-  FileListingRequest get _fileListingSource {
+  @computed
+  FileListingRequest get fileListingSource {
     if (isNullOrEmpty(fileListingSourceStack)) {
       return FileListingRequest(path: '');
     }
@@ -51,35 +52,42 @@ abstract class _FileExplorerScreenStoreBase with Store {
   }
 
   /// current path in the file explorer; path of the last item in [fileListingSourceStack]
+  @computed
   String get currentPath {
-    return _fileListingSource.path;
+    return fileListingSource.path;
   }
 
   /// full path to the currently opened archive file in the file explorer; [archiveFilepath] of the last item in [fileListingSourceStack]
+  @computed
   String get currentArchiveFilepath {
-    return _fileListingSource.archiveFilepath;
+    return fileListingSource.archiveFilepath;
   }
 
   /// password of the currently opened file in the file explorer (if any); [password] of the last item in [fileListingSourceStack]
+  @computed
   String get password {
-    return _fileListingSource.password;
+    return fileListingSource.password;
   }
 
+  @computed
   OrderBy get orderBy {
-    return _fileListingSource.orderBy;
+    return fileListingSource.orderBy;
   }
 
+  @computed
   OrderDir get orderDir {
-    return _fileListingSource.orderDir;
+    return fileListingSource.orderDir;
   }
 
+  @computed
   List<String> get gitIgnorePattern {
-    return _fileListingSource.gitIgnorePattern;
+    return fileListingSource.gitIgnorePattern;
   }
 
   /// [source] of the last item in [fileListingSourceStack]
+  @computed
   FileExplorerSource get source {
-    return _fileListingSource.source;
+    return fileListingSource.source;
   }
 
   /// Adding a new [FileExplorerSource] will first add the request to the [fileListingSourceStack]
@@ -125,7 +133,10 @@ abstract class _FileExplorerScreenStoreBase with Store {
     );
 
     if (clearStack) {
-      fileListingSourceStack.clear();
+      final _fileListingSourceStackTemp = fileListingSourceStack;
+      _fileListingSourceStackTemp.clear();
+
+      fileListingSourceStack = _fileListingSourceStackTemp;
     }
 
     _addToFileListingRequestStack(_request);
@@ -144,7 +155,10 @@ abstract class _FileExplorerScreenStoreBase with Store {
   /// update the last item in the stack
   @action
   Future<void> _updateFileListingRequest(FileListingRequest request) async {
-    fileListingSourceStack.last = request;
+    final _fileListingSourceStackTemp = fileListingSourceStack;
+    _fileListingSourceStackTemp.last = request;
+
+    fileListingSourceStack = _fileListingSourceStackTemp;
 
     return refreshFiles();
   }
@@ -155,7 +169,7 @@ abstract class _FileExplorerScreenStoreBase with Store {
     assert(value != null);
 
     return _updateFileListingRequest(
-      _fileListingSource.copyWith(path: value),
+      fileListingSource.copyWith(path: value),
     );
   }
 
@@ -166,7 +180,7 @@ abstract class _FileExplorerScreenStoreBase with Store {
     @required OrderBy orderBy,
   }) async {
     return _updateFileListingRequest(
-      _fileListingSource.copyWith(
+      fileListingSource.copyWith(
         orderDir: orderDir ?? this.orderDir,
         orderBy: orderBy ?? this.orderBy,
       ),
@@ -187,14 +201,17 @@ abstract class _FileExplorerScreenStoreBase with Store {
 
     // update the last item in the stack
     return _updateFileListingRequest(
-      _fileListingSource.copyWith(path: _parentPath),
+      fileListingSource.copyWith(path: _parentPath),
     );
   }
 
   @action
   Future<void> _popFileListingSourceStack() async {
     if (fileListingSourceStack.length > 1) {
-      fileListingSourceStack.removeLast();
+      final _fileListingSourceStackTemp = fileListingSourceStack;
+      _fileListingSourceStackTemp.removeLast();
+
+      fileListingSourceStack = _fileListingSourceStackTemp;
 
       return refreshFiles(invalidateCache: true);
     }
@@ -212,7 +229,7 @@ abstract class _FileExplorerScreenStoreBase with Store {
 
     filesFuture = ObservableFuture(
       _fileExplorerController.listFiles(
-        request: _fileListingSource,
+        request: fileListingSource,
         invalidateCache: invalidateCache,
       ),
     );
@@ -259,6 +276,9 @@ abstract class _FileExplorerScreenStoreBase with Store {
       return;
     }
 
-    fileListingSourceStack.add(param);
+    final _fileListingSourceStackTemp = fileListingSourceStack;
+    _fileListingSourceStackTemp.add(param);
+
+    fileListingSourceStack = _fileListingSourceStackTemp;
   }
 }
