@@ -1,3 +1,0 @@
-class Dimens {
-  Dimens._();
-}

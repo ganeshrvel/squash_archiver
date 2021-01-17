@@ -5,9 +5,9 @@
 import 'dart:async';
 
 import 'package:flutter/widgets.dart';
+import 'package:injectable/injectable.dart';
 import 'package:squash_archiver/common/exceptions/cache_exception.dart';
 import 'package:squash_archiver/features/app/data/models/language_model.dart';
-import 'package:injectable/injectable.dart';
 import 'package:mobx/mobx.dart';
 import 'package:squash_archiver/common/l10n/l10n_helpers.dart';
 import 'package:squash_archiver/features/app/data/models/theme_model.dart';
@@ -27,11 +27,11 @@ enum AppSettingsTypes {
 class AppStore = _AppStoreBase with _$AppStore;
 
 abstract class _AppStoreBase with Store {
-  final AppController appController;
+  final AppController _appController;
 
   final Alerts _alerts;
 
-  _AppStoreBase(this.appController, this._alerts) {
+  _AppStoreBase(this._appController, this._alerts) {
     init();
   }
 
@@ -56,7 +56,7 @@ abstract class _AppStoreBase with Store {
     BuildContext context,
     LanguageModel languageData,
   ) async {
-    final appData = await appController.setAppLanguageData(languageData);
+    final appData = await _appController.setAppLanguageData(languageData);
 
     appData.pick(
       onError: (error) {
@@ -79,12 +79,15 @@ abstract class _AppStoreBase with Store {
 
   @action
   Future<void> getAppLanguage() async {
-    final appData = await appController.getAppLanguageData();
+    final appData = await _appController.getAppLanguageData();
 
     appData.pick(
       onError: (error) {
         if (error is CacheException) {
-          log.error(error);
+          log.error(
+            title: '_AppStoreBase.getAppLanguage',
+            error: error,
+          );
         }
 
         language = getDefaultAppLanguage();
@@ -103,7 +106,7 @@ abstract class _AppStoreBase with Store {
     BuildContext context,
     ThemeModel data,
   ) async {
-    final appData = await appController.setAppThemeData(data);
+    final appData = await _appController.setAppThemeData(data);
 
     appData.pick(
       onError: (error) {
@@ -124,12 +127,15 @@ abstract class _AppStoreBase with Store {
 
   @action
   Future<void> getAppTheme() async {
-    final appData = await appController.getAppThemeData();
+    final appData = await _appController.getAppThemeData();
 
     appData.pick(
       onError: (error) {
         if (error is CacheException) {
-          log.error(error);
+          log.error(
+            title: 'AppStore.getAppTheme',
+            error: error,
+          );
         }
 
         theme = getDefaultAppTheme();

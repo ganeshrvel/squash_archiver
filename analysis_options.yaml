@@ -14,10 +14,15 @@ analyzer:
     implicit-casts: false
 
   errors:
+    sort_pub_dependencies: ignore
     non_constant_identifier_names: ignore
+    avoid_function_literals_in_foreach_calls: ignore
     avoid_classes_with_only_static_members: ignore
     prefer_const_declarations: error
+    directives_ordering: warning
     constant_identifier_names: ignore
+    unnecessary_statements: error
+    invalid_use_of_visible_for_testing_member: error
     missing_required_param: error
     parameter_assignments: error
     prefer_const_constructors: error

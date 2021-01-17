@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/foundation.dart' as foundation;
 import 'package:squash_archiver/common/di/di.dart';
 import 'package:injectable/injectable.dart';
@@ -9,6 +11,8 @@ class Env {
 
   final bool IS_DEBUG = !foundation.kReleaseMode;
 
+  static final bool IS_TEST = Platform.environment.containsKey('FLUTTER_TEST');
+
   _EnvData get config => IS_RELEASE ? prod : dev;
 
   final _EnvData dev = _EnvData(
@@ -18,6 +22,7 @@ class Env {
     apiBaseUrl: null,
     reportCrashAnalytics: false,
     enableHttpTimelineLogging: false,
+    enableCrashAnalyticsInDevMode: false,
     showDebugLogs: true,
   );
 
@@ -28,6 +33,7 @@ class Env {
     apiBaseUrl: null,
     reportCrashAnalytics: true,
     enableHttpTimelineLogging: true,
+    enableCrashAnalyticsInDevMode: true,
     showDebugLogs: false,
   );
 }
@@ -39,6 +45,7 @@ class _EnvData {
   final bool logApiClient;
   final bool reportCrashAnalytics;
   final bool enableHttpTimelineLogging;
+  final bool enableCrashAnalyticsInDevMode;
   final bool showDebugLogs;
 
   _EnvData({
@@ -48,6 +55,7 @@ class _EnvData {
     @required this.apiBaseUrl,
     @required this.reportCrashAnalytics,
     @required this.enableHttpTimelineLogging,
+    @required this.enableCrashAnalyticsInDevMode,
     @required this.showDebugLogs,
   });
 }

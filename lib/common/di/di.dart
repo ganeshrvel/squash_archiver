@@ -1,11 +1,16 @@
 import 'package:get_it/get_it.dart';
 import 'package:injectable/injectable.dart';
-import 'package:squash_archiver/common/di/di.iconfig.dart';
+import 'package:squash_archiver/common/di/di.config.dart';
 
 final GetIt getIt = GetIt.instance;
 
-@injectableInit
-Future<void> init() => $initGetIt(getIt);
+@InjectableInit(
+  preferRelativeImports: false,
+)
+Future<void> getItInit(String environment) => $initGetIt(
+      getIt,
+      environment: environment,
+    );
 
 void resetGetIt<T>({
   Object instance,

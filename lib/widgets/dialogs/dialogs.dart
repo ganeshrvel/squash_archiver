@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:squash_archiver/widgets/button/button.dart';
 import 'package:squash_archiver/widgets/text/textography.dart';
 
 class DialogAlert extends AlertDialog {
@@ -11,19 +12,18 @@ class DialogAlert extends AlertDialog {
               ? null
               : Textography(
                   title,
-                  variant: TextVariants.body1,
+                  variant: TextVariant.body1,
                 ),
           content: Textography(
             content,
-            variant: TextVariants.body1,
+            variant: TextVariant.body1,
           ),
           actions: <Widget>[
-            FlatButton(
+            Button(
+              text: 'Ok',
               onPressed: () => Navigator.of(context).pop(),
-              child: const Textography(
-                'Ok',
-                variant: TextVariants.body1,
-              ),
+              textVariant: TextVariant.body1,
+              buttonType: ButtonType.FLAT,
             ),
           ],
         );
@@ -49,29 +49,25 @@ class DialogConfirm extends AlertDialog {
               ? null
               : Textography(
                   title,
-                  variant: TextVariants.body1,
+                  variant: TextVariant.body1,
                 ),
           content: Textography(
             content,
-            variant: TextVariants.body1,
+            variant: TextVariant.body1,
           ),
           actions: <Widget>[
-            FlatButton(
+            Button(
+              text: 'No',
               onPressed: () => Navigator.of(context).pop(),
-              child: const Textography(
-                'No',
-                variant: TextVariants.body1,
-              ),
+              buttonType: ButtonType.FLAT,
             ),
-            FlatButton(
+            Button(
+              text: 'Yes',
               onPressed: () {
                 Navigator.of(context).pop();
                 onYes();
               },
-              child: const Textography(
-                'Yes',
-                variant: TextVariants.body1,
-              ),
+              buttonType: ButtonType.FLAT,
             ),
           ],
         );

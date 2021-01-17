@@ -1,6 +1,5 @@
 import 'package:dio/dio.dart';
 import 'package:squash_archiver/common/api_client/api_errors/network_404_api_error.dart';
-import 'package:squash_archiver/common/api_client/interceptors/api_raw_error_message_interceptor.dart';
 import 'package:squash_archiver/common/api_client/interceptors/network_404_error_interceptor.dart';
 import 'package:squash_archiver/common/exceptions/bad_network_exception.dart';
 import 'package:squash_archiver/common/exceptions/dio_exception.dart';
@@ -9,18 +8,16 @@ import 'package:squash_archiver/common/exceptions/network_404_exception.dart';
 import 'package:squash_archiver/common/exceptions/user_unauthenticated_exception.dart';
 import 'package:squash_archiver/utils/error_handling/handle_exception.dart';
 import 'package:injectable/injectable.dart';
-import 'package:squash_archiver/common/api_client/api_errors/api_response_error.dart';
 import 'package:squash_archiver/common/api_client/api_errors/bad_network_api_error.dart';
 import 'package:squash_archiver/common/api_client/api_errors/internal_server_api_error.dart';
 import 'package:squash_archiver/common/api_client/api_errors/unauthorized_api_error.dart';
-import 'package:squash_archiver/common/api_client/interceptors/api_error_message_interceptor.dart';
 import 'package:squash_archiver/common/api_client/interceptors/header_interceptor.dart';
 import 'package:squash_archiver/common/api_client/interceptors/bad_network_error_interceptor.dart';
 import 'package:squash_archiver/common/api_client/interceptors/internal_server_error_interceptor.dart';
 import 'package:squash_archiver/common/api_client/interceptors/unauthorized_interceptor.dart';
-import 'package:squash_archiver/common/exceptions/api_error_message_exceptions.dart';
 import 'package:squash_archiver/constants/env.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
+import 'package:squash_archiver/utils/utils/api.dart';
 
 enum _allowedDioMethods {
   GET,
@@ -44,8 +41,6 @@ class ApiClient {
     dio.interceptors.add(Network404Interceptor());
 
     if (env.config.logApiClient) {
-      dio.interceptors.add(ApiRawErrorMessageInterceptor());
-
       dio.interceptors.add(PrettyDioLogger(
         requestHeader: true,
         requestBody: true,
@@ -58,7 +53,6 @@ class ApiClient {
 
     dio.interceptors.add(BadNetworkErrorInterceptor());
     dio.interceptors.add(UnauthorizedInterceptor());
-    dio.interceptors.add(ApiErrorMessageInterceptor());
     dio.interceptors.add(InternalServerErrorInterceptor());
   }
 
@@ -89,13 +83,14 @@ class ApiClient {
   }
 
   Future<Response> delete(
-    String path, {
+    String path,
+    Map<String, dynamic> data, {
     Map<String, dynamic> queryParameters,
   }) async {
     return _processData(
       _allowedDioMethods.DELETE,
       path,
-      null,
+      data,
       queryParameters: queryParameters,
     );
   }
@@ -139,6 +134,7 @@ class ApiClient {
         case _allowedDioMethods.DELETE:
           return await dio.delete(
             path,
+            data: data,
             queryParameters: queryParameters,
           );
 
@@ -153,29 +149,32 @@ class ApiClient {
       _exception = Network404Exception(
         errorMessage: e.errorMessage,
         apiUrl: e.apiUrl,
-        stackTrace: stackTrace,
+        statusCode: e.statusCode,
+        stackTrace: StackTrace.current ?? stackTrace,
       );
     } on BadNetworkApiError catch (e, stackTrace) {
       _exception = BadNetworkException(
         error: e,
-        stackTrace: stackTrace,
+        stackTrace: StackTrace.current ?? stackTrace,
+        apiUrl: e.apiUrl,
+        statusCode: e.statusCode,
       );
     } on InternalServerApiError catch (e, stackTrace) {
       _exception = InternalServerException(
         error: e,
-        stackTrace: stackTrace,
+        errorMessage: e.errorMessage,
+        stackTrace: StackTrace.current ?? stackTrace,
+        apiUrl: e.apiUrl,
+        statusCode: e.statusCode,
       );
     } on UnauthorizedApiError {
       _exception = UserUnauthenticatedException();
-    } on ApiResponseError catch (e, stackTrace) {
-      _exception = ApiErrorMessageException(
-        errorMessage: e.errorMessage,
-        stackTrace: stackTrace,
-      );
-    } on DioError catch (e, stackTrace) {
+    } on DioError catch (dioError, stackTrace) {
       _exception = DioException(
-        error: e,
-        stackTrace: stackTrace,
+        error: dioError,
+        stackTrace: StackTrace.current ?? stackTrace,
+        apiUrl: getApiUrl(dioError),
+        statusCode: dioError?.response?.statusCode ?? 0,
       );
     }
 

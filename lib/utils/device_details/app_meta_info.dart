@@ -1,7 +1,5 @@
-import 'package:injectable/injectable.dart';
 import 'package:package_info/package_info.dart';
 
-@lazySingleton
 class AppMetaInfo {
   final PackageInfo _packageInfo;
 

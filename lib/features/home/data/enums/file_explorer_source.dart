@@ -1,0 +1,4 @@
+enum FileExplorerSource {
+  LOCAL,
+  ARCHIVE,
+}

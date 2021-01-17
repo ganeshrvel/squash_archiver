@@ -34,7 +34,7 @@ class AlertsHelper {
         _title = 'Info!';
 
         if (_allowLogging) {
-          log.info(_title, error: _exception, stackTrace: stackTrace);
+          log.info(title: _title, error: _exception, stackTrace: stackTrace);
         }
         break;
 
@@ -42,7 +42,7 @@ class AlertsHelper {
         _title = 'Warning!';
 
         if (_allowLogging) {
-          log.warn(_title, error: _exception, stackTrace: stackTrace);
+          log.warn(title: _title, error: _exception, stackTrace: stackTrace);
         }
         break;
 
@@ -55,7 +55,7 @@ class AlertsHelper {
         _title = 'Oops... Some error occured!';
 
         if (_allowLogging) {
-          log.error(_title, error: _exception, stackTrace: stackTrace);
+          log.error(title: _title, error: _exception, stackTrace: stackTrace);
         }
         break;
     }

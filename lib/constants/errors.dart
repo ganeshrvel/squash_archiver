@@ -23,4 +23,7 @@ class Errors {
       'The route is inaccessible. Please login first';
 
   static const String INVALID_OTP_AUTHENTICATION_MESSAGE = 'Invalid OTP';
+
+  static const String TASK_IN_PROGRESS_MESSAGE =
+      'A similar task is already in progress';
 }

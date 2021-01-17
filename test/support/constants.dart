@@ -1,0 +1,3 @@
+class TestConstants {
+  TestConstants._();
+}

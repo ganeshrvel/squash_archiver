@@ -1,39 +1,87 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:isolate';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:squash_archiver/common/di/di.dart' as di;
+import 'package:injectable/injectable.dart';
+import 'package:mobx/mobx.dart';
+import 'package:squash_archiver/common/di/di.dart' show getItInit;
 import 'package:squash_archiver/constants/env.dart';
 import 'package:squash_archiver/features/app/ui/pages/app_screen.dart';
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-import 'package:squash_archiver/services/crashes_service.dart';
+import 'package:squash_archiver/utils/log/log.dart';
+
+Future<void> _logFlutterOnError(FlutterErrorDetails details) async {
+  Zone.current.handleUncaughtError(details.exception, details.stack);
+
+  // todo add firebase
+  // FirebaseCrashlytics.instance.recordFlutterError(details);
+
+  log.error(
+    title: 'An error was captured by main._logFlutterOnError',
+    error: details.exception,
+    stackTrace: details.stack,
+  );
+}
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   // register all dependecy injection
-  await di.init();
+  await getItInit(Environment.dev);
 
-  if (env.config.reportCrashAnalytics) {
-    Crashlytics.instance.enableInDevMode = true;
+  // todo add firebase
+  // await Firebase.initializeApp();
 
-    FlutterError.onError = Crashlytics.instance.recordFlutterError;
-  }
+  // FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(
+  //   env.config.enableCrashAnalyticsInDevMode,
+  // );
 
-  await SystemChrome.setPreferredOrientations([
-    DeviceOrientation.portraitUp,
-  ]);
+  FlutterError.onError = _logFlutterOnError;
 
   HttpClient.enableTimelineLogging = env.config.enableHttpTimelineLogging;
+
+  runZonedGuarded(() {
+    runApp(
+      AppScreen(),
+    );
+  }, (Object error, StackTrace stackTrace) {
+    // Whenever an error occurs, call the `_reportError` function. This sends
+    // Dart errors to the dev console or Sentry depending on the environment.
+    log.error(
+      title: 'An error was captured by main.runZonedGuarded',
+      error: error,
+      stackTrace: stackTrace,
+    );
+  });
+
+  mainContext.onReactionError((_, rxn) {
+    log.error(
+      title: 'A mobx reaction error occured.',
+      error: rxn.errorValue.exception,
+      stackTrace: rxn.errorValue.stackTrace,
+    );
+  });
 
   runZonedGuarded(() {
     runApp(AppScreen());
   }, (Object error, StackTrace stackTrace) {
     // Whenever an error occurs, call the `_reportError` function. This sends
     // Dart errors to the dev console or Sentry depending on the environment.
-    final _crashesService = di.getIt<CrashesService>();
-
-    _crashesService.capture(error, stackTrace);
+    log.error(
+      title:
+          'A Flutter error occured and it was captured by main.runZonedGuarded',
+      error: error,
+      stackTrace: stackTrace,
+    );
   });
+
+  Isolate.current.addErrorListener(RawReceivePort((pair) async {
+    final errorAndStacktrace = pair as List;
+
+    log.error(
+      title: 'An error was captured by main.Isolate.current.addErrorListener',
+      error: errorAndStacktrace.first,
+      stackTrace: errorAndStacktrace.last as StackTrace,
+    );
+  }).sendPort);
 }

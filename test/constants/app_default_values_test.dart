@@ -1,0 +1,49 @@
+import 'package:archiver_ffi/archiver_ffi.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:squash_archiver/constants/app_default_values.dart';
+import 'package:squash_archiver/utils/utils/files.dart';
+
+void main() {
+  group('AppDefaultValues', () {
+    test('DEFAULT_FILE_EXPLORER_DIRECTORY', () async {
+      expect(AppDefaultValues.DEFAULT_FILE_EXPLORER_DIRECTORY,
+          equals(homeDirectory()));
+    });
+
+    test('DEFAULT_FILE_EXPLORER_ORDER_BY', () async {
+      expect(AppDefaultValues.DEFAULT_FILE_EXPLORER_ORDER_BY,
+          equals(OrderBy.name));
+    });
+
+    test('DEFAULT_FILE_EXPLORER_ORDER_DIR', () async {
+      expect(AppDefaultValues.DEFAULT_FILE_EXPLORER_ORDER_DIR,
+          equals(OrderDir.asc));
+    });
+
+    test('SUPPORTED_ARCHIVE_EXTENSIONS', () async {
+      expect(
+          listEquals(AppDefaultValues.SUPPORTED_ARCHIVE_EXTENSIONS.toList(), [
+            'zip',
+            'tar',
+            'tar.br',
+            'tar.bz2',
+            'tar.gz',
+            'tar.lz4',
+            'tar.sz',
+            'tar.xz',
+            'tar.zst',
+            'rar',
+          ]),
+          equals(true));
+    });
+  });
+
+  test('ALLOWED_SECOND_EXTENSIONS', () async {
+    expect(
+        listEquals(AppDefaultValues.ALLOWED_SECOND_EXTENSIONS.toList(), [
+          'tar',
+        ]),
+        equals(true));
+  });
+}

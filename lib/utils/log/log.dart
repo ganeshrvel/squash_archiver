@@ -1,8 +1,10 @@
-import 'package:squash_archiver/constants/env.dart';
-import 'package:squash_archiver/services/crashes_service.dart';
+import 'package:flutter/foundation.dart' show debugPrint;
 import 'package:injectable/injectable.dart';
 import 'package:logger/logger.dart';
+import 'package:meta/meta.dart';
 import 'package:squash_archiver/common/di/di.dart';
+import 'package:squash_archiver/constants/env.dart';
+import 'package:squash_archiver/services/crashes_service.dart';
 
 @lazySingleton
 class Log {
@@ -11,8 +13,8 @@ class Log {
 
   Log(this._logger, this._crashesService);
 
-  void _doReport(
-    dynamic message, {
+  void _doReport({
+    String title,
     dynamic error,
     StackTrace stackTrace,
     bool report,
@@ -23,18 +25,23 @@ class Log {
       return;
     }
 
-    _crashesService.capture(error, stackTrace);
+    _crashesService.capture(
+      title: title,
+      error: error,
+      stackTrace: stackTrace,
+      fullStackTrace: StackTrace.current,
+    );
   }
 
   /// Log a message at level [Level.verbose].
-  void verbose(
-    dynamic message, {
+  void verbose({
+    String title,
     dynamic error,
     StackTrace stackTrace,
     bool report,
   }) {
     _doReport(
-      message,
+      title: title,
       error: error,
       stackTrace: stackTrace,
       report: report,
@@ -44,18 +51,18 @@ class Log {
       return;
     }
 
-    _logger.v(message, error, stackTrace);
+    _logger.v(title, error, stackTrace);
   }
 
   /// Log a message at level [Level.debug].
-  void debug(
-    dynamic message, {
+  void debug({
+    String title,
     dynamic error,
     StackTrace stackTrace,
     bool report,
   }) {
     _doReport(
-      message,
+      title: title,
       error: error,
       stackTrace: stackTrace,
       report: report,
@@ -65,18 +72,18 @@ class Log {
       return;
     }
 
-    _logger.d(message, error, stackTrace);
+    _logger.d(title, error, stackTrace);
   }
 
   /// Log a message at level [Level.info].
-  void info(
-    dynamic message, {
+  void info({
+    String title,
     dynamic error,
     StackTrace stackTrace,
     bool report,
   }) {
     _doReport(
-      message,
+      title: title,
       error: error,
       stackTrace: stackTrace,
       report: report,
@@ -86,18 +93,18 @@ class Log {
       return;
     }
 
-    _logger.i(message, error, stackTrace);
+    _logger.i(title, error, stackTrace);
   }
 
   /// Log a message at level [Level.warning].
-  void warn(
-    dynamic message, {
+  void warn({
+    String title,
     dynamic error,
     StackTrace stackTrace,
     bool report,
   }) {
     _doReport(
-      message,
+      title: title,
       error: error,
       stackTrace: stackTrace,
       report: report,
@@ -107,18 +114,18 @@ class Log {
       return;
     }
 
-    _logger.w(message, error, stackTrace);
+    _logger.w(title, error, stackTrace);
   }
 
   /// Log a message at level [Level.error].
-  void error(
-    dynamic message, {
-    dynamic error,
+  void error({
+    @required String title,
+    @required dynamic error,
     StackTrace stackTrace,
     bool report,
   }) {
     _doReport(
-      message,
+      title: title,
       error: error,
       stackTrace: stackTrace,
       report: report,
@@ -128,18 +135,18 @@ class Log {
       return;
     }
 
-    _logger.e(message, error, stackTrace);
+    _logger.e(title, error, stackTrace);
   }
 
   /// Log a message at level [Level.wtf].
-  void wtf(
-    dynamic message, {
+  void wtf({
+    @required String title,
     dynamic error,
     StackTrace stackTrace,
     bool report,
   }) {
     _doReport(
-      message,
+      title: title,
       error: error,
       stackTrace: stackTrace,
       report: report,
@@ -149,7 +156,16 @@ class Log {
       return;
     }
 
-    _logger.wtf(message, error, stackTrace);
+    _logger.wtf(title, error, stackTrace);
+  }
+
+  /// Log a message at level [debugPrint].
+  void print(String title, String message) {
+    if (!env.config.showDebugLogs) {
+      return;
+    }
+
+    debugPrint('━━━━ $title => $message ━━━━');
   }
 }
 

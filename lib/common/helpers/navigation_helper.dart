@@ -4,6 +4,10 @@ import 'package:squash_archiver/common/router/router.gr.dart';
 import 'package:squash_archiver/utils/utils/functs.dart';
 
 bool isCurrentScreen(BuildContext context) {
+  if (isNull(context)) {
+    return null;
+  }
+
   return ModalRoute.of(context).isCurrent;
 }
 
@@ -15,94 +19,94 @@ String getCurrentScreen(BuildContext context) {
   return ModalRoute.of(context).settings.name;
 }
 
-void navigateToRoute(
+Future<T> navigateToRoute<T>(
   BuildContext context,
   String routeName, {
   Object routeArgs,
-}) {
-  if (getCurrentScreen(context) == routeName) {
-    return;
+  bool skipSameRouteCheck,
+}) async {
+  final _skipSameRouteCheck = skipSameRouteCheck ?? true;
+
+  if (!_skipSameRouteCheck && getCurrentScreen(context) == routeName) {
+    return null;
   }
 
-  if (routeName == Routes.homeScreen) {
-    navigateToHome(context, routeArgs: HomeScreenArguments());
+  if (routeName == Routes.fileExplorerScreen) {
+    var _routeArgs = FileExplorerScreenArguments();
 
-    return;
+    if (routeArgs is FileExplorerScreenArguments) {
+      _routeArgs = routeArgs;
+    }
+
+    return navigateToFileExplorerScreen<T>(routeArgs: _routeArgs);
   }
 
   if (routeArgs != null) {
-    ExtendedNavigator.of(context).pushNamed(
+    return ExtendedNavigator?.root?.push<T>(
       routeName,
       arguments: routeArgs,
     );
-
-    return;
   }
-
-  ExtendedNavigator.of(context).pushNamed(routeName);
+  return ExtendedNavigator?.root?.push<T>(routeName);
 }
 
-void navigateToRouteAndReplace(
-  BuildContext context,
+Future<T> navigateToRouteAndReplace<T>(
   String routeName, {
   Object routeArgs,
-}) {
-  if (routeName == Routes.homeScreen) {
-    navigateToHome(context, routeArgs: HomeScreenArguments());
+}) async {
+  if (routeName == Routes.fileExplorerScreen) {
+    var _routeArgs = FileExplorerScreenArguments();
 
-    return;
+    if (routeArgs is FileExplorerScreenArguments) {
+      _routeArgs = routeArgs;
+    }
+
+    return navigateToFileExplorerScreen<T>(routeArgs: _routeArgs);
   }
 
   if (routeArgs != null) {
-    ExtendedNavigator.of(context).pushReplacementNamed(
+    return ExtendedNavigator?.root?.replace(
       routeName,
       arguments: routeArgs,
     );
-
-    return;
   }
 
-  ExtendedNavigator.of(context).pushReplacementNamed(
+  return ExtendedNavigator?.root?.replace(
     routeName,
   );
 }
 
-void navigateToRouteAndRemoveUntil(
-  BuildContext context,
+Future<T> navigateToRouteAndRemoveUntil<T>(
   String routeName, {
   Object routeArgs,
-}) {
+}) async {
   if (routeArgs != null) {
-    ExtendedNavigator.of(context).pushNamedAndRemoveUntil(
+    return ExtendedNavigator?.root?.pushAndRemoveUntil<T>(
       routeName,
       (final route) => false,
       arguments: routeArgs,
     );
-
-    return;
   }
 
-  ExtendedNavigator.of(context).pushNamedAndRemoveUntil(
+  return ExtendedNavigator?.root?.pushAndRemoveUntil<T>(
     routeName,
     (final route) => false,
   );
 }
 
-void popCurrentRoute(BuildContext context) {
-  ExtendedNavigator.of(context).pop();
+void popCurrentRoute<T>({T result}) {
+  return ExtendedNavigator?.root?.pop<T>(result);
 }
 
-void canPopCurrentRoute(BuildContext context) {
-  ExtendedNavigator.of(context).canPop();
+bool canPopCurrentRoute<T>() {
+  return ExtendedNavigator?.root?.canPop();
 }
 
-void navigateToHome(
-  BuildContext context, {
-  @required HomeScreenArguments routeArgs,
-}) {
-  navigateToRouteAndRemoveUntil(
-    context,
-    Routes.homeScreen,
+Future<T> navigateToFileExplorerScreen<T>({
+  @required FileExplorerScreenArguments routeArgs,
+}) async {
+  return navigateToRouteAndRemoveUntil<T>(
+    Routes.fileExplorerScreen,
     routeArgs: routeArgs,
   );
 }
