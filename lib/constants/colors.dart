@@ -8,6 +8,7 @@ class AppColors {
   static const Color transparent = Colors.transparent;
   static const Color white = Colors.white;
   static final Color blue = HexColor('017AFF');
+  static final Color darkBlue = HexColor('2365d8');
   static final Color black = HexColor('232526');
   static final Color disabled = Colors.black.withOpacity(0.2);
   static final Color splash = Colors.black.withOpacity(0.02);

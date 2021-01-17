@@ -5,7 +5,7 @@ import 'package:squash_archiver/utils/utils/files.dart';
 class AppDefaultValues {
   AppDefaultValues._();
 
-  static const String DEFAULT_DATE_TIME_FORMAT = 'dd-MMM-yyyy, h:m a';
+  static const String DEFAULT_DATE_TIME_FORMAT = 'dd-MMM-yyyy, hh:mm a';
 
   static final String DEFAULT_FILE_EXPLORER_DIRECTORY = homeDirectory();
 

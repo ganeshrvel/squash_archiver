@@ -1,12 +1,15 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:squash_archiver/constants/colors.dart';
+import 'package:squash_archiver/constants/sizes.dart';
 import 'package:squash_archiver/features/home/data/enums/file_explorer_source.dart';
 import 'package:squash_archiver/features/home/data/models/file_listing_response.dart';
 import 'package:squash_archiver/features/home/ui/pages/file_explorer_screen_store.dart';
 import 'package:squash_archiver/widget_extends/sf_widget.dart';
 import 'package:squash_archiver/widgets/text/textography.dart';
+import 'package:dartx/dartx.dart';
 
 class FileExplorerTable extends StatefulWidget {
   final FileExplorerScreenStore fileExplorerScreenStore;
@@ -45,7 +48,13 @@ class _FileExplorerTableState extends SfWidget<FileExplorerTable> {
   List<Widget> _buildRows({
     @required List<FileListingResponse> files,
   }) {
-    return files.map((fileResponse) {
+    const _textFontVariant = TextVariant.body2;
+    const _textFontWeight = FontWeight.w700;
+
+    return files.mapIndexed((index, fileResponse) {
+      final _rowColor = index % 2 == 0 ? AppColors.white : AppColors.colorF5F;
+      final _metaDataTextColor = AppColors.color797;
+
       return Listener(
         onPointerDown: (PointerDownEvent event) {
           if (event.buttons == 2) {
@@ -70,40 +79,68 @@ class _FileExplorerTableState extends SfWidget<FileExplorerTable> {
             onDoubleTap: () {
               _navigateToNextPath(fileResponse);
             },
-            child: ListTile(
-              mouseCursor: SystemMouseCursors.basic,
-              hoverColor: AppColors.transparent,
-              focusColor: AppColors.transparent,
-              selectedTileColor: AppColors.blue,
-              title: Row(
+            child: Container(
+              decoration: BoxDecoration(
+                color: _rowColor,
+                borderRadius: BorderRadius.circular(8),
+              ),
+              padding: const EdgeInsets.symmetric(
+                horizontal: Sizes.FILE_EXPLORER_ROW_HORZ_PADDING,
+                vertical: 4,
+              ),
+              child: Row(
                 children: [
                   Expanded(
                     child: Row(
                       children: [
                         if (fileResponse.file.isDir)
                           Icon(
-                            Icons.folder,
+                            CupertinoIcons.folder_fill,
                             color: AppColors.blue,
+                            size: 20,
                           )
                         else
-                          const Icon(Icons.file_copy_rounded),
+                          const Icon(
+                            CupertinoIcons.doc_fill,
+                            size: 20,
+                          ),
                         const SizedBox(width: 5),
                         Textography(
                           fileResponse.file.name,
                           overflow: TextOverflow.ellipsis,
+                          variant: _textFontVariant,
+                          fontWeight: _textFontWeight,
                         ),
                       ],
                     ),
                   ),
                   Expanded(
-                    child: Textography(fileResponse.prettyFileSize),
+                    child: Textography(
+                      fileResponse.prettyFileSize,
+                      variant: _textFontVariant,
+                      fontWeight: _textFontWeight,
+                      color: _metaDataTextColor,
+                    ),
                   ),
                   Expanded(
-                    child: Textography(fileResponse.prettyDate),
+                    child: Textography(
+                      fileResponse.prettyDate,
+                      variant: _textFontVariant,
+                      fontWeight: _textFontWeight,
+                      color: _metaDataTextColor,
+                    ),
                   ),
                 ],
               ),
             ),
+            // child: ListTile(
+            //   minVerticalPadding: 0,
+            //   mouseCursor: SystemMouseCursors.basic,
+            //   hoverColor: AppColors.transparent,
+            //   focusColor: AppColors.transparent,
+            //   selectedTileColor: AppColors.transparent,
+            //   title: ,
+            // ),
           ),
         ),
       );

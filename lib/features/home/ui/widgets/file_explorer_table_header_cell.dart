@@ -64,6 +64,7 @@ class FileExplorerTableHeaderCell extends StatelessWidget {
 
     switch (selectedOrderDir) {
       case OrderDir.asc:
+
         /// the next [orderDir]
         _nextOrderDir = OrderDir.desc;
 
@@ -150,7 +151,8 @@ class FileExplorerTableHeaderCell extends StatelessWidget {
               alignment: Alignment.centerLeft,
               child: Container(
                 padding: const EdgeInsets.symmetric(
-                  horizontal: Sizes.FILE_EXPLORER_HORZ_PADDING,
+                  horizontal: Sizes.FILE_EXPLORER_ROW_HORZ_PADDING +
+                      Sizes.FILE_EXPLORER_HORZ_PADDING,
                 ),
                 child: Textography(
                   title,
