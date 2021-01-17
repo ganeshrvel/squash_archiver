@@ -5,7 +5,6 @@ import 'package:squash_archiver/constants/colors.dart';
 import 'package:squash_archiver/features/home/ui/pages/file_explorer_screen_store.dart';
 import 'package:squash_archiver/widget_extends/sf_widget.dart';
 import 'package:squash_archiver/widgets/button/action_bar_button.dart';
-import 'package:squash_archiver/widgets/shadows/box_shadow_5.dart';
 
 class FileExplorerToolbar extends StatefulWidget {
   final FileExplorerScreenStore fileExplorerScreenStore;
@@ -27,11 +26,8 @@ class FileExplorerToolbarState extends SfWidget<FileExplorerToolbar> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         color: AppColors.white,
-        boxShadow: [
-          BoxShadow5(),
-        ],
       ),
       padding: const EdgeInsets.symmetric(horizontal: 18),
       child: Observer(

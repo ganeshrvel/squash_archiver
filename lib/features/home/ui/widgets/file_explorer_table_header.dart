@@ -39,55 +39,44 @@ class FileExplorerTableHeaderState extends SfWidget<FileExplorerTableHeader> {
       padding: EdgeInsets.zero,
       color: AppColors.white,
       child: Center(
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Observer(
-              builder: (_) {
-                final _orderDir = _fileExplorerScreenStore.orderDir;
-                final _listFilesInProgress =
-                    _fileExplorerScreenStore.fileListingInProgress;
+        child: Observer(
+          builder: (_) {
+            final _orderDir = _fileExplorerScreenStore.orderDir;
+            final _orderBy = _fileExplorerScreenStore.orderBy;
+            final _listFilesInProgress =
+                _fileExplorerScreenStore.fileListingInProgress;
 
-                return FileExplorerTableHeaderCell(
+            return Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                FileExplorerTableHeaderCell(
                   isLoading: _listFilesInProgress,
                   title: 'Name',
                   orderBy: OrderBy.name,
-                  currentOrderDir: _orderDir,
+                  selectedOrderDir: _orderDir,
+                  selectedOrderBy: _orderBy,
                   onTap: _handleTableHeaderCellSorting,
-                );
-              },
-            ),
-            Observer(
-              builder: (_) {
-                final _orderDir = _fileExplorerScreenStore.orderDir;
-                final _listFilesInProgress =
-                    _fileExplorerScreenStore.fileListingInProgress;
-
-                return FileExplorerTableHeaderCell(
+                  showSeparator: false,
+                ),
+                FileExplorerTableHeaderCell(
                   isLoading: _listFilesInProgress,
                   title: 'Size',
                   orderBy: OrderBy.size,
-                  currentOrderDir: _orderDir,
+                  selectedOrderDir: _orderDir,
                   onTap: _handleTableHeaderCellSorting,
-                );
-              },
-            ),
-            Observer(
-              builder: (_) {
-                final _orderDir = _fileExplorerScreenStore.orderDir;
-                final _listFilesInProgress =
-                    _fileExplorerScreenStore.fileListingInProgress;
-
-                return FileExplorerTableHeaderCell(
+                  selectedOrderBy: _orderBy,
+                ),
+                FileExplorerTableHeaderCell(
                   isLoading: _listFilesInProgress,
                   title: 'Date',
                   orderBy: OrderBy.modTime,
-                  currentOrderDir: _orderDir,
+                  selectedOrderDir: _orderDir,
                   onTap: _handleTableHeaderCellSorting,
-                );
-              },
-            ),
-          ],
+                  selectedOrderBy: _orderBy,
+                )
+              ],
+            );
+          },
         ),
       ),
     );
