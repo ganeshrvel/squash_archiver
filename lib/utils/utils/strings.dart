@@ -1,5 +1,5 @@
 import 'package:meta/meta.dart';
-import 'package:squash_archiver/common/models/truncated_filename.dart';
+import 'package:squash_archiver/common/models/truncated_string.dart';
 
 String enumToString(dynamic input) {
   return input.toString().split('.').last;
@@ -46,7 +46,7 @@ bool isUrl(String input) {
 /// returns truncated string
 /// [offset] minimum number of chars to be displayed in the last chunk
 /// [offset] is exclusive of extension
-TruncatedFilename truncatedString({@required String text, int offset}) {
+TruncatedString truncatedString({@required String text, int offset}) {
   assert(text != null);
 
   final _offset = offset ?? 6;
@@ -66,7 +66,7 @@ TruncatedFilename truncatedString({@required String text, int offset}) {
   final _firstChunk = text.substring(0, _firstChunkLength);
   final _lastChunk = text.substring(_firstChunkLength, _length);
 
-  return TruncatedFilename(
+  return TruncatedString(
     original: text,
     firstChunk: _firstChunk,
     lastChunk: _lastChunk,

@@ -111,7 +111,7 @@ class _FileExplorerTableState extends SfWidget<FileExplorerTable> {
                           child: AppTooltip(
                             message: fileResponse.file.name,
                             child: TruncatedText(
-                              fileResponse.file.name,
+                              truncatedText: fileResponse.truncatedFilename,
                               overflow: TextOverflow.ellipsis,
                               variant: _textFontVariant,
                               fontWeight: _textFontWeight,

@@ -1,9 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:squash_archiver/common/models/truncated_string.dart';
+import 'package:squash_archiver/utils/utils/functs.dart';
 import 'package:squash_archiver/utils/utils/strings.dart';
 import 'package:squash_archiver/widgets/text/textography.dart';
 
 class TruncatedText extends StatelessWidget {
-  final String text;
+  /// original string
+  final String originalText;
+
+  /// truncated string
+  /// Either [originalText] or [truncatedText] is required
+  /// [truncatedText] will be given priority
+  final TruncatedString truncatedText;
+
   final TextVariant variant;
   final Color color;
   final Color backgroundColor;
@@ -13,9 +22,10 @@ class TruncatedText extends StatelessWidget {
   final TextAlign textAlign;
   final TextOverflow overflow;
 
-  const TruncatedText(
-    this.text, {
+  const TruncatedText({
     Key key,
+    this.originalText,
+    this.truncatedText,
     this.variant,
     this.color,
     this.fontWeight,
@@ -24,12 +34,18 @@ class TruncatedText extends StatelessWidget {
     this.fontSize,
     this.textAlign,
     this.overflow,
-  }) : super(key: key);
+  })  : assert(originalText != null || truncatedText != null),
+        super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final _text = text ?? '';
-    final _truncatedText = truncatedString(text: _text);
+    final _originalText = originalText ?? '';
+    var _truncatedText = truncatedText;
+
+    /// if [truncatedText] is null then truncate [originalText]
+    if (isNull(truncatedText)) {
+      _truncatedText = truncatedString(text: _originalText);
+    }
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,

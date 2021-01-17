@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:meta/meta.dart';
-import 'package:squash_archiver/common/models/truncated_filename.dart';
+import 'package:squash_archiver/common/models/truncated_string.dart';
 import 'package:squash_archiver/utils/utils/strings.dart';
 
 class _TestFixDirSlash {
@@ -18,32 +18,32 @@ class _TestFixDirSlash {
 void main() {
   test('truncatedFilename', () async {
     const _mediaMap = {
-      '': TruncatedFilename(
+      '': TruncatedString(
         original: '',
         firstChunk: '',
         lastChunk: '',
       ),
-      'file.ext': TruncatedFilename(
+      'file.ext': TruncatedString(
         original: 'file.ext',
         firstChunk: 'fil',
         lastChunk: 'e.ext',
       ),
-      'abc.file.123': TruncatedFilename(
+      'abc.file.123': TruncatedString(
         original: 'abc.file.123',
         firstChunk: 'abc.fil',
         lastChunk: 'e.123',
       ),
-      '.tar': TruncatedFilename(
+      '.tar': TruncatedString(
         original: '.tar',
         firstChunk: '',
         lastChunk: '.tar',
       ),
-      'txt': TruncatedFilename(
+      'txt': TruncatedString(
         original: 'txt',
         firstChunk: '',
         lastChunk: 'txt',
       ),
-      'abcdefg': TruncatedFilename(
+      'abcdefg': TruncatedString(
         original: 'abcdefg',
         firstChunk: 'a',
         lastChunk: 'bcdefg',

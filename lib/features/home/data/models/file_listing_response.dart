@@ -1,9 +1,11 @@
 import 'package:archiver_ffi/archiver_ffi.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
+import 'package:squash_archiver/common/models/truncated_string.dart';
 import 'package:squash_archiver/features/home/ui/pages/helpers/file_explorer_helper.dart';
 import 'package:squash_archiver/utils/utils/date.dart';
 import 'package:squash_archiver/utils/utils/filesizes.dart';
+import 'package:squash_archiver/utils/utils/strings.dart';
 
 class FileListingResponse extends Equatable {
   /// file information object
@@ -22,11 +24,15 @@ class FileListingResponse extends Equatable {
   /// human readable string representing the date
   String get prettyDate => appDateFormatFromString(file.modTime);
 
+  /// Truncated filename
+  TruncatedString get truncatedFilename => truncatedString(text: file.name);
+
   @override
   List<Object> get props => [
         file,
         isSupported,
         prettyFileSize,
         prettyDate,
+        truncatedFilename,
       ];
 }
