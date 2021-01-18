@@ -120,6 +120,8 @@ dependencies:
   # date
   intl: ^0.17.0-nullsafety.2
 
+  flutter_portal: ^0.3.0
+
 dev_dependencies:
   flutter_driver:
     sdk: flutter

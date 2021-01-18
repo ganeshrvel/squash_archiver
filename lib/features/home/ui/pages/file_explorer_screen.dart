@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mobx/mobx.dart' show ReactionDisposer;
 import 'package:squash_archiver/constants/app_default_values.dart';
 import 'package:squash_archiver/constants/colors.dart';
@@ -12,6 +13,7 @@ import 'package:squash_archiver/features/home/ui/widgets/file_explorer_toolbar.d
 import 'package:squash_archiver/features/home/ui/widgets/file_explorer_sidebar.dart';
 import 'package:squash_archiver/utils/utils/store_helper.dart';
 import 'package:squash_archiver/widget_extends/sf_widget.dart';
+import 'package:squash_archiver/widgets/overlays/progress_overlay.dart';
 import 'package:squash_archiver/widgets/sliver/app_sliver_header.dart';
 
 class FileExplorerScreen extends StatefulWidget {
@@ -147,6 +149,17 @@ class _FileExplorerScreenState extends SfWidget<FileExplorerScreen> {
       children: [
         _buildSidebar(),
         _buildFileExplorer(),
+        Observer(
+          builder: (_) {
+            final _fileListingInProgress =
+                _fileExplorerScreenStore.fileListingInProgress;
+
+            return  ProgressOverlay(
+              visible: _fileListingInProgress,
+              loadingText: 'Loading file...',
+            );
+          },
+        )
       ],
     );
   }

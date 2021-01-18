@@ -118,9 +118,6 @@ class AppDialog extends StatelessWidget {
                     if (isNotNull(content))
                       Column(
                         children: [
-                          const SizedBox(
-                            height: 10,
-                          ),
                           content,
                         ],
                       ),
@@ -134,7 +131,7 @@ class AppDialog extends StatelessWidget {
                       ),
                       actionContainer,
                     ],
-                  )
+                  ),
               ],
             ),
           ),

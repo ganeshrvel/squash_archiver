@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:mobx/mobx.dart' show ReactionDisposer;
 import 'package:squash_archiver/constants/colors.dart';
 import 'package:squash_archiver/constants/sizes.dart';
 import 'package:squash_archiver/features/home/data/enums/file_explorer_source.dart';
@@ -29,6 +30,15 @@ class FileExplorerTable extends StatefulWidget {
 class _FileExplorerTableState extends SfWidget<FileExplorerTable> {
   FileExplorerScreenStore get _fileExplorerScreenStore =>
       widget.fileExplorerScreenStore;
+
+  List<ReactionDisposer> _disposers = [];
+
+  @override
+  void dispose() {
+    _disposers ??= [];
+
+    super.dispose();
+  }
 
   Future<void> _navigateToNextPath(FileListingResponse fileResponse) async {
     if (fileResponse.file.isDir) {
