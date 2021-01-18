@@ -144,22 +144,26 @@ class _FileExplorerScreenState extends SfWidget<FileExplorerScreen> {
     );
   }
 
+  Widget _buildProgressOverlay() {
+    return Observer(
+      builder: (_) {
+        final _archiveLoadingInProgress =
+            _fileExplorerScreenStore.archiveLoadingInProgress;
+
+        return ProgressOverlay(
+          visible: _archiveLoadingInProgress,
+          loadingText: 'Loading file...',
+        );
+      },
+    );
+  }
+
   Widget _buildBody() {
     return Row(
       children: [
         _buildSidebar(),
         _buildFileExplorer(),
-        Observer(
-          builder: (_) {
-            final _fileListingInProgress =
-                _fileExplorerScreenStore.fileListingInProgress;
-
-            return  ProgressOverlay(
-              visible: _fileListingInProgress,
-              loadingText: 'Loading file...',
-            );
-          },
-        )
+        _buildProgressOverlay(),
       ],
     );
   }

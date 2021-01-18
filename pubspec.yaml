@@ -100,9 +100,6 @@ dependencies:
   # svg
   flutter_svg: ^0.19.2+1
 
-  #icons
-  flutter_icons: ^1.1.0
-
   # fonts
   google_fonts: ^1.1.0
 

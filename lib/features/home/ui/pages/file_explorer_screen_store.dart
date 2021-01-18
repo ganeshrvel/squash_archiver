@@ -11,6 +11,7 @@ import 'package:squash_archiver/features/home/data/controllers/file_explorer_con
 import 'package:squash_archiver/features/home/data/enums/file_explorer_source.dart';
 import 'package:squash_archiver/features/home/data/models/file_listing_request.dart';
 import 'package:squash_archiver/features/home/data/models/file_listing_response.dart';
+import 'package:squash_archiver/utils/log/log.dart';
 import 'package:squash_archiver/utils/utils/files.dart';
 import 'package:squash_archiver/utils/utils/functs.dart';
 import 'package:squash_archiver/utils/utils/store_helper.dart';
@@ -49,6 +50,11 @@ abstract class _FileExplorerScreenStoreBase with Store {
   @computed
   bool get fileListingInProgress {
     return isStateLoading(filesFuture);
+  }
+
+  @computed
+  bool get archiveLoadingInProgress {
+    return fileListingInProgress && isNotNullOrEmpty(currentArchiveFilepath);
   }
 
   /// current path in the file explorer; path of the last item in [fileListingSourceStack]

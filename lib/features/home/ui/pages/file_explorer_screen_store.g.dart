@@ -23,6 +23,13 @@ mixin _$FileExplorerScreenStore on _FileExplorerScreenStoreBase, Store {
           Computed<bool>(() => super.fileListingInProgress,
               name: '_FileExplorerScreenStoreBase.fileListingInProgress'))
       .value;
+  Computed<bool> _$archiveLoadingInProgressComputed;
+
+  @override
+  bool get archiveLoadingInProgress => (_$archiveLoadingInProgressComputed ??=
+          Computed<bool>(() => super.archiveLoadingInProgress,
+              name: '_FileExplorerScreenStoreBase.archiveLoadingInProgress'))
+      .value;
   Computed<String> _$currentPathComputed;
 
   @override
@@ -260,6 +267,7 @@ fileListException: ${fileListException},
 fileListingSourceStack: ${fileListingSourceStack},
 fileListingSource: ${fileListingSource},
 fileListingInProgress: ${fileListingInProgress},
+archiveLoadingInProgress: ${archiveLoadingInProgress},
 currentPath: ${currentPath},
 currentArchiveFilepath: ${currentArchiveFilepath},
 password: ${password},
