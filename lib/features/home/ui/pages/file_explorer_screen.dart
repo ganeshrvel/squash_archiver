@@ -5,6 +5,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mobx/mobx.dart' show ReactionDisposer;
 import 'package:squash_archiver/constants/app_default_values.dart';
 import 'package:squash_archiver/constants/colors.dart';
+import 'package:squash_archiver/constants/sizes.dart';
 import 'package:squash_archiver/features/home/data/enums/file_explorer_source.dart';
 import 'package:squash_archiver/features/home/ui/pages/file_explorer_screen_store.dart';
 import 'package:squash_archiver/features/home/ui/widgets/file_explorer_pane.dart';
@@ -87,7 +88,7 @@ class _FileExplorerScreenState extends SfWidget<FileExplorerScreen> {
 
   Widget _buildSidebar() {
     return SizedBox(
-      width: 250,
+      width: Sizes.SIDEBAR_WIDTH,
       //todo add a store for current path
       child: FileExplorerSidebar(
         fileExplorerScreenStore: _fileExplorerScreenStore,
