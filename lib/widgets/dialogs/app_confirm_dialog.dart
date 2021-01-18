@@ -16,7 +16,7 @@ class AppConfirmDialog extends AlertDialog {
     IconData iconData,
     bool barrierDismissible,
   }) {
-   final _barrierDismissible = barrierDismissible??true;
+    final _barrierDismissible = barrierDismissible ?? true;
 
     showDialog(
       context: context,

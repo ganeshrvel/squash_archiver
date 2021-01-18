@@ -31,7 +31,7 @@ class ProgressOverlay extends StatelessWidget {
     return PortalEntry(
       visible: visible,
       portal: Container(
-        color: AppColors.white.withOpacity(0.2),
+        color: AppColors.white.withOpacity(0.1),
         child: Center(
           child: AppDialog(
             content: Column(

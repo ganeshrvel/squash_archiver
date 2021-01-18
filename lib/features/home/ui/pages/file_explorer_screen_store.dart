@@ -11,7 +11,6 @@ import 'package:squash_archiver/features/home/data/controllers/file_explorer_con
 import 'package:squash_archiver/features/home/data/enums/file_explorer_source.dart';
 import 'package:squash_archiver/features/home/data/models/file_listing_request.dart';
 import 'package:squash_archiver/features/home/data/models/file_listing_response.dart';
-import 'package:squash_archiver/utils/log/log.dart';
 import 'package:squash_archiver/utils/utils/files.dart';
 import 'package:squash_archiver/utils/utils/functs.dart';
 import 'package:squash_archiver/utils/utils/store_helper.dart';
@@ -246,6 +245,8 @@ abstract class _FileExplorerScreenStoreBase with Store {
       onError: (error) async {
         fileListException = error;
 
+        /// if in an exception occured then remove the last request
+        /// from the [fileListingSource] stack
         if (_popStackOnError) {
           await _popFileListingSourceStack();
         }

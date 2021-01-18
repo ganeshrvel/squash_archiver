@@ -141,5 +141,3 @@ String getNativeLib() {
 
   return path.join(_archiverLibRoot, 'build/', AppFiles.ARCHIVER_FFI_LIB);
 }
-
-
