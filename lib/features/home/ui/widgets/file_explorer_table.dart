@@ -90,6 +90,7 @@ class _FileExplorerTableState extends SfWidget<FileExplorerTable> {
         /// [InkWellSplash] package is used here because [onDoubleTap] was delaying the [onTap] performance
         /// github issue: https://github.com/flutter/flutter/issues/22950
         child: InkWellExtended(
+          mouseCursor: SystemMouseCursors.basic,
           onDoubleTap: () {
             _navigateToNextPath(fileContainer);
           },

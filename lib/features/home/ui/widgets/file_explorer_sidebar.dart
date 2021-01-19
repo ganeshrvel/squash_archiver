@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:squash_archiver/constants/app_default_values.dart';
 import 'package:squash_archiver/constants/colors.dart';
@@ -88,40 +89,43 @@ class _FileExplorerSidebarState extends SfWidget<FileExplorerSidebar> {
         }
       }
 
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(
-              vertical: 6,
+      return MouseRegion(
+        cursor: SystemMouseCursors.basic,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(
+                vertical: 6,
+              ),
+              child: Textography(
+                'Favorites',
+                fontSize: 12,
+                color: AppColors.color797,
+                fontWeight: FontWeight.bold,
+              ),
             ),
-            child: Textography(
-              'Favorites',
-              fontSize: 12,
-              color: AppColors.color797,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          Container(
-            padding: const EdgeInsets.symmetric(
-              vertical: 6,
-            ),
-            child: Column(
-              children: List.generate(_entities.length, (index) {
-                final entity = _entities[index];
+            Container(
+              padding: const EdgeInsets.symmetric(
+                vertical: 6,
+              ),
+              child: Column(
+                children: List.generate(_entities.length, (index) {
+                  final entity = _entities[index];
 
-                return AppListTile(
-                  onTap: () {
-                    _handleOnTap(entity.path);
-                  },
-                  selected: entity.selected,
-                  icon: entity.icon,
-                  label: entity.label,
-                );
-              }),
-            ),
-          )
-        ],
+                  return AppListTile(
+                    onTap: () {
+                      _handleOnTap(entity.path);
+                    },
+                    selected: entity.selected,
+                    icon: entity.icon,
+                    label: entity.label,
+                  );
+                }),
+              ),
+            )
+          ],
+        ),
       );
     });
   }

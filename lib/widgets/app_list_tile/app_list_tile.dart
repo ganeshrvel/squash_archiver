@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:squash_archiver/constants/colors.dart';
 import 'package:squash_archiver/widgets/text/textography.dart';
 
@@ -28,6 +29,7 @@ class AppListTile extends StatelessWidget {
 
     return InkWell(
       onTap: onTap,
+      mouseCursor: SystemMouseCursors.basic,
       child: Container(
         decoration: BoxDecoration(
           color: _tileColor,

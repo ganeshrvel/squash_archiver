@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:squash_archiver/constants/colors.dart';
 import 'package:squash_archiver/utils/utils/functs.dart';
 import 'package:squash_archiver/widgets/img/img.dart';
@@ -59,6 +60,7 @@ class Button extends StatelessWidget {
   final Color highlightColor;
   final Color hoverColor;
   final Img image;
+  final SystemMouseCursor mouseCursor;
 
   const Button({
     @required this.text,
@@ -92,6 +94,7 @@ class Button extends StatelessWidget {
     this.hoverColor,
     this.image,
     this.highlightColor,
+    this.mouseCursor,
   });
 
   String getButtonText() {
@@ -235,6 +238,7 @@ class Button extends StatelessWidget {
   Widget getButton() {
     final buttonStyle = getButtonTextStyle();
     final _textVariant = textVariant ?? TextVariant.button;
+    final _mouseCursor = mouseCursor ?? SystemMouseCursors.basic;
 
     switch (buttonType) {
       case ButtonType.FLAT:
@@ -291,6 +295,7 @@ class Button extends StatelessWidget {
             shape: getBtnShape(),
             color: getButtonBgColor(),
             child: InkWell(
+              mouseCursor: _mouseCursor,
               splashColor: splashColor ?? AppColors.splash,
               hoverColor: hoverColor ?? AppColors.hover,
               onTap: isButtonDisabled() ? null : onPressed,
@@ -321,6 +326,7 @@ class Button extends StatelessWidget {
           child: Material(
             color: getButtonBgColor(),
             child: InkWell(
+              mouseCursor: _mouseCursor,
               splashColor: splashColor ?? AppColors.splash,
               highlightColor: highlightColor,
               onTap: isButtonDisabled() ? null : onPressed,
@@ -347,6 +353,7 @@ class Button extends StatelessWidget {
             child: Material(
               color: getButtonBgColor(),
               child: InkWell(
+                mouseCursor: _mouseCursor,
                 splashColor: AppColors.splash,
                 onTap: isButtonDisabled() ? null : onPressed,
                 child: SizedBox(
@@ -387,6 +394,7 @@ class Button extends StatelessWidget {
         final _textButtonPadding = textButtonPadding ?? EdgeInsets.zero;
 
         return InkWell(
+          mouseCursor: _mouseCursor,
           onTap: isButtonDisabled() ? null : onPressed,
           splashColor: splashColor ?? Colors.transparent,
           highlightColor: highlightColor ?? Colors.transparent,
