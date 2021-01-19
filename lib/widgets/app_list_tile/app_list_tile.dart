@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:squash_archiver/constants/colors.dart';
+import 'package:squash_archiver/widgets/inkwell_extended/inkwell_extended.dart';
 import 'package:squash_archiver/widgets/text/textography.dart';
 
 class AppListTile extends StatelessWidget {
@@ -27,9 +28,8 @@ class AppListTile extends StatelessWidget {
     final _tileTextColor =
         selected ? AppColors.white : AppColors.black.withOpacity(0.8);
 
-    return InkWell(
+    return InkWellExtended(
       onTap: onTap,
-      mouseCursor: SystemMouseCursors.basic,
       child: Container(
         decoration: BoxDecoration(
           color: _tileColor,

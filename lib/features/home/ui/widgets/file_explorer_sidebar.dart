@@ -89,43 +89,40 @@ class _FileExplorerSidebarState extends SfWidget<FileExplorerSidebar> {
         }
       }
 
-      return MouseRegion(
-        cursor: SystemMouseCursors.basic,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                vertical: 6,
-              ),
-              child: Textography(
-                'Favorites',
-                fontSize: 12,
-                color: AppColors.color797,
-                fontWeight: FontWeight.bold,
-              ),
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(
+              vertical: 6,
             ),
-            Container(
-              padding: const EdgeInsets.symmetric(
-                vertical: 6,
-              ),
-              child: Column(
-                children: List.generate(_entities.length, (index) {
-                  final entity = _entities[index];
+            child: Textography(
+              'Favorites',
+              fontSize: 12,
+              color: AppColors.color797,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          Container(
+            padding: const EdgeInsets.symmetric(
+              vertical: 6,
+            ),
+            child: Column(
+              children: List.generate(_entities.length, (index) {
+                final entity = _entities[index];
 
-                  return AppListTile(
-                    onTap: () {
-                      _handleOnTap(entity.path);
-                    },
-                    selected: entity.selected,
-                    icon: entity.icon,
-                    label: entity.label,
-                  );
-                }),
-              ),
-            )
-          ],
-        ),
+                return AppListTile(
+                  onTap: () {
+                    _handleOnTap(entity.path);
+                  },
+                  selected: entity.selected,
+                  icon: entity.icon,
+                  label: entity.label,
+                );
+              }),
+            ),
+          )
+        ],
       );
     });
   }

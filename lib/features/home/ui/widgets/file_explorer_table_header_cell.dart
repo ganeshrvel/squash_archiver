@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:squash_archiver/constants/colors.dart';
 import 'package:squash_archiver/constants/sizes.dart';
 import 'package:squash_archiver/utils/utils/functs.dart';
+import 'package:squash_archiver/widgets/inkwell_extended/inkwell_extended.dart';
 import 'package:squash_archiver/widgets/text/textography.dart';
 
 class FileExplorerTableHeaderCell extends StatelessWidget {
@@ -133,7 +134,7 @@ class FileExplorerTableHeaderCell extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      child: InkWell(
+      child: InkWellExtended(
         onTap: _handleOnTap,
         child: Stack(
           children: [

@@ -3,6 +3,7 @@ import 'package:flutter/rendering.dart';
 import 'package:squash_archiver/constants/colors.dart';
 import 'package:squash_archiver/utils/utils/functs.dart';
 import 'package:squash_archiver/widgets/img/img.dart';
+import 'package:squash_archiver/widgets/inkwell_extended/inkwell_extended.dart';
 import 'package:squash_archiver/widgets/text/textography.dart';
 
 enum ButtonType {
@@ -294,7 +295,7 @@ class Button extends StatelessWidget {
           child: Material(
             shape: getBtnShape(),
             color: getButtonBgColor(),
-            child: InkWell(
+            child: InkWellExtended(
               mouseCursor: _mouseCursor,
               splashColor: splashColor ?? AppColors.splash,
               hoverColor: hoverColor ?? AppColors.hover,
@@ -325,7 +326,7 @@ class Button extends StatelessWidget {
         return ClipOval(
           child: Material(
             color: getButtonBgColor(),
-            child: InkWell(
+            child: InkWellExtended(
               mouseCursor: _mouseCursor,
               splashColor: splashColor ?? AppColors.splash,
               highlightColor: highlightColor,
@@ -352,7 +353,7 @@ class Button extends StatelessWidget {
             color: getButtonBgColor(),
             child: Material(
               color: getButtonBgColor(),
-              child: InkWell(
+              child: InkWellExtended(
                 mouseCursor: _mouseCursor,
                 splashColor: AppColors.splash,
                 onTap: isButtonDisabled() ? null : onPressed,
@@ -393,7 +394,7 @@ class Button extends StatelessWidget {
       case ButtonType.TEXT:
         final _textButtonPadding = textButtonPadding ?? EdgeInsets.zero;
 
-        return InkWell(
+        return InkWellExtended(
           mouseCursor: _mouseCursor,
           onTap: isButtonDisabled() ? null : onPressed,
           splashColor: splashColor ?? Colors.transparent,

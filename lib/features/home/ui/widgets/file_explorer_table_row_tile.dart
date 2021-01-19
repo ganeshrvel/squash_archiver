@@ -76,30 +76,24 @@ class _FileExplorerTableRowState extends State<FileExplorerTableRow> {
           );
         }
       },
-      child: MouseRegion(
-        cursor: SystemMouseCursors.basic,
+      child: InkWellExtended(
+        mouseCursor: SystemMouseCursors.basic,
+        onDoubleTap: () {
+          _navigateToNextPath(_fileContainer);
+        },
+        onTap: () {
+          _fileExplorerScreenStore.setSelectedFiles(_fileContainer);
+        },
+        child: Observer(builder: (_) {
+          final _selectedFiles = _fileExplorerScreenStore.selectedFiles;
+          final _isSelected = _selectedFiles.contains(_fileContainer);
 
-        /// [InkWellSplash] package is used here because [onDoubleTap] was delaying the [onTap] performance
-        /// github issue: https://github.com/flutter/flutter/issues/22950
-        child: InkWellExtended(
-          mouseCursor: SystemMouseCursors.basic,
-          onDoubleTap: () {
-            _navigateToNextPath(_fileContainer);
-          },
-          onTap: () {
-            _fileExplorerScreenStore.setSelectedFiles(_fileContainer);
-          },
-          child: Observer(builder: (_) {
-            final _selectedFiles = _fileExplorerScreenStore.selectedFiles;
-            final _isSelected = _selectedFiles.contains(_fileContainer);
-
-            return FileExplorerTableRowTile(
-              isSelected: _isSelected,
-              rowIndex: _rowIndex,
-              fileContainer: _fileContainer,
-            );
-          }),
-        ),
+          return FileExplorerTableRowTile(
+            isSelected: _isSelected,
+            rowIndex: _rowIndex,
+            fileContainer: _fileContainer,
+          );
+        }),
       ),
     );
   }

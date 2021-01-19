@@ -7,6 +7,8 @@ class InkWellExtended extends StatelessWidget {
   /// Replacing the working of the default [onDoubleTap] implementation
   /// using [onTap]
   ///
+  /// [mouseCursor] will default to [SystemMouseCursors.basic]
+  ///
   InkWellExtended({
     Key key,
     this.child,
@@ -118,7 +120,7 @@ class InkWellExtended extends StatelessWidget {
       canRequestFocus: canRequestFocus,
       onFocusChange: onFocusChange,
       autofocus: autofocus,
-      mouseCursor: mouseCursor,
+      mouseCursor: mouseCursor ?? SystemMouseCursors.basic,
       overlayColor: overlayColor,
       child: child,
     );
