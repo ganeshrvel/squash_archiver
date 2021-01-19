@@ -51,4 +51,5 @@ analyzer:
     - "**/*.g.dart"
     - "**/*.gr.dart"
     - "lib/common/router/router.gr.dart"
-    - "component_templates"
+    - "component_templates/**"
+    - "packages/**"

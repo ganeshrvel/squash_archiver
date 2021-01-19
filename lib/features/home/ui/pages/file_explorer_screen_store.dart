@@ -37,6 +37,10 @@ abstract class _FileExplorerScreenStoreBase with Store {
   @visibleForTesting
   List<FileListingRequest> fileListingSourceStack = ObservableList();
 
+  /// the selected files in the file explorer
+  @observable
+  List<FileListingResponse> selectedFiles = ObservableList();
+
   @computed
   FileListingRequest get fileListingSource {
     if (isNullOrEmpty(fileListingSourceStack)) {
@@ -232,6 +236,9 @@ abstract class _FileExplorerScreenStoreBase with Store {
     final _popStackOnError = popStackOnError ?? false;
     fileListException = null;
 
+    /// reset the selected files on directory/path/refresh
+    resetSelectedFiles();
+
     filesFuture = ObservableFuture(
       _fileExplorerController.listFiles(
         request: fileListingSource,
@@ -287,5 +294,31 @@ abstract class _FileExplorerScreenStoreBase with Store {
     _fileListingSourceStackTemp.add(param);
 
     fileListingSourceStack = _fileListingSourceStackTemp;
+  }
+
+  @action
+  void setSelectedFiles(FileListingResponse file) {
+    assert(file != null);
+
+    final _selectedFiles = selectedFiles;
+
+    /// if [selectedFiles] list contains the incoming file
+    /// then remove it
+    if (_selectedFiles.contains(file)) {
+      _selectedFiles.remove(file);
+    }
+
+    /// if [selectedFiles] list does not contain the incoming file
+    /// then add it
+    else {
+      _selectedFiles.add(file);
+    }
+
+    selectedFiles = _selectedFiles;
+  }
+
+  @action
+  void resetSelectedFiles() {
+    selectedFiles = [];
   }
 }

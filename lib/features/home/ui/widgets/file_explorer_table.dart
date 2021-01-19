@@ -10,8 +10,8 @@ import 'package:squash_archiver/features/home/data/models/file_listing_response.
 import 'package:squash_archiver/features/home/ui/pages/file_explorer_screen_store.dart';
 import 'package:squash_archiver/widget_extends/sf_widget.dart';
 import 'package:squash_archiver/widgets/app_tooltip/app_tooltip.dart';
+import 'package:squash_archiver/widgets/inkwell_extended/inkwell_extended.dart';
 import 'package:squash_archiver/widgets/text/textography.dart';
-import 'package:dartx/dartx.dart';
 import 'package:squash_archiver/widgets/text/truncated_text.dart';
 
 class FileExplorerTable extends StatefulWidget {
@@ -40,58 +40,77 @@ class _FileExplorerTableState extends SfWidget<FileExplorerTable> {
     super.dispose();
   }
 
-  Future<void> _navigateToNextPath(FileListingResponse fileResponse) async {
-    if (fileResponse.file.isDir) {
+  Future<void> _navigateToNextPath(FileListingResponse fileContainer) async {
+    if (fileContainer.file.isDir) {
       return _fileExplorerScreenStore
-          .setCurrentPath(fileResponse.file.fullPath);
+          .setCurrentPath(fileContainer.file.fullPath);
     }
 
     /// if the file extension is supported by the archiver then open the archive
-    if (fileResponse.isSupported) {
+    if (fileContainer.isSupported) {
       return _fileExplorerScreenStore.navigateToSource(
         fullPath: '',
-        currentArchiveFilepath: fileResponse.file.fullPath,
+        currentArchiveFilepath: fileContainer.file.fullPath,
         source: FileExplorerSource.ARCHIVE,
         clearStack: false,
       );
     }
   }
 
-  List<Widget> _buildRows({
-    @required List<FileListingResponse> files,
+  Widget _buildRow({
+    @required FileListingResponse fileContainer,
+    @required int index,
   }) {
-    const _textFontVariant = TextVariant.body2;
-    const _textFontWeight = FontWeight.w700;
+    assert(fileContainer != null);
+    assert(index != null);
 
-    return files.mapIndexed((index, fileResponse) {
-      final _rowColor = index % 2 == 0 ? AppColors.white : AppColors.colorF5F;
-      final _metaDataTextColor = AppColors.color797;
+    return Listener(
+      onPointerDown: (PointerDownEvent event) {
+        /// mouse right click
+        if (event.buttons == 2) {
+          showMenu(
+            elevation: 2,
+            context: context,
+            position: RelativeRect.fromLTRB(
+              event.position.dx,
+              event.position.dy,
+              event.position.dx,
+              event.position.dy,
+            ),
+            items: const <PopupMenuItem<String>>[
+              PopupMenuItem(value: 'test1', child: Textography('test1')),
+              PopupMenuItem(value: 'test2', child: Textography('test2')),
+            ],
+          );
+        }
+      },
+      child: MouseRegion(
+        cursor: SystemMouseCursors.basic,
 
-      return Listener(
-        onPointerDown: (PointerDownEvent event) {
-          if (event.buttons == 2) {
-            showMenu(
-              elevation: 2,
-              context: context,
-              position: RelativeRect.fromLTRB(
-                event.position.dx,
-                event.position.dy,
-                event.position.dx,
-                event.position.dy,
-              ),
-              items: const <PopupMenuItem<String>>[
-                PopupMenuItem(value: 'test1', child: Textography('test1')),
-                PopupMenuItem(value: 'test2', child: Textography('test2')),
-              ],
-            );
-          }
-        },
-        child: MouseRegion(
-          child: GestureDetector(
-            onDoubleTap: () {
-              _navigateToNextPath(fileResponse);
-            },
-            child: Container(
+        /// [InkWellSplash] package is used here because [onDoubleTap] was delaying the [onTap] performance
+        /// github issue: https://github.com/flutter/flutter/issues/22950
+        child: InkWellExtended(
+          onDoubleTap: () {
+            _navigateToNextPath(fileContainer);
+          },
+          onTap: () {
+            _fileExplorerScreenStore.setSelectedFiles(fileContainer);
+          },
+          child: Observer(builder: (_) {
+            final _selectedFiles = _fileExplorerScreenStore.selectedFiles;
+            final _isSelected = _selectedFiles.contains(fileContainer);
+
+            const _textFontVariant = TextVariant.body2;
+            const _textFontWeight = FontWeight.w700;
+            final _metaDataTextColor = AppColors.color797;
+
+            var _rowColor =
+                index % 2 == 0 ? AppColors.white : AppColors.colorF5F;
+            if (_isSelected) {
+              _rowColor = AppColors.darkBlue;
+            }
+
+            return Container(
               decoration: BoxDecoration(
                 color: _rowColor,
                 borderRadius: BorderRadius.circular(8),
@@ -105,7 +124,7 @@ class _FileExplorerTableState extends SfWidget<FileExplorerTable> {
                   Expanded(
                     child: Row(
                       children: [
-                        if (fileResponse.file.isDir)
+                        if (fileContainer.file.isDir)
                           Icon(
                             CupertinoIcons.folder_fill,
                             color: AppColors.blue,
@@ -119,9 +138,9 @@ class _FileExplorerTableState extends SfWidget<FileExplorerTable> {
                         const SizedBox(width: 5),
                         Flexible(
                           child: AppTooltip(
-                            message: fileResponse.file.name,
+                            message: fileContainer.file.name,
                             child: TruncatedText(
-                              truncatedText: fileResponse.truncatedFilename,
+                              truncatedText: fileContainer.truncatedFilename,
                               overflow: TextOverflow.ellipsis,
                               variant: _textFontVariant,
                               fontWeight: _textFontWeight,
@@ -137,9 +156,9 @@ class _FileExplorerTableState extends SfWidget<FileExplorerTable> {
                         horizontal: Sizes.FILE_EXPLORER_ROW_HORZ_PADDING,
                       ),
                       child: AppTooltip(
-                        message: fileResponse.prettyFileSize,
+                        message: fileContainer.prettyFileSize,
                         child: Textography(
-                          fileResponse.prettyFileSize,
+                          fileContainer.prettyFileSize,
                           variant: _textFontVariant,
                           fontWeight: _textFontWeight,
                           color: _metaDataTextColor,
@@ -155,9 +174,9 @@ class _FileExplorerTableState extends SfWidget<FileExplorerTable> {
                         horizontal: Sizes.FILE_EXPLORER_ROW_HORZ_PADDING * 2,
                       ),
                       child: AppTooltip(
-                        message: fileResponse.prettyDate,
+                        message: fileContainer.prettyDate,
                         child: Textography(
-                          fileResponse.prettyDate,
+                          fileContainer.prettyDate,
                           variant: _textFontVariant,
                           fontWeight: _textFontWeight,
                           color: _metaDataTextColor,
@@ -168,19 +187,18 @@ class _FileExplorerTableState extends SfWidget<FileExplorerTable> {
                   ),
                 ],
               ),
-            ),
-          ),
+            );
+          }),
         ),
-      );
-    }).toList();
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Observer(builder: (_) {
       final _files = _fileExplorerScreenStore.files;
-      final _rows = _buildRows(files: _files);
-      final _rowsLength = _rows.length;
+      final _rowsLength = _files.length;
 
       return SliverList(
         delegate: SliverChildBuilderDelegate((
@@ -191,7 +209,12 @@ class _FileExplorerTableState extends SfWidget<FileExplorerTable> {
             return null;
           }
 
-          return _rows[index];
+          final _fileContainer = _files[index];
+
+          return _buildRow(
+            fileContainer: _fileContainer,
+            index: index,
+          );
         }),
       );
     });

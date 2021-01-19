@@ -145,6 +145,22 @@ mixin _$FileExplorerScreenStore on _FileExplorerScreenStoreBase, Store {
     });
   }
 
+  final _$selectedFilesAtom =
+      Atom(name: '_FileExplorerScreenStoreBase.selectedFiles');
+
+  @override
+  List<FileListingResponse> get selectedFiles {
+    _$selectedFilesAtom.reportRead();
+    return super.selectedFiles;
+  }
+
+  @override
+  set selectedFiles(List<FileListingResponse> value) {
+    _$selectedFilesAtom.reportWrite(value, super.selectedFiles, () {
+      super.selectedFiles = value;
+    });
+  }
+
   final _$navigateToSourceAsyncAction =
       AsyncAction('_FileExplorerScreenStoreBase.navigateToSource');
 
@@ -259,12 +275,35 @@ mixin _$FileExplorerScreenStore on _FileExplorerScreenStoreBase, Store {
   }
 
   @override
+  void setSelectedFiles(FileListingResponse file) {
+    final _$actionInfo = _$_FileExplorerScreenStoreBaseActionController
+        .startAction(name: '_FileExplorerScreenStoreBase.setSelectedFiles');
+    try {
+      return super.setSelectedFiles(file);
+    } finally {
+      _$_FileExplorerScreenStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void resetSelectedFiles() {
+    final _$actionInfo = _$_FileExplorerScreenStoreBaseActionController
+        .startAction(name: '_FileExplorerScreenStoreBase.resetSelectedFiles');
+    try {
+      return super.resetSelectedFiles();
+    } finally {
+      _$_FileExplorerScreenStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 files: ${files},
 filesFuture: ${filesFuture},
 fileListException: ${fileListException},
 fileListingSourceStack: ${fileListingSourceStack},
+selectedFiles: ${selectedFiles},
 fileListingSource: ${fileListingSource},
 fileListingInProgress: ${fileListingInProgress},
 archiveLoadingInProgress: ${archiveLoadingInProgress},
