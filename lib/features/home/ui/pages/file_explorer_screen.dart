@@ -1,17 +1,20 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mobx/mobx.dart' show ReactionDisposer;
 import 'package:squash_archiver/constants/app_default_values.dart';
 import 'package:squash_archiver/constants/colors.dart';
 import 'package:squash_archiver/constants/sizes.dart';
 import 'package:squash_archiver/features/home/data/enums/file_explorer_source.dart';
+import 'package:squash_archiver/features/app/data/models/keyboard_modifier_intent.dart';
 import 'package:squash_archiver/features/home/ui/pages/file_explorer_screen_store.dart';
 import 'package:squash_archiver/features/home/ui/widgets/file_explorer_pane.dart';
 import 'package:squash_archiver/features/home/ui/widgets/file_explorer_table_header.dart';
 import 'package:squash_archiver/features/home/ui/widgets/file_explorer_toolbar.dart';
 import 'package:squash_archiver/features/home/ui/widgets/file_explorer_sidebar.dart';
+import 'package:squash_archiver/utils/utils/functs.dart';
 import 'package:squash_archiver/utils/utils/store_helper.dart';
 import 'package:squash_archiver/widget_extends/sf_widget.dart';
 import 'package:squash_archiver/widgets/overlays/progress_overlay.dart';
@@ -38,10 +41,16 @@ class _FileExplorerScreenState extends SfWidget<FileExplorerScreen> {
 
   ScrollController _scrollController;
 
+  FocusNode _fileExplorerFocusNode;
+
+  ShortcutManager _shortcutManager;
+
   @override
   void initState() {
     _fileExplorerScreenStore ??= FileExplorerScreenStore();
     _scrollController ??= ScrollController();
+    _fileExplorerFocusNode ??= FocusNode();
+    _shortcutManager ??= ShortcutManager();
 
     super.initState();
   }
@@ -80,7 +89,7 @@ class _FileExplorerScreenState extends SfWidget<FileExplorerScreen> {
         child: FileExplorerToolbar(
           fileExplorerScreenStore: _fileExplorerScreenStore,
         ),
-        maximumExtent: 55,
+        maximumExtent: 50,
         minimumExtent: 50,
       ),
     );
@@ -117,28 +126,72 @@ class _FileExplorerScreenState extends SfWidget<FileExplorerScreen> {
 
   Widget _buildFileExplorer() {
     return Expanded(
-      child: RawKeyboardListener(
-        focusNode: FocusNode(),
-        autofocus: true,
-        onKey: (RawKeyEvent event) {
-          // if (event.isKeyPressed(LogicalKeyboardKey.arrowDown)) {
-          //
-          // }
-          // if (event.isKeyPressed(LogicalKeyboardKey.arrowUp)) {
-          //
-          // }
-        },
-        child: Container(
-          padding: EdgeInsets.zero,
-          color: AppColors.white,
-          child: CustomScrollView(
-            controller: _scrollController,
-            physics: const ScrollPhysics(),
-            slivers: <Widget>[
-              _buildToolbar(),
-              _buildTableHeader(),
-              _buildFileExplorerPane(),
+      child: Shortcuts(
+        manager: _shortcutManager,
+        shortcuts: <LogicalKeySet, Intent>{
+          //todo move the LogicalKeySets to a separate helper file and use this mapping
+          // along with the store variable to avoid unwanted surprises
+          LogicalKeySet(LogicalKeyboardKey.alt): const KeyboardModifierIntent(
+            keys: [
+              LogicalKeyboardKey.alt,
             ],
+          ),
+          LogicalKeySet(LogicalKeyboardKey.control):
+              const KeyboardModifierIntent(
+            keys: [
+              LogicalKeyboardKey.control,
+            ],
+          ),
+          LogicalKeySet(LogicalKeyboardKey.meta): const KeyboardModifierIntent(
+            keys: [
+              LogicalKeyboardKey.meta,
+            ],
+          ),
+          LogicalKeySet(LogicalKeyboardKey.shift): const KeyboardModifierIntent(
+            keys: [
+              LogicalKeyboardKey.shift,
+            ],
+          ),
+          LogicalKeySet(LogicalKeyboardKey.meta, LogicalKeyboardKey.keyA):
+              const KeyboardModifierIntent(
+            keys: [
+              LogicalKeyboardKey.meta,
+              LogicalKeyboardKey.keyA,
+            ],
+          ),
+        },
+        child: Actions(
+          actions: <Type, Action<Intent>>{
+            KeyboardModifierIntent: CallbackAction<KeyboardModifierIntent>(
+              onInvoke: (KeyboardModifierIntent intent) {
+                return _fileExplorerScreenStore
+                    .setActiveKeyboardModifierIntent(intent);
+              },
+            ),
+          },
+          child: Focus(
+            onKey: (focus, keyEvent) {
+              if (isNullOrEmpty(keyEvent.data.modifiersPressed)) {
+                _fileExplorerScreenStore.resetActiveKeyboardModifierIntent();
+              }
+
+              return false;
+            },
+            autofocus: true,
+            focusNode: _fileExplorerFocusNode,
+            child: Container(
+              padding: EdgeInsets.zero,
+              color: AppColors.white,
+              child: CustomScrollView(
+                controller: _scrollController,
+                physics: const ScrollPhysics(),
+                slivers: <Widget>[
+                  _buildToolbar(),
+                  _buildTableHeader(),
+                  _buildFileExplorerPane(),
+                ],
+              ),
+            ),
           ),
         ),
       ),

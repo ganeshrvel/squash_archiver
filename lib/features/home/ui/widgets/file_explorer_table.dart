@@ -1,10 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:mobx/mobx.dart' show ReactionDisposer;
+import 'package:mobx/mobx.dart' show ReactionDisposer, reaction;
 import 'package:squash_archiver/features/home/data/models/file_listing_response.dart';
 import 'package:squash_archiver/features/home/ui/pages/file_explorer_screen_store.dart';
 import 'package:squash_archiver/features/home/ui/widgets/file_explorer_table_row_tile.dart';
+import 'package:squash_archiver/utils/utils/functs.dart';
+import 'package:squash_archiver/utils/utils/store_helper.dart';
 import 'package:squash_archiver/widget_extends/sf_widget.dart';
 
 class FileExplorerTable extends StatefulWidget {
@@ -24,11 +26,31 @@ class _FileExplorerTableState extends SfWidget<FileExplorerTable> {
   FileExplorerScreenStore get _fileExplorerScreenStore =>
       widget.fileExplorerScreenStore;
 
-  List<ReactionDisposer> _disposers = [];
+  List<ReactionDisposer> _disposers;
+
+  @override
+  void didChangeDependencies() {
+    _disposers ??= [
+      reaction(
+        (_) => _fileExplorerScreenStore.isSelectAllPressed,
+        (bool isSelectAllPressed) {
+          if (isNull(isSelectAllPressed)) {
+            return;
+          }
+
+          if (isSelectAllPressed) {
+            _fileExplorerScreenStore.selectAllFiles();
+          }
+        },
+      ),
+    ];
+
+    super.didChangeDependencies();
+  }
 
   @override
   void dispose() {
-    _disposers ??= [];
+    disposeStore(_disposers);
 
     super.dispose();
   }

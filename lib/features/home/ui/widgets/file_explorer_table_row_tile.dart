@@ -82,7 +82,14 @@ class _FileExplorerTableRowState extends State<FileExplorerTableRow> {
           _navigateToNextPath(_fileContainer);
         },
         onTap: () {
-          _fileExplorerScreenStore.setSelectedFiles(_fileContainer);
+          final _activeKeyboardModifierIntent =
+              _fileExplorerScreenStore.activeKeyboardModifierIntent;
+
+          /// if meta key is pressed (in macos) then allow multiple selection
+          _fileExplorerScreenStore.setSelectedFile(
+            _fileContainer,
+            appendToList: _activeKeyboardModifierIntent?.isMetaPressed == true,
+          );
         },
         child: Observer(builder: (_) {
           final _selectedFiles = _fileExplorerScreenStore.selectedFiles;

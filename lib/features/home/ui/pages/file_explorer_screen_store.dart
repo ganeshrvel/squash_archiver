@@ -1,8 +1,10 @@
 import 'dart:async';
 
 import 'package:archiver_ffi/archiver_ffi.dart';
+import 'package:collection/collection.dart';
 import 'package:data_channel/data_channel.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 import 'package:meta/meta.dart';
 
 import 'package:mobx/mobx.dart';
@@ -11,6 +13,7 @@ import 'package:squash_archiver/features/home/data/controllers/file_explorer_con
 import 'package:squash_archiver/features/home/data/enums/file_explorer_source.dart';
 import 'package:squash_archiver/features/home/data/models/file_listing_request.dart';
 import 'package:squash_archiver/features/home/data/models/file_listing_response.dart';
+import 'package:squash_archiver/features/app/data/models/keyboard_modifier_intent.dart';
 import 'package:squash_archiver/utils/utils/files.dart';
 import 'package:squash_archiver/utils/utils/functs.dart';
 import 'package:squash_archiver/utils/utils/store_helper.dart';
@@ -40,6 +43,11 @@ abstract class _FileExplorerScreenStoreBase with Store {
   /// the selected files in the file explorer
   @observable
   List<FileListingResponse> selectedFiles = ObservableList();
+
+  ///todo move [activeKeyboardModifierIntent] into a different store
+  /// keyboard events
+  @observable
+  KeyboardModifierIntent activeKeyboardModifierIntent;
 
   @computed
   FileListingRequest get fileListingSource {
@@ -97,6 +105,17 @@ abstract class _FileExplorerScreenStoreBase with Store {
   @computed
   FileExplorerSource get source {
     return fileListingSource.source;
+  }
+
+  /// returns [true] if meta+a is pressed in the keyboard
+  @computed
+  bool get isSelectAllPressed {
+    final deepEq = const DeepCollectionEquality().equals;
+
+    return deepEq(activeKeyboardModifierIntent?.keys ?? [], [
+      LogicalKeyboardKey.meta,
+      LogicalKeyboardKey.keyA,
+    ]);
   }
 
   /// Adding a new [FileExplorerSource] will first add the request to the [fileListingSourceStack]
@@ -297,10 +316,18 @@ abstract class _FileExplorerScreenStoreBase with Store {
   }
 
   @action
-  void setSelectedFiles(FileListingResponse file) {
-    assert(file != null);
 
-    final _selectedFiles = selectedFiles;
+  /// set files in the explorer window
+  /// if [appendToList] is false then only one file will be selected
+  /// if [appendToList] is true then multiple file selection is allowed
+  void setSelectedFile(
+    FileListingResponse file, {
+    bool appendToList = false,
+  }) {
+    assert(file != null);
+    assert(appendToList != null);
+
+    var _selectedFiles = selectedFiles;
 
     /// if [selectedFiles] list contains the incoming file
     /// then remove it
@@ -309,16 +336,37 @@ abstract class _FileExplorerScreenStoreBase with Store {
     }
 
     /// if [selectedFiles] list does not contain the incoming file
-    /// then add it
     else {
-      _selectedFiles.add(file);
+      /// if [appendToList] is true then multiple file selection is allowed
+      if (appendToList) {
+        _selectedFiles.add(file);
+      } else {
+        /// if [appendToList] is false then only one file will be selected
+        _selectedFiles = [file];
+      }
     }
 
     selectedFiles = _selectedFiles;
   }
 
+  /// select all files in the explorer window
+  void selectAllFiles() {
+    selectedFiles = files;
+  }
+
+  /// reselect selected files in the explorer window
   @action
   void resetSelectedFiles() {
     selectedFiles = [];
+  }
+
+  @action
+  void setActiveKeyboardModifierIntent(KeyboardModifierIntent intent) {
+    activeKeyboardModifierIntent = intent;
+  }
+
+  @action
+  void resetActiveKeyboardModifierIntent() {
+    activeKeyboardModifierIntent = null;
   }
 }

@@ -79,6 +79,13 @@ mixin _$FileExplorerScreenStore on _FileExplorerScreenStoreBase, Store {
       (_$sourceComputed ??= Computed<FileExplorerSource>(() => super.source,
               name: '_FileExplorerScreenStoreBase.source'))
           .value;
+  Computed<bool> _$isSelectAllPressedComputed;
+
+  @override
+  bool get isSelectAllPressed => (_$isSelectAllPressedComputed ??=
+          Computed<bool>(() => super.isSelectAllPressed,
+              name: '_FileExplorerScreenStoreBase.isSelectAllPressed'))
+      .value;
 
   final _$filesAtom = Atom(name: '_FileExplorerScreenStoreBase.files');
 
@@ -158,6 +165,23 @@ mixin _$FileExplorerScreenStore on _FileExplorerScreenStoreBase, Store {
   set selectedFiles(List<FileListingResponse> value) {
     _$selectedFilesAtom.reportWrite(value, super.selectedFiles, () {
       super.selectedFiles = value;
+    });
+  }
+
+  final _$activeKeyboardModifierIntentAtom =
+      Atom(name: '_FileExplorerScreenStoreBase.activeKeyboardModifierIntent');
+
+  @override
+  KeyboardModifierIntent get activeKeyboardModifierIntent {
+    _$activeKeyboardModifierIntentAtom.reportRead();
+    return super.activeKeyboardModifierIntent;
+  }
+
+  @override
+  set activeKeyboardModifierIntent(KeyboardModifierIntent value) {
+    _$activeKeyboardModifierIntentAtom
+        .reportWrite(value, super.activeKeyboardModifierIntent, () {
+      super.activeKeyboardModifierIntent = value;
     });
   }
 
@@ -275,11 +299,11 @@ mixin _$FileExplorerScreenStore on _FileExplorerScreenStoreBase, Store {
   }
 
   @override
-  void setSelectedFiles(FileListingResponse file) {
+  void setSelectedFile(FileListingResponse file, {bool appendToList = false}) {
     final _$actionInfo = _$_FileExplorerScreenStoreBaseActionController
-        .startAction(name: '_FileExplorerScreenStoreBase.setSelectedFiles');
+        .startAction(name: '_FileExplorerScreenStoreBase.setSelectedFile');
     try {
-      return super.setSelectedFiles(file);
+      return super.setSelectedFile(file, appendToList: appendToList);
     } finally {
       _$_FileExplorerScreenStoreBaseActionController.endAction(_$actionInfo);
     }
@@ -297,6 +321,32 @@ mixin _$FileExplorerScreenStore on _FileExplorerScreenStoreBase, Store {
   }
 
   @override
+  void setActiveKeyboardModifierIntent(KeyboardModifierIntent intent) {
+    final _$actionInfo =
+        _$_FileExplorerScreenStoreBaseActionController.startAction(
+            name:
+                '_FileExplorerScreenStoreBase.setActiveKeyboardModifierIntent');
+    try {
+      return super.setActiveKeyboardModifierIntent(intent);
+    } finally {
+      _$_FileExplorerScreenStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void resetActiveKeyboardModifierIntent() {
+    final _$actionInfo =
+        _$_FileExplorerScreenStoreBaseActionController.startAction(
+            name:
+                '_FileExplorerScreenStoreBase.resetActiveKeyboardModifierIntent');
+    try {
+      return super.resetActiveKeyboardModifierIntent();
+    } finally {
+      _$_FileExplorerScreenStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 files: ${files},
@@ -304,6 +354,7 @@ filesFuture: ${filesFuture},
 fileListException: ${fileListException},
 fileListingSourceStack: ${fileListingSourceStack},
 selectedFiles: ${selectedFiles},
+activeKeyboardModifierIntent: ${activeKeyboardModifierIntent},
 fileListingSource: ${fileListingSource},
 fileListingInProgress: ${fileListingInProgress},
 archiveLoadingInProgress: ${archiveLoadingInProgress},
@@ -313,7 +364,8 @@ password: ${password},
 orderBy: ${orderBy},
 orderDir: ${orderDir},
 gitIgnorePattern: ${gitIgnorePattern},
-source: ${source}
+source: ${source},
+isSelectAllPressed: ${isSelectAllPressed}
     ''';
   }
 }
