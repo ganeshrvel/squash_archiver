@@ -315,11 +315,11 @@ abstract class _FileExplorerScreenStoreBase with Store {
     fileListingSourceStack = _fileListingSourceStackTemp;
   }
 
-  @action
-
   /// set files in the explorer window
   /// if [appendToList] is false then only one file will be selected
   /// if [appendToList] is true then multiple file selection is allowed
+  /// todo write tests
+  @action
   void setSelectedFile(
     FileListingResponse file, {
     bool appendToList = false,
@@ -347,21 +347,25 @@ abstract class _FileExplorerScreenStoreBase with Store {
   }
 
   /// select all files in the explorer window
+  ///   /// todo write tests
   void selectAllFiles() {
     selectedFiles = [...files];
   }
 
   /// reselect selected files in the explorer window
+  ///   /// todo write tests
   @action
   void resetSelectedFiles() {
     selectedFiles = [];
   }
 
+  /// todo write tests
   @action
   void setActiveKeyboardModifierIntent(KeyboardModifierIntent intent) {
     activeKeyboardModifierIntent = intent;
   }
 
+  /// todo write tests
   @action
   void resetActiveKeyboardModifierIntent() {
     activeKeyboardModifierIntent = null;
