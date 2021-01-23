@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:squash_archiver/common/helpers/provider_helpers.dart';
 import 'package:squash_archiver/constants/app_default_values.dart';
 import 'package:squash_archiver/constants/colors.dart';
 import 'package:squash_archiver/constants/sizes.dart';
@@ -14,21 +15,16 @@ import 'package:squash_archiver/widgets/app_list_tile/app_list_tile.dart';
 import 'package:squash_archiver/widgets/text/textography.dart';
 
 class FileExplorerSidebar extends StatefulWidget {
-  final FileExplorerScreenStore fileExplorerScreenStore;
-
   const FileExplorerSidebar({
     Key key,
-    @required this.fileExplorerScreenStore,
-  })  : assert(fileExplorerScreenStore != null),
-        super(key: key);
+  }) : super(key: key);
 
   @override
   _FileExplorerSidebarState createState() => _FileExplorerSidebarState();
 }
 
 class _FileExplorerSidebarState extends SfWidget<FileExplorerSidebar> {
-  FileExplorerScreenStore get _fileExplorerScreenStore =>
-      widget.fileExplorerScreenStore;
+FileExplorerScreenStore get _fileExplorerScreenStore => readProvider<FileExplorerScreenStore>(context);
 
   @override
   void initState() {

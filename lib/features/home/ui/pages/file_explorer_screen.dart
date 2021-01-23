@@ -4,6 +4,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mobx/mobx.dart' show ReactionDisposer;
+import 'package:provider/provider.dart';
 import 'package:squash_archiver/constants/app_default_values.dart';
 import 'package:squash_archiver/constants/colors.dart';
 import 'package:squash_archiver/constants/sizes.dart';
@@ -86,9 +87,7 @@ class _FileExplorerScreenState extends SfWidget<FileExplorerScreen> {
     return SliverPersistentHeader(
       pinned: true,
       delegate: AppSliverHeader(
-        child: FileExplorerToolbar(
-          fileExplorerScreenStore: _fileExplorerScreenStore,
-        ),
+        child: const FileExplorerToolbar(),
         maximumExtent: 50,
         minimumExtent: 50,
       ),
@@ -96,12 +95,10 @@ class _FileExplorerScreenState extends SfWidget<FileExplorerScreen> {
   }
 
   Widget _buildSidebar() {
-    return SizedBox(
+    return const SizedBox(
       width: Sizes.SIDEBAR_WIDTH,
       //todo add a store for current path
-      child: FileExplorerSidebar(
-        fileExplorerScreenStore: _fileExplorerScreenStore,
-      ),
+      child: FileExplorerSidebar(),
     );
   }
 
@@ -109,9 +106,7 @@ class _FileExplorerScreenState extends SfWidget<FileExplorerScreen> {
     return SliverPersistentHeader(
       pinned: true,
       delegate: AppSliverHeader(
-        child: FileExplorerTableHeader(
-          fileExplorerScreenStore: _fileExplorerScreenStore,
-        ),
+        child: const FileExplorerTableHeader(),
         maximumExtent: 30,
         minimumExtent: 30,
       ),
@@ -119,9 +114,7 @@ class _FileExplorerScreenState extends SfWidget<FileExplorerScreen> {
   }
 
   Widget _buildFileExplorerPane() {
-    return FileExplorerPane(
-      fileExplorerScreenStore: _fileExplorerScreenStore,
-    );
+    return const FileExplorerPane();
   }
 
   Widget _buildFileExplorer() {
@@ -213,12 +206,19 @@ class _FileExplorerScreenState extends SfWidget<FileExplorerScreen> {
   }
 
   Widget _buildBody() {
-    return Row(
-      children: [
-        _buildSidebar(),
-        _buildFileExplorer(),
-        _buildProgressOverlay(),
+    return MultiProvider(
+      providers: [
+        Provider<FileExplorerScreenStore>(
+          create: (_) => _fileExplorerScreenStore,
+        ),
       ],
+      child: Row(
+        children: [
+          _buildSidebar(),
+          _buildFileExplorer(),
+          _buildProgressOverlay(),
+        ],
+      ),
     );
   }
 

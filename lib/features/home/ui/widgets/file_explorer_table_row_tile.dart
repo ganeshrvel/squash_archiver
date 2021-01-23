@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:squash_archiver/common/helpers/provider_helpers.dart';
 import 'package:squash_archiver/features/home/data/enums/file_explorer_source.dart';
 import 'package:squash_archiver/features/home/data/models/file_listing_response.dart';
 import 'package:squash_archiver/features/home/ui/pages/file_explorer_screen_store.dart';
@@ -11,19 +12,15 @@ import 'package:squash_archiver/widgets/inkwell_extended/inkwell_extended.dart';
 import 'package:squash_archiver/widgets/text/textography.dart';
 
 class FileExplorerTableRow extends StatefulWidget {
-  final FileExplorerScreenStore fileExplorerScreenStore;
-
   final int rowIndex;
 
   final FileListingResponse fileContainer;
 
   const FileExplorerTableRow({
     Key key,
-    @required this.fileExplorerScreenStore,
     @required this.fileContainer,
     @required this.rowIndex,
-  })  : assert(fileExplorerScreenStore != null),
-        assert(fileContainer != null),
+  })  : assert(fileContainer != null),
         assert(rowIndex != null),
         super(key: key);
 
@@ -32,8 +29,7 @@ class FileExplorerTableRow extends StatefulWidget {
 }
 
 class _FileExplorerTableRowState extends State<FileExplorerTableRow> {
-  FileExplorerScreenStore get _fileExplorerScreenStore =>
-      widget.fileExplorerScreenStore;
+FileExplorerScreenStore get _fileExplorerScreenStore => readProvider<FileExplorerScreenStore>(context);
 
   int get _rowIndex => widget.rowIndex;
 
