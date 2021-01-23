@@ -5,6 +5,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:squash_archiver/common/helpers/provider_helpers.dart';
 import 'package:squash_archiver/features/home/data/enums/file_explorer_source.dart';
 import 'package:squash_archiver/features/home/data/models/file_listing_response.dart';
+import 'package:squash_archiver/features/home/ui/pages/file_explorer_keyboard_modifiers_store.dart';
 import 'package:squash_archiver/features/home/ui/pages/file_explorer_screen_store.dart';
 import 'package:squash_archiver/features/home/ui/widgets/file_explorer_table_row.dart';
 import 'package:squash_archiver/utils/utils/functs.dart';
@@ -29,7 +30,11 @@ class FileExplorerTableRow extends StatefulWidget {
 }
 
 class _FileExplorerTableRowState extends State<FileExplorerTableRow> {
-FileExplorerScreenStore get _fileExplorerScreenStore => readProvider<FileExplorerScreenStore>(context);
+  FileExplorerScreenStore get _fileExplorerScreenStore =>
+      readProvider<FileExplorerScreenStore>(context);
+
+  FileExplorerKeyboardModifiersStore get _fileExplorerKeyboardModifiersStore =>
+      readProvider<FileExplorerKeyboardModifiersStore>(context);
 
   int get _rowIndex => widget.rowIndex;
 
@@ -81,7 +86,7 @@ FileExplorerScreenStore get _fileExplorerScreenStore => readProvider<FileExplore
         },
         onTap: () {
           final _activeKeyboardModifierIntent =
-              _fileExplorerScreenStore.activeKeyboardModifierIntent;
+              _fileExplorerKeyboardModifiersStore.activeKeyboardModifierIntent;
 
           /// if meta key is pressed (in macos) then allow multiple selection
           _fileExplorerScreenStore.setSelectedFile(

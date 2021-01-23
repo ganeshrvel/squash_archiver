@@ -10,6 +10,7 @@ import 'package:squash_archiver/constants/colors.dart';
 import 'package:squash_archiver/constants/sizes.dart';
 import 'package:squash_archiver/features/home/data/enums/file_explorer_source.dart';
 import 'package:squash_archiver/features/app/data/models/keyboard_modifier_intent.dart';
+import 'package:squash_archiver/features/home/ui/pages/file_explorer_keyboard_modifiers_store.dart';
 import 'package:squash_archiver/features/home/ui/pages/file_explorer_screen_store.dart';
 import 'package:squash_archiver/features/home/ui/widgets/file_explorer_pane.dart';
 import 'package:squash_archiver/features/home/ui/widgets/file_explorer_table_header.dart';
@@ -38,6 +39,8 @@ class FileExplorerScreen extends StatefulWidget {
 class _FileExplorerScreenState extends SfWidget<FileExplorerScreen> {
   FileExplorerScreenStore _fileExplorerScreenStore;
 
+  FileExplorerKeyboardModifiersStore _fileExplorerKeyboardModifiersStore;
+
   List<ReactionDisposer> _disposers;
 
   ScrollController _scrollController;
@@ -49,6 +52,8 @@ class _FileExplorerScreenState extends SfWidget<FileExplorerScreen> {
   @override
   void initState() {
     _fileExplorerScreenStore ??= FileExplorerScreenStore();
+    _fileExplorerKeyboardModifiersStore ??=
+        FileExplorerKeyboardModifiersStore();
     _scrollController ??= ScrollController();
     _fileExplorerFocusNode ??= FocusNode();
     _shortcutManager ??= ShortcutManager();
@@ -157,7 +162,7 @@ class _FileExplorerScreenState extends SfWidget<FileExplorerScreen> {
           actions: <Type, Action<Intent>>{
             KeyboardModifierIntent: CallbackAction<KeyboardModifierIntent>(
               onInvoke: (KeyboardModifierIntent intent) {
-                return _fileExplorerScreenStore
+                return _fileExplorerKeyboardModifiersStore
                     .setActiveKeyboardModifierIntent(intent);
               },
             ),
@@ -165,7 +170,7 @@ class _FileExplorerScreenState extends SfWidget<FileExplorerScreen> {
           child: Focus(
             onKey: (focus, keyEvent) {
               if (isNullOrEmpty(keyEvent.data.modifiersPressed)) {
-                _fileExplorerScreenStore.resetActiveKeyboardModifierIntent();
+                _fileExplorerKeyboardModifiersStore.resetActiveKeyboardModifierIntent();
               }
 
               return false;
@@ -210,6 +215,9 @@ class _FileExplorerScreenState extends SfWidget<FileExplorerScreen> {
       providers: [
         Provider<FileExplorerScreenStore>(
           create: (_) => _fileExplorerScreenStore,
+        ),
+        Provider<FileExplorerKeyboardModifiersStore>(
+          create: (_) => _fileExplorerKeyboardModifiersStore,
         ),
       ],
       child: Row(

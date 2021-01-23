@@ -4,6 +4,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mobx/mobx.dart' show ReactionDisposer, reaction;
 import 'package:squash_archiver/common/helpers/provider_helpers.dart';
 import 'package:squash_archiver/features/home/data/models/file_listing_response.dart';
+import 'package:squash_archiver/features/home/ui/pages/file_explorer_keyboard_modifiers_store.dart';
 import 'package:squash_archiver/features/home/ui/pages/file_explorer_screen_store.dart';
 import 'package:squash_archiver/features/home/ui/widgets/file_explorer_table_row_tile.dart';
 import 'package:squash_archiver/utils/utils/functs.dart';
@@ -23,13 +24,15 @@ class _FileExplorerTableState extends SfWidget<FileExplorerTable> {
   FileExplorerScreenStore get _fileExplorerScreenStore =>
       readProvider<FileExplorerScreenStore>(context);
 
+  FileExplorerKeyboardModifiersStore get _fileExplorerKeyboardModifiersStore => readProvider<FileExplorerKeyboardModifiersStore>(context);
+
   List<ReactionDisposer> _disposers;
 
   @override
   void didChangeDependencies() {
     _disposers ??= [
       reaction(
-        (_) => _fileExplorerScreenStore.isSelectAllPressed,
+        (_) => _fileExplorerKeyboardModifiersStore.isSelectAllPressed,
         (bool isSelectAllPressed) {
           if (isNull(isSelectAllPressed)) {
             return;

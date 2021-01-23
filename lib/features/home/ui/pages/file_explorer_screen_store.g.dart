@@ -79,13 +79,6 @@ mixin _$FileExplorerScreenStore on _FileExplorerScreenStoreBase, Store {
       (_$sourceComputed ??= Computed<FileExplorerSource>(() => super.source,
               name: '_FileExplorerScreenStoreBase.source'))
           .value;
-  Computed<bool> _$isSelectAllPressedComputed;
-
-  @override
-  bool get isSelectAllPressed => (_$isSelectAllPressedComputed ??=
-          Computed<bool>(() => super.isSelectAllPressed,
-              name: '_FileExplorerScreenStoreBase.isSelectAllPressed'))
-      .value;
 
   final _$fileContainersAtom =
       Atom(name: '_FileExplorerScreenStoreBase.fileContainers');
@@ -169,23 +162,6 @@ mixin _$FileExplorerScreenStore on _FileExplorerScreenStoreBase, Store {
   set selectedFiles(Map<String, FileListingResponse> value) {
     _$selectedFilesAtom.reportWrite(value, super.selectedFiles, () {
       super.selectedFiles = value;
-    });
-  }
-
-  final _$activeKeyboardModifierIntentAtom =
-      Atom(name: '_FileExplorerScreenStoreBase.activeKeyboardModifierIntent');
-
-  @override
-  KeyboardModifierIntent get activeKeyboardModifierIntent {
-    _$activeKeyboardModifierIntentAtom.reportRead();
-    return super.activeKeyboardModifierIntent;
-  }
-
-  @override
-  set activeKeyboardModifierIntent(KeyboardModifierIntent value) {
-    _$activeKeyboardModifierIntentAtom
-        .reportWrite(value, super.activeKeyboardModifierIntent, () {
-      super.activeKeyboardModifierIntent = value;
     });
   }
 
@@ -337,32 +313,6 @@ mixin _$FileExplorerScreenStore on _FileExplorerScreenStoreBase, Store {
   }
 
   @override
-  void setActiveKeyboardModifierIntent(KeyboardModifierIntent intent) {
-    final _$actionInfo =
-        _$_FileExplorerScreenStoreBaseActionController.startAction(
-            name:
-                '_FileExplorerScreenStoreBase.setActiveKeyboardModifierIntent');
-    try {
-      return super.setActiveKeyboardModifierIntent(intent);
-    } finally {
-      _$_FileExplorerScreenStoreBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  void resetActiveKeyboardModifierIntent() {
-    final _$actionInfo =
-        _$_FileExplorerScreenStoreBaseActionController.startAction(
-            name:
-                '_FileExplorerScreenStoreBase.resetActiveKeyboardModifierIntent');
-    try {
-      return super.resetActiveKeyboardModifierIntent();
-    } finally {
-      _$_FileExplorerScreenStoreBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
   String toString() {
     return '''
 fileContainers: ${fileContainers},
@@ -370,7 +320,6 @@ fileContainersFuture: ${fileContainersFuture},
 fileContainersException: ${fileContainersException},
 fileListingSourceStack: ${fileListingSourceStack},
 selectedFiles: ${selectedFiles},
-activeKeyboardModifierIntent: ${activeKeyboardModifierIntent},
 fileListingSource: ${fileListingSource},
 fileListingInProgress: ${fileListingInProgress},
 archiveLoadingInProgress: ${archiveLoadingInProgress},
@@ -380,8 +329,7 @@ password: ${password},
 orderBy: ${orderBy},
 orderDir: ${orderDir},
 gitIgnorePattern: ${gitIgnorePattern},
-source: ${source},
-isSelectAllPressed: ${isSelectAllPressed}
+source: ${source}
     ''';
   }
 }

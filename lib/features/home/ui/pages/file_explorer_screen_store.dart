@@ -1,10 +1,8 @@
 import 'dart:async';
 
 import 'package:archiver_ffi/archiver_ffi.dart';
-import 'package:collection/collection.dart';
 import 'package:data_channel/data_channel.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/services.dart';
 import 'package:meta/meta.dart';
 
 import 'package:mobx/mobx.dart';
@@ -13,7 +11,6 @@ import 'package:squash_archiver/features/home/data/controllers/file_explorer_con
 import 'package:squash_archiver/features/home/data/enums/file_explorer_source.dart';
 import 'package:squash_archiver/features/home/data/models/file_listing_request.dart';
 import 'package:squash_archiver/features/home/data/models/file_listing_response.dart';
-import 'package:squash_archiver/features/app/data/models/keyboard_modifier_intent.dart';
 import 'package:squash_archiver/utils/utils/files.dart';
 import 'package:squash_archiver/utils/utils/functs.dart';
 import 'package:squash_archiver/utils/utils/store_helper.dart';
@@ -46,11 +43,6 @@ abstract class _FileExplorerScreenStoreBase with Store {
   @observable
   Map<String, FileListingResponse> selectedFiles =
       ObservableMap<String, FileListingResponse>();
-
-  ///todo move [activeKeyboardModifierIntent] into a different store
-  /// keyboard events
-  @observable
-  KeyboardModifierIntent activeKeyboardModifierIntent;
 
   @computed
   FileListingRequest get fileListingSource {
@@ -108,17 +100,6 @@ abstract class _FileExplorerScreenStoreBase with Store {
   @computed
   FileExplorerSource get source {
     return fileListingSource.source;
-  }
-
-  /// returns [true] if meta+a is pressed in the keyboard
-  @computed
-  bool get isSelectAllPressed {
-    final deepEq = const DeepCollectionEquality().equals;
-
-    return deepEq(activeKeyboardModifierIntent?.keys ?? [], [
-      LogicalKeyboardKey.meta,
-      LogicalKeyboardKey.keyA,
-    ]);
   }
 
   /// Adding a new [FileExplorerSource] will first add the request to the [fileListingSourceStack]
@@ -368,17 +349,5 @@ abstract class _FileExplorerScreenStoreBase with Store {
   @action
   void resetSelectedFiles() {
     selectedFiles = ObservableMap();
-  }
-
-  /// todo write tests
-  @action
-  void setActiveKeyboardModifierIntent(KeyboardModifierIntent intent) {
-    activeKeyboardModifierIntent = intent;
-  }
-
-  /// todo write tests
-  @action
-  void resetActiveKeyboardModifierIntent() {
-    activeKeyboardModifierIntent = null;
   }
 }
