@@ -329,21 +329,18 @@ abstract class _FileExplorerScreenStoreBase with Store {
 
     var _selectedFiles = selectedFiles;
 
-    /// if [selectedFiles] list contains the incoming file
-    /// then remove it
-    if (_selectedFiles.contains(file)) {
-      _selectedFiles.remove(file);
-    }
-
-    /// if [selectedFiles] list does not contain the incoming file
-    else {
-      /// if [appendToList] is true then multiple file selection is allowed
-      if (appendToList) {
-        _selectedFiles.add(file);
+    /// if [appendToList] is true then multiple file selection is allowed
+    if (appendToList) {
+      /// if [selectedFiles] list contains the incoming file then remove it
+      if (_selectedFiles.contains(file)) {
+        _selectedFiles.remove(file);
       } else {
-        /// if [appendToList] is false then only one file will be selected
-        _selectedFiles = [file];
+        /// if [selectedFiles] list does not contain the incoming file then add it
+        _selectedFiles.add(file);
       }
+    } else {
+      /// if [appendToList] is false then only one file will be selected
+      _selectedFiles = [file];
     }
 
     selectedFiles = _selectedFiles;
@@ -351,7 +348,7 @@ abstract class _FileExplorerScreenStoreBase with Store {
 
   /// select all files in the explorer window
   void selectAllFiles() {
-    selectedFiles = files;
+    selectedFiles = [...files];
   }
 
   /// reselect selected files in the explorer window
