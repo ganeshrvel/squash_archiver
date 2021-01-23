@@ -8,12 +8,14 @@ MacOS:
     Install LLVM -  
     
 ```shell
-brew install llvm.
+brew install llvm
+
+pub run ffigen:setup -I/usr/local/opt/llvm/include -L/usr/local/opt/llvm/lib
 ```
 
 To generate the bindings
 ```shell
-  flutter pub run ffigen
+  pub run ffigen
 ```
 
 To run
@@ -26,3 +28,6 @@ shortcut
 flutter pub run ffigen && "$HOME/Library/Application Support/fvm/current/bin/dart" ./lib/test_ffi.dart
 
 ```
+
+
+
