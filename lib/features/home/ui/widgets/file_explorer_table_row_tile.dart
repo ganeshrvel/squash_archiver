@@ -6,6 +6,7 @@ import 'package:squash_archiver/features/home/data/enums/file_explorer_source.da
 import 'package:squash_archiver/features/home/data/models/file_listing_response.dart';
 import 'package:squash_archiver/features/home/ui/pages/file_explorer_screen_store.dart';
 import 'package:squash_archiver/features/home/ui/widgets/file_explorer_table_row.dart';
+import 'package:squash_archiver/utils/utils/functs.dart';
 import 'package:squash_archiver/widgets/inkwell_extended/inkwell_extended.dart';
 import 'package:squash_archiver/widgets/text/textography.dart';
 
@@ -22,6 +23,7 @@ class FileExplorerTableRow extends StatefulWidget {
     @required this.fileContainer,
     @required this.rowIndex,
   })  : assert(fileExplorerScreenStore != null),
+        assert(fileContainer != null),
         assert(rowIndex != null),
         super(key: key);
 
@@ -93,7 +95,9 @@ class _FileExplorerTableRowState extends State<FileExplorerTableRow> {
         },
         child: Observer(builder: (_) {
           final _selectedFiles = _fileExplorerScreenStore.selectedFiles;
-          final _isSelected = _selectedFiles.contains(_fileContainer);
+          final _isSelected = isNotNull(
+            _selectedFiles[_fileContainer.uniqueId],
+          );
 
           return FileExplorerTableRowTile(
             isSelected: _isSelected,

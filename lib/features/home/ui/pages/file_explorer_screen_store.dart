@@ -27,22 +27,25 @@ abstract class _FileExplorerScreenStoreBase with Store {
   final _fileExplorerController = getIt<FileExplorerController>();
 
   @observable
-  List<FileListingResponse> files = ObservableList<FileListingResponse>();
+  List<FileListingResponse> fileContainers =
+      ObservableList<FileListingResponse>();
 
   @observable
-  ObservableFuture<DC<Exception, List<FileListingResponse>>> filesFuture =
-      ObservableFuture(Future.value());
+  ObservableFuture<DC<Exception, List<FileListingResponse>>>
+      fileContainersFuture = ObservableFuture(Future.value());
 
   @observable
-  Exception fileListException;
+  Exception fileContainersException;
 
   @observable
   @visibleForTesting
   List<FileListingRequest> fileListingSourceStack = ObservableList();
 
   /// the selected files in the file explorer
+  /// ///todo make selectedFiles a map instead of list inorder to make it o(1)
   @observable
-  List<FileListingResponse> selectedFiles = ObservableList();
+  Map<String, FileListingResponse> selectedFiles =
+      ObservableMap<String, FileListingResponse>();
 
   ///todo move [activeKeyboardModifierIntent] into a different store
   /// keyboard events
@@ -60,7 +63,7 @@ abstract class _FileExplorerScreenStoreBase with Store {
 
   @computed
   bool get fileListingInProgress {
-    return isStateLoading(filesFuture);
+    return isStateLoading(fileContainersFuture);
   }
 
   @computed
@@ -253,23 +256,23 @@ abstract class _FileExplorerScreenStoreBase with Store {
     final c = Completer();
 
     final _popStackOnError = popStackOnError ?? false;
-    fileListException = null;
+    fileContainersException = null;
 
     /// reset the selected files on directory/path/refresh
     resetSelectedFiles();
 
-    filesFuture = ObservableFuture(
+    fileContainersFuture = ObservableFuture(
       _fileExplorerController.listFiles(
         request: fileListingSource,
         invalidateCache: invalidateCache,
       ),
     );
 
-    final _data = await filesFuture;
+    final _data = await fileContainersFuture;
 
     _data.pick(
       onError: (error) async {
-        fileListException = error;
+        fileContainersException = error;
 
         /// if in an exception occured then remove the last request
         /// from the [fileListingSource] stack
@@ -280,14 +283,14 @@ abstract class _FileExplorerScreenStoreBase with Store {
         c.complete();
       },
       onData: (data) {
-        files = data;
-        fileListException = null;
+        fileContainers = data;
+        fileContainersException = null;
 
         c.complete();
       },
       onNoData: () {
-        files = [];
-        fileListException = null;
+        fileContainers = [];
+        fileContainersException = null;
 
         c.complete();
       },
@@ -321,26 +324,28 @@ abstract class _FileExplorerScreenStoreBase with Store {
   /// todo write tests
   @action
   void setSelectedFile(
-    FileListingResponse file, {
+    FileListingResponse fileContainer, {
     bool appendToList = false,
   }) {
-    assert(file != null);
+    assert(fileContainer != null);
     assert(appendToList != null);
+
+    final _uniqueId = fileContainer.uniqueId;
 
     var _selectedFiles = selectedFiles;
 
     /// if [appendToList] is true then multiple file selection is allowed
     if (appendToList) {
       /// if [selectedFiles] list contains the incoming file then remove it
-      if (_selectedFiles.contains(file)) {
-        _selectedFiles.remove(file);
+      if (isNotNull(_selectedFiles[_uniqueId])) {
+        _selectedFiles.remove(_uniqueId);
       } else {
         /// if [selectedFiles] list does not contain the incoming file then add it
-        _selectedFiles.add(file);
+        _selectedFiles.putIfAbsent(_uniqueId, () => fileContainer);
       }
     } else {
       /// if [appendToList] is false then only one file will be selected
-      _selectedFiles = [file];
+      _selectedFiles = {_uniqueId: fileContainer};
     }
 
     selectedFiles = _selectedFiles;
@@ -348,15 +353,21 @@ abstract class _FileExplorerScreenStoreBase with Store {
 
   /// select all files in the explorer window
   ///   /// todo write tests
+  @action
   void selectAllFiles() {
-    selectedFiles = [...files];
+    final _filesMap = {
+      for (var fileContainer in fileContainers)
+        fileContainer.uniqueId: fileContainer
+    };
+
+    selectedFiles = {..._filesMap};
   }
 
   /// reselect selected files in the explorer window
   ///   /// todo write tests
   @action
   void resetSelectedFiles() {
-    selectedFiles = [];
+    selectedFiles = ObservableMap();
   }
 
   /// todo write tests

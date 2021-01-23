@@ -118,7 +118,11 @@ dependencies:
   # date
   intl: ^0.17.0-nullsafety.2
 
+  # overlay
   flutter_portal: ^0.3.0
+
+  # hashing
+  crypto: ^2.1.5
 
 dev_dependencies:
   flutter_driver:

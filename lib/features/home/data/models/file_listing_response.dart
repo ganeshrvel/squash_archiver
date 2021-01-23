@@ -5,6 +5,7 @@ import 'package:squash_archiver/common/models/truncated_string.dart';
 import 'package:squash_archiver/features/home/ui/pages/helpers/file_explorer_helper.dart';
 import 'package:squash_archiver/utils/utils/date.dart';
 import 'package:squash_archiver/utils/utils/filesizes.dart';
+import 'package:squash_archiver/utils/utils/hash.dart';
 import 'package:squash_archiver/utils/utils/strings.dart';
 
 class FileListingResponse extends Equatable {
@@ -27,6 +28,10 @@ class FileListingResponse extends Equatable {
   /// Truncated filename
   TruncatedString get truncatedFilename => truncatedString(text: file.name);
 
+  /// Unique id to be used as a map key.
+  /// This is basically md5 hash of the file fullpath
+  String get uniqueId => getMd5(file.fullPath);
+
   @override
   List<Object> get props => [
         file,
@@ -34,5 +39,6 @@ class FileListingResponse extends Equatable {
         prettyFileSize,
         prettyDate,
         truncatedFilename,
+        uniqueId,
       ];
 }

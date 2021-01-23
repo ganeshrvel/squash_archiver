@@ -87,51 +87,55 @@ mixin _$FileExplorerScreenStore on _FileExplorerScreenStoreBase, Store {
               name: '_FileExplorerScreenStoreBase.isSelectAllPressed'))
       .value;
 
-  final _$filesAtom = Atom(name: '_FileExplorerScreenStoreBase.files');
+  final _$fileContainersAtom =
+      Atom(name: '_FileExplorerScreenStoreBase.fileContainers');
 
   @override
-  List<FileListingResponse> get files {
-    _$filesAtom.reportRead();
-    return super.files;
+  List<FileListingResponse> get fileContainers {
+    _$fileContainersAtom.reportRead();
+    return super.fileContainers;
   }
 
   @override
-  set files(List<FileListingResponse> value) {
-    _$filesAtom.reportWrite(value, super.files, () {
-      super.files = value;
+  set fileContainers(List<FileListingResponse> value) {
+    _$fileContainersAtom.reportWrite(value, super.fileContainers, () {
+      super.fileContainers = value;
     });
   }
 
-  final _$filesFutureAtom =
-      Atom(name: '_FileExplorerScreenStoreBase.filesFuture');
+  final _$fileContainersFutureAtom =
+      Atom(name: '_FileExplorerScreenStoreBase.fileContainersFuture');
 
   @override
-  ObservableFuture<DC<Exception, List<FileListingResponse>>> get filesFuture {
-    _$filesFutureAtom.reportRead();
-    return super.filesFuture;
+  ObservableFuture<DC<Exception, List<FileListingResponse>>>
+      get fileContainersFuture {
+    _$fileContainersFutureAtom.reportRead();
+    return super.fileContainersFuture;
   }
 
   @override
-  set filesFuture(
+  set fileContainersFuture(
       ObservableFuture<DC<Exception, List<FileListingResponse>>> value) {
-    _$filesFutureAtom.reportWrite(value, super.filesFuture, () {
-      super.filesFuture = value;
+    _$fileContainersFutureAtom.reportWrite(value, super.fileContainersFuture,
+        () {
+      super.fileContainersFuture = value;
     });
   }
 
-  final _$fileListExceptionAtom =
-      Atom(name: '_FileExplorerScreenStoreBase.fileListException');
+  final _$fileContainersExceptionAtom =
+      Atom(name: '_FileExplorerScreenStoreBase.fileContainersException');
 
   @override
-  Exception get fileListException {
-    _$fileListExceptionAtom.reportRead();
-    return super.fileListException;
+  Exception get fileContainersException {
+    _$fileContainersExceptionAtom.reportRead();
+    return super.fileContainersException;
   }
 
   @override
-  set fileListException(Exception value) {
-    _$fileListExceptionAtom.reportWrite(value, super.fileListException, () {
-      super.fileListException = value;
+  set fileContainersException(Exception value) {
+    _$fileContainersExceptionAtom
+        .reportWrite(value, super.fileContainersException, () {
+      super.fileContainersException = value;
     });
   }
 
@@ -156,13 +160,13 @@ mixin _$FileExplorerScreenStore on _FileExplorerScreenStoreBase, Store {
       Atom(name: '_FileExplorerScreenStoreBase.selectedFiles');
 
   @override
-  List<FileListingResponse> get selectedFiles {
+  Map<String, FileListingResponse> get selectedFiles {
     _$selectedFilesAtom.reportRead();
     return super.selectedFiles;
   }
 
   @override
-  set selectedFiles(List<FileListingResponse> value) {
+  set selectedFiles(Map<String, FileListingResponse> value) {
     _$selectedFilesAtom.reportWrite(value, super.selectedFiles, () {
       super.selectedFiles = value;
     });
@@ -299,11 +303,23 @@ mixin _$FileExplorerScreenStore on _FileExplorerScreenStoreBase, Store {
   }
 
   @override
-  void setSelectedFile(FileListingResponse file, {bool appendToList = false}) {
+  void setSelectedFile(FileListingResponse fileContainer,
+      {bool appendToList = false}) {
     final _$actionInfo = _$_FileExplorerScreenStoreBaseActionController
         .startAction(name: '_FileExplorerScreenStoreBase.setSelectedFile');
     try {
-      return super.setSelectedFile(file, appendToList: appendToList);
+      return super.setSelectedFile(fileContainer, appendToList: appendToList);
+    } finally {
+      _$_FileExplorerScreenStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void selectAllFiles() {
+    final _$actionInfo = _$_FileExplorerScreenStoreBaseActionController
+        .startAction(name: '_FileExplorerScreenStoreBase.selectAllFiles');
+    try {
+      return super.selectAllFiles();
     } finally {
       _$_FileExplorerScreenStoreBaseActionController.endAction(_$actionInfo);
     }
@@ -349,9 +365,9 @@ mixin _$FileExplorerScreenStore on _FileExplorerScreenStoreBase, Store {
   @override
   String toString() {
     return '''
-files: ${files},
-filesFuture: ${filesFuture},
-fileListException: ${fileListException},
+fileContainers: ${fileContainers},
+fileContainersFuture: ${fileContainersFuture},
+fileContainersException: ${fileContainersException},
 fileListingSourceStack: ${fileListingSourceStack},
 selectedFiles: ${selectedFiles},
 activeKeyboardModifierIntent: ${activeKeyboardModifierIntent},

@@ -72,7 +72,7 @@ class _FileExplorerTableState extends SfWidget<FileExplorerTable> {
   @override
   Widget build(BuildContext context) {
     return Observer(builder: (_) {
-      final _files = _fileExplorerScreenStore.files;
+      final _files = _fileExplorerScreenStore.fileContainers;
       final _rowsLength = _files.length;
 
       return SliverList(
