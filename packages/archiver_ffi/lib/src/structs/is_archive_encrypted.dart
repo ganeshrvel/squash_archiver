@@ -5,12 +5,12 @@ import 'package:ffi/ffi.dart';
 
 class IsArchiveEncryptedResultStruct extends Struct {
   @Int8()
-  int isEncrypted;
+  external int isEncrypted;
 
   @Int8()
-  int isValidPassword;
+  external int isValidPassword;
 
-  Pointer<ResultErrorStruct> error;
+  external Pointer<ResultErrorStruct> error;
 
   factory IsArchiveEncryptedResultStruct.allocate(
     int isEncrypted,

@@ -6,7 +6,7 @@ String getTestMocksAsset(String filename) {
   return path.join(Directory.current.path, 'test_assets/', 'mocks/', filename);
 }
 
-String getTestMocksBuildAsset(String filename, {bool delete, bool isDir}) {
+String getTestMocksBuildAsset(String filename, {bool? delete, bool? isDir}) {
   final _delete = delete ?? true;
   final _isDir = isDir ?? false;
 

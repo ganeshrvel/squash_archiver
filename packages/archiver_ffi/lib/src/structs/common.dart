@@ -3,10 +3,10 @@ import 'dart:ffi';
 import 'package:ffi/ffi.dart';
 
 class StringListStruct extends Struct {
-  Pointer<Pointer<Utf8>> list;
+  Pointer<Pointer<Utf8>>? list;
 
   @Int64()
-  int size;
+  int? size;
 
   Pointer<StringListStruct> fromList(
     List<String> arr,
@@ -33,8 +33,9 @@ class StringListStruct extends Struct {
 }
 
 class ResultErrorStruct extends Struct {
-  Pointer<Utf8> errorType;
-  Pointer<Utf8> error;
+  external Pointer<Utf8> errorType;
+
+  external Pointer<Utf8> error;
 
   factory ResultErrorStruct.allocate(
     Pointer<Utf8> error,

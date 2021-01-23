@@ -6,7 +6,7 @@ String getNativeLibRoot() {
   return path.join(Directory.current.path, 'native/', 'archiver_lib/');
 }
 
-String getNativeLib({bool fullPath}) {
+String getNativeLib({bool? fullPath}) {
   final _fullPath = fullPath ?? false;
 
   if (_fullPath) {
@@ -16,7 +16,7 @@ String getNativeLib({bool fullPath}) {
   return AppFiles.ARCHIVER_FFI_LIB;
 }
 
-String enumToString<T>(T value) {
+String? enumToString<T>(T value) {
   if (value == null) {
     return null;
   }

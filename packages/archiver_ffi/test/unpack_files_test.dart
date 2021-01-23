@@ -4,7 +4,6 @@ import 'package:archiver_ffi/src/archiver_ffi.dart';
 import 'package:archiver_ffi/src/exceptions/exceptions.dart';
 import 'package:archiver_ffi/src/models/unpack_files.dart';
 import 'package:archiver_ffi/src/utils/test_utils.dart';
-import 'package:meta/meta.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -262,11 +261,11 @@ void main() {
       const _progressStep = 10;
 
       void _unpackingCb({
-        @required String startTime,
-        @required String currentFilename,
-        @required int totalFiles,
-        @required int progressCount,
-        @required double progressPercentage,
+        required String startTime,
+        required String currentFilename,
+        required int totalFiles,
+        required int progressCount,
+        required double progressPercentage,
       }) {
         _cbCount += 1;
         _totalFiles = totalFiles;

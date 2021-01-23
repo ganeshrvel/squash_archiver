@@ -19,17 +19,16 @@ import 'package:archiver_ffi/src/utils/utils.dart';
 import 'package:archiver_ffi/src/generated/bindings.dart';
 import 'package:data_channel/data_channel.dart';
 import 'package:ffi/ffi.dart';
-import 'package:meta/meta.dart';
 
 class ArchiverFfi {
-  SquashArchiverLib _squashArchiverLib;
+  late SquashArchiverLib _squashArchiverLib;
 
-  factory ArchiverFfi({bool isTest, String libAbsPath}) {
+  factory ArchiverFfi({bool? isTest, String? libAbsPath}) {
     final _isTest = isTest ?? false;
 
     DynamicLibrary _dylib;
     if (isNotNullOrEmpty(libAbsPath)) {
-      _dylib = DynamicLibrary.open(libAbsPath);
+      _dylib = DynamicLibrary.open(libAbsPath!);
     } else {
       _dylib = DynamicLibrary.open(getNativeLib(fullPath: _isTest));
     }
@@ -57,19 +56,19 @@ class ArchiverFfi {
     final _ptrToFreeList = <Pointer<NativeType>>[];
 
     final _filename = toFfiString(params.filename, _ptrToFreeList);
-    final _password = toFfiString(params.password, _ptrToFreeList);
-    final _orderBy = toFfiString(enumToString(params.orderBy), _ptrToFreeList);
+    final _password = toFfiString(params.password!, _ptrToFreeList);
+    final _orderBy = toFfiString(enumToString(params.orderBy)!, _ptrToFreeList);
     final _orderDir =
-        toFfiString(enumToString(params.orderDir), _ptrToFreeList);
+        toFfiString(enumToString(params.orderDir)!, _ptrToFreeList);
     final _listDirectoryPath = toFfiString(
-      params.listDirectoryPath,
+      params.listDirectoryPath!,
       _ptrToFreeList,
     );
     final _pGitIgnorePattern = toFfiStringList(
-      params.gitIgnorePattern,
+      params.gitIgnorePattern!,
       _ptrToFreeList,
     );
-    final _recursive = toFfiBool(params.recursive);
+    final _recursive = toFfiBool(params.recursive!);
 
     _squashArchiverLib.ListArchive(
       _nativePort,
@@ -84,7 +83,7 @@ class ArchiverFfi {
 
     final _completer = Completer<DC<ArchiverException, ListArchiveResult>>();
 
-    StreamSubscription _requestsSub;
+    late StreamSubscription _requestsSub;
     _requestsSub = _requests.listen((address) {
       final _address = address as int;
       final _result =
@@ -155,7 +154,7 @@ class ArchiverFfi {
     final _ptrToFreeList = <Pointer<NativeType>>[];
 
     final _filename = toFfiString(params.filename, _ptrToFreeList);
-    final _password = toFfiString(params.password, _ptrToFreeList);
+    final _password = toFfiString(params.password!, _ptrToFreeList);
 
     _squashArchiverLib.IsArchiveEncrypted(
       _nativePort,
@@ -166,7 +165,7 @@ class ArchiverFfi {
     final _completer =
         Completer<DC<ArchiverException, IsArchiveEncryptedResult>>();
 
-    StreamSubscription _requestsSub;
+    late StreamSubscription _requestsSub;
 
     _requestsSub = _requests.listen((address) {
       final _address = address as int;
@@ -212,12 +211,12 @@ class ArchiverFfi {
   Future<DC<ArchiverException, PackFilesResult>> packFiles(
     PackFiles params, {
     Function({
-      @required String startTime,
-      @required String currentFilename,
-      @required int totalFiles,
-      @required int progressCount,
-      @required double progressPercentage,
-    })
+      required String startTime,
+      required String currentFilename,
+      required int totalFiles,
+      required int progressCount,
+      required double progressPercentage,
+    })?
         onProgress,
   }) async {
     final _requests = ReceivePort();
@@ -227,13 +226,13 @@ class ArchiverFfi {
     final _ptrToFreeList = <Pointer<NativeType>>[];
 
     final _filename = toFfiString(params.filename, _ptrToFreeList);
-    final _password = toFfiString(params.password, _ptrToFreeList);
+    final _password = toFfiString(params.password!, _ptrToFreeList);
     final _pGitIgnorePattern = toFfiStringList(
-      params.gitIgnorePattern,
+      params.gitIgnorePattern!,
       _ptrToFreeList,
     );
     final _pFileList = toFfiStringList(
-      params.fileList,
+      params.fileList!,
       _ptrToFreeList,
     );
 
@@ -247,7 +246,7 @@ class ArchiverFfi {
 
     final _completer = Completer<DC<ArchiverException, PackFilesResult>>();
 
-    StreamSubscription _requestsSub;
+    late StreamSubscription _requestsSub;
 
     _requestsSub = _requests.listen((address) {
       final _address = address as int;
@@ -269,7 +268,7 @@ class ArchiverFfi {
         );
 
         if (isNotNull(onProgress)) {
-          onProgress(
+          onProgress!(
             progressPercentage: _result.ref.progressPercentage,
             progressCount: _result.ref.progressCount,
             startTime: _result.ref.startTime.ref.toString(),
@@ -300,12 +299,12 @@ class ArchiverFfi {
   Future<DC<ArchiverException, UnpackFilesResult>> unpackFiles(
     UnpackFiles params, {
     Function({
-      @required String startTime,
-      @required String currentFilename,
-      @required int totalFiles,
-      @required int progressCount,
-      @required double progressPercentage,
-    })
+      required String startTime,
+      required String currentFilename,
+      required int totalFiles,
+      required int progressCount,
+      required double progressPercentage,
+    })?
         onProgress,
   }) async {
     final _requests = ReceivePort();
@@ -315,14 +314,14 @@ class ArchiverFfi {
     final _ptrToFreeList = <Pointer<NativeType>>[];
 
     final _filename = toFfiString(params.filename, _ptrToFreeList);
-    final _password = toFfiString(params.password, _ptrToFreeList);
+    final _password = toFfiString(params.password!, _ptrToFreeList);
     final _destination = toFfiString(params.destination, _ptrToFreeList);
     final _pGitIgnorePattern = toFfiStringList(
-      params.gitIgnorePattern,
+      params.gitIgnorePattern!,
       _ptrToFreeList,
     );
     final _pFileList = toFfiStringList(
-      params.fileList,
+      params.fileList!,
       _ptrToFreeList,
     );
 
@@ -337,7 +336,7 @@ class ArchiverFfi {
 
     final _completer = Completer<DC<ArchiverException, UnpackFilesResult>>();
 
-    StreamSubscription _requestsSub;
+    late StreamSubscription _requestsSub;
 
     _requestsSub = _requests.listen((address) {
       final _address = address as int;
@@ -359,7 +358,7 @@ class ArchiverFfi {
         );
 
         if (isNotNull(onProgress)) {
-          onProgress(
+          onProgress!(
             progressPercentage: _result.ref.progressPercentage,
             progressCount: _result.ref.progressCount,
             startTime: _result.ref.startTime.ref.toString(),

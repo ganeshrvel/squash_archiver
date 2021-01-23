@@ -15,26 +15,26 @@ class SquashArchiverLib {
   void InitNewNativeDartPort(
     ffi.Pointer<ffi.Void> api,
   ) {
-    _InitNewNativeDartPort ??= _dylib.lookupFunction<_c_InitNewNativeDartPort,
-        _dart_InitNewNativeDartPort>('InitNewNativeDartPort');
-    return _InitNewNativeDartPort(
+    return (_InitNewNativeDartPort ??= _dylib.lookupFunction<
+        _c_InitNewNativeDartPort,
+        _dart_InitNewNativeDartPort>('InitNewNativeDartPort'))(
       api,
     );
   }
 
-  _dart_InitNewNativeDartPort _InitNewNativeDartPort;
+  _dart_InitNewNativeDartPort? _InitNewNativeDartPort;
 
   int CloseNativeDartPort(
     int port,
   ) {
-    _CloseNativeDartPort ??= _dylib.lookupFunction<_c_CloseNativeDartPort,
-        _dart_CloseNativeDartPort>('CloseNativeDartPort');
-    return _CloseNativeDartPort(
+    return (_CloseNativeDartPort ??= _dylib.lookupFunction<
+        _c_CloseNativeDartPort,
+        _dart_CloseNativeDartPort>('CloseNativeDartPort'))(
       port,
     );
   }
 
-  _dart_CloseNativeDartPort _CloseNativeDartPort;
+  _dart_CloseNativeDartPort? _CloseNativeDartPort;
 
   void ListArchive(
     int port,
@@ -46,9 +46,8 @@ class SquashArchiverLib {
     int gitIgnorePatternPtrAddr,
     int recursive,
   ) {
-    _ListArchive ??=
-        _dylib.lookupFunction<_c_ListArchive, _dart_ListArchive>('ListArchive');
-    return _ListArchive(
+    return (_ListArchive ??= _dylib
+        .lookupFunction<_c_ListArchive, _dart_ListArchive>('ListArchive'))(
       port,
       filename,
       password,
@@ -60,49 +59,47 @@ class SquashArchiverLib {
     );
   }
 
-  _dart_ListArchive _ListArchive;
+  _dart_ListArchive? _ListArchive;
 
   void FreeListArchiveMemory(
     int ptrAddr,
   ) {
-    _FreeListArchiveMemory ??= _dylib.lookupFunction<_c_FreeListArchiveMemory,
-        _dart_FreeListArchiveMemory>('FreeListArchiveMemory');
-    return _FreeListArchiveMemory(
+    return (_FreeListArchiveMemory ??= _dylib.lookupFunction<
+        _c_FreeListArchiveMemory,
+        _dart_FreeListArchiveMemory>('FreeListArchiveMemory'))(
       ptrAddr,
     );
   }
 
-  _dart_FreeListArchiveMemory _FreeListArchiveMemory;
+  _dart_FreeListArchiveMemory? _FreeListArchiveMemory;
 
   void IsArchiveEncrypted(
     int port,
     ffi.Pointer<ffi.Int8> filename,
     ffi.Pointer<ffi.Int8> password,
   ) {
-    _IsArchiveEncrypted ??=
+    return (_IsArchiveEncrypted ??=
         _dylib.lookupFunction<_c_IsArchiveEncrypted, _dart_IsArchiveEncrypted>(
-            'IsArchiveEncrypted');
-    return _IsArchiveEncrypted(
+            'IsArchiveEncrypted'))(
       port,
       filename,
       password,
     );
   }
 
-  _dart_IsArchiveEncrypted _IsArchiveEncrypted;
+  _dart_IsArchiveEncrypted? _IsArchiveEncrypted;
 
   void FreeIsArchiveEncryptedMemory(
     int ptrAddr,
   ) {
-    _FreeIsArchiveEncryptedMemory ??= _dylib.lookupFunction<
+    return (_FreeIsArchiveEncryptedMemory ??= _dylib.lookupFunction<
         _c_FreeIsArchiveEncryptedMemory,
-        _dart_FreeIsArchiveEncryptedMemory>('FreeIsArchiveEncryptedMemory');
-    return _FreeIsArchiveEncryptedMemory(
+        _dart_FreeIsArchiveEncryptedMemory>('FreeIsArchiveEncryptedMemory'))(
       ptrAddr,
     );
   }
 
-  _dart_FreeIsArchiveEncryptedMemory _FreeIsArchiveEncryptedMemory;
+  _dart_FreeIsArchiveEncryptedMemory? _FreeIsArchiveEncryptedMemory;
 
   void PackFiles(
     int port,
@@ -111,9 +108,8 @@ class SquashArchiverLib {
     int gitIgnorePatternPtrAddr,
     int fileListPtrAddr,
   ) {
-    _PackFiles ??=
-        _dylib.lookupFunction<_c_PackFiles, _dart_PackFiles>('PackFiles');
-    return _PackFiles(
+    return (_PackFiles ??=
+        _dylib.lookupFunction<_c_PackFiles, _dart_PackFiles>('PackFiles'))(
       port,
       filename,
       password,
@@ -122,19 +118,19 @@ class SquashArchiverLib {
     );
   }
 
-  _dart_PackFiles _PackFiles;
+  _dart_PackFiles? _PackFiles;
 
   void FreePackFilesMemory(
     int ptrAddr,
   ) {
-    _FreePackFilesMemory ??= _dylib.lookupFunction<_c_FreePackFilesMemory,
-        _dart_FreePackFilesMemory>('FreePackFilesMemory');
-    return _FreePackFilesMemory(
+    return (_FreePackFilesMemory ??= _dylib.lookupFunction<
+        _c_FreePackFilesMemory,
+        _dart_FreePackFilesMemory>('FreePackFilesMemory'))(
       ptrAddr,
     );
   }
 
-  _dart_FreePackFilesMemory _FreePackFilesMemory;
+  _dart_FreePackFilesMemory? _FreePackFilesMemory;
 
   void UnpackFiles(
     int port,
@@ -144,9 +140,8 @@ class SquashArchiverLib {
     int gitIgnorePatternPtrAddr,
     int fileListPtrAddr,
   ) {
-    _UnpackFiles ??=
-        _dylib.lookupFunction<_c_UnpackFiles, _dart_UnpackFiles>('UnpackFiles');
-    return _UnpackFiles(
+    return (_UnpackFiles ??= _dylib
+        .lookupFunction<_c_UnpackFiles, _dart_UnpackFiles>('UnpackFiles'))(
       port,
       filename,
       password,
@@ -156,27 +151,27 @@ class SquashArchiverLib {
     );
   }
 
-  _dart_UnpackFiles _UnpackFiles;
+  _dart_UnpackFiles? _UnpackFiles;
 
   void FreeUnpackFilesMemory(
     int ptrAddr,
   ) {
-    _FreeUnpackFilesMemory ??= _dylib.lookupFunction<_c_FreeUnpackFilesMemory,
-        _dart_FreeUnpackFilesMemory>('FreeUnpackFilesMemory');
-    return _FreeUnpackFilesMemory(
+    return (_FreeUnpackFilesMemory ??= _dylib.lookupFunction<
+        _c_FreeUnpackFilesMemory,
+        _dart_FreeUnpackFilesMemory>('FreeUnpackFilesMemory'))(
       ptrAddr,
     );
   }
 
-  _dart_FreeUnpackFilesMemory _FreeUnpackFilesMemory;
+  _dart_FreeUnpackFilesMemory? _FreeUnpackFilesMemory;
 }
 
 class __darwin_pthread_handler_rec extends ffi.Struct {
-  ffi.Pointer<ffi.NativeFunction<_typedefC_1>> __routine;
+  external ffi.Pointer<ffi.NativeFunction<_typedefC_1>> __routine;
 
-  ffi.Pointer<ffi.Void> __arg;
+  external ffi.Pointer<ffi.Void> __arg;
 
-  ffi.Pointer<__darwin_pthread_handler_rec> __next;
+  external ffi.Pointer<__darwin_pthread_handler_rec> __next;
 }
 
 class _opaque_pthread_attr_t extends ffi.Struct {}
@@ -198,26 +193,26 @@ class _opaque_pthread_rwlockattr_t extends ffi.Struct {}
 class _opaque_pthread_t extends ffi.Struct {}
 
 class _GoString_ extends ffi.Struct {
-  ffi.Pointer<ffi.Int8> p;
+  external ffi.Pointer<ffi.Int8> p;
 
   @ffi.Int64()
-  int n;
+  external int n;
 }
 
 class GoInterface extends ffi.Struct {
-  ffi.Pointer<ffi.Void> t;
+  external ffi.Pointer<ffi.Void> t;
 
-  ffi.Pointer<ffi.Void> v;
+  external ffi.Pointer<ffi.Void> v;
 }
 
 class GoSlice extends ffi.Struct {
-  ffi.Pointer<ffi.Void> data;
+  external ffi.Pointer<ffi.Void> data;
 
   @ffi.Int64()
-  int len;
+  external int len;
 
   @ffi.Int64()
-  int cap;
+  external int cap;
 }
 
 const int __DARWIN_ONLY_64_BIT_INO_T = 0;

@@ -33,18 +33,18 @@ dependencies:
 
   # MobX is a library for reactively managing the state of your applications. Use the power of
   # observables, actions, and reactions to supercharge your Dart and Flutter apps.
-  flutter_mobx: ^1.1.0
-  mobx: ^1.1.1
+  flutter_mobx: ^2.0.0-nullsafety.0
+  mobx: ^2.0.0-nullsafety.2
 
   # Service locator
-  get_it: ^5.0.4
+  get_it: ^6.0.0-nullsafety.2
   injectable: ^1.0.7
 
   # data channel
-  data_channel: ^1.0.4
+  data_channel: ^2.0.0-nullsafety.1
 
   #url
-  url_launcher: ^5.4.10
+  url_launcher: ^6.0.0-nullsafety.4
 
   # Local cache
   shared_preferences: ^0.5.12
@@ -59,7 +59,7 @@ dependencies:
   data_connection_checker: ^0.3.4
 
   # Logging
-  logger: ^0.9.1
+  logger: ^1.0.0-nullsafety.0
   pretty_dio_logger: ^1.1.1
   sentry: ^3.0.1
 
@@ -71,7 +71,7 @@ dependencies:
 
   after_layout: ^1.0.7+2
 
-  equatable: ^1.1.1
+  equatable: ^2.0.0-nullsafety.1
 
   #firebase
   #firebase_core: ^0.5.0+1
@@ -81,13 +81,13 @@ dependencies:
   # firebase_analytics: ^6.0.0
 
   # validator
-  rules: ^1.2.0+3
+  rules: ^2.0.0-nullsafety.0
 
   # back button handling
   back_button_interceptor: ^4.2.3
 
   #device info
-  device_info: 1.0.0
+  device_info: 2.0.0-nullsafety.2
   package_info: ^0.4.3
 
   # loading
@@ -98,20 +98,20 @@ dependencies:
   flushbar: ^1.10.0
 
   # svg
-  flutter_svg: ^0.19.2+1
+  flutter_svg: ^0.20.0-nullsafety.3
 
   # fonts
   google_fonts: ^1.1.0
 
-  archiver_ffi:
-    path: ./packages/archiver_ffi
+#  archiver_ffi:
+#    path: ./packages/archiver_ffi
 
   # path
   path: ^1.7.0
   path_provider: ^1.5.1
 
   # utils
-  supercharged: ^1.10.0
+  supercharged: ^2.0.0-nullsafety.1
   dartx: ^0.5.0
   collection: ^1.14.13
 
@@ -121,8 +121,8 @@ dependencies:
   flutter_portal: ^0.3.0
 
 dev_dependencies:
-  flutter_driver:
-    sdk: flutter
+#  flutter_driver:
+#    sdk: flutter
 
 
   flutter_test:
@@ -146,7 +146,7 @@ dev_dependencies:
   auto_route_generator: ^0.6.10
 
   # Json
-  json_serializable: ^3.3.0
+  json_serializable: ^3.5.1
 
 # For information on the generic Dart part of this file, see the
 # following page: https://www.dartlang.org/tools/pub/pubspec

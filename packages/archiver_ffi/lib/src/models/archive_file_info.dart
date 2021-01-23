@@ -1,5 +1,4 @@
 import 'package:equatable/equatable.dart';
-import 'package:meta/meta.dart';
 
 class FileInfo extends Equatable {
   final int mode;
@@ -19,25 +18,25 @@ class FileInfo extends Equatable {
   final String extension;
 
   const FileInfo({
-    @required this.mode,
-    @required this.size,
-    @required this.isDir,
-    @required this.modTime,
-    @required this.name,
-    @required this.fullPath,
-    @required this.parentPath,
-    @required this.extension,
+    required this.mode,
+    required this.size,
+    required this.isDir,
+    required this.modTime,
+    required this.name,
+    required this.fullPath,
+    required this.parentPath,
+    required this.extension,
   });
 
   FileInfo copyWith({
-    int mode,
-    int size,
-    bool isDir,
-    String modTime,
-    String name,
-    String fullPath,
-    String parentPath,
-    String extension,
+    int? mode,
+    int? size,
+    bool? isDir,
+    String? modTime,
+    String? name,
+    String? fullPath,
+    String? parentPath,
+    String? extension,
   }) {
     return FileInfo(
       fullPath: fullPath ?? this.fullPath,
