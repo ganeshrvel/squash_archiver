@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:squash_archiver/constants/colors.dart';
+import 'package:squash_archiver/utils/utils/functs.dart';
 import 'package:squash_archiver/widgets/shadows/box_shadow_3.dart';
 
 class AppTooltip extends StatelessWidget {
@@ -42,6 +43,11 @@ class AppTooltip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    /// don't show empty popup
+    if (isNullOrEmpty(message)) {
+      return child;
+    }
+
     return Tooltip(
       waitDuration: waitDuration ?? const Duration(milliseconds: 700),
       showDuration: showDuration,
