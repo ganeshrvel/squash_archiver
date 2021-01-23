@@ -1,9 +1,9 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:squash_archiver/features/home/ui/pages/helpers/file_explorer_helper.dart';
+import 'package:squash_archiver/common/helpers/archive_helper.dart';
 
 void main() {
   group('file_explorer_helper', () {
-    group('isSupportedArchiveFormat', () {
+    group('isArchiveFormatSupported', () {
       test('should return true', () async {
         final _supportedList = [
           'zip',
@@ -20,7 +20,7 @@ void main() {
 
         _supportedList.forEach((ext) {
           expect(
-            isSupportedArchiveFormat(ext),
+            isArchiveFormatSupported(ext),
             equals(true),
             reason: 'failure: $ext',
           );
@@ -47,7 +47,7 @@ void main() {
 
         _supportedList.forEach((ext) {
           expect(
-            isSupportedArchiveFormat(ext),
+            isArchiveFormatSupported(ext),
             equals(false),
             reason: 'failure: $ext',
           );

@@ -1,8 +1,8 @@
 import 'package:archiver_ffi/archiver_ffi.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
+import 'package:squash_archiver/common/helpers/archive_helper.dart';
 import 'package:squash_archiver/common/models/truncated_string.dart';
-import 'package:squash_archiver/features/home/ui/pages/helpers/file_explorer_helper.dart';
 import 'package:squash_archiver/utils/utils/date.dart';
 import 'package:squash_archiver/utils/utils/filesizes.dart';
 import 'package:squash_archiver/utils/utils/hash.dart';
@@ -17,7 +17,7 @@ class FileListingResponse extends Equatable {
   }) : assert(file != null);
 
   /// if [isSupported] is true then the archive format is supported by the app
-  bool get isSupported => isSupportedArchiveFormat(file.extension);
+  bool get isSupported => isArchiveFormatSupported(file.extension);
 
   /// human readable string representing the file size
   String get prettyFileSize => !file.isDir ? filesize(file.size) : '';
