@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:squash_archiver/common/models/key_modifier.dart';
 import 'package:squash_archiver/features/app/data/models/keyboard_modifier_intent.dart';
+import 'package:squash_archiver/utils/utils/functs.dart';
 
 /// the key modifiers mapping
 const KeyModifiersMapping = <KeyModifierActionType, KeyModifier>{
@@ -89,7 +90,7 @@ Map<LogicalKeySet, Intent> getKeyModifiersShortcut() {
   return _keyMaps;
 }
 
-/// returns the [KeyModifier] for the input key combination
+/// returns the [KeyModifier] of the input key combination
 KeyModifier getKeyModifierFromKeys(
   List<LogicalKeyboardKey> keys,
 ) {
@@ -102,4 +103,19 @@ KeyModifier getKeyModifierFromKeys(
   }
 
   return null;
+}
+
+/// returns [true] if the [keys] matches the [KeyModifierActionType]
+bool isKeyModifierMatching({
+  @required List<LogicalKeyboardKey> keys,
+  @required KeyModifierActionType actionType,
+}) {
+  if (isNull(KeyModifiersMapping[actionType])) {
+    throw "Invalid 'actionType' argument in isKeyModifier";
+  }
+
+  final _deepEq = const DeepCollectionEquality().equals;
+  final _keyMap = KeyModifiersMapping[actionType];
+
+  return _deepEq(_keyMap.keys, keys);
 }

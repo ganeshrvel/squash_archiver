@@ -18,10 +18,10 @@ abstract class _FileExplorerKeyboardModifiersStoreBase with Store {
   ///  /// todo write tests
   @computed
   bool get isSelectAllPressed {
-    final _keyModifier =
-        getKeyModifierFromKeys(activeKeyboardModifierIntent?.keys);
-
-    return _keyModifier.actionType == KeyModifierActionType.SELECT_ALL;
+    return isKeyModifierMatching(
+      keys: activeKeyboardModifierIntent?.keys,
+      actionType: KeyModifierActionType.SELECT_ALL,
+    );
   }
 
   /// todo write tests
