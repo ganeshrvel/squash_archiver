@@ -1,10 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mobx/mobx.dart' show ReactionDisposer;
 import 'package:provider/provider.dart';
+import 'package:squash_archiver/common/helpers/file_explorer_key_modifiers_helper.dart';
 import 'package:squash_archiver/constants/app_default_values.dart';
 import 'package:squash_archiver/constants/colors.dart';
 import 'package:squash_archiver/constants/sizes.dart';
@@ -126,38 +126,7 @@ class _FileExplorerScreenState extends SfWidget<FileExplorerScreen> {
     return Expanded(
       child: Shortcuts(
         manager: _shortcutManager,
-        shortcuts: <LogicalKeySet, Intent>{
-          //todo move the LogicalKeySets to a separate helper file and use this mapping
-          // along with the store variable to avoid unwanted surprises
-          LogicalKeySet(LogicalKeyboardKey.alt): const KeyboardModifierIntent(
-            keys: [
-              LogicalKeyboardKey.alt,
-            ],
-          ),
-          LogicalKeySet(LogicalKeyboardKey.control):
-              const KeyboardModifierIntent(
-            keys: [
-              LogicalKeyboardKey.control,
-            ],
-          ),
-          LogicalKeySet(LogicalKeyboardKey.meta): const KeyboardModifierIntent(
-            keys: [
-              LogicalKeyboardKey.meta,
-            ],
-          ),
-          LogicalKeySet(LogicalKeyboardKey.shift): const KeyboardModifierIntent(
-            keys: [
-              LogicalKeyboardKey.shift,
-            ],
-          ),
-          LogicalKeySet(LogicalKeyboardKey.meta, LogicalKeyboardKey.keyA):
-              const KeyboardModifierIntent(
-            keys: [
-              LogicalKeyboardKey.meta,
-              LogicalKeyboardKey.keyA,
-            ],
-          ),
-        },
+        shortcuts: getKeyModifiersShortcut(),
         child: Actions(
           actions: <Type, Action<Intent>>{
             KeyboardModifierIntent: CallbackAction<KeyboardModifierIntent>(
@@ -170,7 +139,8 @@ class _FileExplorerScreenState extends SfWidget<FileExplorerScreen> {
           child: Focus(
             onKey: (focus, keyEvent) {
               if (isNullOrEmpty(keyEvent.data.modifiersPressed)) {
-                _fileExplorerKeyboardModifiersStore.resetActiveKeyboardModifierIntent();
+                _fileExplorerKeyboardModifiersStore
+                    .resetActiveKeyboardModifierIntent();
               }
 
               return false;

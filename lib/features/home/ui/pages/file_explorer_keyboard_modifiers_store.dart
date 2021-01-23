@@ -1,7 +1,6 @@
-import 'package:collection/collection.dart';
-import 'package:flutter/services.dart';
-
 import 'package:mobx/mobx.dart';
+import 'package:squash_archiver/common/helpers/file_explorer_key_modifiers_helper.dart';
+import 'package:squash_archiver/common/models/key_modifier.dart';
 import 'package:squash_archiver/features/app/data/models/keyboard_modifier_intent.dart';
 
 part 'file_explorer_keyboard_modifiers_store.g.dart';
@@ -16,14 +15,13 @@ abstract class _FileExplorerKeyboardModifiersStoreBase with Store {
   KeyboardModifierIntent activeKeyboardModifierIntent;
 
   /// returns [true] if meta+a is pressed in the keyboard
+  ///  /// todo write tests
   @computed
   bool get isSelectAllPressed {
-    final deepEq = const DeepCollectionEquality().equals;
+    final _keyModifier =
+        getKeyModifierFromKeys(activeKeyboardModifierIntent?.keys);
 
-    return deepEq(activeKeyboardModifierIntent?.keys ?? [], [
-      LogicalKeyboardKey.meta,
-      LogicalKeyboardKey.keyA,
-    ]);
+    return _keyModifier.actionType == KeyModifierActionType.SELECT_ALL;
   }
 
   /// todo write tests
