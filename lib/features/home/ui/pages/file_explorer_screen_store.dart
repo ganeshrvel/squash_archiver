@@ -12,7 +12,6 @@ import 'package:squash_archiver/features/home/data/enums/file_explorer_source.da
 import 'package:squash_archiver/features/home/data/models/file_listing_request.dart';
 import 'package:squash_archiver/features/home/data/models/file_listing_response.dart';
 import 'package:squash_archiver/features/home/data/models/password_request.dart';
-import 'package:squash_archiver/utils/log/log.dart';
 import 'package:squash_archiver/utils/utils/files.dart';
 import 'package:squash_archiver/utils/utils/functs.dart';
 import 'package:squash_archiver/utils/utils/store_helper.dart';
@@ -288,10 +287,6 @@ abstract class _FileExplorerScreenStoreBase with Store {
       onError: (error) async {
         /// set [requestPassword] if the [error] is [PasswordRequiredException]
         if (error is PasswordRequiredException) {
-          print('============');
-          log.print('error', '${error}');
-          print('============');
-
           setRequestPassword(
             PasswordRequest(
               fileListingRequest: fileListingSource,

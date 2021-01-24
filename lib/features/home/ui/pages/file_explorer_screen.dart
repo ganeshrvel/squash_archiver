@@ -111,6 +111,9 @@ class _FileExplorerScreenState extends SfWidget<FileExplorerScreen> {
       clearStack: false,
       source: FileExplorerSource.ARCHIVE,
       currentArchiveFilepath: fileListingRequest.archiveFilepath,
+      orderBy: fileListingRequest.orderBy,
+      orderDir: fileListingRequest.orderDir,
+      gitIgnorePattern: fileListingRequest.gitIgnorePattern,
     );
 
     _fileExplorerScreenStore.resetRequestPassword();

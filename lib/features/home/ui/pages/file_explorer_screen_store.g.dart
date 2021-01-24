@@ -187,18 +187,18 @@ mixin _$FileExplorerScreenStore on _FileExplorerScreenStoreBase, Store {
   @override
   Future<void> navigateToSource(
       {@required String fullPath,
+      String currentArchiveFilepath,
       @required FileExplorerSource source,
       @required bool clearStack,
-      String currentArchiveFilepath,
       OrderBy orderBy,
       OrderDir orderDir,
       String password,
       List<String> gitIgnorePattern}) {
     return _$navigateToSourceAsyncAction.run(() => super.navigateToSource(
         fullPath: fullPath,
+        currentArchiveFilepath: currentArchiveFilepath,
         source: source,
         clearStack: clearStack,
-        currentArchiveFilepath: currentArchiveFilepath,
         orderBy: orderBy,
         orderDir: orderDir,
         password: password,
@@ -271,24 +271,24 @@ mixin _$FileExplorerScreenStore on _FileExplorerScreenStoreBase, Store {
       ActionController(name: '_FileExplorerScreenStoreBase');
 
   @override
-  void _setFileListingRequestStack(FileListingRequest param) {
+  void _setFileListingRequestStack(FileListingRequest value) {
     final _$actionInfo =
         _$_FileExplorerScreenStoreBaseActionController.startAction(
             name: '_FileExplorerScreenStoreBase._setFileListingRequestStack');
     try {
-      return super._setFileListingRequestStack(param);
+      return super._setFileListingRequestStack(value);
     } finally {
       _$_FileExplorerScreenStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  void _addToFileListingRequestStack(FileListingRequest param) {
+  void _addToFileListingRequestStack(FileListingRequest value) {
     final _$actionInfo =
         _$_FileExplorerScreenStoreBaseActionController.startAction(
             name: '_FileExplorerScreenStoreBase._addToFileListingRequestStack');
     try {
-      return super._addToFileListingRequestStack(param);
+      return super._addToFileListingRequestStack(value);
     } finally {
       _$_FileExplorerScreenStoreBaseActionController.endAction(_$actionInfo);
     }
