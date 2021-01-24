@@ -95,7 +95,10 @@ class _FileExplorerTableRowState extends State<FileExplorerTableRow> {
           );
         },
         child: Observer(builder: (_) {
+          /// list of selected files
           final _selectedFiles = _fileExplorerScreenStore.selectedFiles;
+
+          /// is file selected
           final _isSelected = isNotNull(
             _selectedFiles[_fileContainer.uniqueId],
           );

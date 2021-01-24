@@ -26,11 +26,14 @@ class FileExplorerTableRowTile extends StatelessWidget {
   Widget build(BuildContext context) {
     const _textFontVariant = TextVariant.body2;
     const _textFontWeight = FontWeight.w700;
-    final _metaDataTextColor = AppColors.color797;
+    var _metaDataTextColor = AppColors.black.withOpacity(0.6);
+    var _textColor = AppColors.black;
 
     var _rowColor = rowIndex % 2 == 0 ? AppColors.white : AppColors.colorF5F;
     if (isSelected) {
       _rowColor = AppColors.darkBlue;
+      _textColor = AppColors.white;
+      _metaDataTextColor = AppColors.white.withOpacity(0.7);
     }
 
     return Container(
@@ -67,6 +70,7 @@ class FileExplorerTableRowTile extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                       variant: _textFontVariant,
                       fontWeight: _textFontWeight,
+                      color: _textColor,
                     ),
                   ),
                 ),
