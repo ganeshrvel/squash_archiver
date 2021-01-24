@@ -1,5 +1,6 @@
 import 'package:archiver_ffi/archiver_ffi.dart';
 import 'package:equatable/equatable.dart';
+import 'package:path/path.dart' show basename;
 import 'package:meta/meta.dart';
 import 'package:squash_archiver/constants/app_default_values.dart';
 import 'package:squash_archiver/features/home/data/enums/file_explorer_source.dart';
@@ -22,6 +23,9 @@ class FileListingRequest extends Equatable {
   List<String> gitIgnorePattern;
 
   FileExplorerSource source;
+
+  /// file name derived from [archiveFilepath]
+  String get filename => basename(archiveFilepath);
 
   FileListingRequest({
     @required this.path,

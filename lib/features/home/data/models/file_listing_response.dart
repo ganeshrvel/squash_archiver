@@ -29,7 +29,7 @@ class FileListingResponse extends Equatable {
   TruncatedString get truncatedFilename => truncatedString(text: file.name);
 
   /// Unique id to be used as a map key.
-  /// This is basically md5 hash of the file fullpath
+  /// This is basically md5 hash of the file's fullPath
   String get uniqueId => getMd5(file.fullPath);
 
   @override

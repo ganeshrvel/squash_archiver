@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:mobx/mobx.dart' show ReactionDisposer;
+import 'package:mobx/mobx.dart' show ReactionDisposer, reaction;
 import 'package:provider/provider.dart';
 import 'package:squash_archiver/common/helpers/file_explorer_key_modifiers_helper.dart';
 import 'package:squash_archiver/constants/app_default_values.dart';
@@ -10,9 +10,11 @@ import 'package:squash_archiver/constants/colors.dart';
 import 'package:squash_archiver/constants/sizes.dart';
 import 'package:squash_archiver/features/home/data/enums/file_explorer_source.dart';
 import 'package:squash_archiver/features/app/data/models/keyboard_modifier_intent.dart';
+import 'package:squash_archiver/features/home/data/models/file_listing_request.dart';
 import 'package:squash_archiver/features/home/ui/pages/file_explorer_keyboard_modifiers_store.dart';
 import 'package:squash_archiver/features/home/ui/pages/file_explorer_screen_store.dart';
 import 'package:squash_archiver/features/home/ui/widgets/file_explorer_pane.dart';
+import 'package:squash_archiver/features/home/ui/widgets/file_explorer_password_overlay.dart';
 import 'package:squash_archiver/features/home/ui/widgets/file_explorer_table_header.dart';
 import 'package:squash_archiver/features/home/ui/widgets/file_explorer_toolbar.dart';
 import 'package:squash_archiver/features/home/ui/widgets/file_explorer_sidebar.dart';
@@ -78,6 +80,17 @@ class _FileExplorerScreenState extends SfWidget<FileExplorerScreen> {
 
   @override
   void didChangeDependencies() {
+    _disposers = [
+      reaction(
+        (_) => _fileExplorerScreenStore.fileContainersException,
+        (Exception fileContainersException) {
+          if (isNull(fileContainersException)) {
+            return;
+          }
+        },
+      ),
+    ];
+
     super.didChangeDependencies();
   }
 
@@ -86,6 +99,25 @@ class _FileExplorerScreenState extends SfWidget<FileExplorerScreen> {
     disposeStore(_disposers);
 
     super.dispose();
+  }
+
+  void _handlePasswordRequestOkTap({
+    @required FileListingRequest fileListingRequest,
+    @required String password,
+  }) {
+    _fileExplorerScreenStore.navigateToSource(
+      fullPath: fileListingRequest.path,
+      password: password,
+      clearStack: false,
+      source: FileExplorerSource.ARCHIVE,
+      currentArchiveFilepath: fileListingRequest.archiveFilepath,
+    );
+
+    _fileExplorerScreenStore.resetRequestPassword();
+  }
+
+  void _handlePasswordRequestCancelTap() {
+    _fileExplorerScreenStore.resetRequestPassword();
   }
 
   SliverPersistentHeader _buildToolbar() {
@@ -180,6 +212,26 @@ class _FileExplorerScreenState extends SfWidget<FileExplorerScreen> {
     );
   }
 
+  Widget _buildPasswordOverlay() {
+    return Observer(
+      builder: (_) {
+        final _requestPassword = _fileExplorerScreenStore.requestPassword;
+        final _showRequestPasswordOverlay = isNotNull(_requestPassword);
+
+        if (!_showRequestPasswordOverlay) {
+          return Container();
+        }
+
+        return FileExplorerPasswordOverlay(
+          visible: _showRequestPasswordOverlay,
+          passwordRequest: _requestPassword,
+          onCancel: _handlePasswordRequestCancelTap,
+          onOk: _handlePasswordRequestOkTap,
+        );
+      },
+    );
+  }
+
   Widget _buildBody() {
     return MultiProvider(
       providers: [
@@ -195,6 +247,7 @@ class _FileExplorerScreenState extends SfWidget<FileExplorerScreen> {
           _buildSidebar(),
           _buildFileExplorer(),
           _buildProgressOverlay(),
+          _buildPasswordOverlay(),
         ],
       ),
     );

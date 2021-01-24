@@ -149,6 +149,22 @@ mixin _$FileExplorerScreenStore on _FileExplorerScreenStoreBase, Store {
     });
   }
 
+  final _$requestPasswordAtom =
+      Atom(name: '_FileExplorerScreenStoreBase.requestPassword');
+
+  @override
+  PasswordRequest get requestPassword {
+    _$requestPasswordAtom.reportRead();
+    return super.requestPassword;
+  }
+
+  @override
+  set requestPassword(PasswordRequest value) {
+    _$requestPasswordAtom.reportWrite(value, super.requestPassword, () {
+      super.requestPassword = value;
+    });
+  }
+
   final _$selectedFilesAtom =
       Atom(name: '_FileExplorerScreenStoreBase.selectedFiles');
 
@@ -313,12 +329,35 @@ mixin _$FileExplorerScreenStore on _FileExplorerScreenStoreBase, Store {
   }
 
   @override
+  void setRequestPassword(PasswordRequest value) {
+    final _$actionInfo = _$_FileExplorerScreenStoreBaseActionController
+        .startAction(name: '_FileExplorerScreenStoreBase.setRequestPassword');
+    try {
+      return super.setRequestPassword(value);
+    } finally {
+      _$_FileExplorerScreenStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void resetRequestPassword() {
+    final _$actionInfo = _$_FileExplorerScreenStoreBaseActionController
+        .startAction(name: '_FileExplorerScreenStoreBase.resetRequestPassword');
+    try {
+      return super.resetRequestPassword();
+    } finally {
+      _$_FileExplorerScreenStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 fileContainers: ${fileContainers},
 fileContainersFuture: ${fileContainersFuture},
 fileContainersException: ${fileContainersException},
 fileListingSourceStack: ${fileListingSourceStack},
+requestPassword: ${requestPassword},
 selectedFiles: ${selectedFiles},
 fileListingSource: ${fileListingSource},
 fileListingInProgress: ${fileListingInProgress},

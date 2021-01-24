@@ -11,6 +11,7 @@ import 'package:squash_archiver/features/home/data/controllers/file_explorer_con
 import 'package:squash_archiver/features/home/data/enums/file_explorer_source.dart';
 import 'package:squash_archiver/features/home/data/models/file_listing_request.dart';
 import 'package:squash_archiver/features/home/data/models/file_listing_response.dart';
+import 'package:squash_archiver/features/home/data/models/password_request.dart';
 import 'package:squash_archiver/utils/utils/files.dart';
 import 'package:squash_archiver/utils/utils/functs.dart';
 import 'package:squash_archiver/utils/utils/store_helper.dart';
@@ -37,6 +38,10 @@ abstract class _FileExplorerScreenStoreBase with Store {
   @observable
   @visibleForTesting
   List<FileListingRequest> fileListingSourceStack = ObservableList();
+
+  /// if passwordOverlay is NOT null then show the password request overlay
+  @observable
+  PasswordRequest requestPassword;
 
   /// the selected files in the file explorer
   /// ///todo make selectedFiles a map instead of list inorder to make it o(1)
@@ -106,17 +111,30 @@ abstract class _FileExplorerScreenStoreBase with Store {
   /// and then fetch files from the respective source
   @action
   Future<void> navigateToSource({
+    /// full path to the next directory
+    /// for [FileExplorerSource.local] fullPath is the path to the next directory
+    /// for [FileExplorerSource.archive] fullPath is the directory path within the archive
     @required String fullPath,
+
+    /// the full path to the archive file
+    String currentArchiveFilepath,
+
+    /// source type [FileExplorerSource.local] or [FileExplorerSource.archive]
     @required FileExplorerSource source,
 
     /// clearing stack will empty [fileListingSourceStack] first and then insert a new request
     @required bool clearStack,
 
-    /// the full path to the archive file
-    String currentArchiveFilepath,
+    /// sort the files by name, size or modified time. order by 'fullPath' isn't supported yet.
     OrderBy orderBy,
+
+    /// sort the files in ascending or descending order. orderDir 'none' isn't supported yet.
     OrderDir orderDir,
+
+    /// password field. If null or empty then password will be ignored.
     String password,
+
+    /// gitignore pattern list
     List<String> gitIgnorePattern,
   }) async {
     assert(fullPath != null);
@@ -253,7 +271,30 @@ abstract class _FileExplorerScreenStoreBase with Store {
 
     _data.pick(
       onError: (error) async {
-        fileContainersException = error;
+        /// set [requestPassword] if the [error] is [PasswordRequiredException]
+        if (error is PasswordRequiredException) {
+          setRequestPassword(
+            PasswordRequest(
+              fileListingRequest: fileListingSource,
+              invalidPassword: false,
+            ),
+          );
+        }
+
+        /// mark [requestPassword.invalidPassword] as true if the [error] is [InvalidPasswordException]
+        else if (error is InvalidPasswordException) {
+          setRequestPassword(
+            PasswordRequest(
+              fileListingRequest: fileListingSource,
+              invalidPassword: true,
+            ),
+          );
+        }
+
+        /// set [fileContainersException] for all other errors
+        else {
+          fileContainersException = error;
+        }
 
         /// if in an exception occured then remove the last request
         /// from the [fileListingSource] stack
@@ -349,5 +390,15 @@ abstract class _FileExplorerScreenStoreBase with Store {
   @action
   void resetSelectedFiles() {
     selectedFiles = ObservableMap();
+  }
+
+  @action
+  void setRequestPassword(PasswordRequest value) {
+    requestPassword = value;
+  }
+
+  @action
+  void resetRequestPassword() {
+    requestPassword = null;
   }
 }
