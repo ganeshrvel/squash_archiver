@@ -134,7 +134,6 @@ class _FileExplorerScreenState extends SfWidget<FileExplorerScreen> {
   Widget _buildSidebar() {
     return const SizedBox(
       width: Sizes.SIDEBAR_WIDTH,
-      //todo add a store for current path
       child: FileExplorerSidebar(),
     );
   }

@@ -24,6 +24,7 @@ class FileExplorerScreenStore = _FileExplorerScreenStoreBase
 abstract class _FileExplorerScreenStoreBase with Store {
   final _fileExplorerController = getIt<FileExplorerController>();
 
+  /// [FileListingResponse] object stack
   @observable
   List<FileListingResponse> fileContainers =
       ObservableList<FileListingResponse>();
@@ -32,9 +33,11 @@ abstract class _FileExplorerScreenStoreBase with Store {
   ObservableFuture<DC<Exception, List<FileListingResponse>>>
       fileContainersFuture = ObservableFuture(Future.value());
 
+  /// [Exception] from [_fetchFiles]
   @observable
   Exception fileContainersException;
 
+  /// [FileListingRequest] object stack
   @observable
   @visibleForTesting
   List<FileListingRequest> fileListingSourceStack = ObservableList();
@@ -235,6 +238,7 @@ abstract class _FileExplorerScreenStoreBase with Store {
     );
   }
 
+  /// pop the last source item ([FileListingRequest] object) from the [fileListingSourceStack] stack
   @action
   Future<void> _popFileListingSourceStack() async {
     if (fileListingSourceStack.length > 1) {
@@ -247,9 +251,19 @@ abstract class _FileExplorerScreenStoreBase with Store {
     }
   }
 
+  ///  fetch files from local or archive data source
   @action
   Future<void> _fetchFiles({
+    /// InvalidateCache is only using for listing archive files.
+    /// Use 'invalidate' flag to use the cache while listing archive files.
+    /// If [invalidateCache] is set as true while listing the archive files
+    /// then the files will be fetched again from the [archiver_ffi]
+    /// Reading an archive file requires a few seconds as there are multiple
+    /// file processing involved.
+    /// Use this as required and only when neccessary
     bool invalidateCache,
+
+    /// should pop the [fileListingSourceStack] stack on error.
     bool popStackOnError,
   }) async {
     final c = Completer();
@@ -311,7 +325,7 @@ abstract class _FileExplorerScreenStoreBase with Store {
         c.complete();
       },
       onNoData: () {
-        fileContainers = [];
+        fileContainers = ObservableList();
         fileContainersException = null;
 
         c.complete();
@@ -321,21 +335,25 @@ abstract class _FileExplorerScreenStoreBase with Store {
     return c.future;
   }
 
+  /// set the [fileListingSourceStack]
   @action
-  void _setFileListingRequestStack(FileListingRequest param) {
-    fileListingSourceStack = [param];
+  void _setFileListingRequestStack(FileListingRequest value) {
+    fileListingSourceStack = [value];
   }
 
+  /// add an item to the [fileListingSourceStack]
   @action
-  void _addToFileListingRequestStack(FileListingRequest param) {
+  void _addToFileListingRequestStack(FileListingRequest value) {
+    /// if [fileListingSourceStack] is empty then SET a new [FileListingRequest] object to it
     if (isNullOrEmpty(fileListingSourceStack)) {
-      _setFileListingRequestStack(param);
+      _setFileListingRequestStack(value);
 
       return;
     }
 
+    /// if [fileListingSourceStack] is NOT empty then ADD a new [FileListingRequest] object to it
     final _fileListingSourceStackTemp = fileListingSourceStack;
-    _fileListingSourceStackTemp.add(param);
+    _fileListingSourceStackTemp.add(value);
 
     fileListingSourceStack = _fileListingSourceStackTemp;
   }
@@ -392,11 +410,13 @@ abstract class _FileExplorerScreenStoreBase with Store {
     selectedFiles = ObservableMap();
   }
 
+  /// set the password request field
   @action
   void setRequestPassword(PasswordRequest value) {
     requestPassword = value;
   }
 
+  /// reset the password request field
   @action
   void resetRequestPassword() {
     requestPassword = null;
