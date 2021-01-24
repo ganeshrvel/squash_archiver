@@ -17,7 +17,8 @@ class FileExplorerToolbar extends StatefulWidget {
 }
 
 class FileExplorerToolbarState extends SfWidget<FileExplorerToolbar> {
-  FileExplorerScreenStore get _fileExplorerScreenStore => readProvider<FileExplorerScreenStore>(context);
+  FileExplorerScreenStore get _fileExplorerScreenStore =>
+      readProvider<FileExplorerScreenStore>(context);
 
   @override
   Widget build(BuildContext context) {

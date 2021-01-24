@@ -18,6 +18,9 @@ class FileExplorerPasswordOverlay extends StatefulWidget {
   /// [PasswordRequest] object
   final PasswordRequest passwordRequest;
 
+  /// [bool] true if the password was invalid
+  final bool invalidPassword;
+
   /// On tapping ok
   final Function({
     @required FileListingRequest fileListingRequest,
@@ -30,10 +33,12 @@ class FileExplorerPasswordOverlay extends StatefulWidget {
   const FileExplorerPasswordOverlay({
     Key key,
     @required this.visible,
+    @required this.invalidPassword,
     @required this.passwordRequest,
     @required this.onOk,
     @required this.onCancel,
   })  : assert(visible != null),
+        assert(invalidPassword != null),
         assert(passwordRequest != null),
         assert(onOk != null),
         assert(onCancel != null),
@@ -49,6 +54,8 @@ class _FileExplorerPasswordOverlayState
   TextEditingController _passwordTextController;
 
   bool get _visible => widget.visible;
+
+  bool get _invalidPassword => widget.invalidPassword;
 
   PasswordRequest get _passwordRequest => widget.passwordRequest;
 
@@ -78,6 +85,8 @@ class _FileExplorerPasswordOverlayState
 
   @override
   Widget build(BuildContext context) {
+    final _errorText = _invalidPassword ? 'Invalid password' : null;
+
     return PortalEntry(
       visible: _visible,
       portal: Container(
@@ -107,6 +116,7 @@ class _FileExplorerPasswordOverlayState
                   onChanged: (value) {},
                   controller: _passwordTextController,
                   hintText: 'Password',
+                  errorText: _errorText,
                 ),
               ],
             ),

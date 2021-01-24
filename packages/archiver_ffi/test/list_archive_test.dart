@@ -101,8 +101,26 @@ void main() {
       expect(_result.error.toString(), contains('file does not exist'));
     });
 
+    test('password required | should throw (file does not exist) error',
+        () async {
+      final _param = ListArchive(
+        filename: getTestMocksAsset('mock_enc_test_file1.zip'),
+        recursive: true,
+        listDirectoryPath: '',
+        gitIgnorePattern: const [],
+      );
+
+      final _result = await _archiverFfi.listArchive(_param);
+
+      expect(_result.hasError, equals(true));
+      expect(_result.hasData, equals(false));
+      expect(_result.error, isA<PasswordRequiredException>());
+      expect(_result.error.toString(), contains('password is required'));
+    });
+
     test('wrong password | should throw (file does not exist) error', () async {
       final _param = ListArchive(
+        password: 'fakepassword',
         filename: getTestMocksAsset('mock_enc_test_file1.zip'),
         recursive: true,
         listDirectoryPath: '',

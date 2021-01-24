@@ -15,7 +15,8 @@ class FileExplorerPane extends StatefulWidget {
 }
 
 class _FileExplorerPaneState extends SfWidget<FileExplorerPane> {
-FileExplorerScreenStore get _fileExplorerScreenStore => readProvider<FileExplorerScreenStore>(context);
+  FileExplorerScreenStore get _fileExplorerScreenStore =>
+      readProvider<FileExplorerScreenStore>(context);
 
   @override
   void initState() {

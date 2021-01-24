@@ -226,6 +226,7 @@ class _FileExplorerScreenState extends SfWidget<FileExplorerScreen> {
           passwordRequest: _requestPassword,
           onCancel: _handlePasswordRequestCancelTap,
           onOk: _handlePasswordRequestOkTap,
+          invalidPassword: _requestPassword.invalidPassword,
         );
       },
     );

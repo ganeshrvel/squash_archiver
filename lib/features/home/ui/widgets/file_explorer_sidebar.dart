@@ -24,7 +24,8 @@ class FileExplorerSidebar extends StatefulWidget {
 }
 
 class _FileExplorerSidebarState extends SfWidget<FileExplorerSidebar> {
-FileExplorerScreenStore get _fileExplorerScreenStore => readProvider<FileExplorerScreenStore>(context);
+  FileExplorerScreenStore get _fileExplorerScreenStore =>
+      readProvider<FileExplorerScreenStore>(context);
 
   @override
   void initState() {

@@ -24,7 +24,8 @@ class _FileExplorerTableState extends SfWidget<FileExplorerTable> {
   FileExplorerScreenStore get _fileExplorerScreenStore =>
       readProvider<FileExplorerScreenStore>(context);
 
-  FileExplorerKeyboardModifiersStore get _fileExplorerKeyboardModifiersStore => readProvider<FileExplorerKeyboardModifiersStore>(context);
+  FileExplorerKeyboardModifiersStore get _fileExplorerKeyboardModifiersStore =>
+      readProvider<FileExplorerKeyboardModifiersStore>(context);
 
   List<ReactionDisposer> _disposers;
 

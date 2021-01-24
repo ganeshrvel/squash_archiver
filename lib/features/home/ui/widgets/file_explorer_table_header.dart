@@ -17,7 +17,8 @@ class FileExplorerTableHeader extends StatefulWidget {
 }
 
 class FileExplorerTableHeaderState extends SfWidget<FileExplorerTableHeader> {
-FileExplorerScreenStore get _fileExplorerScreenStore => readProvider<FileExplorerScreenStore>(context);
+  FileExplorerScreenStore get _fileExplorerScreenStore =>
+      readProvider<FileExplorerScreenStore>(context);
 
   void _handleTableHeaderCellSorting({
     @required OrderDir orderDir,
