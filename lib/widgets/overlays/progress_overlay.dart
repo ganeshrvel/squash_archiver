@@ -1,10 +1,9 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_portal/flutter_portal.dart';
 import 'package:squash_archiver/constants/colors.dart';
 import 'package:squash_archiver/utils/utils/functs.dart';
-import 'package:squash_archiver/widgets/dialogs/app_dialog.dart';
+import 'package:squash_archiver/widgets/overlays/app_overlay.dart';
 import 'package:squash_archiver/widgets/progress/progress_bar.dart';
 import 'package:squash_archiver/widgets/text/textography.dart';
 
@@ -28,31 +27,23 @@ class ProgressOverlay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PortalEntry(
+    return AppOverlay(
       visible: visible,
-      portal: Container(
-        color: AppColors.white.withOpacity(0.1),
-        child: Center(
-          child: AppDialog(
-            content: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                if (isNotNullOrEmpty(loadingText))
-                  Textography(
-                    loadingText,
-                    color: AppColors.color797,
-                    variant: TextVariant.small1,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ProgressBar(
-                  value: value,
-                ),
-              ],
+      content: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          if (isNotNullOrEmpty(loadingText))
+            Textography(
+              loadingText,
+              color: AppColors.color797,
+              variant: TextVariant.small1,
+              fontWeight: FontWeight.bold,
             ),
+          ProgressBar(
+            value: value,
           ),
-        ),
+        ],
       ),
-      child: Container(),
     );
   }
 }

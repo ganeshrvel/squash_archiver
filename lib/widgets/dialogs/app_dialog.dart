@@ -10,12 +10,16 @@ enum DialogSize {
 }
 
 class AppDialog extends StatelessWidget {
+  /// title value
   final String title;
 
+  /// body value
   final String body;
 
+  /// child widget or the main content
   final Widget content;
 
+  /// bottom most action part. commonly used for action buttons like Ok and Cancel
   final Widget actionContainer;
 
   final IconData iconData;

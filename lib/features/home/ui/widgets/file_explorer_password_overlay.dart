@@ -1,13 +1,12 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_portal/flutter_portal.dart';
 import 'package:squash_archiver/constants/colors.dart';
 import 'package:squash_archiver/features/home/data/models/file_listing_request.dart';
 import 'package:squash_archiver/features/home/data/models/password_request.dart';
 import 'package:squash_archiver/widget_extends/sf_widget.dart';
 import 'package:squash_archiver/widgets/button/confirm_action_buttons.dart';
-import 'package:squash_archiver/widgets/dialogs/app_dialog.dart';
+import 'package:squash_archiver/widgets/overlays/app_overlay.dart';
 import 'package:squash_archiver/widgets/text/textography.dart';
 import 'package:squash_archiver/widgets/text_field/text_field_regular_input.dart';
 
@@ -87,43 +86,35 @@ class _FileExplorerPasswordOverlayState
   Widget build(BuildContext context) {
     final _errorText = _invalidPassword ? 'Invalid password' : null;
 
-    return PortalEntry(
+    return AppOverlay(
       visible: _visible,
-      portal: Container(
-        color: AppColors.white.withOpacity(0.1),
-        child: Center(
-          child: AppDialog(
-            actionContainer: ConfirmActionButtons(
-              onOk: () {
-                _onOk(
-                  password: _passwordTextController.text,
-                  fileListingRequest: _fileListingRequest,
-                );
-              },
-              onCancel: _onCancel,
-              shouldPopOnButtonClick: false,
-            ),
-            content: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Textography(
-                  'Enter password for "${_fileListingRequest.filename}"',
-                  color: AppColors.color797,
-                  variant: TextVariant.small1,
-                  fontWeight: FontWeight.bold,
-                ),
-                TextFieldRegularInput(
-                  onChanged: (value) {},
-                  controller: _passwordTextController,
-                  hintText: 'Password',
-                  errorText: _errorText,
-                ),
-              ],
-            ),
-          ),
-        ),
+      actionContainer: ConfirmActionButtons(
+        onOk: () {
+          _onOk(
+            password: _passwordTextController.text,
+            fileListingRequest: _fileListingRequest,
+          );
+        },
+        onCancel: _onCancel,
+        shouldPopOnButtonClick: false,
       ),
-      child: Container(),
+      content: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Textography(
+            'Enter password for "${_fileListingRequest.filename}"',
+            color: AppColors.color797,
+            variant: TextVariant.small1,
+            fontWeight: FontWeight.bold,
+          ),
+          TextFieldRegularInput(
+            onChanged: (value) {},
+            controller: _passwordTextController,
+            hintText: 'Password',
+            errorText: _errorText,
+          ),
+        ],
+      ),
     );
   }
 }

@@ -246,10 +246,15 @@ class Button extends StatelessWidget {
         return isNull(icon)
             ? TextButton(
                 style: ElevatedButton.styleFrom(
-                    elevation: elevation,
-                    primary: getButtonBgColor(),
-                    shape: getBtnShape(),
-                    onPrimary: AppColors.colorF1F.withOpacity(0.1)),
+                  elevation: elevation,
+                  primary: getButtonBgColor(),
+                  shape: getBtnShape(),
+                  onPrimary: AppColors.colorF1F.withOpacity(0.1),
+                  side: BorderSide(
+                    width: 0.2,
+                    color: AppColors.black.withOpacity(0.2),
+                  ),
+                ),
                 onPressed: isButtonDisabled() ? null : onPressed,
                 child: Textography(
                   getButtonText(),
