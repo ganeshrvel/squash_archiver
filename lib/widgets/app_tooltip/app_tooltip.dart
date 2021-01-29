@@ -12,8 +12,7 @@ class AppTooltip extends StatelessWidget {
     this.child,
     this.waitDuration,
     this.showDuration,
-  })  : assert(message != null),
-        super(key: key);
+  }) : super(key: key);
 
   /// The text to display in the tooltip.
   final String message;
