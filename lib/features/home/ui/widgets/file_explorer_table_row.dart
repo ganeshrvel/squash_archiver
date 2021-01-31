@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:squash_archiver/common/themes/colors.dart';
+import 'package:squash_archiver/common/themes/theme_helper.dart';
 import 'package:squash_archiver/constants/image_paths.dart';
 import 'package:squash_archiver/constants/sizes.dart';
 import 'package:squash_archiver/features/home/data/models/file_listing_response.dart';
@@ -29,19 +30,23 @@ class FileExplorerTableRowTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final _palette = getPalette(context);
+
     const _textFontVariant = TextVariant.body2;
     const _textFontWeight = FontWeight.w700;
-    var _metaDataTextColor = AppColors.color232526.withOpacity(0.6);
-    var _textColor = AppColors.color232526;
+    var _metaDataTextColor = _palette.textColor.withOpacity(0.6);
+    var _textColor = _palette.textColor;
 
     File _fileIcon;
     const _fileIconHeight = 24.0;
 
-    var _rowColor = rowIndex % 2 == 0 ? AppColors.white : AppColors.colorF5F;
+    var _rowColor = rowIndex % 2 == 0
+        ? _palette.backgroundColor
+        : _palette.alternativeRowColor;
     if (isSelected) {
-      _rowColor = AppColors.darkBlue;
-      _textColor = AppColors.white;
-      _metaDataTextColor = AppColors.white.withOpacity(0.7);
+      _rowColor = _palette.rowSelectionColor;
+      _textColor = _palette.rowTextContrastColor;
+      _metaDataTextColor = _palette.rowTextContrastColor.withOpacity(0.7);
     }
 
     if (!fileContainer.file.isDir) {

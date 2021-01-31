@@ -22,11 +22,6 @@ class AppColors {
   /// [Open color-hex.com](https://www.color-hex.com/color/017AFF)
   static final Color blue = HexColor('017AFF');
 
-  /// second shade of blue
-  ///
-  /// [Open color-hex.com](https://www.color-hex.com/color/2365D8)
-  static final Color darkBlue = HexColor('2365D8');
-
   /// black shade, primarily used for text
   ///
   /// [Open color-hex.com](https://www.color-hex.com/color/232526)
@@ -63,9 +58,28 @@ class AppColors {
   static final Color colorF1F = HexColor('F1F1F1');
 
   /// dim white shade 1
+  /// used as alternate row color in light theme mode
   ///
   /// [Open color-hex.com](https://www.color-hex.com/color/F5F5F5)
   static final Color colorF5F = HexColor('F5F5F5');
+
+  /// dim white shade 2
+  /// used as alternate row color in dark theme mode
+  ///
+  /// [Open color-hex.com](https://www.color-hex.com/color/2E2A2E)
+  static final Color color2E2A2E = HexColor('2E2A2E');
+
+  /// second shade of blue
+  /// used as row selection color in light theme mode
+  ///
+  /// [Open color-hex.com](https://www.color-hex.com/color/2365D8)
+  static final Color darkBlue = HexColor('2365D8');
+
+  /// dim white shade 3
+  /// used as row selection color in dark theme mode
+  ///
+  /// [Open color-hex.com](https://www.color-hex.com/color/464646)
+  static final Color color464 = HexColor('464646');
 
   /// pink shade
   /// used for sidebar and cells separator
@@ -76,8 +90,8 @@ class AppColors {
   /// secondary dark shade
   /// used for sidebar and cells separator
   ///
-  /// [Open color-hex.com](https://www.color-hex.com/color/252125)
-  static final Color color252125 = HexColor('252125');
+  /// [Open color-hex.com](https://www.color-hex.com/color/2d292d)
+  static final Color color2D292D = HexColor('2D292D');
 
   /// light gray shade 1
   ///

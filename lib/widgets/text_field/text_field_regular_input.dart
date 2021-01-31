@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:squash_archiver/common/themes/colors.dart';
+import 'package:squash_archiver/common/themes/theme_helper.dart';
 import 'package:squash_archiver/utils/utils/functs.dart';
 
 class TextFieldRegularInput extends StatelessWidget {
@@ -37,6 +38,8 @@ class TextFieldRegularInput extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final _palette = getPalette(context);
+
     return TextField(
       style: const TextStyle(
         fontSize: 16.0,
@@ -60,11 +63,11 @@ class TextFieldRegularInput extends StatelessWidget {
         prefixIcon: isNotNull(prefixIcon)
             ? Icon(
                 prefixIcon,
-                color: AppColors.color232526,
+                color: _palette.textColor,
                 size: 20,
               )
             : null,
-        fillColor: AppColors.white,
+        fillColor: _palette.secondaryColor,
         counterText: '',
         errorText: errorText,
       ),
@@ -84,6 +87,7 @@ class TextFieldRegularInput extends StatelessWidget {
       minLines: minLines,
       maxLength: maxLength,
       keyboardType: keyboardType,
+      cursorColor: _palette.textColor,
     );
   }
 }

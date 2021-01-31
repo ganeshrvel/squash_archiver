@@ -13,36 +13,42 @@ class AppTheme {
 
   /// theme palatte. Use [palette] to pick colors use across the app.
   ThemePalette get palette {
-    /// dark theme mode color palette
-    if (mode == ThemeMode.dark) {
+    if (mode == ThemeMode.light) {
+      /// light theme mode color palette
       return ThemePalette(
         accentColor: AppColors.blue,
         secondaryColor: AppColors.blue,
-        primaryColor: AppColors.color232526,
-        backgroundColor: AppColors.color242024,
-        textColor: AppColors.white,
-        textContrastColor: AppColors.color232526,
-        disabledColor: AppColors.lightDisabled,
-        hoverColor: AppColors.lightHover,
-        splashColor: AppColors.lightSplash,
+        primaryColor: AppColors.white,
+        backgroundColor: AppColors.white,
+        textColor: AppColors.color232526,
+        textContrastColor: AppColors.white,
+        rowTextContrastColor: AppColors.white,
+        disabledColor: AppColors.darkDisabled,
+        hoverColor: AppColors.darkHover,
+        splashColor: AppColors.darkSplash,
         captionColor: AppColors.color797,
-        sidebarColor:  AppColors.color252125,
+        sidebarColor: AppColors.colorE6E3E3,
+        rowSelectionColor: AppColors.darkBlue,
+        alternativeRowColor: AppColors.color2E2A2E,
       );
     }
 
-    /// light theme mode color palette
+    /// dark theme mode color palette
     return ThemePalette(
       accentColor: AppColors.blue,
       secondaryColor: AppColors.blue,
-      primaryColor: AppColors.white,
-      backgroundColor: AppColors.white,
-      textColor: AppColors.color232526,
-      textContrastColor: AppColors.white,
-      disabledColor: AppColors.darkDisabled,
-      hoverColor: AppColors.darkHover,
-      splashColor: AppColors.darkSplash,
+      primaryColor: AppColors.color232526,
+      backgroundColor: AppColors.color242024,
+      textColor: AppColors.white,
+      textContrastColor: AppColors.color232526,
+      rowTextContrastColor: AppColors.white,
+      disabledColor: AppColors.lightDisabled,
+      hoverColor: AppColors.lightHover,
+      splashColor: AppColors.lightSplash,
       captionColor: AppColors.color797,
-      sidebarColor:  AppColors.colorE6E3E3,
+      sidebarColor: AppColors.color2D292D,
+      rowSelectionColor: AppColors.darkBlue,
+      alternativeRowColor: AppColors.color2E2A2E,
     );
   }
 

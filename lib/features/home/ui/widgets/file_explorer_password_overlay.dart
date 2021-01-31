@@ -1,7 +1,8 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:squash_archiver/common/themes/colors.dart';
+import 'package:squash_archiver/common/models/theme_palette.dart';
+import 'package:squash_archiver/common/themes/theme_helper.dart';
 import 'package:squash_archiver/features/home/data/models/file_listing_request.dart';
 import 'package:squash_archiver/features/home/data/models/password_request.dart';
 import 'package:squash_archiver/widget_extends/sf_widget.dart';
@@ -58,6 +59,8 @@ class _FileExplorerPasswordOverlayState
 
   PasswordRequest get _passwordRequest => widget.passwordRequest;
 
+  ThemePalette get _palette => getPalette(context);
+
   FileListingRequest get _fileListingRequest =>
       widget.passwordRequest.fileListingRequest;
 
@@ -103,7 +106,7 @@ class _FileExplorerPasswordOverlayState
         children: [
           Textography(
             'Enter password for "${_fileListingRequest.filename}"',
-            color: AppColors.color797,
+            color: _palette.captionColor,
             variant: TextVariant.small1,
             fontWeight: FontWeight.bold,
           ),
