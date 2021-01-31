@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:squash_archiver/common/themes/colors.dart';
+import 'package:squash_archiver/common/themes/theme_helper.dart';
 import 'package:squash_archiver/widgets/app_tooltip/app_tooltip.dart';
 import 'package:squash_archiver/widgets/button/button.dart';
 
@@ -34,7 +34,9 @@ class ActionBarButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _iconColor = iconColor ?? AppColors.color797;
+    final _palette = getPalette(context);
+
+    final _iconColor = iconColor ?? _palette.actionbarIconColor;
     final _iconPadding = iconPadding ?? const EdgeInsets.all(5);
 
     return AppTooltip(

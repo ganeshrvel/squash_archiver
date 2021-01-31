@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:squash_archiver/common/di/di.dart';
 import 'package:squash_archiver/common/helpers/display_helper.dart';
-import 'package:squash_archiver/common/themes/colors.dart';
+import 'package:squash_archiver/common/themes/theme_helper.dart';
 import 'package:squash_archiver/features/app/ui/store/app_store.dart';
 import 'package:squash_archiver/utils/utils/files.dart';
 import 'package:squash_archiver/utils/utils/functs.dart';
@@ -138,14 +138,16 @@ class _ImgState extends SfWidget<Img> {
   }
 
   Widget _buildPlaceholder(BuildContext context) {
+    final _palette = getPalette(context);
+
     return SizedBox(
       height: _placeholderSize,
       width: _placeholderSize,
       child: Padding(
         padding: EdgeInsets.zero,
         child: CircularProgressIndicator(
-          backgroundColor: AppColors.white,
-          valueColor: AlwaysStoppedAnimation<Color>(AppColors.blue),
+          backgroundColor: _palette.backgroundColor,
+          valueColor: AlwaysStoppedAnimation<Color>(_palette.accentColor),
         ),
       ),
     );

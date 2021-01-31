@@ -23,6 +23,10 @@ class ThemePalette {
   final Color sidebarTileIconContrastColor;
   final Color sidebarTileTextColor;
   final Color sidebarTileTextContrastColor;
+  final Color actionbarIconColor;
+  final Color tooltipColor;
+  final Color tooltipTextColor;
+  final Color progressBackgroundColor;
 
   ThemePalette({
     @required this.accentColor,
@@ -44,5 +48,9 @@ class ThemePalette {
     @required this.sidebarTileIconContrastColor,
     @required this.sidebarTileTextColor,
     @required this.sidebarTileTextContrastColor,
+    @required this.actionbarIconColor,
+    @required this.tooltipColor,
+    @required this.tooltipTextColor,
+    @required this.progressBackgroundColor,
   });
 }

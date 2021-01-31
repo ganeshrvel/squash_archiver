@@ -12,7 +12,7 @@ class AppColors {
   static const Color white = Colors.white;
 
   /// primary color in dark theme mode
-  /// black shade, primarily used for dark theme scaffold background
+  /// black shade 1, primarily used for dark theme scaffold background
   ///
   /// [Open color-hex.com](https://www.color-hex.com/color/242024)
   static final Color color242024 = HexColor('242024');
@@ -22,7 +22,7 @@ class AppColors {
   /// [Open color-hex.com](https://www.color-hex.com/color/017AFF)
   static final Color blue = HexColor('017AFF');
 
-  /// black shade, primarily used for text
+  /// black shade 2, primarily used for text
   ///
   /// [Open color-hex.com](https://www.color-hex.com/color/232526)
   static final Color black1 = HexColor('232526');
@@ -63,29 +63,41 @@ class AppColors {
   /// [Open color-hex.com](https://www.color-hex.com/color/F5F5F5)
   static final Color colorF5F = HexColor('F5F5F5');
 
-  /// dim white shade 2
-  /// used as alternate row color in dark theme mode
-  ///
-  /// [Open color-hex.com](https://www.color-hex.com/color/2E2A2E)
-  static final Color color2E2A2E = HexColor('2E2A2E');
-
   /// second shade of blue
   /// used as row selection color in light theme mode
   ///
   /// [Open color-hex.com](https://www.color-hex.com/color/2365D8)
   static final Color darkBlue = HexColor('2365D8');
 
-  /// dim white shade 3
+  /// dim white shade 2
   /// used as row selection color in dark theme mode
   ///
   /// [Open color-hex.com](https://www.color-hex.com/color/464646)
   static final Color color464 = HexColor('464646');
+
+  /// very dim white shade 3
+  /// used as alternate row color in dark theme mode
+  ///
+  /// [Open color-hex.com](https://www.color-hex.com/color/2E2A2E)
+  static final Color color2E2A2E = HexColor('2E2A2E');
+
+  /// dim white shade 4
+  /// Used for captions, overlays
+  ///
+  /// [Open color-hex.com](https://www.color-hex.com/color/797979)
+  static final Color color797 = HexColor('797979');
 
   /// pink shade
   /// used for sidebar and cells separator
   ///
   /// [Open color-hex.com](https://www.color-hex.com/color/E6E3E3)
   static final Color colorE6E3E3 = HexColor('E6E3E3');
+
+  /// black shade 3
+  /// used for tooltips in dark theme mode
+  ///
+  /// [Open color-hex.com](https://www.color-hex.com/color/28262B)
+  static final Color color28262B = HexColor('28262B');
 
   /// secondary dark shade
   /// used for sidebar and cells separator
@@ -97,10 +109,4 @@ class AppColors {
   ///
   /// [Open color-hex.com](https://www.color-hex.com/color/E5E5E5)
   static final Color colorE5E = HexColor('E5E5E5');
-
-  /// light black shade 1
-  /// Used for captions, overlays
-  ///
-  /// [Open color-hex.com](https://www.color-hex.com/color/797979)
-  static final Color color797 = HexColor('797979');
 }

@@ -1,7 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:squash_archiver/common/themes/colors.dart';
+import 'package:squash_archiver/common/themes/theme_helper.dart';
 import 'package:squash_archiver/utils/utils/functs.dart';
 import 'package:squash_archiver/widgets/overlays/app_overlay.dart';
 import 'package:squash_archiver/widgets/progress/progress_bar.dart';
@@ -27,6 +27,8 @@ class ProgressOverlay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final _palette = getPalette(context);
+
     return AppOverlay(
       visible: visible,
       content: Column(
@@ -35,7 +37,7 @@ class ProgressOverlay extends StatelessWidget {
           if (isNotNullOrEmpty(loadingText))
             Textography(
               loadingText,
-              color: AppColors.color797,
+              color: _palette.captionColor,
               variant: TextVariant.small1,
               fontWeight: FontWeight.bold,
             ),
