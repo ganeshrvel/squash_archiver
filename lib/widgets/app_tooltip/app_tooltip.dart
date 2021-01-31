@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:squash_archiver/constants/colors.dart';
+import 'package:squash_archiver/common/themes/colors.dart';
 import 'package:squash_archiver/utils/utils/functs.dart';
 import 'package:squash_archiver/widgets/shadows/box_shadow_3.dart';
 

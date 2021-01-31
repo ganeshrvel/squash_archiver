@@ -1,7 +1,7 @@
 import 'package:archiver_ffi/archiver_ffi.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:squash_archiver/constants/colors.dart';
+import 'package:squash_archiver/common/themes/colors.dart';
 import 'package:squash_archiver/constants/sizes.dart';
 import 'package:squash_archiver/utils/utils/functs.dart';
 import 'package:squash_archiver/widgets/inkwell_extended/inkwell_extended.dart';

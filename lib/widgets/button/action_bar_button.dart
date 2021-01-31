@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:squash_archiver/constants/colors.dart';
+import 'package:squash_archiver/common/themes/colors.dart';
 import 'package:squash_archiver/widgets/app_tooltip/app_tooltip.dart';
 import 'package:squash_archiver/widgets/button/button.dart';
 

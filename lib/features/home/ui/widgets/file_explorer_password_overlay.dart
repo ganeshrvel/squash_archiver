@@ -1,7 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:squash_archiver/constants/colors.dart';
+import 'package:squash_archiver/common/themes/colors.dart';
 import 'package:squash_archiver/features/home/data/models/file_listing_request.dart';
 import 'package:squash_archiver/features/home/data/models/password_request.dart';
 import 'package:squash_archiver/widget_extends/sf_widget.dart';

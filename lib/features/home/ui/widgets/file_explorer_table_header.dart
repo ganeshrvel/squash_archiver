@@ -2,7 +2,7 @@ import 'package:archiver_ffi/archiver_ffi.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:squash_archiver/common/helpers/provider_helpers.dart';
-import 'package:squash_archiver/constants/colors.dart';
+import 'package:squash_archiver/common/themes/colors.dart';
 import 'package:squash_archiver/features/home/ui/pages/file_explorer_screen_store.dart';
 import 'package:squash_archiver/features/home/ui/widgets/file_explorer_table_header_cell.dart';
 import 'package:squash_archiver/widget_extends/sf_widget.dart';

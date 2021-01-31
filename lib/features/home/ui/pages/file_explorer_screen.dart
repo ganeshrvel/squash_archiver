@@ -6,7 +6,7 @@ import 'package:mobx/mobx.dart' show ReactionDisposer, reaction;
 import 'package:provider/provider.dart';
 import 'package:squash_archiver/common/helpers/file_explorer_key_modifiers_helper.dart';
 import 'package:squash_archiver/constants/app_default_values.dart';
-import 'package:squash_archiver/constants/colors.dart';
+import 'package:squash_archiver/common/themes/colors.dart';
 import 'package:squash_archiver/constants/sizes.dart';
 import 'package:squash_archiver/features/home/data/enums/file_explorer_source.dart';
 import 'package:squash_archiver/features/app/data/models/keyboard_modifier_intent.dart';
