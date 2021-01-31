@@ -125,7 +125,7 @@ class Button extends StatelessWidget {
         return AppColors.white;
 
       case ButtonColorType.BLACK:
-        return AppColors.color232526;
+        return AppColors.black1;
 
       case ButtonColorType.INFO:
         return AppColors.info;
@@ -151,7 +151,7 @@ class Button extends StatelessWidget {
     if (isNotNull(buttonTextColor)) {
       switch (buttonTextColor) {
         case ButtonColorType.WHITE:
-          return AppColors.color232526;
+          return AppColors.black1;
 
         default:
           return AppColors.white;
@@ -184,13 +184,13 @@ class Button extends StatelessWidget {
     }
 
     if (buttonType == ButtonType.ICON) {
-      return AppColors.color232526;
+      return AppColors.black1;
     }
 
     if (isNotNull(buttonColor)) {
       switch (buttonColor) {
         case ButtonColorType.WHITE:
-          return AppColors.color232526;
+          return AppColors.black1;
 
         default:
           return AppColors.white;
@@ -249,7 +249,7 @@ class Button extends StatelessWidget {
                   onPrimary: AppColors.colorF1F.withOpacity(0.1),
                   side: BorderSide(
                     width: 0.2,
-                    color: AppColors.color232526.withOpacity(0.2),
+                    color: AppColors.black1.withOpacity(0.2),
                   ),
                 ),
                 onPressed: isButtonDisabled() ? null : onPressed,

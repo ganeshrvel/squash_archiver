@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:squash_archiver/common/themes/colors.dart';
 import 'package:squash_archiver/common/themes/theme_helper.dart';
 import 'package:squash_archiver/utils/utils/functs.dart';
 

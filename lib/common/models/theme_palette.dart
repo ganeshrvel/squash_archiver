@@ -18,6 +18,11 @@ class ThemePalette {
   final Color sidebarColor;
   final Color rowSelectionColor;
   final Color alternativeRowColor;
+  final Color sidebarSelectionColor;
+  final Color sidebarTileIconColor;
+  final Color sidebarTileIconContrastColor;
+  final Color sidebarTileTextColor;
+  final Color sidebarTileTextContrastColor;
 
   ThemePalette({
     @required this.accentColor,
@@ -34,5 +39,10 @@ class ThemePalette {
     @required this.sidebarColor,
     @required this.rowSelectionColor,
     @required this.alternativeRowColor,
+    @required this.sidebarSelectionColor,
+    @required this.sidebarTileIconColor,
+    @required this.sidebarTileIconContrastColor,
+    @required this.sidebarTileTextColor,
+    @required this.sidebarTileTextContrastColor,
   });
 }

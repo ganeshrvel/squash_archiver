@@ -14,13 +14,13 @@ class AppTheme {
   /// theme palatte. Use [palette] to pick colors use across the app.
   ThemePalette get palette {
     if (mode == ThemeMode.light) {
-      /// light theme mode color palette
+      /// LIGHT theme mode color palette
       return ThemePalette(
         accentColor: AppColors.blue,
         secondaryColor: AppColors.blue,
         primaryColor: AppColors.white,
         backgroundColor: AppColors.white,
-        textColor: AppColors.color232526,
+        textColor: AppColors.black1,
         textContrastColor: AppColors.white,
         rowTextContrastColor: AppColors.white,
         disabledColor: AppColors.darkDisabled,
@@ -30,17 +30,23 @@ class AppTheme {
         sidebarColor: AppColors.colorE6E3E3,
         rowSelectionColor: AppColors.darkBlue,
         alternativeRowColor: AppColors.color2E2A2E,
+        sidebarSelectionColor: AppColors.blue,
+        sidebarTileIconColor: AppColors.blue,
+        sidebarTileIconContrastColor: AppColors.white,
+        sidebarTileTextColor: AppColors.black1,
+        sidebarTileTextContrastColor: AppColors.white,
       );
+      // </------ LIGHT theme mode color palette ----->
     }
 
-    /// dark theme mode color palette
+    /// DARK theme mode color palette
     return ThemePalette(
       accentColor: AppColors.blue,
       secondaryColor: AppColors.blue,
-      primaryColor: AppColors.color232526,
+      primaryColor: AppColors.black1,
       backgroundColor: AppColors.color242024,
       textColor: AppColors.white,
-      textContrastColor: AppColors.color232526,
+      textContrastColor: AppColors.black1,
       rowTextContrastColor: AppColors.white,
       disabledColor: AppColors.lightDisabled,
       hoverColor: AppColors.lightHover,
@@ -49,7 +55,13 @@ class AppTheme {
       sidebarColor: AppColors.color2D292D,
       rowSelectionColor: AppColors.darkBlue,
       alternativeRowColor: AppColors.color2E2A2E,
+      sidebarSelectionColor: AppColors.color464,
+      sidebarTileIconColor: AppColors.blue,
+      sidebarTileIconContrastColor: AppColors.blue,
+      sidebarTileTextColor: AppColors.white,
+      sidebarTileTextContrastColor: AppColors.white,
     );
+    // </------ DARK theme mode color palette ----->
   }
 
   TextStyle get _originalBodyText1 => GoogleFonts.openSans(

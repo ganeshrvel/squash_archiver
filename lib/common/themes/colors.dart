@@ -25,7 +25,7 @@ class AppColors {
   /// black shade, primarily used for text
   ///
   /// [Open color-hex.com](https://www.color-hex.com/color/232526)
-  static final Color color232526 = HexColor('232526');
+  static final Color black1 = HexColor('232526');
 
   static final Color lightDisabled = Colors.black.withOpacity(0.2);
   static final Color darkDisabled = Colors.white.withOpacity(0.2);
