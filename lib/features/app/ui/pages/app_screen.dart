@@ -42,8 +42,6 @@ class AppScreen extends StatelessWidget {
           );
         }
 
-        print('todo //theme:');
-
         return Portal(
           child: MaterialApp(
             debugShowCheckedModeBanner: env.config.debugShowCheckedModeBanner,
@@ -65,8 +63,7 @@ class AppScreen extends StatelessWidget {
               );
             },
             title: Strings.APP_NAME,
-            //theme: getAppThemeData(_appStore.theme.mode),
-            theme: getAppThemeData(ThemeMode.dark),
+            theme: getAppThemeData(_appStore.theme.mode),
             locale: Locale(
               _appStore.language.locale,
               _appStore.language.countryCode,

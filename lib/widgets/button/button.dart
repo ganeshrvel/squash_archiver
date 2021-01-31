@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:squash_archiver/common/themes/colors.dart';
+import 'package:squash_archiver/common/themes/theme_helper.dart';
 import 'package:squash_archiver/utils/utils/functs.dart';
 import 'package:squash_archiver/widgets/img/img.dart';
 import 'package:squash_archiver/widgets/inkwell_extended/inkwell_extended.dart';
@@ -21,7 +22,6 @@ enum ButtonColorType {
   BLUE,
   INFO,
   TRANSPARENT,
-  ColorF1F,
 }
 
 enum ButtonSizeType {
@@ -165,13 +165,15 @@ class Button extends StatelessWidget {
     return AppColors.blue;
   }
 
-  Color getButtonTextColor() {
+  Color getButtonTextColor(BuildContext context) {
+    final _palette = getPalette(context);
+
     switch (buttonType) {
       case ButtonType.TEXT:
       case ButtonType.ICON:
       case ButtonType.TILE:
         if (isButtonDisabled()) {
-          return AppColors.lightDisabled;
+          return _palette.disabledColor;
         }
         break;
 
@@ -218,7 +220,7 @@ class Button extends StatelessWidget {
     );
   }
 
-  TextStyle getButtonTextStyle() {
+  TextStyle getButtonTextStyle(BuildContext context) {
     var _fontWeight = FontWeight.w900;
 
     if (isNotNull(fontWeight)) {
@@ -229,12 +231,14 @@ class Button extends StatelessWidget {
 
     return TextStyle(
       fontWeight: _fontWeight,
-      color: getButtonTextColor(),
+      color: getButtonTextColor(context),
     );
   }
 
-  Widget getButton() {
-    final buttonStyle = getButtonTextStyle();
+  Widget getButton(BuildContext context) {
+    final _palette = getPalette(context);
+
+    final buttonStyle = getButtonTextStyle(context);
     final _textVariant = textVariant ?? TextVariant.button;
     final _mouseCursor = mouseCursor ?? SystemMouseCursors.basic;
 
@@ -246,10 +250,10 @@ class Button extends StatelessWidget {
                   elevation: elevation,
                   primary: getButtonBgColor(),
                   shape: getBtnShape(),
-                  onPrimary: AppColors.colorF1F.withOpacity(0.1),
+                  onPrimary: _palette.flatButtonPrimaryColor.withOpacity(0.1),
                   side: BorderSide(
                     width: 0.2,
-                    color: AppColors.black1.withOpacity(0.2),
+                    color: _palette.textContrastColor.withOpacity(0.2),
                   ),
                 ),
                 onPressed: isButtonDisabled() ? null : onPressed,
@@ -263,10 +267,10 @@ class Button extends StatelessWidget {
             : TextButton.icon(
                 style: ElevatedButton.styleFrom(
                   elevation: elevation,
-                  primary: iconColor ?? getButtonTextColor(),
+                  primary: iconColor ?? getButtonTextColor(context),
                   shape: getBtnShape(),
-                  textStyle:
-                      TextStyle(color: iconColor ?? getButtonTextColor()),
+                  textStyle: TextStyle(
+                      color: iconColor ?? getButtonTextColor(context)),
                 ),
                 icon: Icon(
                   icon,
@@ -287,9 +291,9 @@ class Button extends StatelessWidget {
           throw 'icon cannot be empty';
         }
 
-        var _color = iconColor ?? getButtonTextColor();
+        var _color = iconColor ?? getButtonTextColor(context);
         if (disabled) {
-          _color = AppColors.lightDisabled;
+          _color = _palette.disabledColor;
         }
 
         return ClipRRect(
@@ -299,8 +303,8 @@ class Button extends StatelessWidget {
             color: getButtonBgColor(),
             child: InkWellExtended(
               mouseCursor: _mouseCursor,
-              splashColor: splashColor ?? AppColors.lightSplash,
-              hoverColor: hoverColor ?? AppColors.lightHover,
+              splashColor: splashColor ?? _palette.splashColor,
+              hoverColor: hoverColor ?? _palette.hoverColor,
               onTap: isButtonDisabled() ? null : onPressed,
               child: SizedBox(
                 width: width,
@@ -330,7 +334,7 @@ class Button extends StatelessWidget {
             color: getButtonBgColor(),
             child: InkWellExtended(
               mouseCursor: _mouseCursor,
-              splashColor: splashColor ?? AppColors.lightSplash,
+              splashColor: splashColor ?? _palette.splashColor,
               highlightColor: highlightColor,
               onTap: isButtonDisabled() ? null : onPressed,
               child: SizedBox(
@@ -357,7 +361,7 @@ class Button extends StatelessWidget {
               color: getButtonBgColor(),
               child: InkWellExtended(
                 mouseCursor: _mouseCursor,
-                splashColor: AppColors.lightSplash,
+                splashColor: splashColor ?? _palette.splashColor,
                 onTap: isButtonDisabled() ? null : onPressed,
                 child: SizedBox(
                   width: width,
@@ -369,7 +373,7 @@ class Button extends StatelessWidget {
                       Icon(
                         icon,
                         textDirection: iconTextDirection,
-                        color: iconColor ?? getButtonTextColor(),
+                        color: iconColor ?? getButtonTextColor(context),
                         size: iconButtonIconSize,
                       ),
                       Padding(
@@ -406,7 +410,7 @@ class Button extends StatelessWidget {
             child: Textography(
               getButtonText(),
               variant: isNotNull(textVariant) ? textVariant : null,
-              color: getButtonTextColor(),
+              color: getButtonTextColor(context),
               decoration: underline ? TextDecoration.underline : null,
               backgroundColor: getButtonBgColor(),
               fontWeight: isNotNull(textVariant)
@@ -443,8 +447,8 @@ class Button extends StatelessWidget {
                     primary: getButtonBgColor(),
                     shape: getBtnShape(),
                     enableFeedback: true,
-                    textStyle:
-                        TextStyle(color: iconColor ?? getButtonTextColor())),
+                    textStyle: TextStyle(
+                        color: iconColor ?? getButtonTextColor(context))),
                 onPressed: isButtonDisabled() ? null : onPressed,
                 label: Textography(
                   getButtonText(),
@@ -494,7 +498,7 @@ class Button extends StatelessWidget {
       case ButtonType.TEXT:
       case ButtonType.ICON:
       case ButtonType.TILE:
-        return getButton();
+        return getButton(context);
 
       default:
         break;
@@ -505,7 +509,7 @@ class Button extends StatelessWidget {
         buttonType == ButtonType.ICON ||
         buttonType == ButtonType.TILE ||
         buttonType == ButtonType.IMAGE) {
-      return getButton();
+      return getButton(context);
     }
 
     return ConstrainedBox(
@@ -515,7 +519,7 @@ class Button extends StatelessWidget {
         minHeight: buttonHeight.min,
         maxHeight: buttonHeight.max,
       ),
-      child: getButton(),
+      child: getButton(context),
     );
   }
 }

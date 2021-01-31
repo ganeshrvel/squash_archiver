@@ -27,6 +27,7 @@ class ThemePalette {
   final Color tooltipColor;
   final Color tooltipTextColor;
   final Color progressBackgroundColor;
+  final Color flatButtonPrimaryColor;
 
   ThemePalette({
     @required this.accentColor,
@@ -52,5 +53,6 @@ class ThemePalette {
     @required this.tooltipColor,
     @required this.tooltipTextColor,
     @required this.progressBackgroundColor,
+    @required this.flatButtonPrimaryColor,
   });
 }

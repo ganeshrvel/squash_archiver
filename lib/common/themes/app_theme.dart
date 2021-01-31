@@ -23,13 +23,13 @@ class AppTheme {
         textColor: AppColors.black1,
         textContrastColor: AppColors.white,
         rowTextContrastColor: AppColors.white,
-        disabledColor: AppColors.darkDisabled,
-        hoverColor: AppColors.darkHover,
-        splashColor: AppColors.darkSplash,
+        disabledColor: AppColors.lightDisabled,
+        hoverColor: AppColors.lightHover,
+        splashColor: AppColors.lightSplash,
         captionColor: AppColors.color797,
         sidebarColor: AppColors.colorE6E3E3,
         rowSelectionColor: AppColors.darkBlue,
-        alternativeRowColor: AppColors.color2E2A2E,
+        alternativeRowColor: AppColors.colorF5F,
         sidebarSelectionColor: AppColors.blue,
         sidebarTileIconColor: AppColors.blue,
         sidebarTileIconContrastColor: AppColors.white,
@@ -39,6 +39,7 @@ class AppTheme {
         tooltipColor: AppColors.colorE6E3E3,
         tooltipTextColor: AppColors.black1,
         progressBackgroundColor: AppColors.colorE5E,
+        flatButtonPrimaryColor: AppColors.colorF1F,
       );
       // </------ LIGHT theme mode color palette ----->
     }
@@ -52,9 +53,9 @@ class AppTheme {
       textColor: AppColors.white,
       textContrastColor: AppColors.black1,
       rowTextContrastColor: AppColors.white,
-      disabledColor: AppColors.lightDisabled,
-      hoverColor: AppColors.lightHover,
-      splashColor: AppColors.lightSplash,
+      disabledColor: AppColors.darkDisabled,
+      hoverColor: AppColors.darkHover,
+      splashColor: AppColors.darkSplash,
       captionColor: AppColors.white.withOpacity(0.7),
       sidebarColor: AppColors.color2D292D,
       rowSelectionColor: AppColors.darkBlue,
@@ -68,6 +69,7 @@ class AppTheme {
       tooltipColor: AppColors.color28262B,
       tooltipTextColor: AppColors.white,
       progressBackgroundColor: AppColors.color2E2A2E,
+      flatButtonPrimaryColor: AppColors.white.withOpacity(0.35),
     );
     // </------ DARK theme mode color palette ----->
   }

@@ -31,10 +31,10 @@ class AppColors {
   static final Color darkDisabled = Colors.white.withOpacity(0.2);
 
   static final Color lightSplash = Colors.black.withOpacity(0.02);
-  static final Color darkSplash = Colors.white.withOpacity(0.02);
+  static final Color darkSplash = Colors.white.withOpacity(0.1);
 
   static final Color lightHover = Colors.black.withOpacity(0.05);
-  static final Color darkHover = Colors.white.withOpacity(0.05);
+  static final Color darkHover = Colors.white.withOpacity(0.1);
 
   ///
   /// [Open color-hex.com](https://www.color-hex.com/color/F96057)
