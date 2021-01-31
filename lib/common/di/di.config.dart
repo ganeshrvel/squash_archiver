@@ -12,6 +12,8 @@ import 'package:squash_archiver/features/app/data/controllers/app_controller.dar
 import 'package:squash_archiver/features/app/data/data_sources/app_local_data_source.dart';
 import 'package:squash_archiver/features/app/data/repositories/app_repository.dart';
 import 'package:squash_archiver/features/app/ui/store/app_store.dart';
+import 'package:squash_archiver/common/themes/app_theme.dart';
+import 'package:squash_archiver/common/di/app_theme_di.dart';
 import 'package:squash_archiver/features/home/data/data_sources/archive_data_source.dart';
 import 'package:archiver_ffi/archiver_ffi.dart';
 import 'package:squash_archiver/common/di/archiver_ffi_di.dart';
@@ -51,6 +53,7 @@ Future<GetIt> $initGetIt(
   EnvironmentFilter environmentFilter,
 }) async {
   final gh = GetItHelper(get, environment, environmentFilter);
+  final appThemeDi = _$AppThemeDi();
   final archiverFfiDi = _$ArchiverFfiDi();
   final networkInfoDi = _$NetworkInfoDi();
   final dioDi = _$DioDi();
@@ -58,6 +61,10 @@ Future<GetIt> $initGetIt(
   final sentryClientDI = _$SentryClientDI();
   final sharedPreferencesDi = _$SharedPreferencesDi();
   gh.lazySingleton<AnalyticsService>(() => AnalyticsService());
+  gh.lazySingleton<AppTheme>(() => appThemeDi.lightTheme,
+      instanceName: 'lightTheme');
+  gh.lazySingleton<AppTheme>(() => appThemeDi.darkTheme,
+      instanceName: 'darkTheme');
   gh.lazySingleton<ArchiveDataSource>(() => ArchiveDataSource());
   gh.lazySingleton<ArchiverFfi>(() => archiverFfiDi.archiverFfi,
       registerFor: {_dev});
@@ -96,6 +103,8 @@ Future<GetIt> $initGetIt(
       () => AppStore(get<AppController>(), get<Alerts>()));
   return get;
 }
+
+class _$AppThemeDi extends AppThemeDi {}
 
 class _$ArchiverFfiDi extends ArchiverFfiDi {}
 
