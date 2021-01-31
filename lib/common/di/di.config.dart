@@ -95,12 +95,11 @@ Future<GetIt> $initGetIt(
   gh.lazySingleton<Log>(() => Log(get<Logger>(), get<CrashesService>()));
   gh.lazySingleton<AlertsHelper>(() => AlertsHelper(get<CrashesService>()));
   gh.lazySingleton<AppController>(() => AppController(get<AppRepository>()));
+  gh.lazySingleton<AppStore>(() => AppStore(get<AppController>()));
   gh.lazySingleton<FileExplorerController>(
       () => FileExplorerController(get<FileExplorerRepository>()));
   gh.lazySingleton<Alerts>(
       () => Alerts(get<AlertsHelper>(), get<FlushbarHelper>()));
-  gh.lazySingleton<AppStore>(
-      () => AppStore(get<AppController>(), get<Alerts>()));
   return get;
 }
 

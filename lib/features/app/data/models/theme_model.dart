@@ -22,5 +22,8 @@ class ThemeModel extends Equatable {
   Map<String, dynamic> toJson() => _$ThemeModelToJson(this);
 
   @override
-  List<Object> get props => [mode, brightness];
+  List<Object> get props => [
+        mode,
+        brightness,
+      ];
 }
