@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:squash_archiver/common/models/theme_palette.dart';
-import 'package:squash_archiver/common/themes/theme_helper.dart';
 import 'package:squash_archiver/common/themes/colors.dart';
+import 'package:squash_archiver/utils/utils/colors.dart';
 
 class AppTheme {
   final ThemeMode mode;
