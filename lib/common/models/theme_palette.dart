@@ -10,6 +10,10 @@ class ThemePalette {
   final Color textColor;
   final Color textContrastColor;
   final Color backgroundColor;
+  final Color disabledColor;
+  final Color splashColor;
+  final Color hoverColor;
+  final Color captionColor;
 
   ThemePalette({
     @required this.accentColor,
@@ -18,5 +22,9 @@ class ThemePalette {
     @required this.textColor,
     @required this.textContrastColor,
     @required this.backgroundColor,
+    @required this.disabledColor,
+    @required this.splashColor,
+    @required this.hoverColor,
+    @required this.captionColor,
   });
 }

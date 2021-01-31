@@ -127,9 +127,6 @@ class Button extends StatelessWidget {
       case ButtonColorType.BLACK:
         return AppColors.color232526;
 
-      case ButtonColorType.ColorF1F:
-        return AppColors.colorF1F;
-
       case ButtonColorType.INFO:
         return AppColors.info;
 
@@ -174,7 +171,7 @@ class Button extends StatelessWidget {
       case ButtonType.ICON:
       case ButtonType.TILE:
         if (isButtonDisabled()) {
-          return AppColors.disabled;
+          return AppColors.lightDisabled;
         }
         break;
 
@@ -292,7 +289,7 @@ class Button extends StatelessWidget {
 
         var _color = iconColor ?? getButtonTextColor();
         if (disabled) {
-          _color = AppColors.disabled;
+          _color = AppColors.lightDisabled;
         }
 
         return ClipRRect(
@@ -302,8 +299,8 @@ class Button extends StatelessWidget {
             color: getButtonBgColor(),
             child: InkWellExtended(
               mouseCursor: _mouseCursor,
-              splashColor: splashColor ?? AppColors.splash,
-              hoverColor: hoverColor ?? AppColors.hover,
+              splashColor: splashColor ?? AppColors.lightSplash,
+              hoverColor: hoverColor ?? AppColors.lightHover,
               onTap: isButtonDisabled() ? null : onPressed,
               child: SizedBox(
                 width: width,
@@ -333,7 +330,7 @@ class Button extends StatelessWidget {
             color: getButtonBgColor(),
             child: InkWellExtended(
               mouseCursor: _mouseCursor,
-              splashColor: splashColor ?? AppColors.splash,
+              splashColor: splashColor ?? AppColors.lightSplash,
               highlightColor: highlightColor,
               onTap: isButtonDisabled() ? null : onPressed,
               child: SizedBox(
@@ -360,7 +357,7 @@ class Button extends StatelessWidget {
               color: getButtonBgColor(),
               child: InkWellExtended(
                 mouseCursor: _mouseCursor,
-                splashColor: AppColors.splash,
+                splashColor: AppColors.lightSplash,
                 onTap: isButtonDisabled() ? null : onPressed,
                 child: SizedBox(
                   width: width,

@@ -11,6 +11,37 @@ class AppTheme {
     @required this.mode,
   });
 
+  /// theme palatte. Use [palette] to pick colors use across the app.
+  ThemePalette get palette {
+    if (mode == ThemeMode.dark) {
+      return ThemePalette(
+        accentColor: AppColors.blue,
+        secondaryColor: AppColors.blue,
+        primaryColor: AppColors.color232526,
+        backgroundColor: AppColors.color242024,
+        textColor: AppColors.white,
+        textContrastColor: AppColors.color232526,
+        disabledColor: AppColors.lightDisabled,
+        hoverColor: AppColors.lightHover,
+        splashColor: AppColors.lightSplash,
+        captionColor: AppColors.color797,
+      );
+    }
+
+    return ThemePalette(
+      accentColor: AppColors.blue,
+      secondaryColor: AppColors.blue,
+      primaryColor: AppColors.white,
+      backgroundColor: AppColors.white,
+      textColor: AppColors.color232526,
+      textContrastColor: AppColors.white,
+      disabledColor: AppColors.darkDisabled,
+      hoverColor: AppColors.darkHover,
+      splashColor: AppColors.darkSplash,
+      captionColor: AppColors.color797,
+    );
+  }
+
   TextStyle get _originalBodyText1 => GoogleFonts.openSans(
         color: palette.textColor,
       );
@@ -35,36 +66,13 @@ class AppTheme {
     return ThemeData.light().iconTheme;
   }
 
-  /// theme palatte. Use [palette] to pick colors use across the app.
-  ThemePalette get palette {
-    if (mode == ThemeMode.dark) {
-      return ThemePalette(
-        accentColor: AppColors.blue,
-        secondaryColor: AppColors.blue,
-        primaryColor: AppColors.color232526,
-        backgroundColor: AppColors.color242024,
-        textColor: AppColors.white,
-        textContrastColor: AppColors.color232526,
-      );
-    }
-
-    return ThemePalette(
-      accentColor: AppColors.blue,
-      secondaryColor: AppColors.blue,
-      primaryColor: AppColors.white,
-      backgroundColor: AppColors.white,
-      textColor: AppColors.color232526,
-      textContrastColor: AppColors.white,
-    );
-  }
-
   /// Button Theme
   ButtonThemeData get _buttonTheme {
     return ButtonThemeData(
-      splashColor: AppColors.splash,
-      buttonColor: AppColors.blue,
-      textTheme: ButtonTextTheme.primary,
-      disabledColor: AppColors.disabled,
+      buttonColor: palette.accentColor,
+      splashColor: palette.splashColor,
+      disabledColor: palette.disabledColor,
+      hoverColor: palette.hoverColor,
     );
   }
 
@@ -107,8 +115,8 @@ class AppTheme {
         ),
         caption: _originalBodyText1.copyWith(
           fontSize: 12.0,
-          color: AppColors.color797,
           fontWeight: FontWeight.w700,
+          color: palette.captionColor,
         ),
         button: _originalBodyText1.copyWith(
           fontSize: 15.0,
