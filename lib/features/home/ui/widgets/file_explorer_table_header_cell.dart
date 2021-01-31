@@ -1,7 +1,8 @@
 import 'package:archiver_ffi/archiver_ffi.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:squash_archiver/common/themes/colors.dart';
+import 'package:squash_archiver/common/models/theme_palette.dart';
+import 'package:squash_archiver/common/themes/theme_helper.dart';
 import 'package:squash_archiver/constants/sizes.dart';
 import 'package:squash_archiver/utils/utils/functs.dart';
 import 'package:squash_archiver/widgets/inkwell_extended/inkwell_extended.dart';
@@ -52,9 +53,15 @@ class FileExplorerTableHeaderCell extends StatelessWidget {
 
   bool get _isLoading => isLoading ?? false;
 
-  Color get _textColor => orderBy == selectedOrderBy
-      ? AppColors.color232526
-      : AppColors.color232526.withOpacity(0.60);
+  Color _textColor(BuildContext context) {
+    final _p = _palette(context);
+
+    return orderBy == selectedOrderBy
+        ? _p.textColor
+        : _p.textColor.withOpacity(0.60);
+  }
+
+  ThemePalette _palette(BuildContext context) => getPalette(context);
 
   void _handleOnTap() {
     if (isNull(onTap)) {
@@ -92,7 +99,7 @@ class FileExplorerTableHeaderCell extends StatelessWidget {
     );
   }
 
-  Widget _buildOrderDirIcon() {
+  Widget _buildOrderDirIcon(BuildContext context) {
     /// don't display the [orderDir] icon if [orderBy] is not equal to [selectedOrderBy]
     if (orderBy != selectedOrderBy) {
       return Container();
@@ -105,7 +112,7 @@ class FileExplorerTableHeaderCell extends StatelessWidget {
       case OrderDir.asc:
         _icon = Icon(
           CupertinoIcons.control,
-          color: _textColor,
+          color: _textColor(context),
           size: _size,
         );
 
@@ -113,7 +120,7 @@ class FileExplorerTableHeaderCell extends StatelessWidget {
       case OrderDir.desc:
         _icon = Icon(
           CupertinoIcons.chevron_down,
-          color: _textColor,
+          color: _textColor(context),
           size: _size,
         );
 
@@ -142,10 +149,12 @@ class FileExplorerTableHeaderCell extends StatelessWidget {
               height: 28,
               decoration: BoxDecoration(
                 border: Border.symmetric(
-                  horizontal:
-                      BorderSide(color: AppColors.colorE6E3E3, width: 0.9),
+                  horizontal: BorderSide(
+                    color: _palette(context).sidebarColor,
+                    width: 0.9,
+                  ),
                 ),
-                color: AppColors.white,
+                color: _palette(context).backgroundColor,
               ),
             ),
             Align(
@@ -157,7 +166,7 @@ class FileExplorerTableHeaderCell extends StatelessWidget {
                 ),
                 child: Textography(
                   title,
-                  color: _textColor,
+                  color: _textColor(context),
                   fontSize: 11,
                   fontWeight: FontWeight.bold,
                 ),
@@ -165,14 +174,14 @@ class FileExplorerTableHeaderCell extends StatelessWidget {
             ),
             Align(
               alignment: Alignment.centerRight,
-              child: _buildOrderDirIcon(),
+              child: _buildOrderDirIcon(context),
             ),
             if (showSeparator)
               Align(
                 alignment: Alignment.centerLeft,
                 child: Container(
                   margin: const EdgeInsets.symmetric(vertical: 7),
-                  color: AppColors.colorE6E3E3,
+                  color: _palette(context).sidebarColor,
                   width: 1,
                 ),
               ),

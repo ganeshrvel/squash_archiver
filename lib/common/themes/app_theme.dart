@@ -26,6 +26,7 @@ class AppTheme {
         hoverColor: AppColors.lightHover,
         splashColor: AppColors.lightSplash,
         captionColor: AppColors.color797,
+        sidebarColor:  AppColors.color252125,
       );
     }
 
@@ -41,6 +42,7 @@ class AppTheme {
       hoverColor: AppColors.darkHover,
       splashColor: AppColors.darkSplash,
       captionColor: AppColors.color797,
+      sidebarColor:  AppColors.colorE6E3E3,
     );
   }
 

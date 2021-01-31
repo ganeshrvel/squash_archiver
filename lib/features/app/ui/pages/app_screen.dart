@@ -42,6 +42,8 @@ class AppScreen extends StatelessWidget {
           );
         }
 
+        print('todo //theme:');
+
         return Portal(
           child: MaterialApp(
             debugShowCheckedModeBanner: env.config.debugShowCheckedModeBanner,

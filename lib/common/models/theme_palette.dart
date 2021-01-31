@@ -14,6 +14,7 @@ class ThemePalette {
   final Color splashColor;
   final Color hoverColor;
   final Color captionColor;
+  final Color sidebarColor;
 
   ThemePalette({
     @required this.accentColor,
@@ -26,5 +27,6 @@ class ThemePalette {
     @required this.splashColor,
     @required this.hoverColor,
     @required this.captionColor,
+    @required this.sidebarColor,
   });
 }
