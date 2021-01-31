@@ -106,7 +106,7 @@ class Button extends StatelessWidget {
     return textAutoCapitalize ? text.toUpperCase() : text;
   }
 
-  bool isButtonDisabled() {
+  bool get isButtonDisabled {
     if (disabled) {
       return true;
     }
@@ -172,7 +172,7 @@ class Button extends StatelessWidget {
       case ButtonType.TEXT:
       case ButtonType.ICON:
       case ButtonType.TILE:
-        if (isButtonDisabled()) {
+        if (isButtonDisabled) {
           return _palette.disabledColor;
         }
         break;
@@ -256,7 +256,7 @@ class Button extends StatelessWidget {
                     color: _palette.textContrastColor.withOpacity(0.2),
                   ),
                 ),
-                onPressed: isButtonDisabled() ? null : onPressed,
+                onPressed: isButtonDisabled ? null : onPressed,
                 child: Textography(
                   getButtonText(),
                   variant: _textVariant,
@@ -276,7 +276,7 @@ class Button extends StatelessWidget {
                   icon,
                   textDirection: iconTextDirection,
                 ),
-                onPressed: isButtonDisabled() ? null : onPressed,
+                onPressed: isButtonDisabled ? null : onPressed,
                 label: Textography(
                   getButtonText(),
                   variant: textVariant,
@@ -292,7 +292,7 @@ class Button extends StatelessWidget {
         }
 
         var _color = iconColor ?? getButtonTextColor(context);
-        if (disabled) {
+        if (isButtonDisabled) {
           _color = _palette.disabledColor;
         }
 
@@ -305,7 +305,7 @@ class Button extends StatelessWidget {
               mouseCursor: _mouseCursor,
               splashColor: splashColor ?? _palette.splashColor,
               hoverColor: hoverColor ?? _palette.hoverColor,
-              onTap: isButtonDisabled() ? null : onPressed,
+              onTap: isButtonDisabled ? null : onPressed,
               child: SizedBox(
                 width: width,
                 height: height,
@@ -336,7 +336,7 @@ class Button extends StatelessWidget {
               mouseCursor: _mouseCursor,
               splashColor: splashColor ?? _palette.splashColor,
               highlightColor: highlightColor,
-              onTap: isButtonDisabled() ? null : onPressed,
+              onTap: isButtonDisabled ? null : onPressed,
               child: SizedBox(
                 width: width,
                 height: height,
@@ -362,7 +362,7 @@ class Button extends StatelessWidget {
               child: InkWellExtended(
                 mouseCursor: _mouseCursor,
                 splashColor: splashColor ?? _palette.splashColor,
-                onTap: isButtonDisabled() ? null : onPressed,
+                onTap: isButtonDisabled ? null : onPressed,
                 child: SizedBox(
                   width: width,
                   height: height,
@@ -402,7 +402,7 @@ class Button extends StatelessWidget {
 
         return InkWellExtended(
           mouseCursor: _mouseCursor,
-          onTap: isButtonDisabled() ? null : onPressed,
+          onTap: isButtonDisabled ? null : onPressed,
           splashColor: splashColor ?? Colors.transparent,
           highlightColor: highlightColor ?? Colors.transparent,
           child: Padding(
@@ -429,7 +429,7 @@ class Button extends StatelessWidget {
                   primary: getButtonBgColor(),
                   shape: getBtnShape(),
                 ),
-                onPressed: isButtonDisabled() ? null : onPressed,
+                onPressed: isButtonDisabled ? null : onPressed,
                 child: Textography(
                   getButtonText(),
                   variant: _textVariant,
@@ -449,7 +449,7 @@ class Button extends StatelessWidget {
                     enableFeedback: true,
                     textStyle: TextStyle(
                         color: iconColor ?? getButtonTextColor(context))),
-                onPressed: isButtonDisabled() ? null : onPressed,
+                onPressed: isButtonDisabled ? null : onPressed,
                 label: Textography(
                   getButtonText(),
                   variant: _textVariant,
