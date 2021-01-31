@@ -13,6 +13,7 @@ class AppTheme {
 
   /// theme palatte. Use [palette] to pick colors use across the app.
   ThemePalette get palette {
+    /// dark theme mode color palette
     if (mode == ThemeMode.dark) {
       return ThemePalette(
         accentColor: AppColors.blue,
@@ -28,6 +29,7 @@ class AppTheme {
       );
     }
 
+    /// light theme mode color palette
     return ThemePalette(
       accentColor: AppColors.blue,
       secondaryColor: AppColors.blue,

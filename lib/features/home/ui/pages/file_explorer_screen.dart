@@ -5,8 +5,10 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mobx/mobx.dart' show ReactionDisposer, reaction;
 import 'package:provider/provider.dart';
 import 'package:squash_archiver/common/helpers/file_explorer_key_modifiers_helper.dart';
-import 'package:squash_archiver/constants/app_default_values.dart';
+import 'package:squash_archiver/common/models/theme_palette.dart';
 import 'package:squash_archiver/common/themes/colors.dart';
+import 'package:squash_archiver/common/themes/theme_helper.dart';
+import 'package:squash_archiver/constants/app_default_values.dart';
 import 'package:squash_archiver/constants/sizes.dart';
 import 'package:squash_archiver/features/home/data/enums/file_explorer_source.dart';
 import 'package:squash_archiver/features/app/data/models/keyboard_modifier_intent.dart';
@@ -50,6 +52,8 @@ class _FileExplorerScreenState extends SfWidget<FileExplorerScreen> {
   FocusNode _fileExplorerFocusNode;
 
   ShortcutManager _shortcutManager;
+
+  ThemePalette get _palette => getPalette(context);
 
   @override
   void initState() {
@@ -130,6 +134,7 @@ class _FileExplorerScreenState extends SfWidget<FileExplorerScreen> {
         child: const FileExplorerToolbar(),
         maximumExtent: 50,
         minimumExtent: 50,
+        backgroundColor: _palette.backgroundColor,
       ),
     );
   }
@@ -148,6 +153,7 @@ class _FileExplorerScreenState extends SfWidget<FileExplorerScreen> {
         child: const FileExplorerTableHeader(),
         maximumExtent: 30,
         minimumExtent: 30,
+        backgroundColor: _palette.backgroundColor,
       ),
     );
   }
@@ -183,7 +189,7 @@ class _FileExplorerScreenState extends SfWidget<FileExplorerScreen> {
             focusNode: _fileExplorerFocusNode,
             child: Container(
               padding: EdgeInsets.zero,
-              color: AppColors.white,
+              color: _palette.backgroundColor,
               child: CustomScrollView(
                 controller: _scrollController,
                 physics: const ScrollPhysics(),
@@ -261,7 +267,7 @@ class _FileExplorerScreenState extends SfWidget<FileExplorerScreen> {
     return SafeArea(
       top: true,
       child: Scaffold(
-        backgroundColor: Colors.transparent,
+        backgroundColor: AppColors.transparent,
         body: _buildBody(),
       ),
     );

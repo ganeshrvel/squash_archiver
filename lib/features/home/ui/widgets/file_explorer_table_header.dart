@@ -2,7 +2,8 @@ import 'package:archiver_ffi/archiver_ffi.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:squash_archiver/common/helpers/provider_helpers.dart';
-import 'package:squash_archiver/common/themes/colors.dart';
+import 'package:squash_archiver/common/models/theme_palette.dart';
+import 'package:squash_archiver/common/themes/theme_helper.dart';
 import 'package:squash_archiver/features/home/ui/pages/file_explorer_screen_store.dart';
 import 'package:squash_archiver/features/home/ui/widgets/file_explorer_table_header_cell.dart';
 import 'package:squash_archiver/widget_extends/sf_widget.dart';
@@ -20,6 +21,8 @@ class FileExplorerTableHeaderState extends SfWidget<FileExplorerTableHeader> {
   FileExplorerScreenStore get _fileExplorerScreenStore =>
       readProvider<FileExplorerScreenStore>(context);
 
+  ThemePalette get _palette => getPalette(context);
+
   void _handleTableHeaderCellSorting({
     @required OrderDir orderDir,
     @required OrderBy orderBy,
@@ -34,7 +37,7 @@ class FileExplorerTableHeaderState extends SfWidget<FileExplorerTableHeader> {
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.zero,
-      color: AppColors.white,
+      color: _palette.backgroundColor,
       child: Center(
         child: Observer(
           builder: (_) {
