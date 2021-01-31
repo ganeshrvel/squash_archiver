@@ -19,6 +19,8 @@ class AppDefaultValues {
 
   static const bool SHOW_HIDDEN_FILES = false; //todo move this into a setting
 
+  static const bool FOLLOW_SYSTEM_THEME = true; //todo move this into a setting
+
   /// supported archive extensions
   static const Map<String, String> SUPPORTED_ARCHIVE_EXTENSIONS = {
     'zip': 'zip',
