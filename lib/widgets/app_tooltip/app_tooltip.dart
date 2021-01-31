@@ -61,7 +61,7 @@ class AppTooltip extends StatelessWidget {
       padding:
           padding ?? const EdgeInsets.symmetric(vertical: 1, horizontal: 7),
       textStyle: TextStyle(
-        color: AppColors.black,
+        color: AppColors.color232526,
         fontSize: 11,
         fontWeight: FontWeight.w700,
       ),

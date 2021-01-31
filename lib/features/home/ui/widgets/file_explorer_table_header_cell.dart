@@ -53,8 +53,8 @@ class FileExplorerTableHeaderCell extends StatelessWidget {
   bool get _isLoading => isLoading ?? false;
 
   Color get _textColor => orderBy == selectedOrderBy
-      ? AppColors.black
-      : AppColors.black.withOpacity(0.60);
+      ? AppColors.color232526
+      : AppColors.color232526.withOpacity(0.60);
 
   void _handleOnTap() {
     if (isNull(onTap)) {

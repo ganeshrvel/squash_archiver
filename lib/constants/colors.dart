@@ -6,10 +6,23 @@ class AppColors {
   AppColors._();
 
   static const Color transparent = Colors.transparent;
+
+  /// primary color in light theme mode
+  /// primarily used for light theme scaffold background
   static const Color white = Colors.white;
+
+  /// primary color in dark theme mode
+  /// black shade, primarily used for dark theme scaffold background
+  static final Color color242024 = HexColor('242024');
+
+  /// primary and accent color
   static final Color blue = HexColor('017AFF');
-  static final Color darkBlue = HexColor('2365d8');
-  static final Color black = HexColor('232526');
+
+  /// second shade of blue
+  static final Color darkBlue = HexColor('2365D8');
+
+  /// black shade, primarily used for text
+  static final Color color232526 = HexColor('232526');
 
   //// todo remove these 3 dep.
   static final Color disabled = Colors.black.withOpacity(0.2);

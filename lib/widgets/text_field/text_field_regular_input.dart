@@ -60,7 +60,7 @@ class TextFieldRegularInput extends StatelessWidget {
         prefixIcon: isNotNull(prefixIcon)
             ? Icon(
                 prefixIcon,
-                color: AppColors.black,
+                color: AppColors.color232526,
                 size: 20,
               )
             : null,

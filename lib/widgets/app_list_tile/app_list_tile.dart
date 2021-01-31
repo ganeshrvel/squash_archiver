@@ -26,7 +26,7 @@ class AppListTile extends StatelessWidget {
     final _iconColor = selected ? AppColors.white : AppColors.blue;
     final _tileColor = selected ? AppColors.blue : null;
     final _tileTextColor =
-        selected ? AppColors.white : AppColors.black.withOpacity(0.8);
+        selected ? AppColors.white : AppColors.color232526.withOpacity(0.8);
 
     return InkWellExtended(
       onTap: onTap,

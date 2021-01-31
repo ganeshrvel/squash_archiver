@@ -40,7 +40,7 @@ class HintText extends StatelessWidget {
         break;
       case HintTextTypes.REGULAR:
       default:
-        _color = AppColors.black;
+        _color = AppColors.color232526;
         break;
     }
 

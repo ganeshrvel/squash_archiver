@@ -31,8 +31,8 @@ class FileExplorerTableRowTile extends StatelessWidget {
   Widget build(BuildContext context) {
     const _textFontVariant = TextVariant.body2;
     const _textFontWeight = FontWeight.w700;
-    var _metaDataTextColor = AppColors.black.withOpacity(0.6);
-    var _textColor = AppColors.black;
+    var _metaDataTextColor = AppColors.color232526.withOpacity(0.6);
+    var _textColor = AppColors.color232526;
 
     File _fileIcon;
     const _fileIconHeight = 24.0;

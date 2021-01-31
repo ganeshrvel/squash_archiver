@@ -11,10 +11,13 @@ class AppTheme {
     @required this.mode,
   });
 
-  TextStyle get _originalBodyText1 => GoogleFonts.openSans();
+  TextStyle get _originalBodyText1 => GoogleFonts.openSans(
+        color: palette.textColor,
+      );
 
-  MaterialColor get _primarySwatch =>
-      hexColor2MaterialColor(color: AppColors.blue);
+  MaterialColor get _primarySwatch => hexColor2MaterialColor(
+        color: palette.primaryColor,
+      );
 
   TextTheme get _originalTextTheme {
     if (mode == ThemeMode.dark) {
@@ -37,73 +40,25 @@ class AppTheme {
     if (mode == ThemeMode.dark) {
       return ThemePalette(
         accentColor: AppColors.blue,
-        scaffoldBackgroundColor: AppColors.black,
-        primaryColor: AppColors.black,
+        secondaryColor: AppColors.blue,
+        primaryColor: AppColors.color232526,
+        backgroundColor: AppColors.color242024,
+        textColor: AppColors.white,
+        textContrastColor: AppColors.color232526,
       );
     }
 
     return ThemePalette(
       accentColor: AppColors.blue,
-      scaffoldBackgroundColor: AppColors.white,
+      secondaryColor: AppColors.blue,
       primaryColor: AppColors.white,
+      backgroundColor: AppColors.white,
+      textColor: AppColors.color232526,
+      textContrastColor: AppColors.white,
     );
   }
 
-  /// AppBar theme
-  AppBarTheme get _appBarTheme {
-    return AppBarTheme(
-      color: AppColors.white,
-      elevation: 2,
-      brightness: Brightness.light,
-      iconTheme: _originalIconTheme.copyWith(color: AppColors.color797),
-      actionsIconTheme: _originalIconTheme.copyWith(color: AppColors.color797),
-      textTheme: GoogleFonts.openSansTextTheme(_originalTextTheme).copyWith(
-        subtitle1: _originalBodyText1.copyWith(
-          fontSize: 18.0,
-          fontWeight: FontWeight.w800,
-          color: AppColors.black,
-        ),
-        button: _originalBodyText1.copyWith(
-          fontSize: 14.0,
-          fontWeight: FontWeight.w900,
-          color: AppColors.black,
-        ),
-        headline3: TextStyle(
-          fontSize: 22.0,
-          fontWeight: FontWeight.w500,
-          color: AppColors.black,
-        ),
-        headline4: _originalBodyText1.copyWith(
-          fontSize: 21.0,
-          color: AppColors.black,
-        ),
-        headline6: TextStyle(
-          fontSize: 20.0,
-          fontWeight: FontWeight.w500,
-          color: AppColors.black,
-        ),
-        bodyText1: _originalBodyText1.copyWith(
-          fontSize: 16.0,
-          fontWeight: FontWeight.normal,
-        ),
-        bodyText2: _originalBodyText1.copyWith(
-          fontSize: 13.0,
-          color: AppColors.black,
-        ),
-        headline1: _originalBodyText1.copyWith(),
-        headline2: _originalBodyText1.copyWith(),
-        headline5: _originalBodyText1.copyWith(),
-        subtitle2: _originalBodyText1.copyWith(),
-        caption: _originalBodyText1.copyWith(
-          fontSize: 12.0,
-          color: AppColors.color797,
-        ),
-        overline: _originalBodyText1.copyWith(),
-      ),
-    );
-  }
-
-  /// ButtonTheme
+  /// Button Theme
   ButtonThemeData get _buttonTheme {
     return ButtonThemeData(
       splashColor: AppColors.splash,
@@ -116,47 +71,39 @@ class AppTheme {
   /// ThemeData
   ThemeData get themeData {
     return ThemeData(
+      fontFamily: 'Open Sans',
+      brightness: mode == ThemeMode.light ? Brightness.light : Brightness.dark,
       visualDensity: VisualDensity.adaptivePlatformDensity,
       iconTheme: _originalIconTheme,
-      brightness: Brightness.light,
       primarySwatch: _primarySwatch,
+      buttonTheme: _buttonTheme,
       primaryColor: palette.primaryColor,
       accentColor: palette.accentColor,
-      appBarTheme: _appBarTheme,
-      buttonTheme: _buttonTheme,
-      indicatorColor: AppColors.blue,
-      scaffoldBackgroundColor: palette.scaffoldBackgroundColor,
-      fontFamily: 'Open Sans',
-      backgroundColor: AppColors.white,
-      unselectedWidgetColor: AppColors.white,
+      indicatorColor: palette.accentColor,
+      scaffoldBackgroundColor: palette.backgroundColor,
+      backgroundColor: palette.backgroundColor,
       textTheme: GoogleFonts.openSansTextTheme(_originalTextTheme).copyWith(
         headline1: _originalBodyText1.copyWith(
           fontSize: 24.0,
           fontWeight: FontWeight.w800,
-          color: AppColors.black,
         ),
         headline6: _originalBodyText1.copyWith(
           fontSize: 20.0,
           fontWeight: FontWeight.normal,
-          color: AppColors.black,
         ),
         subtitle1: _originalBodyText1.copyWith(
           fontSize: 16.0,
-          color: AppColors.black,
         ),
         subtitle2: _originalBodyText1.copyWith(
           fontSize: 18.0,
-          color: AppColors.black,
         ),
         bodyText1: _originalBodyText1.copyWith(
           fontSize: 16.0,
           fontWeight: FontWeight.normal,
-          color: AppColors.black,
         ),
         bodyText2: _originalBodyText1.copyWith(
           fontSize: 13.0,
           fontWeight: FontWeight.normal,
-          color: AppColors.black,
         ),
         caption: _originalBodyText1.copyWith(
           fontSize: 12.0,
@@ -166,7 +113,6 @@ class AppTheme {
         button: _originalBodyText1.copyWith(
           fontSize: 15.0,
           fontWeight: FontWeight.w900,
-          color: AppColors.black,
         ),
         headline2: _originalBodyText1.copyWith(),
         headline5: _originalBodyText1.copyWith(),
