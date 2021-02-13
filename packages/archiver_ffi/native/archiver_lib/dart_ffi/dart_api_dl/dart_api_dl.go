@@ -149,8 +149,11 @@ import (
 */
 import "C"
 
-func InitializeDartApi(api unsafe.Pointer) C.long {
-	return C.Dart_InitializeApiDL(api)
+func InitializeDartApi(api unsafe.Pointer) {
+	if C.Dart_InitializeApiDL(api) != 0 {
+		panic("failed to initialize Dart DL C API: version mismatch. " +
+			"must update include/ to match Dart SDK version")
+	}
 }
 
 func CloseNativePort(port int64) bool {
