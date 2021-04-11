@@ -8,6 +8,7 @@ import 'package:squash_archiver/features/home/data/models/file_listing_response.
 import 'package:squash_archiver/features/home/ui/pages/file_explorer_keyboard_modifiers_store.dart';
 import 'package:squash_archiver/features/home/ui/pages/file_explorer_screen_store.dart';
 import 'package:squash_archiver/features/home/ui/widgets/file_explorer_table_row.dart';
+import 'package:squash_archiver/utils/log/log.dart';
 import 'package:squash_archiver/utils/utils/functs.dart';
 import 'package:squash_archiver/widgets/inkwell_extended/inkwell_extended.dart';
 import 'package:squash_archiver/widgets/text/textography.dart';
@@ -40,6 +41,15 @@ class _FileExplorerTableRowState extends State<FileExplorerTableRow> {
 
   FileListingResponse get _fileContainer => widget.fileContainer;
 
+  bool get _isFileSelected {
+    final _selectedFiles = _fileExplorerScreenStore.selectedFiles;
+
+    /// is file selected
+    return isNotNull(
+      _selectedFiles[_fileContainer.uniqueId],
+    );
+  }
+
   Future<void> _navigateToNextPath(FileListingResponse fileContainer) async {
     if (fileContainer.file.isDir) {
       return _fileExplorerScreenStore
@@ -57,13 +67,49 @@ class _FileExplorerTableRowState extends State<FileExplorerTableRow> {
     }
   }
 
+  void _handleSelectFile() {
+    final _activeKeyboardModifierIntent =
+        _fileExplorerKeyboardModifiersStore.activeKeyboardModifierIntent;
+
+    /// if meta key is pressed (in macos) then allow multiple selection
+    _fileExplorerScreenStore.setSelectedFile(
+      _fileContainer,
+      appendToList: _activeKeyboardModifierIntent?.isMetaPressed == true,
+    );
+  }
+
+  List<PopupMenuItem<String>> _buildContextMenuItems() {
+    const _menuList = <PopupMenuItem<String>>[
+      PopupMenuItem(value: 'Info', child: Textography('Info')),
+      PopupMenuItem(value: 'Delete', child: Textography('Delete')),
+    ];
+
+    if (_fileExplorerScreenStore.isSourceAnArchive) {
+      const _menu = [
+        PopupMenuItem(value: 'Open', child: Textography('Open')),
+        PopupMenuItem(value: 'Extract', child: Textography('Open')),
+      ];
+
+      _menuList.addAll(_menu);
+    }
+
+    return _menuList;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Listener(
       onPointerDown: (PointerDownEvent event) {
         /// mouse right click
         if (event.buttons == 2) {
+          if (!_isFileSelected) {
+            _handleSelectFile();
+          }
+
+          final _items = _buildContextMenuItems();
+
           showMenu(
+            useRootNavigator: true,
             elevation: 2,
             context: context,
             position: RelativeRect.fromLTRB(
@@ -72,10 +118,7 @@ class _FileExplorerTableRowState extends State<FileExplorerTableRow> {
               event.position.dx,
               event.position.dy,
             ),
-            items: const <PopupMenuItem<String>>[
-              PopupMenuItem(value: 'test1', child: Textography('test1')),
-              PopupMenuItem(value: 'test2', child: Textography('test2')),
-            ],
+            items: _items,
           );
         }
       },
@@ -84,16 +127,7 @@ class _FileExplorerTableRowState extends State<FileExplorerTableRow> {
         onDoubleTap: () {
           _navigateToNextPath(_fileContainer);
         },
-        onTap: () {
-          final _activeKeyboardModifierIntent =
-              _fileExplorerKeyboardModifiersStore.activeKeyboardModifierIntent;
-
-          /// if meta key is pressed (in macos) then allow multiple selection
-          _fileExplorerScreenStore.setSelectedFile(
-            _fileContainer,
-            appendToList: _activeKeyboardModifierIntent?.isMetaPressed == true,
-          );
-        },
+        onTap: _handleSelectFile,
         child: Observer(builder: (_) {
           /// list of selected files
           final _selectedFiles = _fileExplorerScreenStore.selectedFiles;

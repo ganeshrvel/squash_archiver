@@ -310,7 +310,7 @@ abstract class _FileExplorerScreenStoreBase with Store {
           fileContainersException = error;
         }
 
-        /// if in an exception occured then remove the last request
+        /// if an exception occured then remove the last request
         /// from the [fileListingSource] stack
         if (_popStackOnError) {
           await _popFileListingSourceStack();
@@ -400,7 +400,9 @@ abstract class _FileExplorerScreenStoreBase with Store {
         fileContainer.uniqueId: fileContainer
     };
 
-    selectedFiles = {..._filesMap};
+    selectedFiles = {
+      ..._filesMap,
+    };
   }
 
   /// reselect selected files in the explorer window
@@ -420,5 +422,10 @@ abstract class _FileExplorerScreenStoreBase with Store {
   @action
   void resetRequestPassword() {
     requestPassword = null;
+  }
+
+  /// check if the [source] (the last item in [fileListingSourceStack]) is an archive
+  bool get isSourceAnArchive {
+    return fileListingSource.source == FileExplorerSource.ARCHIVE;
   }
 }
