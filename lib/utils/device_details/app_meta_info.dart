@@ -14,4 +14,8 @@ class AppMetaInfo {
   String get appVersion {
     return _packageInfo.version;
   }
+
+  String get release {
+    return '${appVersion}+${appVersionCode}';
+  }
 }

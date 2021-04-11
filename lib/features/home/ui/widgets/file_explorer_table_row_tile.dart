@@ -8,7 +8,6 @@ import 'package:squash_archiver/features/home/data/models/file_listing_response.
 import 'package:squash_archiver/features/home/ui/pages/file_explorer_keyboard_modifiers_store.dart';
 import 'package:squash_archiver/features/home/ui/pages/file_explorer_screen_store.dart';
 import 'package:squash_archiver/features/home/ui/widgets/file_explorer_table_row.dart';
-import 'package:squash_archiver/utils/log/log.dart';
 import 'package:squash_archiver/utils/utils/functs.dart';
 import 'package:squash_archiver/widgets/inkwell_extended/inkwell_extended.dart';
 import 'package:squash_archiver/widgets/text/textography.dart';

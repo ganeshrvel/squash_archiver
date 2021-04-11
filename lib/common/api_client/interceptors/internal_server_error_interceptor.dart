@@ -6,7 +6,7 @@ import 'package:squash_archiver/utils/utils/api.dart';
 // intercept statusCode >= 500 && < 600
 class InternalServerErrorInterceptor extends Interceptor {
   @override
-  Future onError(DioError _dioError) async {
+  Future onError(DioError _dioError, ErrorInterceptorHandler handler) async {
     if (_dioError.response != null) {
       if (_dioError.response.statusCode >= 500 &&
           _dioError.response.statusCode < 600) {

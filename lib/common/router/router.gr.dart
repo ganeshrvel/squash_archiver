@@ -4,78 +4,80 @@
 // AutoRouteGenerator
 // **************************************************************************
 
-// ignore_for_file: public_member_api_docs
+import 'package:auto_route/auto_route.dart' as _i1;
+import 'package:flutter/material.dart' as _i5;
+import 'package:squash_archiver/features/home/ui/pages/file_explorer_screen.dart'
+    as _i3;
+import 'package:squash_archiver/features/page_not_found/ui/pages/page_not_found_screen.dart'
+    as _i4;
+import 'package:squash_archiver/features/splash/ui/pages/splash_screen.dart'
+    as _i2;
 
-import 'package:auto_route/auto_route.dart';
-import 'package:flutter/material.dart';
+class Router extends _i1.RootStackRouter {
+  Router();
 
-import '../../features/home/ui/pages/file_explorer_screen.dart';
-import '../../features/page_not_found/ui/pages/page_not_found_screen.dart';
-import '../../features/splash/ui/pages/splash_screen.dart';
-
-class Routes {
-  static const String splashScreen = '/splash-screen';
-  static const String fileExplorerScreen = '/';
-  static const String pageNotFoundScreen = '*';
-  static const all = <String>{
-    splashScreen,
-    fileExplorerScreen,
-    pageNotFoundScreen,
+  @override
+  final Map<String, _i1.PageFactory> pagesMap = {
+    SplashScreenRoute.name: (entry) {
+      return _i1.AdaptivePage(entry: entry, child: const _i2.SplashScreen());
+    },
+    FileExplorerScreenRoute.name: (entry) {
+      var args = entry.routeData.argsAs<FileExplorerScreenRouteArgs>(
+          orElse: () => FileExplorerScreenRouteArgs());
+      return _i1.AdaptivePage(
+          entry: entry,
+          child: _i3.FileExplorerScreen(key: args.key, dummy: args.dummy));
+    },
+    PageNotFoundScreenRoute.name: (entry) {
+      var args = entry.routeData.argsAs<PageNotFoundScreenRouteArgs>();
+      return _i1.AdaptivePage(
+          entry: entry, child: _i4.PageNotFoundScreen(args.routeName));
+    }
   };
+
+  @override
+  List<_i1.RouteConfig> get routes => [
+        _i1.RouteConfig(SplashScreenRoute.name, path: '/splash-screen'),
+        _i1.RouteConfig(FileExplorerScreenRoute.name, path: '/'),
+        _i1.RouteConfig(PageNotFoundScreenRoute.name, path: '*')
+      ];
 }
 
-class Router extends RouterBase {
-  @override
-  List<RouteDef> get routes => _routes;
-  final _routes = <RouteDef>[
-    RouteDef(Routes.splashScreen, page: SplashScreen),
-    RouteDef(Routes.fileExplorerScreen, page: FileExplorerScreen),
-    RouteDef(Routes.pageNotFoundScreen, page: PageNotFoundScreen),
-  ];
-  @override
-  Map<Type, AutoRouteFactory> get pagesMap => _pagesMap;
-  final _pagesMap = <Type, AutoRouteFactory>{
-    SplashScreen: (data) {
-      return buildAdaptivePageRoute<dynamic>(
-        builder: (context) => const SplashScreen(),
-        settings: data,
-      );
-    },
-    FileExplorerScreen: (data) {
-      final args = data.getArgs<FileExplorerScreenArguments>(
-        orElse: () => FileExplorerScreenArguments(),
-      );
-      return buildAdaptivePageRoute<dynamic>(
-        builder: (context) => FileExplorerScreen(
-          key: args.key,
-          dummy: args.dummy,
-        ),
-        settings: data,
-      );
-    },
-    PageNotFoundScreen: (data) {
-      final args = data.getArgs<PageNotFoundScreenArguments>(nullOk: false);
-      return buildAdaptivePageRoute<dynamic>(
-        builder: (context) => PageNotFoundScreen(args.routeName),
-        settings: data,
-      );
-    },
-  };
+class SplashScreenRoute extends _i1.PageRouteInfo {
+  const SplashScreenRoute() : super(name, path: '/splash-screen');
+
+  static const String name = 'SplashScreenRoute';
 }
 
-/// ************************************************************************
-/// Arguments holder classes
-/// *************************************************************************
+class FileExplorerScreenRoute
+    extends _i1.PageRouteInfo<FileExplorerScreenRouteArgs> {
+  FileExplorerScreenRoute({_i5.Key key, String dummy})
+      : super(name,
+            path: '/',
+            args: FileExplorerScreenRouteArgs(key: key, dummy: dummy));
 
-/// FileExplorerScreen arguments holder class
-class FileExplorerScreenArguments {
-  final Key key;
+  static const String name = 'FileExplorerScreenRoute';
+}
+
+class FileExplorerScreenRouteArgs {
+  const FileExplorerScreenRouteArgs({this.key, this.dummy});
+
+  final _i5.Key key;
+
   final String dummy;
-  FileExplorerScreenArguments({this.key, this.dummy});
 }
 
-/// PageNotFoundScreen arguments holder class
-class PageNotFoundScreenArguments {
+class PageNotFoundScreenRoute
+    extends _i1.PageRouteInfo<PageNotFoundScreenRouteArgs> {
+  PageNotFoundScreenRoute({required String routeName})
+      : super(name,
+            path: '*', args: PageNotFoundScreenRouteArgs(routeName: routeName));
+
+  static const String name = 'PageNotFoundScreenRoute';
+}
+
+class PageNotFoundScreenRouteArgs {
+  const PageNotFoundScreenRouteArgs({required this.routeName});
+
   final String routeName;
-  PageNotFoundScreenArguments({@required this.routeName});
 }

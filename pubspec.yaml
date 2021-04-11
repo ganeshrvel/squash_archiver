@@ -11,8 +11,8 @@ publish_to: 'none'
 version: 0.0.2+0
 
 environment:
-  sdk: ">=2.9.0 <3.0.0"
-  flutter: ">=1.20.4 <3.0.0"
+  sdk: ">=2.12.0 <3.0.0"
+  flutter: ">=2.0.0 <3.0.0"
 
 dependencies:
   flutter:
@@ -62,7 +62,7 @@ dependencies:
   # Logging
   logger: ^1.0.0
   pretty_dio_logger: ^1.2.0-beta-1
-  sentry: ^5.0.0
+  sentry_flutter: ^5.0.0
 
   # Routing
   auto_route: ^1.0.2
@@ -104,8 +104,8 @@ dependencies:
   # fonts
   google_fonts: ^2.0.0
 
-  #  archiver_ffi:
-  #    path: ./packages/archiver_ffi
+  archiver_ffi:
+    path: ./packages/archiver_ffi
 
   # path
   path: ^1.7.0
@@ -138,7 +138,7 @@ dev_dependencies:
   lint: ^1.5.1
 
   # Build runner
-  build_runner: ^1.10.13
+  build_runner: ^1.12.2
 
   # Service locator
   injectable_generator: ^1.2.2

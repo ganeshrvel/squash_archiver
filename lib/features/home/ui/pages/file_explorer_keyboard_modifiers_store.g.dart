@@ -10,7 +10,7 @@ part of 'file_explorer_keyboard_modifiers_store.dart';
 
 mixin _$FileExplorerKeyboardModifiersStore
     on _FileExplorerKeyboardModifiersStoreBase, Store {
-  Computed<bool> _$isSelectAllPressedComputed;
+  Computed<bool>? _$isSelectAllPressedComputed;
 
   @override
   bool get isSelectAllPressed => (_$isSelectAllPressedComputed ??=

@@ -7,8 +7,12 @@ import 'package:injectable/injectable.dart';
 import 'package:mobx/mobx.dart';
 import 'package:squash_archiver/common/di/di.dart' show getItInit;
 import 'package:squash_archiver/constants/env.dart';
+import 'package:squash_archiver/constants/service_keys.dart';
 import 'package:squash_archiver/features/app/ui/pages/app_screen.dart';
 import 'package:squash_archiver/utils/log/log.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
+import 'package:squash_archiver/utils/utils/strings.dart';
+
 
 Future<void> _logFlutterOnError(FlutterErrorDetails details) async {
   Zone.current.handleUncaughtError(details.exception, details.stack);
@@ -28,6 +32,18 @@ Future<void> main() async {
 
   // register all dependecy injection
   await getItInit(Environment.dev);
+
+  await SentryFlutter.init(
+        (options) {
+      options
+        ..dsn = ServiceKeys.SENTRY_DSN
+        ..environment = enumToString(env.config.environment)
+        ..release = _appMetaInfo.release
+        ..attachStacktrace = true
+        ..useNativeBreadcrumbTracking();
+    },
+  );
+
 
   // todo add firebase
   // await Firebase.initializeApp();
