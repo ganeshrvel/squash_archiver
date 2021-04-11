@@ -1,16 +1,22 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:mobx/mobx.dart' show ReactionDisposer;
+import 'package:mobx/mobx.dart' show ReactionDisposer, reaction;
+import 'package:provider/provider.dart';
+import 'package:squash_archiver/common/helpers/file_explorer_key_modifiers_helper.dart';
+import 'package:squash_archiver/common/models/theme_palette.dart';
+import 'package:squash_archiver/common/themes/colors.dart';
+import 'package:squash_archiver/common/themes/theme_helper.dart';
 import 'package:squash_archiver/constants/app_default_values.dart';
-import 'package:squash_archiver/constants/colors.dart';
 import 'package:squash_archiver/constants/sizes.dart';
 import 'package:squash_archiver/features/home/data/enums/file_explorer_source.dart';
 import 'package:squash_archiver/features/app/data/models/keyboard_modifier_intent.dart';
+import 'package:squash_archiver/features/home/data/models/file_listing_request.dart';
+import 'package:squash_archiver/features/home/ui/pages/file_explorer_keyboard_modifiers_store.dart';
 import 'package:squash_archiver/features/home/ui/pages/file_explorer_screen_store.dart';
 import 'package:squash_archiver/features/home/ui/widgets/file_explorer_pane.dart';
+import 'package:squash_archiver/features/home/ui/widgets/file_explorer_password_overlay.dart';
 import 'package:squash_archiver/features/home/ui/widgets/file_explorer_table_header.dart';
 import 'package:squash_archiver/features/home/ui/widgets/file_explorer_toolbar.dart';
 import 'package:squash_archiver/features/home/ui/widgets/file_explorer_sidebar.dart';
@@ -37,6 +43,8 @@ class FileExplorerScreen extends StatefulWidget {
 class _FileExplorerScreenState extends SfWidget<FileExplorerScreen> {
   FileExplorerScreenStore _fileExplorerScreenStore;
 
+  FileExplorerKeyboardModifiersStore _fileExplorerKeyboardModifiersStore;
+
   List<ReactionDisposer> _disposers;
 
   ScrollController _scrollController;
@@ -45,9 +53,13 @@ class _FileExplorerScreenState extends SfWidget<FileExplorerScreen> {
 
   ShortcutManager _shortcutManager;
 
+  ThemePalette get _palette => getPalette(context);
+
   @override
   void initState() {
     _fileExplorerScreenStore ??= FileExplorerScreenStore();
+    _fileExplorerKeyboardModifiersStore ??=
+        FileExplorerKeyboardModifiersStore();
     _scrollController ??= ScrollController();
     _fileExplorerFocusNode ??= FocusNode();
     _shortcutManager ??= ShortcutManager();
@@ -72,6 +84,17 @@ class _FileExplorerScreenState extends SfWidget<FileExplorerScreen> {
 
   @override
   void didChangeDependencies() {
+    _disposers = [
+      reaction(
+        (_) => _fileExplorerScreenStore.fileContainersException,
+        (Exception fileContainersException) {
+          if (isNull(fileContainersException)) {
+            return;
+          }
+        },
+      ),
+    ];
+
     super.didChangeDependencies();
   }
 
@@ -82,26 +105,44 @@ class _FileExplorerScreenState extends SfWidget<FileExplorerScreen> {
     super.dispose();
   }
 
+  void _handlePasswordRequestOkTap({
+    @required FileListingRequest fileListingRequest,
+    @required String password,
+  }) {
+    _fileExplorerScreenStore.navigateToSource(
+      fullPath: fileListingRequest.path,
+      password: password,
+      clearStack: false,
+      source: FileExplorerSource.ARCHIVE,
+      currentArchiveFilepath: fileListingRequest.archiveFilepath,
+      orderBy: fileListingRequest.orderBy,
+      orderDir: fileListingRequest.orderDir,
+      gitIgnorePattern: fileListingRequest.gitIgnorePattern,
+    );
+
+    _fileExplorerScreenStore.resetRequestPassword();
+  }
+
+  void _handlePasswordRequestCancelTap() {
+    _fileExplorerScreenStore.resetRequestPassword();
+  }
+
   SliverPersistentHeader _buildToolbar() {
     return SliverPersistentHeader(
       pinned: true,
       delegate: AppSliverHeader(
-        child: FileExplorerToolbar(
-          fileExplorerScreenStore: _fileExplorerScreenStore,
-        ),
+        child: const FileExplorerToolbar(),
         maximumExtent: 50,
         minimumExtent: 50,
+        backgroundColor: _palette.backgroundColor,
       ),
     );
   }
 
   Widget _buildSidebar() {
-    return SizedBox(
+    return const SizedBox(
       width: Sizes.SIDEBAR_WIDTH,
-      //todo add a store for current path
-      child: FileExplorerSidebar(
-        fileExplorerScreenStore: _fileExplorerScreenStore,
-      ),
+      child: FileExplorerSidebar(),
     );
   }
 
@@ -109,62 +150,28 @@ class _FileExplorerScreenState extends SfWidget<FileExplorerScreen> {
     return SliverPersistentHeader(
       pinned: true,
       delegate: AppSliverHeader(
-        child: FileExplorerTableHeader(
-          fileExplorerScreenStore: _fileExplorerScreenStore,
-        ),
+        child: const FileExplorerTableHeader(),
         maximumExtent: 30,
         minimumExtent: 30,
+        backgroundColor: _palette.backgroundColor,
       ),
     );
   }
 
   Widget _buildFileExplorerPane() {
-    return FileExplorerPane(
-      fileExplorerScreenStore: _fileExplorerScreenStore,
-    );
+    return const FileExplorerPane();
   }
 
   Widget _buildFileExplorer() {
     return Expanded(
       child: Shortcuts(
         manager: _shortcutManager,
-        shortcuts: <LogicalKeySet, Intent>{
-          //todo move the LogicalKeySets to a separate helper file and use this mapping
-          // along with the store variable to avoid unwanted surprises
-          LogicalKeySet(LogicalKeyboardKey.alt): const KeyboardModifierIntent(
-            keys: [
-              LogicalKeyboardKey.alt,
-            ],
-          ),
-          LogicalKeySet(LogicalKeyboardKey.control):
-              const KeyboardModifierIntent(
-            keys: [
-              LogicalKeyboardKey.control,
-            ],
-          ),
-          LogicalKeySet(LogicalKeyboardKey.meta): const KeyboardModifierIntent(
-            keys: [
-              LogicalKeyboardKey.meta,
-            ],
-          ),
-          LogicalKeySet(LogicalKeyboardKey.shift): const KeyboardModifierIntent(
-            keys: [
-              LogicalKeyboardKey.shift,
-            ],
-          ),
-          LogicalKeySet(LogicalKeyboardKey.meta, LogicalKeyboardKey.keyA):
-              const KeyboardModifierIntent(
-            keys: [
-              LogicalKeyboardKey.meta,
-              LogicalKeyboardKey.keyA,
-            ],
-          ),
-        },
+        shortcuts: getKeyModifiersShortcut(),
         child: Actions(
           actions: <Type, Action<Intent>>{
             KeyboardModifierIntent: CallbackAction<KeyboardModifierIntent>(
               onInvoke: (KeyboardModifierIntent intent) {
-                return _fileExplorerScreenStore
+                return _fileExplorerKeyboardModifiersStore
                     .setActiveKeyboardModifierIntent(intent);
               },
             ),
@@ -172,7 +179,8 @@ class _FileExplorerScreenState extends SfWidget<FileExplorerScreen> {
           child: Focus(
             onKey: (focus, keyEvent) {
               if (isNullOrEmpty(keyEvent.data.modifiersPressed)) {
-                _fileExplorerScreenStore.resetActiveKeyboardModifierIntent();
+                _fileExplorerKeyboardModifiersStore
+                    .resetActiveKeyboardModifierIntent();
               }
 
               return false;
@@ -181,7 +189,7 @@ class _FileExplorerScreenState extends SfWidget<FileExplorerScreen> {
             focusNode: _fileExplorerFocusNode,
             child: Container(
               padding: EdgeInsets.zero,
-              color: AppColors.white,
+              color: _palette.backgroundColor,
               child: CustomScrollView(
                 controller: _scrollController,
                 physics: const ScrollPhysics(),
@@ -212,13 +220,45 @@ class _FileExplorerScreenState extends SfWidget<FileExplorerScreen> {
     );
   }
 
+  Widget _buildPasswordOverlay() {
+    return Observer(
+      builder: (_) {
+        final _requestPassword = _fileExplorerScreenStore.requestPassword;
+        final _showRequestPasswordOverlay = isNotNull(_requestPassword);
+
+        if (!_showRequestPasswordOverlay) {
+          return Container();
+        }
+
+        return FileExplorerPasswordOverlay(
+          visible: _showRequestPasswordOverlay,
+          passwordRequest: _requestPassword,
+          onCancel: _handlePasswordRequestCancelTap,
+          onOk: _handlePasswordRequestOkTap,
+          invalidPassword: _requestPassword.invalidPassword,
+        );
+      },
+    );
+  }
+
   Widget _buildBody() {
-    return Row(
-      children: [
-        _buildSidebar(),
-        _buildFileExplorer(),
-        _buildProgressOverlay(),
+    return MultiProvider(
+      providers: [
+        Provider<FileExplorerScreenStore>(
+          create: (_) => _fileExplorerScreenStore,
+        ),
+        Provider<FileExplorerKeyboardModifiersStore>(
+          create: (_) => _fileExplorerKeyboardModifiersStore,
+        ),
       ],
+      child: Row(
+        children: [
+          _buildSidebar(),
+          _buildFileExplorer(),
+          _buildProgressOverlay(),
+          _buildPasswordOverlay(),
+        ],
+      ),
     );
   }
 
@@ -227,7 +267,7 @@ class _FileExplorerScreenState extends SfWidget<FileExplorerScreen> {
     return SafeArea(
       top: true,
       child: Scaffold(
-        backgroundColor: Colors.transparent,
+        backgroundColor: AppColors.transparent,
         body: _buildBody(),
       ),
     );

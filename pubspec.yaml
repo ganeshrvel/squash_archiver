@@ -39,6 +39,7 @@ dependencies:
   # Service locator
   get_it: ^6.0.0-nullsafety.2
   injectable: ^1.0.7
+  provider: ^4.3.3
 
   # data channel
   data_channel: ^2.0.0-nullsafety.1
@@ -118,12 +119,15 @@ dependencies:
   # date
   intl: ^0.17.0-nullsafety.2
 
+  # overlay
   flutter_portal: ^0.3.0
 
-dev_dependencies:
-#  flutter_driver:
-#    sdk: flutter
+  # hashing
+  crypto: ^2.1.5
 
+dev_dependencies:
+  #  flutter_driver:
+  #    sdk: flutter
 
   flutter_test:
     sdk: flutter
@@ -154,6 +158,9 @@ dev_dependencies:
 # The following section is specific to Flutter.
 flutter:
   uses-material-design: true
+  assets:
+    - assets/images/
+    - assets/images/file_icons/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.io/assets-and-images/#resolution-aware.

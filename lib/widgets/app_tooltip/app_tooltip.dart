@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:squash_archiver/constants/colors.dart';
+import 'package:squash_archiver/common/themes/theme_helper.dart';
+import 'package:squash_archiver/utils/utils/functs.dart';
 import 'package:squash_archiver/widgets/shadows/box_shadow_3.dart';
 
 class AppTooltip extends StatelessWidget {
@@ -11,8 +12,7 @@ class AppTooltip extends StatelessWidget {
     this.child,
     this.waitDuration,
     this.showDuration,
-  })  : assert(message != null),
-        super(key: key);
+  }) : super(key: key);
 
   /// The text to display in the tooltip.
   final String message;
@@ -42,12 +42,19 @@ class AppTooltip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    /// don't show empty popup
+    if (isNullOrEmpty(message)) {
+      return child;
+    }
+
+    final _palette = getPalette(context);
+
     return Tooltip(
       waitDuration: waitDuration ?? const Duration(milliseconds: 700),
       showDuration: showDuration,
       message: message,
       decoration: BoxDecoration(
-        color: AppColors.colorE6E3E3,
+        color: _palette.tooltipColor,
         borderRadius: BorderRadius.circular(4),
         boxShadow: [
           BoxShadow3(),
@@ -56,7 +63,7 @@ class AppTooltip extends StatelessWidget {
       padding:
           padding ?? const EdgeInsets.symmetric(vertical: 1, horizontal: 7),
       textStyle: TextStyle(
-        color: AppColors.black,
+        color: _palette.tooltipTextColor,
         fontSize: 11,
         fontWeight: FontWeight.w700,
       ),

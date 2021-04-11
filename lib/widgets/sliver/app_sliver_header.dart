@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:squash_archiver/constants/colors.dart';
 
 class AppSliverHeader extends SliverPersistentHeaderDelegate {
   final Widget child;
@@ -14,7 +13,7 @@ class AppSliverHeader extends SliverPersistentHeaderDelegate {
     @required this.child,
     @required this.maximumExtent,
     @required this.minimumExtent,
-    this.backgroundColor = AppColors.white,
+    @required this.backgroundColor,
   });
 
   @override

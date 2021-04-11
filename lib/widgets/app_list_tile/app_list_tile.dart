@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:squash_archiver/constants/colors.dart';
+import 'package:squash_archiver/common/themes/theme_helper.dart';
 import 'package:squash_archiver/widgets/inkwell_extended/inkwell_extended.dart';
 import 'package:squash_archiver/widgets/text/textography.dart';
 
@@ -23,10 +23,15 @@ class AppListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _iconColor = selected ? AppColors.white : AppColors.blue;
-    final _tileColor = selected ? AppColors.blue : null;
-    final _tileTextColor =
-        selected ? AppColors.white : AppColors.black.withOpacity(0.8);
+    final _palette = getPalette(context);
+
+    final _iconColor = selected
+        ? _palette.sidebarTileIconContrastColor
+        : _palette.sidebarTileIconColor;
+    final _tileColor = selected ? _palette.sidebarSelectionColor : null;
+    final _tileTextColor = selected
+        ? _palette.sidebarTileTextContrastColor
+        : _palette.sidebarTileTextColor.withOpacity(0.8);
 
     return InkWellExtended(
       onTap: onTap,

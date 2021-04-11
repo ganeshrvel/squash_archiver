@@ -1,10 +1,8 @@
 import 'dart:async';
 
 import 'package:archiver_ffi/archiver_ffi.dart';
-import 'package:collection/collection.dart';
 import 'package:data_channel/data_channel.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/services.dart';
 import 'package:meta/meta.dart';
 
 import 'package:mobx/mobx.dart';
@@ -13,7 +11,7 @@ import 'package:squash_archiver/features/home/data/controllers/file_explorer_con
 import 'package:squash_archiver/features/home/data/enums/file_explorer_source.dart';
 import 'package:squash_archiver/features/home/data/models/file_listing_request.dart';
 import 'package:squash_archiver/features/home/data/models/file_listing_response.dart';
-import 'package:squash_archiver/features/app/data/models/keyboard_modifier_intent.dart';
+import 'package:squash_archiver/features/home/data/models/password_request.dart';
 import 'package:squash_archiver/utils/utils/files.dart';
 import 'package:squash_archiver/utils/utils/functs.dart';
 import 'package:squash_archiver/utils/utils/store_helper.dart';
@@ -26,28 +24,33 @@ class FileExplorerScreenStore = _FileExplorerScreenStoreBase
 abstract class _FileExplorerScreenStoreBase with Store {
   final _fileExplorerController = getIt<FileExplorerController>();
 
+  /// [FileListingResponse] object stack
   @observable
-  List<FileListingResponse> files = ObservableList<FileListingResponse>();
+  List<FileListingResponse> fileContainers =
+      ObservableList<FileListingResponse>();
 
   @observable
-  ObservableFuture<DC<Exception, List<FileListingResponse>>> filesFuture =
-      ObservableFuture(Future.value());
+  ObservableFuture<DC<Exception, List<FileListingResponse>>>
+      fileContainersFuture = ObservableFuture(Future.value());
 
+  /// [Exception] from [_fetchFiles]
   @observable
-  Exception fileListException;
+  Exception fileContainersException;
 
+  /// [FileListingRequest] object stack
   @observable
   @visibleForTesting
   List<FileListingRequest> fileListingSourceStack = ObservableList();
 
-  /// the selected files in the file explorer
+  /// if passwordOverlay is NOT null then show the password request overlay
   @observable
-  List<FileListingResponse> selectedFiles = ObservableList();
+  PasswordRequest requestPassword;
 
-  ///todo move [activeKeyboardModifierIntent] into a different store
-  /// keyboard events
+  /// the selected files in the file explorer
+  /// ///todo make selectedFiles a map instead of list inorder to make it o(1)
   @observable
-  KeyboardModifierIntent activeKeyboardModifierIntent;
+  Map<String, FileListingResponse> selectedFiles =
+      ObservableMap<String, FileListingResponse>();
 
   @computed
   FileListingRequest get fileListingSource {
@@ -60,7 +63,7 @@ abstract class _FileExplorerScreenStoreBase with Store {
 
   @computed
   bool get fileListingInProgress {
-    return isStateLoading(filesFuture);
+    return isStateLoading(fileContainersFuture);
   }
 
   @computed
@@ -107,32 +110,34 @@ abstract class _FileExplorerScreenStoreBase with Store {
     return fileListingSource.source;
   }
 
-  /// returns [true] if meta+a is pressed in the keyboard
-  @computed
-  bool get isSelectAllPressed {
-    final deepEq = const DeepCollectionEquality().equals;
-
-    return deepEq(activeKeyboardModifierIntent?.keys ?? [], [
-      LogicalKeyboardKey.meta,
-      LogicalKeyboardKey.keyA,
-    ]);
-  }
-
   /// Adding a new [FileExplorerSource] will first add the request to the [fileListingSourceStack]
   /// and then fetch files from the respective source
   @action
   Future<void> navigateToSource({
+    /// full path to the next directory
+    /// for [FileExplorerSource.local] fullPath is the path to the next directory
+    /// for [FileExplorerSource.archive] fullPath is the directory path within the archive
     @required String fullPath,
+
+    /// the full path to the archive file
+    String currentArchiveFilepath,
+
+    /// source type [FileExplorerSource.local] or [FileExplorerSource.archive]
     @required FileExplorerSource source,
 
     /// clearing stack will empty [fileListingSourceStack] first and then insert a new request
     @required bool clearStack,
 
-    /// the full path to the archive file
-    String currentArchiveFilepath,
+    /// sort the files by name, size or modified time. order by 'fullPath' isn't supported yet.
     OrderBy orderBy,
+
+    /// sort the files in ascending or descending order. orderDir 'none' isn't supported yet.
     OrderDir orderDir,
+
+    /// password field. If null or empty then password will be ignored.
     String password,
+
+    /// gitignore pattern list
     List<String> gitIgnorePattern,
   }) async {
     assert(fullPath != null);
@@ -233,6 +238,7 @@ abstract class _FileExplorerScreenStoreBase with Store {
     );
   }
 
+  /// pop the last source item ([FileListingRequest] object) from the [fileListingSourceStack] stack
   @action
   Future<void> _popFileListingSourceStack() async {
     if (fileListingSourceStack.length > 1) {
@@ -245,33 +251,66 @@ abstract class _FileExplorerScreenStoreBase with Store {
     }
   }
 
+  ///  fetch files from local or archive data source
   @action
   Future<void> _fetchFiles({
+    /// InvalidateCache is only using for listing archive files.
+    /// Use 'invalidate' flag to use the cache while listing archive files.
+    /// If [invalidateCache] is set as true while listing the archive files
+    /// then the files will be fetched again from the [archiver_ffi]
+    /// Reading an archive file requires a few seconds as there are multiple
+    /// file processing involved.
+    /// Use this as required and only when neccessary
     bool invalidateCache,
+
+    /// should pop the [fileListingSourceStack] stack on error.
     bool popStackOnError,
   }) async {
     final c = Completer();
 
     final _popStackOnError = popStackOnError ?? false;
-    fileListException = null;
+    fileContainersException = null;
 
     /// reset the selected files on directory/path/refresh
     resetSelectedFiles();
 
-    filesFuture = ObservableFuture(
+    fileContainersFuture = ObservableFuture(
       _fileExplorerController.listFiles(
         request: fileListingSource,
         invalidateCache: invalidateCache,
       ),
     );
 
-    final _data = await filesFuture;
+    final _data = await fileContainersFuture;
 
     _data.pick(
       onError: (error) async {
-        fileListException = error;
+        /// set [requestPassword] if the [error] is [PasswordRequiredException]
+        if (error is PasswordRequiredException) {
+          setRequestPassword(
+            PasswordRequest(
+              fileListingRequest: fileListingSource,
+              invalidPassword: false,
+            ),
+          );
+        }
 
-        /// if in an exception occured then remove the last request
+        /// mark [requestPassword.invalidPassword] as true if the [error] is [InvalidPasswordException]
+        else if (error is InvalidPasswordException) {
+          setRequestPassword(
+            PasswordRequest(
+              fileListingRequest: fileListingSource,
+              invalidPassword: true,
+            ),
+          );
+        }
+
+        /// set [fileContainersException] for all other errors
+        else {
+          fileContainersException = error;
+        }
+
+        /// if an exception occured then remove the last request
         /// from the [fileListingSource] stack
         if (_popStackOnError) {
           await _popFileListingSourceStack();
@@ -280,14 +319,14 @@ abstract class _FileExplorerScreenStoreBase with Store {
         c.complete();
       },
       onData: (data) {
-        files = data;
-        fileListException = null;
+        fileContainers = data;
+        fileContainersException = null;
 
         c.complete();
       },
       onNoData: () {
-        files = [];
-        fileListException = null;
+        fileContainers = ObservableList();
+        fileContainersException = null;
 
         c.complete();
       },
@@ -296,77 +335,97 @@ abstract class _FileExplorerScreenStoreBase with Store {
     return c.future;
   }
 
+  /// set the [fileListingSourceStack]
   @action
-  void _setFileListingRequestStack(FileListingRequest param) {
-    fileListingSourceStack = [param];
+  void _setFileListingRequestStack(FileListingRequest value) {
+    fileListingSourceStack = [value];
   }
 
+  /// add an item to the [fileListingSourceStack]
   @action
-  void _addToFileListingRequestStack(FileListingRequest param) {
+  void _addToFileListingRequestStack(FileListingRequest value) {
+    /// if [fileListingSourceStack] is empty then SET a new [FileListingRequest] object to it
     if (isNullOrEmpty(fileListingSourceStack)) {
-      _setFileListingRequestStack(param);
+      _setFileListingRequestStack(value);
 
       return;
     }
 
+    /// if [fileListingSourceStack] is NOT empty then ADD a new [FileListingRequest] object to it
     final _fileListingSourceStackTemp = fileListingSourceStack;
-    _fileListingSourceStackTemp.add(param);
+    _fileListingSourceStackTemp.add(value);
 
     fileListingSourceStack = _fileListingSourceStackTemp;
   }
 
-  @action
-
   /// set files in the explorer window
   /// if [appendToList] is false then only one file will be selected
   /// if [appendToList] is true then multiple file selection is allowed
+  /// todo write tests
+  @action
   void setSelectedFile(
-    FileListingResponse file, {
+    FileListingResponse fileContainer, {
     bool appendToList = false,
   }) {
-    assert(file != null);
+    assert(fileContainer != null);
     assert(appendToList != null);
+
+    final _uniqueId = fileContainer.uniqueId;
 
     var _selectedFiles = selectedFiles;
 
-    /// if [selectedFiles] list contains the incoming file
-    /// then remove it
-    if (_selectedFiles.contains(file)) {
-      _selectedFiles.remove(file);
-    }
-
-    /// if [selectedFiles] list does not contain the incoming file
-    else {
-      /// if [appendToList] is true then multiple file selection is allowed
-      if (appendToList) {
-        _selectedFiles.add(file);
+    /// if [appendToList] is true then multiple file selection is allowed
+    if (appendToList) {
+      /// if [selectedFiles] list contains the incoming file then remove it
+      if (isNotNull(_selectedFiles[_uniqueId])) {
+        _selectedFiles.remove(_uniqueId);
       } else {
-        /// if [appendToList] is false then only one file will be selected
-        _selectedFiles = [file];
+        /// if [selectedFiles] list does not contain the incoming file then add it
+        _selectedFiles.putIfAbsent(_uniqueId, () => fileContainer);
       }
+    } else {
+      /// if [appendToList] is false then only one file will be selected
+      _selectedFiles = {_uniqueId: fileContainer};
     }
 
     selectedFiles = _selectedFiles;
   }
 
   /// select all files in the explorer window
+  ///   /// todo write tests
+  @action
   void selectAllFiles() {
-    selectedFiles = files;
+    final _filesMap = {
+      for (var fileContainer in fileContainers)
+        fileContainer.uniqueId: fileContainer
+    };
+
+    selectedFiles = {
+      ..._filesMap,
+    };
   }
 
   /// reselect selected files in the explorer window
+  ///   /// todo write tests
   @action
   void resetSelectedFiles() {
-    selectedFiles = [];
+    selectedFiles = ObservableMap();
   }
 
+  /// set the password request field
   @action
-  void setActiveKeyboardModifierIntent(KeyboardModifierIntent intent) {
-    activeKeyboardModifierIntent = intent;
+  void setRequestPassword(PasswordRequest value) {
+    requestPassword = value;
   }
 
+  /// reset the password request field
   @action
-  void resetActiveKeyboardModifierIntent() {
-    activeKeyboardModifierIntent = null;
+  void resetRequestPassword() {
+    requestPassword = null;
+  }
+
+  /// check if the [source] (the last item in [fileListingSourceStack]) is an archive
+  bool get isSourceAnArchive {
+    return fileListingSource.source == FileExplorerSource.ARCHIVE;
   }
 }

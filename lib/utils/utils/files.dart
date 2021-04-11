@@ -35,7 +35,7 @@ String getExtension(String filename) {
   if (_splittedFilename.length > 2) {
     final _exts = _splittedFilename.sublist(length - 2);
 
-    if (AppDefaultValues.ALLOWED_SECOND_EXTENSIONS.contains(_exts[0])) {
+    if (isNotNull(AppDefaultValues.ALLOWED_SECOND_EXTENSIONS[_exts[0]])) {
       return _exts.join('.');
     }
   }

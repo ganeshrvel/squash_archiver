@@ -63,7 +63,7 @@ class AppScreen extends StatelessWidget {
               );
             },
             title: Strings.APP_NAME,
-            theme: getAppThemeFromThemeMode(_appStore.theme.mode),
+            theme: getAppThemeData(_appStore.theme.mode),
             locale: Locale(
               _appStore.language.locale,
               _appStore.language.countryCode,

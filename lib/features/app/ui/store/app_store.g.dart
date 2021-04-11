@@ -51,10 +51,9 @@ mixin _$AppStore on _AppStoreBase, Store {
       AsyncAction('_AppStoreBase.setAppLanguage');
 
   @override
-  Future<void> setAppLanguage(
-      BuildContext context, LanguageModel languageData) {
+  Future<void> setAppLanguage(LanguageModel languageData) {
     return _$setAppLanguageAsyncAction
-        .run(() => super.setAppLanguage(context, languageData));
+        .run(() => super.setAppLanguage(languageData));
   }
 
   final _$getAppLanguageAsyncAction =
@@ -68,15 +67,23 @@ mixin _$AppStore on _AppStoreBase, Store {
   final _$setAppThemeAsyncAction = AsyncAction('_AppStoreBase.setAppTheme');
 
   @override
-  Future<void> setAppTheme(BuildContext context, ThemeModel data) {
-    return _$setAppThemeAsyncAction.run(() => super.setAppTheme(context, data));
+  Future<void> setAppTheme(ThemeModel data) {
+    return _$setAppThemeAsyncAction.run(() => super.setAppTheme(data));
   }
 
   final _$getAppThemeAsyncAction = AsyncAction('_AppStoreBase.getAppTheme');
 
   @override
-  Future<void> getAppTheme() {
+  Future<ThemeModel> getAppTheme() {
     return _$getAppThemeAsyncAction.run(() => super.getAppTheme());
+  }
+
+  final _$toggleAppThemeAsyncAction =
+      AsyncAction('_AppStoreBase.toggleAppTheme');
+
+  @override
+  Future<void> toggleAppTheme() {
+    return _$toggleAppThemeAsyncAction.run(() => super.toggleAppTheme());
   }
 
   @override

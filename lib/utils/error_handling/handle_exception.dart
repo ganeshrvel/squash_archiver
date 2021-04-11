@@ -23,7 +23,7 @@ HandleExceptionModel handleException(
   var _reportCrash = true;
   var _stackTrace = stackTrace;
   var _exception = exception;
-  final _allowLogging = allowLogging ?? true;
+  var _allowLogging = allowLogging ?? true;
   String _body;
   if (exception is TaskInProgressException) {
     _body = Errors.TASK_IN_PROGRESS_MESSAGE;
@@ -31,10 +31,19 @@ HandleExceptionModel handleException(
 
     _reportCrash = true;
   } else if (exception is ArchiverException) {
-    _body = exception.error;
-    _exception = exception;
-
-    _reportCrash = true;
+    if (exception is FileNotFoundToPackException ||
+        exception is FileNotFoundException ||
+        exception is PasswordRequiredException ||
+        exception is InvalidPasswordException ||
+        exception is OperationNotPermittedException) {
+      /// do not report this
+      _reportCrash = false;
+      _allowLogging = false;
+    } else {
+      _body = exception.error;
+      _exception = exception;
+      _reportCrash = true;
+    }
   } else if (exception is CacheException) {
     _body = Errors.CACHE_FAILURE_MESSAGE;
     _stackTrace = exception.stackTrace;

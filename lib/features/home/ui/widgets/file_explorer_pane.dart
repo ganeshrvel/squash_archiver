@@ -1,17 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:squash_archiver/common/helpers/provider_helpers.dart';
 import 'package:squash_archiver/constants/sizes.dart';
 import 'package:squash_archiver/features/home/ui/pages/file_explorer_screen_store.dart';
 import 'package:squash_archiver/features/home/ui/widgets/file_explorer_table.dart';
 import 'package:squash_archiver/widget_extends/sf_widget.dart';
 
 class FileExplorerPane extends StatefulWidget {
-  final FileExplorerScreenStore fileExplorerScreenStore;
-
   const FileExplorerPane({
     Key key,
-    @required this.fileExplorerScreenStore,
-  })  : assert(fileExplorerScreenStore != null),
-        super(key: key);
+  }) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _FileExplorerPaneState();
@@ -19,7 +16,7 @@ class FileExplorerPane extends StatefulWidget {
 
 class _FileExplorerPaneState extends SfWidget<FileExplorerPane> {
   FileExplorerScreenStore get _fileExplorerScreenStore =>
-      widget.fileExplorerScreenStore;
+      readProvider<FileExplorerScreenStore>(context);
 
   @override
   void initState() {
@@ -28,12 +25,12 @@ class _FileExplorerPaneState extends SfWidget<FileExplorerPane> {
 
   @override
   Widget build(BuildContext context) {
-    return SliverPadding(
-      padding: const EdgeInsets.symmetric(
-          horizontal: Sizes.FILE_EXPLORER_HORZ_PADDING, vertical: 5),
-      sliver: FileExplorerTable(
-        fileExplorerScreenStore: _fileExplorerScreenStore,
+    return const SliverPadding(
+      padding: EdgeInsets.symmetric(
+        horizontal: Sizes.FILE_EXPLORER_HORZ_PADDING,
+        vertical: 5,
       ),
+      sliver: FileExplorerTable(),
     );
   }
 }

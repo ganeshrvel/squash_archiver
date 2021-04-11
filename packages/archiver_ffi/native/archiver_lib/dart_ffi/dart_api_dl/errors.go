@@ -25,6 +25,8 @@ func processErrors(e error, taskType TaskType) string {
 		errorType = string(ErrorUnsupportedFileFormat)
 	} else if strings.Contains(e.Error(), "invalid password") {
 		errorType = string(ErrorInvalidPassword)
+	} else if strings.Contains(e.Error(), "password is required") {
+		errorType = string(ErrorPasswordRequired)
 	} else if strings.Contains(e.Error(), "operation not permitted") {
 		errorType = string(ErrorOperationNotPermitted)
 	}

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:squash_archiver/constants/colors.dart';
+import 'package:squash_archiver/common/themes/colors.dart';
 import 'package:squash_archiver/widgets/text/textography.dart';
 
 enum HintTextTypes {
@@ -40,7 +40,7 @@ class HintText extends StatelessWidget {
         break;
       case HintTextTypes.REGULAR:
       default:
-        _color = AppColors.black;
+        _color = AppColors.black1;
         break;
     }
 

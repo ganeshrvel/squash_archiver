@@ -2,8 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:squash_archiver/common/helpers/provider_helpers.dart';
+import 'package:squash_archiver/common/models/theme_palette.dart';
+import 'package:squash_archiver/common/themes/theme_helper.dart';
 import 'package:squash_archiver/constants/app_default_values.dart';
-import 'package:squash_archiver/constants/colors.dart';
 import 'package:squash_archiver/constants/sizes.dart';
 import 'package:squash_archiver/features/home/data/enums/file_explorer_source.dart';
 import 'package:squash_archiver/features/home/data/models/file_explorer_entity.dart';
@@ -14,13 +16,9 @@ import 'package:squash_archiver/widgets/app_list_tile/app_list_tile.dart';
 import 'package:squash_archiver/widgets/text/textography.dart';
 
 class FileExplorerSidebar extends StatefulWidget {
-  final FileExplorerScreenStore fileExplorerScreenStore;
-
   const FileExplorerSidebar({
     Key key,
-    @required this.fileExplorerScreenStore,
-  })  : assert(fileExplorerScreenStore != null),
-        super(key: key);
+  }) : super(key: key);
 
   @override
   _FileExplorerSidebarState createState() => _FileExplorerSidebarState();
@@ -28,7 +26,9 @@ class FileExplorerSidebar extends StatefulWidget {
 
 class _FileExplorerSidebarState extends SfWidget<FileExplorerSidebar> {
   FileExplorerScreenStore get _fileExplorerScreenStore =>
-      widget.fileExplorerScreenStore;
+      readProvider<FileExplorerScreenStore>(context);
+
+  ThemePalette get _palette => getPalette(context);
 
   @override
   void initState() {
@@ -99,7 +99,7 @@ class _FileExplorerSidebarState extends SfWidget<FileExplorerSidebar> {
             child: Textography(
               'Favorites',
               fontSize: 12,
-              color: AppColors.color797,
+              color: _palette.captionColor,
               fontWeight: FontWeight.bold,
             ),
           ),
@@ -134,7 +134,7 @@ class _FileExplorerSidebarState extends SfWidget<FileExplorerSidebar> {
         horizontal: 10,
         vertical: 11,
       ),
-      color: AppColors.colorE6E3E3.withOpacity(0.97),
+      color: _palette.sidebarColor.withOpacity(0.97),
       child: Container(
         margin: const EdgeInsets.only(top: Sizes.TITLE_BAR_PADDING),
         child: Column(

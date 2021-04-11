@@ -4,7 +4,8 @@ import 'package:archiver_ffi/src/exceptions/exceptions.dart';
 import 'package:archiver_ffi/src/structs/common.dart';
 import 'package:data_channel/data_channel.dart';
 
-DC<ArchiverException, T> handleError<T>(Pointer<ResultErrorStruct> errorPtr, {T? data}) {
+DC<ArchiverException, T> handleError<T>(Pointer<ResultErrorStruct> errorPtr,
+    {T? data}) {
   ArchiverException _exception;
 
   final error = errorPtr.ref.error.ref.toString();
@@ -25,6 +26,10 @@ DC<ArchiverException, T> handleError<T>(Pointer<ResultErrorStruct> errorPtr, {T?
       break;
     case 'ErrorUnsupportedFileFormat':
       _exception = UnsupportedFileFormatException(error);
+
+      break;
+    case 'ErrorPasswordRequired':
+      _exception = PasswordRequiredException(error);
 
       break;
     case 'ErrorInvalidPassword':

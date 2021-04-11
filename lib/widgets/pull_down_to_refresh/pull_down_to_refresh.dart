@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:squash_archiver/constants/colors.dart';
+import 'package:squash_archiver/common/themes/theme_helper.dart';
 
 class PullDownToRefresh extends StatelessWidget {
   final Widget child;
@@ -14,8 +14,10 @@ class PullDownToRefresh extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final _palette = getPalette(context);
+
     return RefreshIndicator(
-      color: AppColors.blue,
+      color: _palette.accentColor,
       onRefresh: onRefresh,
       child: child,
     );

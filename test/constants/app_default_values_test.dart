@@ -22,28 +22,44 @@ void main() {
     });
 
     test('SUPPORTED_ARCHIVE_EXTENSIONS', () async {
+      final _supportedArchiveExtns = [];
+      AppDefaultValues.SUPPORTED_ARCHIVE_EXTENSIONS.forEach((key, value) {
+        _supportedArchiveExtns.add(value);
+      });
+
       expect(
-          listEquals(AppDefaultValues.SUPPORTED_ARCHIVE_EXTENSIONS.toList(), [
-            'zip',
-            'tar',
-            'tar.br',
-            'tar.bz2',
-            'tar.gz',
-            'tar.lz4',
-            'tar.sz',
-            'tar.xz',
-            'tar.zst',
-            'rar',
-          ]),
+          listEquals(
+            _supportedArchiveExtns,
+            [
+              'zip',
+              'tar',
+              'tar.br',
+              'tar.bz2',
+              'tar.gz',
+              'tar.lz4',
+              'tar.sz',
+              'tar.xz',
+              'tar.zst',
+              'rar',
+            ],
+          ),
           equals(true));
     });
   });
 
   test('ALLOWED_SECOND_EXTENSIONS', () async {
+    final _allowedArchiveExtns = [];
+    AppDefaultValues.ALLOWED_SECOND_EXTENSIONS.forEach((key, value) {
+      _allowedArchiveExtns.add(value);
+    });
+
     expect(
-        listEquals(AppDefaultValues.ALLOWED_SECOND_EXTENSIONS.toList(), [
-          'tar',
-        ]),
+        listEquals(
+          _allowedArchiveExtns,
+          [
+            'tar',
+          ],
+        ),
         equals(true));
   });
 }
