@@ -10,10 +10,10 @@ class AppSliverHeader extends SliverPersistentHeaderDelegate {
   final Color backgroundColor;
 
   AppSliverHeader({
-    @required this.child,
-    @required this.maximumExtent,
-    @required this.minimumExtent,
-    @required this.backgroundColor,
+    required this.child,
+    required this.maximumExtent,
+    required this.minimumExtent,
+    required this.backgroundColor,
   });
 
   @override

@@ -17,7 +17,7 @@ import 'package:squash_archiver/widgets/text/textography.dart';
 
 class FileExplorerSidebar extends StatefulWidget {
   const FileExplorerSidebar({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -50,7 +50,7 @@ class _FileExplorerSidebarState extends SfWidget<FileExplorerSidebar> {
       final _entities = [
         FileExplorerSidebarEntity(
           label: 'Home',
-          path: AppDefaultValues.DEFAULT_FILE_EXPLORER_DIRECTORY,
+          path: AppDefaultValues.DEFAULT_FILE_EXPLORER_DIRECTORY!,
           icon: CupertinoIcons.home,
           selected: false,
         ),

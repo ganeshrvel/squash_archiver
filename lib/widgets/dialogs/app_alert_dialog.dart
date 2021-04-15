@@ -7,12 +7,12 @@ import 'package:squash_archiver/widgets/dialogs/app_dialog.dart';
 class AppAlertDialog extends AlertDialog {
   static void show(
     BuildContext context, {
-    String title,
-    String content,
-    String okText,
-    VoidCallback onOk,
-    IconData iconData,
-    bool barrierDismissible,
+    String? title,
+    String? content,
+    String? okText,
+    VoidCallback? onOk,
+    IconData? iconData,
+    bool? barrierDismissible,
   }) {
     final _barrierDismissible = barrierDismissible ?? true;
 
@@ -34,7 +34,7 @@ class AppAlertDialog extends AlertDialog {
                   text: okText ?? 'Ok',
                   onPressed: () {
                     if (isNotNull(onOk)) {
-                      onOk();
+                      onOk!();
                     }
 
                     Navigator.of(context).pop();

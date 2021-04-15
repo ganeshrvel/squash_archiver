@@ -1,4 +1,5 @@
-import 'package:meta/meta.dart';
+import 'package:collection/collection.dart' show IterableExtension;
+
 import 'package:squash_archiver/common/models/truncated_string.dart';
 
 String enumToString(dynamic input) {
@@ -9,8 +10,8 @@ String enumToStringSingle(dynamic input) {
   return enumToString(input).split(RegExp('[A-Z]')).first;
 }
 
-T stringToEnum<T>(String input, List<T> values) {
-  return values.firstWhere((e) => input == enumToString(e), orElse: () => null);
+T? stringToEnum<T>(String input, List<T> values) {
+  return values.firstWhereOrNull((e) => input == enumToString(e));
 }
 
 bool isBlank(String input) {
@@ -21,7 +22,7 @@ String capitalize(String input) {
   return input[0].toUpperCase() + input.substring(1);
 }
 
-String plural({String text, int value}) {
+String? plural({String? text, int? value}) {
   if (value == 1) {
     return text;
   } else {
@@ -46,9 +47,7 @@ bool isUrl(String input) {
 /// returns truncated string
 /// [offset] minimum number of chars to be displayed in the last chunk
 /// [offset] is exclusive of extension
-TruncatedString truncatedString({@required String text, int offset}) {
-  assert(text != null);
-
+TruncatedString truncatedString({required String text, int? offset}) {
   final _offset = offset ?? 6;
   assert(_offset >= 0);
 

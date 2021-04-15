@@ -3,8 +3,8 @@ import 'package:squash_archiver/utils/utils/functs.dart';
 import 'package:squash_archiver/widgets/button/button.dart';
 
 class ConfirmActionButtons extends StatelessWidget {
-  final String okText;
-  final String cancelText;
+  final String? okText;
+  final String? cancelText;
   final VoidCallback onOk;
   final VoidCallback onCancel;
 
@@ -13,15 +13,13 @@ class ConfirmActionButtons extends StatelessWidget {
   final bool shouldPopOnButtonClick;
 
   const ConfirmActionButtons({
-    Key key,
+    Key? key,
     this.okText,
     this.cancelText,
-    @required this.onOk,
-    @required this.onCancel,
-    @required this.shouldPopOnButtonClick,
-  })  : assert(onOk != null),
-        assert(onCancel != null),
-        assert(shouldPopOnButtonClick != null),
+    required this.onOk,
+    required this.onCancel,
+    required this.shouldPopOnButtonClick,
+  })  :
         super(key: key);
 
   @override

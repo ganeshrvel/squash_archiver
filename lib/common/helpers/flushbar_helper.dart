@@ -2,15 +2,15 @@ import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
 
-@lazySingleton
+@LazySingleton()
 class FlushbarHelper {
   Flushbar buildSnackbar({
-    BuildContext context,
-    @required String title,
-    @required String message,
-    bool isDismissible,
-    Duration duration,
-    Color backgroundColor,
+    BuildContext? context,
+    required String title,
+    required String message,
+    bool? isDismissible,
+    Duration? duration,
+    Color? backgroundColor,
   }) {
     final _isDismissible = isDismissible ?? true;
     final _duration = duration ?? const Duration(seconds: 4);
@@ -41,10 +41,10 @@ class FlushbarHelper {
   }
 
   Flushbar buildErrorSnackbar({
-    BuildContext context,
-    @required String title,
-    @required String message,
-    @required Duration duration,
+    BuildContext? context,
+    required String title,
+    required String message,
+    required Duration? duration,
   }) {
     return buildSnackbar(
       context: context,

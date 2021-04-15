@@ -15,17 +15,17 @@ import 'package:squash_archiver/widget_extends/sf_widget.dart';
 
 class Img extends StatefulWidget {
   final String url;
-  final bool isStorageFile;
-  final double height;
-  final double width;
+  final bool? isStorageFile;
+  final double? height;
+  final double? width;
   final bool fullWidth;
   final bool fullHeight;
   final bool isSvg;
-  final BoxFit fit;
+  final BoxFit? fit;
 
   const Img(
     this.url, {
-    Key key,
+    Key? key,
     this.height,
     this.width,
     this.fit,
@@ -42,45 +42,45 @@ class Img extends StatefulWidget {
 class _ImgState extends SfWidget<Img> {
   String get url => widget.url;
 
-  double get height => widget.height;
+  double? get height => widget.height;
 
-  double get width => widget.width;
+  double? get width => widget.width;
 
   bool get fullWidth => widget.fullWidth;
 
   bool get fullHeight => widget.fullHeight;
 
-  BoxFit get fit => widget.fit;
+  BoxFit? get fit => widget.fit;
 
   bool get isSvg => widget.isSvg;
 
   bool get isStorageFile => widget.isStorageFile ?? false;
 
-  AppStore get _appStore => getIt<AppStore>();
+  AppStore? get _appStore => getIt<AppStore>();
 
   double get _displayHeight => Display.getHeight(context);
 
   double get _displayWidth => Display.getWidth(context);
 
-  double get _height {
+  double? get _height {
     return fullHeight ? _displayHeight : height;
   }
 
-  double get _width {
+  double? get _width {
     return fullWidth ? _displayWidth : width;
   }
 
-  double get _placeholderSize {
+  double? get _placeholderSize {
     const _placeholderSize = 20.0;
 
     final _heightWidthList = <double>[];
 
     if (_height != null) {
-      _heightWidthList.add(_height);
+      _heightWidthList.add(_height!);
     }
 
     if (_width != null) {
-      _heightWidthList.add(_width);
+      _heightWidthList.add(_width!);
     }
 
     final _allowedPlaceholderSize =
@@ -111,8 +111,8 @@ class _ImgState extends SfWidget<Img> {
   }
 
   Widget _buildSizedContainer({
-    @required Widget child,
-    @required BuildContext context,
+    required Widget child,
+    required BuildContext context,
   }) {
     return SizedBox(
       width: _width,
@@ -166,7 +166,7 @@ class _ImgState extends SfWidget<Img> {
   }
 
   Widget _buildSvg({
-    @required String url,
+    required String url,
   }) {
     final _isNetworkUrl = isUrl(
       url,
@@ -211,7 +211,7 @@ class _ImgState extends SfWidget<Img> {
   }
 
   Widget _buildPng({
-    @required String url,
+    required String url,
   }) {
     final _isNetworkUrl = isUrl(
       url,

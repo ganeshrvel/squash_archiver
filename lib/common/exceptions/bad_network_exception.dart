@@ -1,17 +1,17 @@
-import 'package:meta/meta.dart';
+
 import 'package:squash_archiver/utils/utils/error.dart';
 
 class BadNetworkException implements Exception {
   final Exception error;
   final StackTrace stackTrace;
-  final int statusCode;
+  final int? statusCode;
   final String apiUrl;
 
   BadNetworkException({
-    @required this.error,
-    @required this.statusCode,
-    @required this.stackTrace,
-    @required this.apiUrl,
+    required this.error,
+    required this.statusCode,
+    required this.stackTrace,
+    required this.apiUrl,
   });
 
   @override

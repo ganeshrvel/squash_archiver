@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:squash_archiver/common/themes/theme_helper.dart';
 
 class ProgressBar extends StatelessWidget {
-  final double value;
+  final double? value;
 
   const ProgressBar({
-    Key key,
+    Key? key,
     this.value,
   }) : super(key: key);
 

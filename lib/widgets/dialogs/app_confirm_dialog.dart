@@ -6,14 +6,14 @@ import 'package:squash_archiver/widgets/dialogs/app_dialog.dart';
 class AppConfirmDialog extends AlertDialog {
   static void show(
     BuildContext context, {
-    String title,
-    String content,
-    String okText,
-    String cancelText,
-    VoidCallback onOk,
-    VoidCallback onCancel,
-    IconData iconData,
-    bool barrierDismissible,
+    String? title,
+    String? content,
+    String? okText,
+    String? cancelText,
+    VoidCallback? onOk,
+    VoidCallback? onCancel,
+    IconData? iconData,
+    bool? barrierDismissible,
   }) {
     final _barrierDismissible = barrierDismissible ?? true;
 
@@ -27,8 +27,8 @@ class AppConfirmDialog extends AlertDialog {
           iconData: iconData,
           size: DialogSize.sm,
           actionContainer: ConfirmActionButtons(
-            onOk: onOk,
-            onCancel: onCancel,
+            onOk: onOk!,
+            onCancel: onCancel!,
             shouldPopOnButtonClick: true,
             cancelText: cancelText,
             okText: okText,

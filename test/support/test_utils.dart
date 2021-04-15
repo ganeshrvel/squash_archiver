@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'package:path/path.dart' as path;
 
-String getTestMocksAsset(String filename, {bool isDir}) {
+String getTestMocksAsset(String filename, {bool? isDir}) {
   final _isDir = isDir ?? false;
 
   final _filePath = path.join(
@@ -26,7 +26,7 @@ String getTestMocksAsset(String filename, {bool isDir}) {
   return _filePath;
 }
 
-String getTestMocksBuildAsset(String filename, {bool delete, bool isDir}) {
+String getTestMocksBuildAsset(String filename, {bool? delete, bool? isDir}) {
   final _delete = delete ?? true;
   final _isDir = isDir ?? false;
 

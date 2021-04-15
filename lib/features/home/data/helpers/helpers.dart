@@ -1,12 +1,12 @@
 import 'package:archiver_ffi/archiver_ffi.dart';
-import 'package:meta/meta.dart';
+
 import 'package:squash_archiver/constants/app_default_values.dart';
 import 'package:squash_archiver/features/home/data/enums/file_explorer_entities_sort_by.dart';
 import 'package:squash_archiver/utils/utils/functs.dart';
 import 'package:dartx/dartx.dart';
 
 List<FileInfo> sortFileExplorerEntities({
-  @required List<FileInfo> files,
+  required List<FileInfo> files,
 }) {
   if (AppDefaultValues.DEFAULT_FILE_EXPLORER_ENTITIES_SORT_BY ==
       FileExplorerEntitiesSortBy.none) {
@@ -37,7 +37,6 @@ List<FileInfo> sortFileExplorerEntities({
 
       return _sortedFiles;
 
-      break;
     case FileExplorerEntitiesSortBy.directory:
     default:
       // preserve the order
@@ -45,15 +44,13 @@ List<FileInfo> sortFileExplorerEntities({
       _sortedFiles.addAll(_fileBucket);
 
       return _sortedFiles;
-
-      break;
   }
 }
 
 List<FileInfo> sortFiles({
-  @required List<FileInfo> files,
-  @required OrderBy orderBy,
-  @required OrderDir orderDir,
+  required List<FileInfo> files,
+  required OrderBy? orderBy,
+  required OrderDir? orderDir,
 }) {
   if (orderDir == OrderDir.none) {
     return files;
@@ -67,16 +64,12 @@ List<FileInfo> sortFiles({
 
       return files.sortedByDescending((file) => file.size);
 
-      break;
-
     case OrderBy.modTime:
       if (orderDir == OrderDir.asc) {
         return files.sortedBy((file) => file.modTime);
       }
 
       return files.sortedByDescending((file) => file.modTime);
-
-      break;
 
     case OrderBy.name:
     default:
@@ -85,7 +78,5 @@ List<FileInfo> sortFiles({
       }
 
       return files.sortedByDescending((file) => file.name.toLowerCase());
-
-      break;
   }
 }

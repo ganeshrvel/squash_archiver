@@ -29,29 +29,22 @@ class FileExplorerTableHeaderCell extends StatelessWidget {
 
   /// on tap action return the next [OrderDir] and [OrderBy] to sort to
   final Function({
-    @required OrderDir orderDir,
-    @required OrderBy orderBy,
+    required OrderDir orderDir,
+    required OrderBy orderBy,
   }) onTap;
 
   const FileExplorerTableHeaderCell({
-    Key key,
-    @required this.title,
-    @required this.orderBy,
-    @required this.onTap,
-    @required this.isLoading,
-    @required this.selectedOrderDir,
-    @required this.selectedOrderBy,
+    Key? key,
+    required this.title,
+    required this.orderBy,
+    required this.onTap,
+    required this.isLoading,
+    required this.selectedOrderDir,
+    required this.selectedOrderBy,
     this.showSeparator = true,
-  })  : assert(title != null),
-        assert(orderBy != null),
-        assert(onTap != null),
-        assert(isLoading != null),
-        assert(selectedOrderDir != null),
-        assert(selectedOrderBy != null),
-        assert(showSeparator != null),
-        super(key: key);
+  }) : super(key: key);
 
-  bool get _isLoading => isLoading ?? false;
+  bool get _isLoading => isLoading;
 
   Color _textColor(BuildContext context) {
     final _p = _palette(context);

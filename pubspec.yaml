@@ -11,7 +11,7 @@ publish_to: 'none'
 version: 0.0.2+0
 
 environment:
-  sdk: ">=2.12.0 <3.0.0"
+  sdk: '>=2.12.0 <3.0.0'
   flutter: ">=2.0.0 <3.0.0"
 
 dependencies:
@@ -114,7 +114,7 @@ dependencies:
   # utils
   supercharged: ^2.0.0
   dartx: ^0.7.1
-  collection: ^1.14.13
+  collection: ^1.15.0-nullsafety.4
 
   # date
   intl: ^0.17.0-nullsafety.2

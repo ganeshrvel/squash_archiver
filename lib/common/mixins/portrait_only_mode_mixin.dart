@@ -13,7 +13,8 @@ mixin PortraitModeMixin on StatelessWidget {
   @override
   Widget build(BuildContext context) {
     _portraitModeOnly();
-    return null;
+
+    return Container();
   }
 }
 
@@ -27,7 +28,8 @@ mixin PortraitStatefulModeMixin<T extends StatefulWidget> on State<T> {
   @override
   Widget build(BuildContext context) {
     _portraitModeOnly();
-    return null;
+
+    return Container();
   }
 
   @override

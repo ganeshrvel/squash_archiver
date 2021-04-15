@@ -10,7 +10,7 @@ class InkWellExtended extends StatelessWidget {
   /// [mouseCursor] will default to [SystemMouseCursors.basic]
   ///
   InkWellExtended({
-    Key key,
+    Key? key,
     this.child,
     this.onTap,
     this.onDoubleTap,
@@ -36,40 +36,35 @@ class InkWellExtended extends StatelessWidget {
     this.autofocus = false,
     this.mouseCursor,
     this.overlayColor,
-  })  : assert(enableFeedback != null),
-        assert(excludeFromSemantics != null),
-        assert(doubleTapTime != null),
-        assert(autofocus != null),
-        assert(canRequestFocus != null),
-        super(key: key);
+  }) : super(key: key);
 
-  final Widget child;
-  final GestureTapCallback onTap;
-  final GestureTapCallback onDoubleTap;
+  final Widget? child;
+  final GestureTapCallback? onTap;
+  final GestureTapCallback? onDoubleTap;
   final Duration doubleTapTime;
-  final GestureLongPressCallback onLongPress;
-  final GestureTapDownCallback onTapDown;
-  final GestureTapCancelCallback onTapCancel;
-  final ValueChanged<bool> onHighlightChanged;
-  final ValueChanged<bool> onHover;
-  final Color focusColor;
-  final Color hoverColor;
-  final Color highlightColor;
-  final Color splashColor;
-  final InteractiveInkFeatureFactory splashFactory;
-  final double radius;
-  final BorderRadius borderRadius;
-  final ShapeBorder customBorder;
+  final GestureLongPressCallback? onLongPress;
+  final GestureTapDownCallback? onTapDown;
+  final GestureTapCancelCallback? onTapCancel;
+  final ValueChanged<bool>? onHighlightChanged;
+  final ValueChanged<bool>? onHover;
+  final Color? focusColor;
+  final Color? hoverColor;
+  final Color? highlightColor;
+  final Color? splashColor;
+  final InteractiveInkFeatureFactory? splashFactory;
+  final double? radius;
+  final BorderRadius? borderRadius;
+  final ShapeBorder? customBorder;
   final bool enableFeedback;
   final bool excludeFromSemantics;
-  final FocusNode focusNode;
+  final FocusNode? focusNode;
   final bool canRequestFocus;
-  final ValueChanged<bool> onFocusChange;
+  final ValueChanged<bool>? onFocusChange;
   final bool autofocus;
-  final MouseCursor mouseCursor;
-  final MaterialStateProperty<Color> overlayColor;
+  final MouseCursor? mouseCursor;
+  final MaterialStateProperty<Color>? overlayColor;
 
-  DateTime _lastTapTime;
+  DateTime? _lastTapTime;
 
   /// replace default [onDoubleTap] implementation with the help of [onTap]
   void _onTap() {
@@ -78,10 +73,10 @@ class InkWellExtended extends StatelessWidget {
     if (_lastTapTime != null) {
       /// if the difference between current timestamp [_now] and [_lastTapTime]
       /// is less than [doubleTapTime] then register it as [onDoubleTap]
-      if (_now.difference(_lastTapTime).inMilliseconds <
+      if (_now.difference(_lastTapTime!).inMilliseconds <
           doubleTapTime.inMilliseconds) {
         if (onDoubleTap != null) {
-          onDoubleTap();
+          onDoubleTap!();
 
           return;
         }
@@ -89,7 +84,7 @@ class InkWellExtended extends StatelessWidget {
     }
 
     if (onTap != null) {
-      onTap();
+      onTap!();
     }
 
     _lastTapTime = _now;

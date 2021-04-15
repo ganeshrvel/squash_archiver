@@ -11,7 +11,9 @@ LanguageModel _$LanguageModelFromJson(Map<String, dynamic> json) {
     countryCode: json['countryCode'] as String,
     locale: json['locale'] as String,
     language: json['language'] as String,
-    dictionary: Map<String, String>.from(json['dictionary'] as Map),
+    dictionary: (json['dictionary'] as Map<String, dynamic>?)?.map(
+      (k, e) => MapEntry(k, e as String),
+    ),
   );
 }
 

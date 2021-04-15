@@ -13,7 +13,7 @@ import 'package:squash_archiver/widget_extends/sf_widget.dart';
 
 class FileExplorerTable extends StatefulWidget {
   const FileExplorerTable({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -27,7 +27,7 @@ class _FileExplorerTableState extends SfWidget<FileExplorerTable> {
   FileExplorerKeyboardModifiersStore get _fileExplorerKeyboardModifiersStore =>
       readProvider<FileExplorerKeyboardModifiersStore>(context);
 
-  List<ReactionDisposer> _disposers;
+  List<ReactionDisposer>? _disposers;
 
   @override
   void didChangeDependencies() {
@@ -57,12 +57,9 @@ class _FileExplorerTableState extends SfWidget<FileExplorerTable> {
   }
 
   Widget _buildRow({
-    @required FileListingResponse fileContainer,
-    @required int index,
+    required FileListingResponse fileContainer,
+    required int index,
   }) {
-    assert(fileContainer != null);
-    assert(index != null);
-
     return FileExplorerTableRow(
       fileContainer: fileContainer,
       rowIndex: index,

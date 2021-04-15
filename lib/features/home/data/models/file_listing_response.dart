@@ -1,6 +1,6 @@
 import 'package:archiver_ffi/archiver_ffi.dart';
 import 'package:equatable/equatable.dart';
-import 'package:meta/meta.dart';
+
 import 'package:squash_archiver/common/helpers/archive_helper.dart';
 import 'package:squash_archiver/common/models/truncated_string.dart';
 import 'package:squash_archiver/utils/utils/date.dart';
@@ -13,8 +13,8 @@ class FileListingResponse extends Equatable {
   final FileInfo file;
 
   const FileListingResponse({
-    @required this.file,
-  }) : assert(file != null);
+    required this.file,
+  });
 
   /// if [isSupported] is true then the archive format is supported by the app
   bool get isSupported => isArchiveFormatSupported(file.extension);

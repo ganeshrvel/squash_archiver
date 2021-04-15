@@ -18,12 +18,10 @@ class FileExplorerTableRow extends StatefulWidget {
   final FileListingResponse fileContainer;
 
   const FileExplorerTableRow({
-    Key key,
-    @required this.fileContainer,
-    @required this.rowIndex,
-  })  : assert(fileContainer != null),
-        assert(rowIndex != null),
-        super(key: key);
+    Key? key,
+    required this.fileContainer,
+    required this.rowIndex,
+  }) : super(key: key);
 
   @override
   _FileExplorerTableRowState createState() => _FileExplorerTableRowState();

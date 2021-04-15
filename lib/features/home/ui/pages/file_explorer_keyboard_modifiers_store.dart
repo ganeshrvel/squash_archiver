@@ -12,7 +12,7 @@ abstract class _FileExplorerKeyboardModifiersStoreBase with Store {
   ///todo move [activeKeyboardModifierIntent] into a different store
   /// keyboard events
   @observable
-  KeyboardModifierIntent activeKeyboardModifierIntent;
+  KeyboardModifierIntent? activeKeyboardModifierIntent;
 
   /// returns [true] if meta+a is pressed in the keyboard
   ///  /// todo write tests

@@ -37,46 +37,46 @@ mixin _$FileExplorerScreenStore on _FileExplorerScreenStoreBase, Store {
       (_$currentPathComputed ??= Computed<String>(() => super.currentPath,
               name: '_FileExplorerScreenStoreBase.currentPath'))
           .value;
-  Computed<String>? _$currentArchiveFilepathComputed;
+  Computed<String?>? _$currentArchiveFilepathComputed;
 
   @override
-  String get currentArchiveFilepath => (_$currentArchiveFilepathComputed ??=
-          Computed<String>(() => super.currentArchiveFilepath,
+  String? get currentArchiveFilepath => (_$currentArchiveFilepathComputed ??=
+          Computed<String?>(() => super.currentArchiveFilepath,
               name: '_FileExplorerScreenStoreBase.currentArchiveFilepath'))
       .value;
-  Computed<String>? _$passwordComputed;
+  Computed<String?>? _$passwordComputed;
 
   @override
-  String get password =>
-      (_$passwordComputed ??= Computed<String>(() => super.password,
+  String? get password =>
+      (_$passwordComputed ??= Computed<String?>(() => super.password,
               name: '_FileExplorerScreenStoreBase.password'))
           .value;
-  Computed<OrderBy>? _$orderByComputed;
+  Computed<OrderBy?>? _$orderByComputed;
 
   @override
-  OrderBy get orderBy =>
-      (_$orderByComputed ??= Computed<OrderBy>(() => super.orderBy,
+  OrderBy? get orderBy =>
+      (_$orderByComputed ??= Computed<OrderBy?>(() => super.orderBy,
               name: '_FileExplorerScreenStoreBase.orderBy'))
           .value;
-  Computed<OrderDir>? _$orderDirComputed;
+  Computed<OrderDir?>? _$orderDirComputed;
 
   @override
-  OrderDir get orderDir =>
-      (_$orderDirComputed ??= Computed<OrderDir>(() => super.orderDir,
+  OrderDir? get orderDir =>
+      (_$orderDirComputed ??= Computed<OrderDir?>(() => super.orderDir,
               name: '_FileExplorerScreenStoreBase.orderDir'))
           .value;
-  Computed<List<String>>? _$gitIgnorePatternComputed;
+  Computed<List<String>?>? _$gitIgnorePatternComputed;
 
   @override
-  List<String> get gitIgnorePattern => (_$gitIgnorePatternComputed ??=
-          Computed<List<String>>(() => super.gitIgnorePattern,
+  List<String>? get gitIgnorePattern => (_$gitIgnorePatternComputed ??=
+          Computed<List<String>?>(() => super.gitIgnorePattern,
               name: '_FileExplorerScreenStoreBase.gitIgnorePattern'))
       .value;
-  Computed<FileExplorerSource>? _$sourceComputed;
+  Computed<FileExplorerSource?>? _$sourceComputed;
 
   @override
-  FileExplorerSource get source =>
-      (_$sourceComputed ??= Computed<FileExplorerSource>(() => super.source,
+  FileExplorerSource? get source =>
+      (_$sourceComputed ??= Computed<FileExplorerSource?>(() => super.source,
               name: '_FileExplorerScreenStoreBase.source'))
           .value;
 
@@ -119,13 +119,13 @@ mixin _$FileExplorerScreenStore on _FileExplorerScreenStoreBase, Store {
       Atom(name: '_FileExplorerScreenStoreBase.fileContainersException');
 
   @override
-  Exception get fileContainersException {
+  Exception? get fileContainersException {
     _$fileContainersExceptionAtom.reportRead();
     return super.fileContainersException;
   }
 
   @override
-  set fileContainersException(Exception value) {
+  set fileContainersException(Exception? value) {
     _$fileContainersExceptionAtom
         .reportWrite(value, super.fileContainersException, () {
       super.fileContainersException = value;
@@ -153,13 +153,13 @@ mixin _$FileExplorerScreenStore on _FileExplorerScreenStoreBase, Store {
       Atom(name: '_FileExplorerScreenStoreBase.requestPassword');
 
   @override
-  PasswordRequest get requestPassword {
+  PasswordRequest? get requestPassword {
     _$requestPasswordAtom.reportRead();
     return super.requestPassword;
   }
 
   @override
-  set requestPassword(PasswordRequest value) {
+  set requestPassword(PasswordRequest? value) {
     _$requestPasswordAtom.reportWrite(value, super.requestPassword, () {
       super.requestPassword = value;
     });
@@ -186,14 +186,14 @@ mixin _$FileExplorerScreenStore on _FileExplorerScreenStoreBase, Store {
 
   @override
   Future<void> navigateToSource(
-      {String fullPath,
-      String currentArchiveFilepath,
-      FileExplorerSource source,
-      bool clearStack,
-      OrderBy orderBy,
-      OrderDir orderDir,
-      String password,
-      List<String> gitIgnorePattern}) {
+      {required String fullPath,
+      String? currentArchiveFilepath,
+      required FileExplorerSource source,
+      required bool clearStack,
+      OrderBy? orderBy,
+      OrderDir? orderDir,
+      String? password,
+      List<String>? gitIgnorePattern}) {
     return _$navigateToSourceAsyncAction.run(() => super.navigateToSource(
         fullPath: fullPath,
         currentArchiveFilepath: currentArchiveFilepath,
@@ -209,7 +209,7 @@ mixin _$FileExplorerScreenStore on _FileExplorerScreenStoreBase, Store {
       AsyncAction('_FileExplorerScreenStoreBase.refreshFiles');
 
   @override
-  Future<void> refreshFiles({bool invalidateCache}) {
+  Future<void> refreshFiles({bool invalidateCache = false}) {
     return _$refreshFilesAsyncAction
         .run(() => super.refreshFiles(invalidateCache: invalidateCache));
   }
@@ -235,7 +235,8 @@ mixin _$FileExplorerScreenStore on _FileExplorerScreenStoreBase, Store {
       AsyncAction('_FileExplorerScreenStoreBase.setOrderDirOrderBy');
 
   @override
-  Future<void> setOrderDirOrderBy({OrderDir orderDir, OrderBy orderBy}) {
+  Future<void> setOrderDirOrderBy(
+      {required OrderDir? orderDir, required OrderBy? orderBy}) {
     return _$setOrderDirOrderByAsyncAction.run(
         () => super.setOrderDirOrderBy(orderDir: orderDir, orderBy: orderBy));
   }
@@ -261,7 +262,8 @@ mixin _$FileExplorerScreenStore on _FileExplorerScreenStoreBase, Store {
       AsyncAction('_FileExplorerScreenStoreBase._fetchFiles');
 
   @override
-  Future<void> _fetchFiles({bool invalidateCache, bool popStackOnError}) {
+  Future<void> _fetchFiles(
+      {bool invalidateCache = false, bool? popStackOnError}) {
     return _$_fetchFilesAsyncAction.run(() => super._fetchFiles(
         invalidateCache: invalidateCache, popStackOnError: popStackOnError));
   }

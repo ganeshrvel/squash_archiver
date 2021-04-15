@@ -6,11 +6,11 @@ import 'package:squash_archiver/common/helpers/flushbar_helper.dart';
 import 'package:squash_archiver/utils/alerts/alerts_helper.dart';
 import 'package:squash_archiver/utils/alerts/alerts_model.dart';
 
-@lazySingleton
+@LazySingleton()
 class Alerts {
-  AlertsHelper alertsHelper;
+  final AlertsHelper alertsHelper;
 
-  FlushbarHelper flushbarHelper;
+  final FlushbarHelper flushbarHelper;
 
   Alerts(this.alertsHelper, this.flushbarHelper);
 
@@ -21,11 +21,11 @@ class Alerts {
   void setAlert(
     BuildContext context,
     String message, {
-    String title,
-    AlertsTypes type,
-    AlertsPopupTypes popupType,
-    StackTrace stackTrace,
-    Duration duration,
+    String? title,
+    AlertsTypes? type,
+    AlertsPopupTypes? popupType,
+    StackTrace? stackTrace,
+    Duration? duration,
   }) {
     if (isNull(message)) {
       return;
@@ -47,7 +47,7 @@ class Alerts {
   void setException(
     BuildContext context,
     Exception exception, {
-    StackTrace stackTrace,
+    StackTrace? stackTrace,
   }) {
     if (isNull(exception)) {
       return;
@@ -63,8 +63,8 @@ class Alerts {
   }
 
   void removeAlert({
-    int generatedTime,
-    AlertsModel alert,
+    int? generatedTime,
+    AlertsModel? alert,
   }) {
     if (generatedTime != null) {
       _alertsList.removeWhere((a) => a.generatedTime == generatedTime);
@@ -111,11 +111,11 @@ class Alerts {
     }
   }
 
-  Future<void> _buildSnackbar(
+  Future<dynamic> _buildSnackbar(
     AlertsModel alertItem,
   ) async {
     final _flushbarInstance = flushbarHelper.buildErrorSnackbar(
-      message: alertItem.body,
+      message: alertItem.body!,
       title: alertItem.title,
       duration: alertItem.duration,
     );

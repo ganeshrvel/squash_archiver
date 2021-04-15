@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/services.dart';
-import 'package:meta/meta.dart';
+
 
 /// Key modifier action type enum
 enum KeyModifierActionType {
@@ -32,12 +32,10 @@ class KeyModifier extends Equatable {
   final String label;
 
   const KeyModifier({
-    @required this.keys,
-    @required this.actionType,
-    @required this.label,
-  })  : assert(keys != null),
-        assert(actionType != null),
-        assert(label != null);
+    required this.keys,
+    required this.actionType,
+    required this.label,
+  }) ;
 
   @override
   List<Object> get props => [

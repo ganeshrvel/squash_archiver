@@ -1,4 +1,4 @@
-import 'package:meta/meta.dart';
+
 import 'package:squash_archiver/utils/utils/error.dart';
 
 class DioException implements Exception {
@@ -8,17 +8,17 @@ class DioException implements Exception {
   final int statusCode;
 
   DioException({
-    @required this.error,
-    @required this.apiUrl,
-    @required this.stackTrace,
-    @required this.statusCode,
+    required this.error,
+    required this.apiUrl,
+    required this.stackTrace,
+    required this.statusCode,
   });
 
   @override
   String toString() {
     final _errorBody = getErrorBody({
       'API URL': apiUrl,
-      'Status Code': (statusCode ?? '').toString(),
+      'Status Code': (statusCode).toString(),
       'Error': error.toString(),
     });
 

@@ -8,8 +8,8 @@ class SplashLoading extends StatelessWidget {
   final String appName;
 
   const SplashLoading({
-    @required this.logoPath,
-    @required this.appName,
+    required this.logoPath,
+    required this.appName,
   });
 
   @override

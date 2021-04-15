@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:squash_archiver/common/themes/theme_helper.dart';
 
 class PullDownToRefresh extends StatelessWidget {
-  final Widget child;
+  final Widget? child;
 
-  final RefreshCallback onRefresh;
+  final RefreshCallback? onRefresh;
 
   const PullDownToRefresh({
-    Key key,
+    Key? key,
     this.child,
     this.onRefresh,
   }) : super(key: key);
@@ -18,8 +18,8 @@ class PullDownToRefresh extends StatelessWidget {
 
     return RefreshIndicator(
       color: _palette.accentColor,
-      onRefresh: onRefresh,
-      child: child,
+      onRefresh: onRefresh!,
+      child: child!,
     );
   }
 }

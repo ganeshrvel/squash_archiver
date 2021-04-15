@@ -11,20 +11,20 @@ enum DialogSize {
 
 class AppDialog extends StatelessWidget {
   /// title value
-  final String title;
+  final String? title;
 
   /// body value
-  final String body;
+  final String? body;
 
   /// child widget or the main content
-  final Widget content;
+  final Widget? content;
 
   /// bottom most action part. commonly used for action buttons like Ok and Cancel
-  final Widget actionContainer;
+  final Widget? actionContainer;
 
-  final IconData iconData;
+  final IconData? iconData;
 
-  final DialogSize size;
+  final DialogSize? size;
 
   const AppDialog({
     this.iconData,
@@ -122,7 +122,7 @@ class AppDialog extends StatelessWidget {
                     if (isNotNull(content))
                       Column(
                         children: [
-                          content,
+                          content!,
                         ],
                       ),
                   ],
@@ -133,7 +133,7 @@ class AppDialog extends StatelessWidget {
                       const SizedBox(
                         height: 20,
                       ),
-                      actionContainer,
+                      actionContainer!,
                     ],
                   ),
               ],

@@ -1,29 +1,28 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/widgets.dart';
 import 'package:squash_archiver/common/router/router.gr.dart';
-import 'package:squash_archiver/utils/utils/functs.dart';
 
-bool isCurrentScreen(BuildContext context) {
-  if (isNull(context)) {
+bool? isCurrentScreen(BuildContext? context) {
+  if (context == null) {
     return null;
   }
 
-  return ModalRoute.of(context).isCurrent;
+  return ModalRoute.of(context)!.isCurrent;
 }
 
-String getCurrentScreen(BuildContext context) {
-  if (isNull(context)) {
+String? getCurrentScreen(BuildContext? context) {
+  if (context == null) {
     return null;
   }
 
-  return ModalRoute.of(context).settings.name;
+  return ModalRoute.of(context)!.settings.name;
 }
 
-Future<T> navigateToRoute<T>(
-  BuildContext context,
+Future<T?> navigateToRoute<T extends Object>(
+  BuildContext? context,
   String routeName, {
-  Object routeArgs,
-  bool skipSameRouteCheck,
+  Object? routeArgs,
+  bool? skipSameRouteCheck,
 }) async {
   final _skipSameRouteCheck = skipSameRouteCheck ?? true;
 
@@ -31,10 +30,10 @@ Future<T> navigateToRoute<T>(
     return null;
   }
 
-  if (routeName == Routes.fileExplorerScreen) {
-    var _routeArgs = FileExplorerScreenArguments();
+  if (routeName == FileExplorerScreenRoute.name) {
+    var _routeArgs = const FileExplorerScreenRouteArgs();
 
-    if (routeArgs is FileExplorerScreenArguments) {
+    if (routeArgs is FileExplorerScreenRouteArgs) {
       _routeArgs = routeArgs;
     }
 
@@ -50,14 +49,14 @@ Future<T> navigateToRoute<T>(
   return ExtendedNavigator?.root?.push<T>(routeName);
 }
 
-Future<T> navigateToRouteAndReplace<T>(
+Future<T?> navigateToRouteAndReplace<T extends Object>(
   String routeName, {
-  Object routeArgs,
+  Object? routeArgs,
 }) async {
-  if (routeName == Routes.fileExplorerScreen) {
-    var _routeArgs = FileExplorerScreenArguments();
+  if (routeName == FileExplorerScreenRoute.name) {
+    var _routeArgs = const FileExplorerScreenRouteArgs();
 
-    if (routeArgs is FileExplorerScreenArguments) {
+    if (routeArgs is FileExplorerScreenRouteArgs) {
       _routeArgs = routeArgs;
     }
 
@@ -76,9 +75,9 @@ Future<T> navigateToRouteAndReplace<T>(
   );
 }
 
-Future<T> navigateToRouteAndRemoveUntil<T>(
+Future<T?> navigateToRouteAndRemoveUntil<T extends Object>(
   String routeName, {
-  Object routeArgs,
+  Object? routeArgs,
 }) async {
   if (routeArgs != null) {
     return ExtendedNavigator?.root?.pushAndRemoveUntil<T>(
@@ -94,19 +93,19 @@ Future<T> navigateToRouteAndRemoveUntil<T>(
   );
 }
 
-void popCurrentRoute<T>({T result}) {
+void popCurrentRoute<T extends Object>({T? result}) {
   return ExtendedNavigator?.root?.pop<T>(result);
 }
 
 bool canPopCurrentRoute<T>() {
-  return ExtendedNavigator?.root?.canPop();
+  return ExtendedNavigator?.root?.canPop() ?? false;
 }
 
-Future<T> navigateToFileExplorerScreen<T>({
-  @required FileExplorerScreenArguments routeArgs,
+Future<T?> navigateToFileExplorerScreen<T extends Object>({
+  required FileExplorerScreenRouteArgs routeArgs,
 }) async {
   return navigateToRouteAndRemoveUntil<T>(
-    Routes.fileExplorerScreen,
+    FileExplorerScreenRoute.name,
     routeArgs: routeArgs,
   );
 }

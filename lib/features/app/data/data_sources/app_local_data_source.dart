@@ -9,7 +9,7 @@ import 'package:squash_archiver/features/app/data/models/theme_model.dart';
 import 'package:squash_archiver/constants/shared_preferences_keys.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-@lazySingleton
+@LazySingleton()
 class AppLocalDataSource {
   final SharedPreferences _sharedPreferences;
 
@@ -21,7 +21,7 @@ class AppLocalDataSource {
       final jsonString =
           pref.getString(SharedPreferencesKeys.APP_LANGUAGE_SETTING);
 
-      LanguageModel _languageData;
+      LanguageModel? _languageData;
 
       if (jsonString != null) {
         _languageData = LanguageModel.fromJson(
@@ -70,7 +70,7 @@ class AppLocalDataSource {
       final pref = _sharedPreferences;
 
       return DC.data(
-        await pref.setString(SharedPreferencesKeys.APP_LANGUAGE_SETTING, null),
+        await pref.remove(SharedPreferencesKeys.APP_LANGUAGE_SETTING),
       );
     } on Exception catch (e, stackTrace) {
       return DC.error(
@@ -88,7 +88,7 @@ class AppLocalDataSource {
       final jsonString =
           pref.getString(SharedPreferencesKeys.APP_THEME_SETTING);
 
-      ThemeModel _data;
+      ThemeModel? _data;
 
       if (jsonString != null) {
         _data = ThemeModel.fromJson(
@@ -137,7 +137,7 @@ class AppLocalDataSource {
       final pref = _sharedPreferences;
 
       return DC.data(
-        await pref.setString(SharedPreferencesKeys.APP_THEME_SETTING, null),
+        await pref.remove(SharedPreferencesKeys.APP_THEME_SETTING),
       );
     } on Exception catch (e, stackTrace) {
       return DC.error(

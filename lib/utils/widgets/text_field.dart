@@ -4,7 +4,7 @@ void setDefaultTextFieldValue(
   TextEditingController _controller,
   String value,
 ) {
-  final _value = value ?? '';
+  final _value = value;
 
   _controller.value = _controller.value.copyWith(
     text: _value,

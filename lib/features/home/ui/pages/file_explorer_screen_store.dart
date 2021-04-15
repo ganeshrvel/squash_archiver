@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:archiver_ffi/archiver_ffi.dart';
 import 'package:data_channel/data_channel.dart';
 import 'package:flutter/foundation.dart';
-import 'package:meta/meta.dart';
 
 import 'package:mobx/mobx.dart';
 import 'package:squash_archiver/common/di/di.dart';
@@ -22,7 +21,8 @@ class FileExplorerScreenStore = _FileExplorerScreenStoreBase
     with _$FileExplorerScreenStore;
 
 abstract class _FileExplorerScreenStoreBase with Store {
-  final _fileExplorerController = getIt<FileExplorerController>();
+  final FileExplorerController _fileExplorerController =
+      getIt<FileExplorerController>();
 
   /// [FileListingResponse] object stack
   @observable
@@ -35,7 +35,7 @@ abstract class _FileExplorerScreenStoreBase with Store {
 
   /// [Exception] from [_fetchFiles]
   @observable
-  Exception fileContainersException;
+  Exception? fileContainersException;
 
   /// [FileListingRequest] object stack
   @observable
@@ -44,7 +44,7 @@ abstract class _FileExplorerScreenStoreBase with Store {
 
   /// if passwordOverlay is NOT null then show the password request overlay
   @observable
-  PasswordRequest requestPassword;
+  PasswordRequest? requestPassword;
 
   /// the selected files in the file explorer
   /// ///todo make selectedFiles a map instead of list inorder to make it o(1)
@@ -79,34 +79,34 @@ abstract class _FileExplorerScreenStoreBase with Store {
 
   /// full path to the currently opened archive file in the file explorer; [archiveFilepath] of the last item in [fileListingSourceStack]
   @computed
-  String get currentArchiveFilepath {
+  String? get currentArchiveFilepath {
     return fileListingSource.archiveFilepath;
   }
 
   /// password of the currently opened file in the file explorer (if any); [password] of the last item in [fileListingSourceStack]
   @computed
-  String get password {
+  String? get password {
     return fileListingSource.password;
   }
 
   @computed
-  OrderBy get orderBy {
+  OrderBy? get orderBy {
     return fileListingSource.orderBy;
   }
 
   @computed
-  OrderDir get orderDir {
+  OrderDir? get orderDir {
     return fileListingSource.orderDir;
   }
 
   @computed
-  List<String> get gitIgnorePattern {
+  List<String>? get gitIgnorePattern {
     return fileListingSource.gitIgnorePattern;
   }
 
   /// [source] of the last item in [fileListingSourceStack]
   @computed
-  FileExplorerSource get source {
+  FileExplorerSource? get source {
     return fileListingSource.source;
   }
 
@@ -117,33 +117,29 @@ abstract class _FileExplorerScreenStoreBase with Store {
     /// full path to the next directory
     /// for [FileExplorerSource.local] fullPath is the path to the next directory
     /// for [FileExplorerSource.archive] fullPath is the directory path within the archive
-    @required String fullPath,
+    required String fullPath,
 
     /// the full path to the archive file
-    String currentArchiveFilepath,
+    String? currentArchiveFilepath,
 
     /// source type [FileExplorerSource.local] or [FileExplorerSource.archive]
-    @required FileExplorerSource source,
+    required FileExplorerSource source,
 
     /// clearing stack will empty [fileListingSourceStack] first and then insert a new request
-    @required bool clearStack,
+    required bool clearStack,
 
     /// sort the files by name, size or modified time. order by 'fullPath' isn't supported yet.
-    OrderBy orderBy,
+    OrderBy? orderBy,
 
     /// sort the files in ascending or descending order. orderDir 'none' isn't supported yet.
-    OrderDir orderDir,
+    OrderDir? orderDir,
 
     /// password field. If null or empty then password will be ignored.
-    String password,
+    String? password,
 
     /// gitignore pattern list
-    List<String> gitIgnorePattern,
+    List<String>? gitIgnorePattern,
   }) async {
-    assert(fullPath != null);
-    assert(source != null);
-    assert(clearStack != null);
-
     if (source == FileExplorerSource.ARCHIVE &&
         currentArchiveFilepath == null) {
       throw "'currentArchiveFilepath' cannot be null if source is 'Archive'";
@@ -181,7 +177,7 @@ abstract class _FileExplorerScreenStoreBase with Store {
   }
 
   @action
-  Future<void> refreshFiles({bool invalidateCache}) async {
+  Future<void> refreshFiles({bool invalidateCache = false}) async {
     return _fetchFiles(invalidateCache: invalidateCache);
   }
 
@@ -199,8 +195,6 @@ abstract class _FileExplorerScreenStoreBase with Store {
   /// set the current path
   @action
   Future<void> setCurrentPath(String value) async {
-    assert(value != null);
-
     return _updateFileListingRequest(
       fileListingSource.copyWith(path: value),
     );
@@ -209,8 +203,8 @@ abstract class _FileExplorerScreenStoreBase with Store {
   /// set [orderDir] and [orderBy]
   @action
   Future<void> setOrderDirOrderBy({
-    @required OrderDir orderDir,
-    @required OrderBy orderBy,
+    required OrderDir? orderDir,
+    required OrderBy? orderBy,
   }) async {
     return _updateFileListingRequest(
       fileListingSource.copyWith(
@@ -261,10 +255,10 @@ abstract class _FileExplorerScreenStoreBase with Store {
     /// Reading an archive file requires a few seconds as there are multiple
     /// file processing involved.
     /// Use this as required and only when neccessary
-    bool invalidateCache,
+    bool invalidateCache = false,
 
     /// should pop the [fileListingSourceStack] stack on error.
-    bool popStackOnError,
+    bool? popStackOnError,
   }) async {
     final c = Completer();
 
@@ -367,9 +361,6 @@ abstract class _FileExplorerScreenStoreBase with Store {
     FileListingResponse fileContainer, {
     bool appendToList = false,
   }) {
-    assert(fileContainer != null);
-    assert(appendToList != null);
-
     final _uniqueId = fileContainer.uniqueId;
 
     var _selectedFiles = selectedFiles;

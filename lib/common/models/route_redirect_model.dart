@@ -1,11 +1,11 @@
-import 'package:meta/meta.dart';
+
 
 class RouteRedirectModel {
   String routeName;
-  Object arguments;
+  Object? arguments;
 
   RouteRedirectModel({
-    @required this.routeName,
+    required this.routeName,
     this.arguments,
   });
 }

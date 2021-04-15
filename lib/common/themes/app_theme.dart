@@ -8,7 +8,7 @@ class AppTheme {
   final ThemeMode mode;
 
   AppTheme({
-    @required this.mode,
+    required this.mode,
   });
 
   /// theme palatte. Use [palette] to pick colors use across the app.

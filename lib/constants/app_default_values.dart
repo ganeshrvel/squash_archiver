@@ -7,7 +7,7 @@ class AppDefaultValues {
 
   static const String DEFAULT_DATE_TIME_FORMAT = 'dd-MMM-yyyy, hh:mm a';
 
-  static final String DEFAULT_FILE_EXPLORER_DIRECTORY = homeDirectory();
+  static final String? DEFAULT_FILE_EXPLORER_DIRECTORY = homeDirectory();
 
   static const OrderBy DEFAULT_FILE_EXPLORER_ORDER_BY = OrderBy.name;
 

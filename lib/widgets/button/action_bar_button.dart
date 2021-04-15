@@ -5,19 +5,19 @@ import 'package:squash_archiver/widgets/button/button.dart';
 
 class ActionBarButton extends StatelessWidget {
   final String text;
-  final VoidCallback onPressed;
+  final VoidCallback? onPressed;
   final IconData icon;
-  final Color iconColor;
+  final Color? iconColor;
   final bool loading;
   final bool disabled;
   final double radius;
   final double iconSize;
-  final EdgeInsetsGeometry iconPadding;
+  final EdgeInsetsGeometry? iconPadding;
 
   const ActionBarButton({
-    Key key,
-    @required this.text,
-    @required this.icon,
+    Key? key,
+    required this.text,
+    required this.icon,
     this.loading = false,
     this.disabled = false,
     this.radius = 8,
@@ -25,11 +25,7 @@ class ActionBarButton extends StatelessWidget {
     this.iconColor,
     this.onPressed,
     this.iconPadding,
-  })  : assert(text != null),
-        assert(loading != null),
-        assert(disabled != null),
-        assert(iconSize != null),
-        assert(radius != null),
+  })  :
         super(key: key);
 
   @override

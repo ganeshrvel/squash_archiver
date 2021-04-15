@@ -9,7 +9,7 @@ part of 'theme_model.dart';
 ThemeModel _$ThemeModelFromJson(Map<String, dynamic> json) {
   return ThemeModel(
     mode: _$enumDecode(_$ThemeModeEnumMap, json['mode']),
-    brightness: (json['brightness'] as num).toDouble(),
+    brightness: (json['brightness'] as num?)?.toDouble(),
   );
 }
 

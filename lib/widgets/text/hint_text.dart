@@ -11,13 +11,13 @@ enum HintTextTypes {
 }
 
 class HintText extends StatelessWidget {
-  final String text;
+  final String? text;
   final HintTextTypes type;
 
   const HintText({
-    Key key,
+    Key? key,
     this.text,
-    @required this.type,
+    required this.type,
   }) : super(key: key);
 
   @override

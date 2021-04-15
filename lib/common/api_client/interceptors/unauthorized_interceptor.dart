@@ -10,7 +10,8 @@ class UnauthorizedInterceptor extends Interceptor {
 
       return UnauthorizedApiError(
         apiUrl: _apiUrl,
-        statusCode: error?.response?.statusCode ?? 0,
+        statusCode: error.response?.statusCode ?? 0,
+        dioError: error,
       );
     }
 

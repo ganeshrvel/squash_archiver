@@ -11,7 +11,7 @@ abstract class SlWidget<S extends StatelessWidget> {
   void throwException(
     BuildContext context,
     Exception exception, {
-    StackTrace stackTrace,
+    StackTrace? stackTrace,
   }) =>
       _alerts.setException(
         context,
@@ -24,11 +24,11 @@ abstract class SlWidget<S extends StatelessWidget> {
   void throwAlert(
     BuildContext context,
     String message, {
-    String title,
-    AlertsTypes type,
-    AlertsPopupTypes popupType,
-    StackTrace stackTrace,
-    Duration duration,
+    String? title,
+    AlertsTypes? type,
+    AlertsPopupTypes? popupType,
+    StackTrace? stackTrace,
+    Duration? duration,
   }) =>
       _alerts.setAlert(
         context,

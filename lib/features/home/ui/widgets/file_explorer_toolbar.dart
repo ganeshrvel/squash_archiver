@@ -12,7 +12,7 @@ import 'package:squash_archiver/widgets/button/action_bar_button.dart';
 
 class FileExplorerToolbar extends StatefulWidget {
   const FileExplorerToolbar({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override

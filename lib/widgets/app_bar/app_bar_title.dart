@@ -6,7 +6,7 @@ class AppBarTitle extends StatelessWidget {
 
   const AppBarTitle(
     this.text, {
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override

@@ -7,7 +7,7 @@ import 'package:squash_archiver/widget_extends/sf_widget.dart';
 
 class FileExplorerPane extends StatefulWidget {
   const FileExplorerPane({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override

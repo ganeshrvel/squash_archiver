@@ -24,13 +24,13 @@ mixin _$FileExplorerKeyboardModifiersStore
           '_FileExplorerKeyboardModifiersStoreBase.activeKeyboardModifierIntent');
 
   @override
-  KeyboardModifierIntent get activeKeyboardModifierIntent {
+  KeyboardModifierIntent? get activeKeyboardModifierIntent {
     _$activeKeyboardModifierIntentAtom.reportRead();
     return super.activeKeyboardModifierIntent;
   }
 
   @override
-  set activeKeyboardModifierIntent(KeyboardModifierIntent value) {
+  set activeKeyboardModifierIntent(KeyboardModifierIntent? value) {
     _$activeKeyboardModifierIntentAtom
         .reportWrite(value, super.activeKeyboardModifierIntent, () {
       super.activeKeyboardModifierIntent = value;

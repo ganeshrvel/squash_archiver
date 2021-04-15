@@ -2,7 +2,7 @@ import 'package:archiver_ffi/archiver_ffi.dart';
 import 'package:data_channel/data_channel.dart';
 import 'package:flutter/foundation.dart';
 import 'package:injectable/injectable.dart';
-import 'package:meta/meta.dart';
+
 import 'package:squash_archiver/common/exceptions/task_in_progress_exception.dart';
 import 'package:squash_archiver/constants/app_default_values.dart';
 import 'package:squash_archiver/constants/env.dart';
@@ -13,15 +13,15 @@ import 'package:squash_archiver/utils/compute_in_background.dart';
 import 'package:squash_archiver/utils/utils/files.dart';
 import 'package:squash_archiver/utils/utils/functs.dart';
 
-@lazySingleton
+@LazySingleton()
 class ArchiveDataSource {
   ArchiveDataSource();
 
   @visibleForTesting
-  ListArchive cachedListArchiveParams;
+  ListArchive? cachedListArchiveParams;
 
   @visibleForTesting
-  ListArchiveResult cachedListArchiveResult;
+  ListArchiveResult? cachedListArchiveResult;
 
   @visibleForTesting
   int listArchiveCacheResultResetCount = 0;
@@ -30,25 +30,21 @@ class ArchiveDataSource {
   /// spinning up multiple isolates might crash the app, so it's for the best to have a check
   bool taskInProgress = false;
 
-  Future<DC<Exception, List<FileListingResponse>>> listFiles({
-    @required ListArchive listArchiveRequest,
-    bool invalidateCache,
+  Future<DC<Exception, List<FileListingResponse>>?> listFiles({
+    required ListArchive listArchiveRequest,
+    bool invalidateCache = false,
   }) async {
-    assert(listArchiveRequest != null);
-
     if (taskInProgress) {
       return DC.error(TaskInProgressException());
     }
 
     taskInProgress = true;
 
-    final _invalidateCache = invalidateCache ?? false;
-
-    if (_invalidateCache) {
+    if (invalidateCache) {
       _resetListFilesResultsCache();
     }
 
-    DC<Exception, List<FileListingResponse>> _result;
+    DC<Exception, List<FileListingResponse>>? _result;
 
     if (_fetchFromFfi(listArchiveRequest)) {
       // this is for testing purposes only
@@ -83,7 +79,7 @@ class ArchiveDataSource {
           cachedListArchiveResult = data;
 
           final _filteredPath = _getFilesList(
-            listDirectoryPath: listArchiveRequest.listDirectoryPath,
+            listDirectoryPath: listArchiveRequest.listDirectoryPath!,
             orderBy: listArchiveRequest.orderBy,
             orderDir: listArchiveRequest.orderDir,
           );
@@ -98,9 +94,9 @@ class ArchiveDataSource {
       cachedListArchiveParams = listArchiveRequest;
 
       final _filteredPath = _getFilesList(
-        listDirectoryPath: cachedListArchiveParams.listDirectoryPath,
-        orderBy: cachedListArchiveParams.orderBy,
-        orderDir: cachedListArchiveParams.orderDir,
+        listDirectoryPath: cachedListArchiveParams!.listDirectoryPath!,
+        orderBy: cachedListArchiveParams!.orderBy,
+        orderDir: cachedListArchiveParams!.orderDir,
       );
 
       _result = DC.data(_filteredPath);
@@ -113,12 +109,10 @@ class ArchiveDataSource {
 
   // filter files by their path
   List<FileListingResponse> _getFilesList({
-    @required String listDirectoryPath,
-    @required OrderBy orderBy,
-    @required OrderDir orderDir,
+    required String listDirectoryPath,
+    required OrderBy? orderBy,
+    required OrderDir? orderDir,
   }) {
-    assert(listDirectoryPath != null);
-
     if (isNullOrEmpty(cachedListArchiveResult?.files)) {
       return [];
     }
@@ -132,7 +126,7 @@ class ArchiveDataSource {
       fullPath: listDirectoryPath,
     );
 
-    var _fileListResult = cachedListArchiveResult.files.where((file) {
+    var _fileListResult = cachedListArchiveResult!.files.where((file) {
       final _parentPath = fixDirSlash(
         isDir: file.isDir,
         fullPath: file.parentPath,
@@ -163,33 +157,34 @@ class ArchiveDataSource {
       return true;
     }
 
-    if (params.filename != cachedListArchiveParams.filename) {
+    if (params.filename != cachedListArchiveParams!.filename) {
       return true;
     }
 
-    if (params.password != cachedListArchiveParams.password) {
+    if (params.password != cachedListArchiveParams!.password) {
       return true;
     }
 
     if (!listEquals(
       params.gitIgnorePattern,
-      cachedListArchiveParams.gitIgnorePattern,
+      cachedListArchiveParams!.gitIgnorePattern,
     )) {
       return true;
     }
 
     /// making sure that the archive walk through doesn't require a native call
-    if (params.listDirectoryPath != cachedListArchiveParams.listDirectoryPath) {
+    if (params.listDirectoryPath !=
+        cachedListArchiveParams!.listDirectoryPath) {
       return false;
     }
 
     /// if [orderDir] is changed pick it up from cache
-    if (params.orderDir != cachedListArchiveParams.orderDir) {
+    if (params.orderDir != cachedListArchiveParams!.orderDir) {
       return false;
     }
 
     /// if [orderDir] is changed pick it up from cache
-    if (params.orderBy != cachedListArchiveParams.orderBy) {
+    if (params.orderBy != cachedListArchiveParams!.orderBy) {
       return false;
     }
 
@@ -205,9 +200,7 @@ class ArchiveDataSource {
 Future<DC<Exception, ListArchiveResult>> _fetchFiles(
   ArchiveDataSourceListingRequest params,
 ) async {
-  assert(params != null);
-
-  String libAbsPath;
+  String? libAbsPath;
   if (Env.IS_TEST) {
     // this is to assist the unit tests
     // for unit tests we need to supply the absolute path of the library

@@ -11,7 +11,7 @@ final List<String> supportedL10nLocales =
     supportedL10nLanguages.map((language) => language.locale).toList();
 
 String ln(BuildContext context, String key) {
-  final value = L10n.of(context).translate(key);
+  final value = L10n.of(context)!.translate(key);
 
   if (value == null) {
     throw 'No text translation found for $key';

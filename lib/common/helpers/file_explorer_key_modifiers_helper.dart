@@ -91,7 +91,7 @@ Map<LogicalKeySet, Intent> getKeyModifiersShortcut() {
 }
 
 /// returns the [KeyModifier] of the input key combination
-KeyModifier getKeyModifierFromKeys(
+KeyModifier? getKeyModifierFromKeys(
   List<LogicalKeyboardKey> keys,
 ) {
   final _deepEq = const DeepCollectionEquality().equals;
@@ -107,15 +107,15 @@ KeyModifier getKeyModifierFromKeys(
 
 /// returns [true] if the [keys] matches the [KeyModifierActionType]
 bool isKeyModifierMatching({
-  @required List<LogicalKeyboardKey> keys,
-  @required KeyModifierActionType actionType,
+  required List<LogicalKeyboardKey>? keys,
+  required KeyModifierActionType actionType,
 }) {
   if (isNull(KeyModifiersMapping[actionType])) {
     throw "Invalid 'actionType' argument in isKeyModifier";
   }
 
   final _deepEq = const DeepCollectionEquality().equals;
-  final _keyMap = KeyModifiersMapping[actionType];
+  final _keyMap = KeyModifiersMapping[actionType]!;
 
   return _deepEq(_keyMap.keys, keys);
 }

@@ -1,4 +1,3 @@
-import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -16,7 +15,11 @@ import 'package:squash_archiver/widgets/common_widget/custom_scroll_behavior.dar
 import 'package:squash_archiver/widgets/text/textography.dart';
 
 class AppScreen extends StatelessWidget {
-  final _appStore = getIt<AppStore>();
+  final AppStore _appStore = getIt<AppStore>();
+
+  final _appRouter = router_gen.AppRouter(
+    routerAuthGuard: RouterAuthGuard(),
+  );
 
   void setErrorBuilder() {
     ErrorWidget.builder = (FlutterErrorDetails errorDetails) {
@@ -43,7 +46,7 @@ class AppScreen extends StatelessWidget {
         }
 
         return Portal(
-          child: MaterialApp(
+          child: MaterialApp.router(
             debugShowCheckedModeBanner: env.config.debugShowCheckedModeBanner,
             debugShowMaterialGrid: env.config.debugShowMaterialGrid,
             builder: (context, nativeNavigator) {
@@ -52,21 +55,15 @@ class AppScreen extends StatelessWidget {
               return ScrollConfiguration(
                 behavior: const ScrollBehavior(),
                 child: CustomScrollBehavior(
-                  child: ExtendedNavigator<router_gen.Router>(
-                    initialRoute: router_gen.Routes.fileExplorerScreen,
-                    router: router_gen.Router(),
-                    guards: [
-                      RouterAuthGuard(),
-                    ],
-                  ),
+                  child: nativeNavigator!,
                 ),
               );
             },
             title: Strings.APP_NAME,
-            theme: getAppThemeData(_appStore.theme.mode),
+            theme: getAppThemeData(_appStore.theme!.mode),
             locale: Locale(
-              _appStore.language.locale,
-              _appStore.language.countryCode,
+              _appStore.language!.locale,
+              _appStore.language!.countryCode,
             ),
             supportedLocales: supportedL10nLanguages
                 .map(
@@ -90,6 +87,8 @@ class AppScreen extends StatelessWidget {
                 orElse: () => supportedLocales.first,
               );
             },
+            routerDelegate: _appRouter.delegate(),
+            routeInformationParser: _appRouter.defaultRouteParser(),
           ),
         );
       },

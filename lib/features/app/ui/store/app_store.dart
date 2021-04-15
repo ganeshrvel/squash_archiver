@@ -22,7 +22,7 @@ enum AppSettingsTypes {
   THEME,
 }
 
-@lazySingleton
+@LazySingleton()
 class AppStore = _AppStoreBase with _$AppStore;
 
 abstract class _AppStoreBase with Store {
@@ -38,10 +38,10 @@ abstract class _AppStoreBase with Store {
   }
 
   @observable
-  LanguageModel language;
+  LanguageModel? language;
 
   @observable
-  ThemeModel theme;
+  ThemeModel? theme;
 
   @computed
   bool get isAppSettingsLoaded {
@@ -120,7 +120,7 @@ abstract class _AppStoreBase with Store {
   }
 
   @action
-  Future<ThemeModel> getAppTheme() async {
+  Future<ThemeModel?> getAppTheme() async {
     final appData = await _appController.getAppThemeData();
 
     appData.pick(
@@ -147,7 +147,7 @@ abstract class _AppStoreBase with Store {
 
   @action
   Future<void> toggleAppTheme() async {
-    final _currentAppTheme = await getAppTheme();
+    final _currentAppTheme = await (getAppTheme() as FutureOr<ThemeModel>);
     final _nextAppTheme = _currentAppTheme.mode == ThemeMode.dark
         ? const ThemeModel(mode: ThemeMode.light)
         : const ThemeModel(mode: ThemeMode.dark);

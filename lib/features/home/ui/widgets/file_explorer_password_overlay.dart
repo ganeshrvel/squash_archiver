@@ -23,26 +23,21 @@ class FileExplorerPasswordOverlay extends StatefulWidget {
 
   /// On tapping ok
   final Function({
-    @required FileListingRequest fileListingRequest,
-    @required String password,
+    required FileListingRequest fileListingRequest,
+    required String password,
   }) onOk;
 
   /// On tapping cancel
   final Function() onCancel;
 
   const FileExplorerPasswordOverlay({
-    Key key,
-    @required this.visible,
-    @required this.invalidPassword,
-    @required this.passwordRequest,
-    @required this.onOk,
-    @required this.onCancel,
-  })  : assert(visible != null),
-        assert(invalidPassword != null),
-        assert(passwordRequest != null),
-        assert(onOk != null),
-        assert(onCancel != null),
-        super(key: key);
+    Key? key,
+    required this.visible,
+    required this.invalidPassword,
+    required this.passwordRequest,
+    required this.onOk,
+    required this.onCancel,
+  }) : super(key: key);
 
   @override
   _FileExplorerPasswordOverlayState createState() =>
@@ -51,7 +46,7 @@ class FileExplorerPasswordOverlay extends StatefulWidget {
 
 class _FileExplorerPasswordOverlayState
     extends SfWidget<FileExplorerPasswordOverlay> {
-  TextEditingController _passwordTextController;
+  TextEditingController? _passwordTextController;
 
   bool get _visible => widget.visible;
 
@@ -65,8 +60,8 @@ class _FileExplorerPasswordOverlayState
       widget.passwordRequest.fileListingRequest;
 
   Function({
-    @required FileListingRequest fileListingRequest,
-    @required String password,
+    required FileListingRequest fileListingRequest,
+    required String password,
   }) get _onOk => widget.onOk;
 
   Function() get _onCancel => widget.onCancel;
@@ -80,7 +75,7 @@ class _FileExplorerPasswordOverlayState
 
   @override
   void dispose() {
-    _passwordTextController.dispose();
+    _passwordTextController!.dispose();
 
     super.dispose();
   }
@@ -94,7 +89,7 @@ class _FileExplorerPasswordOverlayState
       actionContainer: ConfirmActionButtons(
         onOk: () {
           _onOk(
-            password: _passwordTextController.text,
+            password: _passwordTextController!.text,
             fileListingRequest: _fileListingRequest,
           );
         },
@@ -112,7 +107,7 @@ class _FileExplorerPasswordOverlayState
           ),
           TextFieldRegularInput(
             onChanged: (value) {},
-            controller: _passwordTextController,
+            controller: _passwordTextController!,
             hintText: 'Password',
             errorText: _errorText,
           ),

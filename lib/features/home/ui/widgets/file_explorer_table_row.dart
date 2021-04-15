@@ -20,12 +20,11 @@ class FileExplorerTableRowTile extends StatelessWidget {
   final bool isSelected;
 
   const FileExplorerTableRowTile({
-    Key key,
-    @required this.fileContainer,
-    @required this.rowIndex,
-    @required this.isSelected,
-  })  : assert(rowIndex != null),
-        super(key: key);
+    Key? key,
+    required this.fileContainer,
+    required this.rowIndex,
+    required this.isSelected,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +35,7 @@ class FileExplorerTableRowTile extends StatelessWidget {
     var _metaDataTextColor = _palette.textColor.withOpacity(0.6);
     var _textColor = _palette.textColor;
 
-    File _fileIcon;
+    late File _fileIcon;
     const _fileIconHeight = 24.0;
 
     var _rowColor = rowIndex % 2 == 0

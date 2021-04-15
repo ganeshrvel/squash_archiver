@@ -14,7 +14,7 @@ ThemeModel getDefaultAppTheme() {
 /// returns the platform [ThemeMode];
 /// if 'follow system theme' is false then null is returned
 /// if [context] is null then use [SchedulerBinding]
-ThemeMode getPlatformThemeMode(BuildContext context) {
+ThemeMode? getPlatformThemeMode(BuildContext? context) {
   if (!AppDefaultValues.FOLLOW_SYSTEM_THEME) {
     return null;
   }
@@ -22,9 +22,9 @@ ThemeMode getPlatformThemeMode(BuildContext context) {
   Brightness _brightness;
 
   if (isNotNull(context)) {
-    _brightness = MediaQuery.of(context).platformBrightness;
+    _brightness = MediaQuery.of(context!).platformBrightness;
   } else {
-    _brightness = SchedulerBinding.instance.window.platformBrightness;
+    _brightness = SchedulerBinding.instance!.window.platformBrightness;
   }
 
   return _brightness == Brightness.dark ? ThemeMode.dark : ThemeMode.light;
@@ -42,7 +42,7 @@ bool isDarkMode(BuildContext context) {
 }
 
 /// Get app theme [AppTheme]
-AppTheme getAppTheme(ThemeMode mode) {
+AppTheme getAppTheme(ThemeMode? mode) {
   if (mode == ThemeMode.light) {
     final _lightTheme = getIt.get<AppTheme>(instanceName: 'lightTheme');
 
@@ -56,7 +56,7 @@ AppTheme getAppTheme(ThemeMode mode) {
 
 /// Returns [ThemeData] from [ThemeData]
 ThemeData getAppThemeData(ThemeMode mode) {
-  var _themeMode = mode;
+  ThemeMode? _themeMode = mode;
 
   final _platformThemeMode = getPlatformThemeMode(null);
 

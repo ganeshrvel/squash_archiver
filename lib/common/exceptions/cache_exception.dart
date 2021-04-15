@@ -1,13 +1,13 @@
 import 'package:squash_archiver/utils/utils/error.dart';
-import 'package:meta/meta.dart';
+
 
 class CacheException implements Exception {
   final Exception error;
   final StackTrace stackTrace;
 
   CacheException({
-    @required this.error,
-    @required this.stackTrace,
+    required this.error,
+    required this.stackTrace,
   });
 
   @override

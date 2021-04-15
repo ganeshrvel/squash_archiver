@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:archiver_ffi/archiver_ffi.dart';
 import 'package:data_channel/data_channel.dart';
 import 'package:injectable/injectable.dart';
-import 'package:meta/meta.dart';
+
 import 'package:path/path.dart' as path;
 import 'package:squash_archiver/constants/app_default_values.dart';
 import 'package:squash_archiver/features/home/data/helpers/helpers.dart';
@@ -12,15 +12,13 @@ import 'package:squash_archiver/features/home/data/models/file_listing_response.
 import 'package:squash_archiver/utils/utils/files.dart';
 import 'package:dartx/dartx.dart';
 
-@lazySingleton
+@LazySingleton()
 class LocalDataSource {
   LocalDataSource();
 
   Future<DC<Exception, List<FileListingResponse>>> listFiles({
-    @required FileListingRequest request,
+    required FileListingRequest request,
   }) async {
-    assert(request != null);
-
     try {
       final _fileListResult = <FileInfo>[];
       final _files = listDirectory(Directory(request.path));
@@ -41,7 +39,7 @@ class LocalDataSource {
         final _fileInfoResult = FileInfo(
           fullPath: file.path,
           modTime: file.statSync().modified.toString(),
-          parentPath: getParentPath(file.path),
+          parentPath: getParentPath(file.path)!,
           mode: _modeOctal,
           size: file.statSync().size,
           name: _name,

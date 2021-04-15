@@ -26,12 +26,12 @@ enum _allowedDioMethods {
   DELETE,
 }
 
-@lazySingleton
+@LazySingleton()
 class ApiClient {
   final Dio dio;
 
   ApiClient(this.dio) {
-    dio.options.baseUrl = env.config.apiBaseUrl;
+    dio.options.baseUrl = env.config.apiBaseUrl!;
     dio.options.connectTimeout = const Duration(seconds: 30).inMilliseconds;
     dio.options.receiveTimeout = const Duration(seconds: 30).inMilliseconds;
 
@@ -59,7 +59,7 @@ class ApiClient {
   Future<Response> post(
     String path,
     Map<String, dynamic> data, {
-    Map<String, dynamic> queryParameters,
+    Map<String, dynamic>? queryParameters,
   }) async {
     return _processData(
       _allowedDioMethods.POST,
@@ -72,7 +72,7 @@ class ApiClient {
   Future<Response> put(
     String path,
     Map<String, dynamic> data, {
-    Map<String, dynamic> queryParameters,
+    Map<String, dynamic>? queryParameters,
   }) async {
     return _processData(
       _allowedDioMethods.PUT,
@@ -85,7 +85,7 @@ class ApiClient {
   Future<Response> delete(
     String path,
     Map<String, dynamic> data, {
-    Map<String, dynamic> queryParameters,
+    Map<String, dynamic>? queryParameters,
   }) async {
     return _processData(
       _allowedDioMethods.DELETE,
@@ -97,7 +97,7 @@ class ApiClient {
 
   Future<Response> get(
     String path, {
-    Map<String, dynamic> queryParameters,
+    Map<String, dynamic>? queryParameters,
   }) async {
     return _processData(
       _allowedDioMethods.GET,
@@ -110,8 +110,8 @@ class ApiClient {
   Future<Response> _processData(
     _allowedDioMethods methodType,
     String path,
-    Map<String, dynamic> data, {
-    Map<String, dynamic> queryParameters,
+    Map<String, dynamic>? data, {
+    Map<String, dynamic>? queryParameters,
   }) async {
     Exception _exception;
 
@@ -145,36 +145,36 @@ class ApiClient {
             queryParameters: queryParameters,
           );
       }
-    } on Network404Error catch (e, stackTrace) {
+    } on Network404Error catch (e) {
       _exception = Network404Exception(
         errorMessage: e.errorMessage,
         apiUrl: e.apiUrl,
         statusCode: e.statusCode,
-        stackTrace: StackTrace.current ?? stackTrace,
+        stackTrace: StackTrace.current,
       );
-    } on BadNetworkApiError catch (e, stackTrace) {
+    } on BadNetworkApiError catch (e) {
       _exception = BadNetworkException(
         error: e,
-        stackTrace: StackTrace.current ?? stackTrace,
+        stackTrace: StackTrace.current,
         apiUrl: e.apiUrl,
         statusCode: e.statusCode,
       );
-    } on InternalServerApiError catch (e, stackTrace) {
+    } on InternalServerApiError catch (e) {
       _exception = InternalServerException(
         error: e,
         errorMessage: e.errorMessage,
-        stackTrace: StackTrace.current ?? stackTrace,
+        stackTrace: StackTrace.current,
         apiUrl: e.apiUrl,
         statusCode: e.statusCode,
       );
     } on UnauthorizedApiError {
       _exception = UserUnauthenticatedException();
-    } on DioError catch (dioError, stackTrace) {
+    } on DioError catch (dioError) {
       _exception = DioException(
         error: dioError,
-        stackTrace: StackTrace.current ?? stackTrace,
+        stackTrace: StackTrace.current,
         apiUrl: getApiUrl(dioError),
-        statusCode: dioError?.response?.statusCode ?? 0,
+        statusCode: dioError.response?.statusCode ?? 0,
       );
     }
 

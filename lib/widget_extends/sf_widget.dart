@@ -22,7 +22,7 @@ abstract class SfWidget<S extends StatefulWidget> extends State<S>
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
       onWidgetUpdate();
     });
   }
@@ -45,7 +45,7 @@ abstract class SfWidget<S extends StatefulWidget> extends State<S>
   void throwException(
     BuildContext context,
     Exception exception, {
-    StackTrace stackTrace,
+    StackTrace? stackTrace,
   }) {
     _alerts.setException(
       context,
@@ -59,11 +59,11 @@ abstract class SfWidget<S extends StatefulWidget> extends State<S>
   void throwAlert(
     BuildContext context,
     String message, {
-    String title,
-    AlertsTypes type,
-    AlertsPopupTypes popupType,
-    StackTrace stackTrace,
-    Duration duration,
+    String? title,
+    AlertsTypes? type,
+    AlertsPopupTypes? popupType,
+    StackTrace? stackTrace,
+    Duration? duration,
   }) {
     _alerts.setAlert(
       context,
@@ -80,10 +80,10 @@ abstract class SfWidget<S extends StatefulWidget> extends State<S>
   @mustCallSuper
   void logError(
     dynamic message, {
-    String title,
-    BuildContext context,
-    StackTrace stackTrace,
-    bool reportCrash,
+    String? title,
+    BuildContext? context,
+    StackTrace? stackTrace,
+    bool? reportCrash,
   }) {
     final _reportCrash = reportCrash ?? true;
 

@@ -6,8 +6,8 @@ import 'package:squash_archiver/widgets/shadows/box_shadow_3.dart';
 
 class AppTooltip extends StatelessWidget {
   const AppTooltip({
-    Key key,
-    @required this.message,
+    Key? key,
+    required this.message,
     this.padding,
     this.child,
     this.waitDuration,
@@ -20,12 +20,12 @@ class AppTooltip extends StatelessWidget {
   /// The amount of space by which to inset the tooltip's [child].
   ///
   /// Defaults to 16.0 logical pixels in each direction.
-  final EdgeInsetsGeometry padding;
+  final EdgeInsetsGeometry? padding;
 
   /// The widget below this widget in the tree.
   ///
   /// {@macro flutter.widgets.ProxyWidget.child}
-  final Widget child;
+  final Widget? child;
 
   /// The length of time that a pointer must hover over a tooltip's widget
   /// before the tooltip will be shown.
@@ -33,18 +33,18 @@ class AppTooltip extends StatelessWidget {
   /// Once the pointer leaves the widget, the tooltip will immediately
   /// disappear.
   ///
-  final Duration waitDuration;
+  final Duration? waitDuration;
 
   /// The length of time that the tooltip will be shown after a long press
   /// is released.
   ///
-  final Duration showDuration;
+  final Duration? showDuration;
 
   @override
   Widget build(BuildContext context) {
     /// don't show empty popup
     if (isNullOrEmpty(message)) {
-      return child;
+      return child!;
     }
 
     final _palette = getPalette(context);

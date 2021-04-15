@@ -7,14 +7,14 @@ class AppOverlay extends StatelessWidget {
   final bool visible;
 
   /// child widget or the main content
-  final Widget content;
+  final Widget? content;
 
   /// bottom most action part. commonly used for action buttons like Ok and Cancel
-  final Widget actionContainer;
+  final Widget? actionContainer;
 
   const AppOverlay({
-    Key key,
-    @required this.visible,
+    Key? key,
+    required this.visible,
     this.content,
     this.actionContainer,
   }) : super(key: key);

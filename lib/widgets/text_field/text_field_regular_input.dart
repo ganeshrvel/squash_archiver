@@ -3,24 +3,24 @@ import 'package:squash_archiver/common/themes/theme_helper.dart';
 import 'package:squash_archiver/utils/utils/functs.dart';
 
 class TextFieldRegularInput extends StatelessWidget {
-  final int maxLength;
-  final int minLines;
+  final int? maxLength;
+  final int? minLines;
   final int maxLines;
   final bool disabled;
   final bool autofocus;
   final TextEditingController controller;
   final ValueChanged<String> onChanged;
-  final String errorText;
-  final String hintText;
-  final String labelText;
-  final String prefixText;
-  final IconData prefixIcon;
-  final TextInputType keyboardType;
+  final String? errorText;
+  final String? hintText;
+  final String? labelText;
+  final String? prefixText;
+  final IconData? prefixIcon;
+  final TextInputType? keyboardType;
 
   const TextFieldRegularInput({
-    Key key,
-    @required this.onChanged,
-    @required this.controller,
+    Key? key,
+    required this.onChanged,
+    required this.controller,
     this.maxLength,
     this.disabled = false,
     this.errorText,
@@ -32,8 +32,7 @@ class TextFieldRegularInput extends StatelessWidget {
     this.maxLines = 1,
     this.keyboardType,
     this.prefixIcon,
-  })  : assert(controller != null),
-        super(key: key);
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -73,7 +72,7 @@ class TextFieldRegularInput extends StatelessWidget {
       autofocus: autofocus,
       controller: controller,
       onChanged: (String value) {
-        if (isNotNull(maxLength) && value.length > maxLength) {
+        if (isNotNull(maxLength) && value.length > maxLength!) {
           return;
         }
 

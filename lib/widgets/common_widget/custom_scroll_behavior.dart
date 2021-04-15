@@ -4,7 +4,7 @@ class CustomScrollBehavior extends StatelessWidget {
   final Widget child;
 
   const CustomScrollBehavior({
-    @required this.child,
+    required this.child,
   });
 
   @override

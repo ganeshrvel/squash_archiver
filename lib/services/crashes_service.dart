@@ -2,11 +2,9 @@ import 'package:flutter/widgets.dart';
 import 'package:squash_archiver/constants/env.dart';
 import 'package:injectable/injectable.dart';
 import 'package:sentry/sentry.dart';
-import 'package:squash_archiver/utils/device_details/app_meta_info.dart';
 import 'package:squash_archiver/utils/device_details/device_details.dart';
-import 'package:squash_archiver/utils/utils/error.dart';
 
-@lazySingleton
+@LazySingleton()
 class CrashesService {
   final DeviceDetails _deviceDetails;
 
@@ -15,12 +13,12 @@ class CrashesService {
   );
 
   void capture({
-    @required String title,
-    @required dynamic error,
-    @required StackTrace stackTrace,
-    @required StackTrace fullStackTrace,
-    BuildContext context,
-    Map<String, String> extras,
+    required String? title,
+    required dynamic error,
+    required StackTrace? stackTrace,
+    required StackTrace fullStackTrace,
+    BuildContext? context,
+    Map<String, String>? extras,
   }) {
     if (!env.config.reportCrashAnalytics) {
       return;

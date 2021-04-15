@@ -29,10 +29,10 @@ import 'package:squash_archiver/widgets/sliver/app_sliver_header.dart';
 class FileExplorerScreen extends StatefulWidget {
   /// this is a dummy variable
   /// this is to assist auto argument generation
-  final String dummy;
+  final String? dummy;
 
   const FileExplorerScreen({
-    Key key,
+    Key? key,
     this.dummy,
   }) : super(key: key);
 
@@ -41,28 +41,28 @@ class FileExplorerScreen extends StatefulWidget {
 }
 
 class _FileExplorerScreenState extends SfWidget<FileExplorerScreen> {
-  FileExplorerScreenStore _fileExplorerScreenStore;
+  late final FileExplorerScreenStore _fileExplorerScreenStore;
 
-  FileExplorerKeyboardModifiersStore _fileExplorerKeyboardModifiersStore;
+  late final FileExplorerKeyboardModifiersStore
+      _fileExplorerKeyboardModifiersStore;
 
-  List<ReactionDisposer> _disposers;
+  late final List<ReactionDisposer> _disposers;
 
-  ScrollController _scrollController;
+  late final ScrollController _scrollController;
 
-  FocusNode _fileExplorerFocusNode;
+  late final FocusNode _fileExplorerFocusNode;
 
-  ShortcutManager _shortcutManager;
+  late final ShortcutManager _shortcutManager;
 
   ThemePalette get _palette => getPalette(context);
 
   @override
   void initState() {
-    _fileExplorerScreenStore ??= FileExplorerScreenStore();
-    _fileExplorerKeyboardModifiersStore ??=
-        FileExplorerKeyboardModifiersStore();
-    _scrollController ??= ScrollController();
-    _fileExplorerFocusNode ??= FocusNode();
-    _shortcutManager ??= ShortcutManager();
+    _fileExplorerScreenStore = FileExplorerScreenStore();
+    _fileExplorerKeyboardModifiersStore = FileExplorerKeyboardModifiersStore();
+    _scrollController = ScrollController();
+    _fileExplorerFocusNode = FocusNode();
+    _shortcutManager = ShortcutManager();
 
     super.initState();
   }
@@ -76,7 +76,7 @@ class _FileExplorerScreenState extends SfWidget<FileExplorerScreen> {
 
   void _init() {
     _fileExplorerScreenStore.navigateToSource(
-      fullPath: AppDefaultValues.DEFAULT_FILE_EXPLORER_DIRECTORY,
+      fullPath: AppDefaultValues.DEFAULT_FILE_EXPLORER_DIRECTORY!,
       source: FileExplorerSource.LOCAL,
       clearStack: true,
     );
@@ -87,7 +87,7 @@ class _FileExplorerScreenState extends SfWidget<FileExplorerScreen> {
     _disposers = [
       reaction(
         (_) => _fileExplorerScreenStore.fileContainersException,
-        (Exception fileContainersException) {
+        (Exception? fileContainersException) {
           if (isNull(fileContainersException)) {
             return;
           }
@@ -106,8 +106,8 @@ class _FileExplorerScreenState extends SfWidget<FileExplorerScreen> {
   }
 
   void _handlePasswordRequestOkTap({
-    @required FileListingRequest fileListingRequest,
-    @required String password,
+    required FileListingRequest fileListingRequest,
+    required String password,
   }) {
     _fileExplorerScreenStore.navigateToSource(
       fullPath: fileListingRequest.path,
@@ -183,7 +183,7 @@ class _FileExplorerScreenState extends SfWidget<FileExplorerScreen> {
                     .resetActiveKeyboardModifierIntent();
               }
 
-              return false;
+              return KeyEventResult.handled;
             },
             autofocus: true,
             focusNode: _fileExplorerFocusNode,
@@ -232,7 +232,7 @@ class _FileExplorerScreenState extends SfWidget<FileExplorerScreen> {
 
         return FileExplorerPasswordOverlay(
           visible: _showRequestPasswordOverlay,
-          passwordRequest: _requestPassword,
+          passwordRequest: _requestPassword!,
           onCancel: _handlePasswordRequestCancelTap,
           onOk: _handlePasswordRequestOkTap,
           invalidPassword: _requestPassword.invalidPassword,
@@ -244,10 +244,10 @@ class _FileExplorerScreenState extends SfWidget<FileExplorerScreen> {
   Widget _buildBody() {
     return MultiProvider(
       providers: [
-        Provider<FileExplorerScreenStore>(
+        Provider<FileExplorerScreenStore?>(
           create: (_) => _fileExplorerScreenStore,
         ),
-        Provider<FileExplorerKeyboardModifiersStore>(
+        Provider<FileExplorerKeyboardModifiersStore?>(
           create: (_) => _fileExplorerKeyboardModifiersStore,
         ),
       ],

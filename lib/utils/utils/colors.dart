@@ -32,10 +32,10 @@ int colorToInt(String hexColor) {
   return int.parse(_hexColor, radix: 16);
 }
 
-MaterialColor hexColor2MaterialColor({Color color, int hexColor}) {
+MaterialColor hexColor2MaterialColor({Color? color, int? hexColor}) {
   assert(isNotNull(color) || isNotNull(hexColor));
 
-  final _color = color ?? Color(hexColor);
+  final _color = color ?? Color(hexColor!);
   final _hexColor = hexColor ?? colorToInt(colorToHex(_color));
 
   final r = _color.red;

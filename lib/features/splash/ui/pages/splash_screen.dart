@@ -6,7 +6,7 @@ import 'package:squash_archiver/widget_extends/sf_widget.dart';
 import 'package:squash_archiver/features/splash/ui/widgets/splash_loading.dart';
 
 class SplashScreen extends StatefulWidget {
-  const SplashScreen({Key key}) : super(key: key);
+  const SplashScreen({Key? key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _SplashScreenState();

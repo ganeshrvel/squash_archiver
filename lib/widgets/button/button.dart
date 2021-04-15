@@ -33,40 +33,40 @@ enum ButtonSizeType {
 class Button extends StatelessWidget {
   final String text;
   final bool loading;
-  final String loadingText;
+  final String? loadingText;
   final bool disabled;
   final bool fullWidth;
-  final IconData icon;
-  final TextDirection iconTextDirection;
-  final EdgeInsetsGeometry iconButtonPadding;
-  final EdgeInsetsGeometry imageButtonPadding;
-  final EdgeInsetsGeometry textButtonPadding;
-  final VoidCallback onPressed;
+  final IconData? icon;
+  final TextDirection? iconTextDirection;
+  final EdgeInsetsGeometry? iconButtonPadding;
+  final EdgeInsetsGeometry? imageButtonPadding;
+  final EdgeInsetsGeometry? textButtonPadding;
+  final VoidCallback? onPressed;
   final ButtonType buttonType;
-  final double height;
-  final double width;
-  final ButtonColorType buttonColor;
+  final double? height;
+  final double? width;
+  final ButtonColorType? buttonColor;
   final double elevation;
   final double iconButtonIconSize;
-  final Color iconColor;
-  final ButtonColorType buttonTextColor;
+  final Color? iconColor;
+  final ButtonColorType? buttonTextColor;
   final bool roundedEdge;
   final double radius;
   final ButtonSizeType buttonSize;
   final bool textAutoCapitalize;
   final bool underline;
-  final TextVariant textVariant;
-  final FontWeight fontWeight;
-  final bool disableAutoBoxConstraints;
-  final Color splashColor;
-  final Color highlightColor;
-  final Color hoverColor;
-  final Img image;
-  final SystemMouseCursor mouseCursor;
+  final TextVariant? textVariant;
+  final FontWeight? fontWeight;
+  final bool? disableAutoBoxConstraints;
+  final Color? splashColor;
+  final Color? highlightColor;
+  final Color? hoverColor;
+  final Img? image;
+  final SystemMouseCursor? mouseCursor;
 
   const Button({
-    @required this.text,
-    @required this.onPressed,
+    required this.text,
+    required this.onPressed,
     this.loading = false,
     this.loadingText,
     this.disabled = false,
@@ -99,9 +99,9 @@ class Button extends StatelessWidget {
     this.mouseCursor,
   });
 
-  String getButtonText() {
+  String? getButtonText() {
     if (loading && isNotNullOrEmpty(loadingText)) {
-      return textAutoCapitalize ? loadingText.toUpperCase() : loadingText;
+      return textAutoCapitalize ? loadingText!.toUpperCase() : loadingText;
     }
 
     return textAutoCapitalize ? text.toUpperCase() : text;
@@ -120,7 +120,7 @@ class Button extends StatelessWidget {
   }
 
   // add new ButtonColorTypes colors here
-  Color _buttonColorMapping(ButtonColorType _colorType) {
+  Color _buttonColorMapping(ButtonColorType? _colorType) {
     switch (_colorType) {
       case ButtonColorType.WHITE:
         return AppColors.white;
@@ -208,7 +208,7 @@ class Button extends StatelessWidget {
   }
 
   OutlinedBorder getBtnShape() {
-    final _roundedEdge = roundedEdge ?? false;
+    final _roundedEdge = roundedEdge;
 
     if (!_roundedEdge) {
       return const RoundedRectangleBorder(
@@ -222,7 +222,7 @@ class Button extends StatelessWidget {
   }
 
   TextStyle getButtonTextStyle(BuildContext context) {
-    var _fontWeight = FontWeight.w900;
+    FontWeight? _fontWeight = FontWeight.w900;
 
     if (isNotNull(fontWeight)) {
       _fontWeight = fontWeight;
@@ -285,7 +285,6 @@ class Button extends StatelessWidget {
                   fontWeight: buttonStyle.fontWeight,
                 ),
               );
-        break;
 
       case ButtonType.ICON:
         if (isNull(icon)) {
@@ -382,7 +381,7 @@ class Button extends StatelessWidget {
                           0,
                           5,
                           0,
-                          (iconButtonIconSize ?? 0) / 10,
+                          iconButtonIconSize / 10,
                         ),
                         child: Textography(
                           getButtonText(),
@@ -478,8 +477,8 @@ class Button extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var _minWidth = 200.0;
-    var _maxWidth = double.infinity;
+    double? _minWidth = 200.0;
+    double? _maxWidth = double.infinity;
 
     if (buttonType == ButtonType.ICON) {
       _minWidth = 0.0;
@@ -515,8 +514,8 @@ class Button extends StatelessWidget {
 
     return ConstrainedBox(
       constraints: BoxConstraints(
-        minWidth: _minWidth,
-        maxWidth: _maxWidth,
+        minWidth: _minWidth!,
+        maxWidth: _maxWidth!,
         minHeight: buttonHeight.min,
         maxHeight: buttonHeight.max,
       ),
@@ -530,7 +529,7 @@ class _ButtonHeight {
   final double max;
 
   _ButtonHeight({
-    @required this.min,
-    @required this.max,
+    required this.min,
+    required this.max,
   });
 }

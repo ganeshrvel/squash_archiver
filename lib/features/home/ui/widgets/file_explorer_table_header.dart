@@ -10,7 +10,7 @@ import 'package:squash_archiver/widget_extends/sf_widget.dart';
 
 class FileExplorerTableHeader extends StatefulWidget {
   const FileExplorerTableHeader({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -24,8 +24,8 @@ class FileExplorerTableHeaderState extends SfWidget<FileExplorerTableHeader> {
   ThemePalette get _palette => getPalette(context);
 
   void _handleTableHeaderCellSorting({
-    @required OrderDir orderDir,
-    @required OrderBy orderBy,
+    required OrderDir orderDir,
+    required OrderBy orderBy,
   }) {
     _fileExplorerScreenStore.setOrderDirOrderBy(
       orderBy: orderBy,
@@ -41,8 +41,8 @@ class FileExplorerTableHeaderState extends SfWidget<FileExplorerTableHeader> {
       child: Center(
         child: Observer(
           builder: (_) {
-            final _orderDir = _fileExplorerScreenStore.orderDir;
-            final _orderBy = _fileExplorerScreenStore.orderBy;
+            final _orderDir = _fileExplorerScreenStore.orderDir!;
+            final _orderBy = _fileExplorerScreenStore.orderBy!;
             final _listFilesInProgress =
                 _fileExplorerScreenStore.fileListingInProgress;
 

@@ -5,11 +5,11 @@ import 'package:squash_archiver/utils/utils/files.dart';
 @module
 abstract class ArchiverFfiDi {
   @dev
-  @lazySingleton
+  @LazySingleton()
   ArchiverFfi get archiverFfi => ArchiverFfi();
 
   /// for testing [libAbsPath] has to be passed through the constructor of [ArchiverFfi]
   @test
-  @lazySingleton
+  @LazySingleton()
   ArchiverFfi get archiverFfiTest => ArchiverFfi(libAbsPath: getNativeLib());
 }

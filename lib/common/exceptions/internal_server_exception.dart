@@ -1,4 +1,4 @@
-import 'package:meta/meta.dart';
+
 import 'package:squash_archiver/utils/utils/error.dart';
 
 class InternalServerException implements Exception {
@@ -9,11 +9,11 @@ class InternalServerException implements Exception {
   final StackTrace stackTrace;
 
   InternalServerException({
-    @required this.error,
-    @required this.errorMessage,
-    @required this.statusCode,
-    @required this.apiUrl,
-    @required this.stackTrace,
+    required this.error,
+    required this.errorMessage,
+    required this.statusCode,
+    required this.apiUrl,
+    required this.stackTrace,
   });
 
   @override
@@ -21,7 +21,7 @@ class InternalServerException implements Exception {
     final _errorBody = getErrorBody({
       'API URL': apiUrl,
       'Error': error.toString(),
-      'Status Code': (statusCode ?? '').toString(),
+      'Status Code': (statusCode).toString(),
       'Error Message': errorMessage,
     });
 

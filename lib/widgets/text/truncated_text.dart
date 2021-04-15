@@ -6,24 +6,24 @@ import 'package:squash_archiver/widgets/text/textography.dart';
 
 class TruncatedText extends StatelessWidget {
   /// original string
-  final String originalText;
+  final String? originalText;
 
   /// truncated string
   /// Either [originalText] or [truncatedText] is required
   /// [truncatedText] will be given priority
-  final TruncatedString truncatedText;
+  final TruncatedString? truncatedText;
 
-  final TextVariant variant;
-  final Color color;
-  final Color backgroundColor;
-  final FontWeight fontWeight;
-  final TextDecoration decoration;
-  final double fontSize;
-  final TextAlign textAlign;
-  final TextOverflow overflow;
+  final TextVariant? variant;
+  final Color? color;
+  final Color? backgroundColor;
+  final FontWeight? fontWeight;
+  final TextDecoration? decoration;
+  final double? fontSize;
+  final TextAlign? textAlign;
+  final TextOverflow? overflow;
 
   const TruncatedText({
-    Key key,
+    Key? key,
     this.originalText,
     this.truncatedText,
     this.variant,
@@ -52,7 +52,7 @@ class TruncatedText extends StatelessWidget {
       children: [
         Flexible(
           child: Text(
-            Characters(_truncatedText.firstChunk).toList().join('\u{200B}'),
+            Characters(_truncatedText!.firstChunk).toList().join('\u{200B}'),
             style: TextStyle(
               fontSize: fontSize,
               fontWeight: fontWeight,

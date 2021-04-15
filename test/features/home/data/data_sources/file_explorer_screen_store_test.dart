@@ -14,7 +14,7 @@ import '../../../../support/test_utils.dart';
 Future<void> main() async {
   TestWidgetsFlutterBinding.ensureInitialized();
   SharedPreferences.setMockInitialValues({});
-  await getItInit(Environment.test);
+  await getItInit(env: Environment.test);
 
   setUpAll(() async {});
 
@@ -28,7 +28,7 @@ Future<void> main() async {
       );
 
       await _fileExplorerScreenStore.navigateToSource(
-        fullPath: AppDefaultValues.DEFAULT_FILE_EXPLORER_DIRECTORY,
+        fullPath: AppDefaultValues.DEFAULT_FILE_EXPLORER_DIRECTORY!,
         source: FileExplorerSource.LOCAL,
         clearStack: true,
       );

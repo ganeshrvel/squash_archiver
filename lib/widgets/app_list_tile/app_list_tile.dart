@@ -11,14 +11,12 @@ class AppListTile extends StatelessWidget {
   final String label;
 
   const AppListTile({
-    Key key,
-    @required this.selected,
-    @required this.icon,
-    @required this.onTap,
-    @required this.label,
-  })  : assert(selected != null),
-        assert(icon != null),
-        assert(label != null),
+    Key? key,
+    required this.selected,
+    required this.icon,
+    required this.onTap,
+    required this.label,
+  })  :
         super(key: key);
 
   @override

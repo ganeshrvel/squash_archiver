@@ -67,20 +67,20 @@ enum TextVariant {
 }
 
 class Textography extends StatelessWidget {
-  final String text;
-  final TextVariant variant;
-  final Color color;
-  final Color backgroundColor;
-  final TextAlign textAlign;
-  final FontWeight fontWeight;
-  final double fontSize;
-  final TextDecoration decoration;
+  final String? text;
+  final TextVariant? variant;
+  final Color? color;
+  final Color? backgroundColor;
+  final TextAlign? textAlign;
+  final FontWeight? fontWeight;
+  final double? fontSize;
+  final TextDecoration? decoration;
   final bool capitalize;
-  final TextOverflow overflow;
+  final TextOverflow? overflow;
 
   const Textography(
     this.text, {
-    Key key,
+    Key? key,
     this.variant,
     this.color,
     this.textAlign,
@@ -95,9 +95,9 @@ class Textography extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final _variant = variant ?? TextVariant.body1;
-    var _fontWeight = FontWeight.normal;
+    FontWeight? _fontWeight = FontWeight.normal;
     var _child = text ?? '';
-    double _fontSize;
+    double? _fontSize;
 
     const _corrector = 1;
 
@@ -157,13 +157,13 @@ class Textography extends StatelessWidget {
         break;
     }
 
-    if ((capitalize ?? false) && isNotNullOrEmpty(_child)) {
+    if (capitalize && isNotNullOrEmpty(_child)) {
       _child = _child.toUpperCase();
     }
 
     var _correctedFontWeight = fontSize ?? _fontSize;
 
-    if (isNotNull(_correctedFontWeight)) {
+    if (_correctedFontWeight != null) {
       _correctedFontWeight += _corrector;
     }
 

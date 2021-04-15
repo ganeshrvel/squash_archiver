@@ -5,17 +5,18 @@ import 'dart:isolate';
 import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
 import 'package:mobx/mobx.dart';
-import 'package:squash_archiver/common/di/di.dart' show getItInit;
+import 'package:squash_archiver/common/di/di.dart' show getIt, getItInit;
 import 'package:squash_archiver/constants/env.dart';
 import 'package:squash_archiver/constants/service_keys.dart';
 import 'package:squash_archiver/features/app/ui/pages/app_screen.dart';
+import 'package:squash_archiver/utils/device_details/app_meta_info.dart';
 import 'package:squash_archiver/utils/log/log.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:squash_archiver/utils/utils/strings.dart';
 
 
 Future<void> _logFlutterOnError(FlutterErrorDetails details) async {
-  Zone.current.handleUncaughtError(details.exception, details.stack);
+  Zone.current.handleUncaughtError(details.exception, details.stack!);
 
   // todo add firebase
   // FirebaseCrashlytics.instance.recordFlutterError(details);
@@ -31,7 +32,8 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   // register all dependecy injection
-  await getItInit(Environment.dev);
+  await getItInit(env: Environment.dev);
+  final _appMetaInfo = getIt<AppMetaInfo>();
 
   await SentryFlutter.init(
         (options) {
@@ -73,8 +75,8 @@ Future<void> main() async {
   mainContext.onReactionError((_, rxn) {
     log.error(
       title: 'A mobx reaction error occured.',
-      error: rxn.errorValue.exception,
-      stackTrace: rxn.errorValue.stackTrace,
+      error: rxn.errorValue!.exception,
+      stackTrace: rxn.errorValue!.stackTrace,
     );
   });
 

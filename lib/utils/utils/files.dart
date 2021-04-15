@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:meta/meta.dart';
+
 import 'package:squash_archiver/constants/app_default_values.dart';
 import 'package:squash_archiver/constants/app_files.dart';
 import 'package:squash_archiver/utils/utils/functs.dart';
@@ -13,17 +13,17 @@ String getFileName(String pathName) {
 
   final file = File(pathName);
 
-  return path.basename(file.path) ?? '';
+  return path.basename(file.path);
 }
 
-String getExtension(String filename) {
+String getExtension(String? filename) {
   const extension = '';
 
   if (isNullOrEmpty(filename)) {
     return extension;
   }
 
-  final _filenameSlashSplitted = path.split(filename);
+  final _filenameSlashSplitted = path.split(filename!);
   final _splittedFilename = _filenameSlashSplitted.last.split('.');
 
   if (isNullOrEmpty(_splittedFilename)) {
@@ -49,7 +49,7 @@ String getExtension(String filename) {
   return extension;
 }
 
-String homeDirectory() {
+String? homeDirectory() {
   return Platform.environment['HOME'] ?? Platform.environment['USERPROFILE'];
 }
 
@@ -58,20 +58,20 @@ String rootDirectory() {
 }
 
 String desktopDirectory() {
-  return path.join(homeDirectory(), 'Desktop');
+  return path.join(homeDirectory()!, 'Desktop');
 }
 
 String downloadsDirectory() {
-  return path.join(homeDirectory(), 'Downloads');
+  return path.join(homeDirectory()!, 'Downloads');
 }
 
 String getDesktopFile(String filename) {
   return path.join(desktopDirectory(), filename);
 }
 
-String fixDirSlash({
-  @required bool isDir,
-  @required String fullPath,
+String? fixDirSlash({
+  required bool isDir,
+  required String? fullPath,
 }) {
   var _fullPath = fullPath;
 
@@ -83,7 +83,7 @@ String fixDirSlash({
     return _fullPath;
   }
 
-  final _offset = fullPath.length - 1;
+  final _offset = fullPath!.length - 1;
 
   if (isDir && !fullPath.contains(Platform.pathSeparator, _offset)) {
     _fullPath = '$_fullPath${Platform.pathSeparator}';
@@ -92,7 +92,7 @@ String fixDirSlash({
   return _fullPath;
 }
 
-String getParentPath(String fullPath) {
+String? getParentPath(String? fullPath) {
   if (isNullOrEmpty(fullPath)) {
     return '';
   }
@@ -101,7 +101,7 @@ String getParentPath(String fullPath) {
     return fullPath;
   }
 
-  final _parentDir = Directory(fullPath).parent.path;
+  final _parentDir = Directory(fullPath!).parent.path;
 
   if (_parentDir == '.' || _parentDir == './') {
     return '';
@@ -110,7 +110,7 @@ String getParentPath(String fullPath) {
   return _parentDir;
 }
 
-List<FileSystemEntity> listDirectory(Directory dir, {bool recursive}) {
+List<FileSystemEntity> listDirectory(Directory dir, {bool? recursive}) {
   final _recursive = recursive ?? false;
 
   final _files = <FileSystemEntity>[];

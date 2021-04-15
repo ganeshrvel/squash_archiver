@@ -1,27 +1,27 @@
 import 'package:flutter/widgets.dart';
 import 'package:squash_archiver/utils/error_handling/handle_exception.dart';
 import 'package:injectable/injectable.dart';
-import 'package:meta/meta.dart';
+
 import 'package:squash_archiver/services/crashes_service.dart';
 import 'package:squash_archiver/utils/alerts/alerts_model.dart';
 import 'package:squash_archiver/utils/log/log.dart';
 
-@lazySingleton
+@LazySingleton()
 class AlertsHelper {
-  CrashesService crashesService;
+  final CrashesService crashesService;
 
   AlertsHelper(this.crashesService);
 
   AlertsModel getAlert(
     BuildContext context,
-    String body, {
-    Exception exception,
-    String title,
-    AlertsTypes type,
-    AlertsPopupTypes popupType,
-    StackTrace stackTrace,
-    Duration duration,
-    bool allowLogging,
+    String? body, {
+    Exception? exception,
+    String? title,
+    AlertsTypes? type,
+    AlertsPopupTypes? popupType,
+    StackTrace? stackTrace,
+    Duration? duration,
+    bool? allowLogging,
   }) {
     String _title;
     final _type = type ?? AlertsTypes.ERROR;
@@ -73,7 +73,7 @@ class AlertsHelper {
   AlertsModel getException(
     BuildContext context,
     Exception exception, {
-    @required StackTrace stackTrace,
+    required StackTrace? stackTrace,
   }) {
     ///
     ///   todo Implement UserUnauthenticatedException redirect logic

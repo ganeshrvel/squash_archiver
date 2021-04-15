@@ -9,7 +9,7 @@ class KeyboardModifierIntent extends Intent implements Equatable {
 
   const KeyboardModifierIntent({
     this.keys = const [],
-  }) : assert(keys != null);
+  });
 
   /// [bool] shift key pressed
   bool get isShiftPressed => keys.contains(LogicalKeyboardKey.shift);

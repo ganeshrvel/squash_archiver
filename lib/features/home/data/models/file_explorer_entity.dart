@@ -16,17 +16,17 @@ class FileExplorerSidebarEntity extends Equatable {
   final bool selected;
 
   const FileExplorerSidebarEntity({
-    @required this.label,
-    @required this.path,
-    @required this.icon,
-    @required this.selected,
+    required this.label,
+    required this.path,
+    required this.icon,
+    required this.selected,
   });
 
   FileExplorerSidebarEntity copyWith({
-    String label,
-    IconData icon,
-    String path,
-    bool selected,
+    String? label,
+    IconData? icon,
+    String? path,
+    bool? selected,
   }) {
     return FileExplorerSidebarEntity(
       label: label ?? this.label,
@@ -37,7 +37,7 @@ class FileExplorerSidebarEntity extends Equatable {
   }
 
   @override
-  List<Object> get props => [
+  List<Object?> get props => [
         selected,
         path,
         icon,

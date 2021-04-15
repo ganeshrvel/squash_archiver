@@ -12,17 +12,17 @@ class ProgressOverlay extends StatelessWidget {
   final bool visible;
 
   /// progress value
-  final double value;
+  final double? value;
 
   /// loading text
-  final String loadingText;
+  final String? loadingText;
 
   const ProgressOverlay({
-    Key key,
-    @required this.visible,
+    Key? key,
+    required this.visible,
     this.value,
     this.loadingText,
-  })  : assert(visible != null),
+  })  :
         super(key: key);
 
   @override
