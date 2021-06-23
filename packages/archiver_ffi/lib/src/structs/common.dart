@@ -18,7 +18,7 @@ class StringListStruct extends Struct {
     print('fix the memory bytes');
     print('make sure to free the mmry');
     // ignore: omit_local_variable_types
-    final Pointer<Pointer<Utf8>> ppList = malloc.allocate(0);
+    final Pointer<Pointer<Utf8>> ppList = malloc();
 
     for (var i = 0; i < arr.length; i++) {
       ppList[i] = pUtf[i];
@@ -30,7 +30,7 @@ class StringListStruct extends Struct {
     //todo
     print('fix the memory bytes');
     print('make sure to free the mmry');
-    final pStrList = malloc.allocate<StringListStruct>(0);
+    final pStrList = malloc<StringListStruct>();
     pStrList.ref.list = ppList;
     pStrList.ref.size = arr.length;
 
