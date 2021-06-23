@@ -29,7 +29,7 @@ class FileExplorerRepository {
       case FileExplorerSource.ARCHIVE:
         try {
           final _params = ListArchive(
-            filename: request.archiveFilepath!,
+            filename: request.archiveFilepath,
             listDirectoryPath: request.path,
             password: request.password,
             gitIgnorePattern: request.gitIgnorePattern,
@@ -37,12 +37,12 @@ class FileExplorerRepository {
             orderDir: request.orderDir,
           );
 
-          final _result = await (_archiveDataSource.listFiles(
+          final _result = await _archiveDataSource.listFiles(
             listArchiveRequest: _params,
             invalidateCache: invalidateCache,
-          ) as FutureOr<DC<Exception, List<FileListingResponse>>>);
+          );
 
-          if (_result.hasError) {
+          if (_result!.hasError) {
             handleException(
               _result.error,
               allowLogging: true,

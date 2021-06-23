@@ -12,17 +12,17 @@ class StringListStruct extends Struct {
     List<String> arr,
     List<Pointer<NativeType>> ptrList,
   ) {
-    final pUtf = arr.map((e) => e.toNativeUtf8()).toList();
+    final pUtfList = arr.map((e) => e.toNativeUtf8()).toList();
 
     // ignore: omit_local_variable_types
     final Pointer<Pointer<Utf8>> ppList = malloc();
 
     for (var i = 0; i < arr.length; i++) {
-      ppList[i] = pUtf[i];
+      ppList[i] = pUtfList[i];
     }
 
     ptrList.add(ppList);
-    ptrList.addAll(pUtf);
+    ptrList.addAll(pUtfList);
 
     final pStrList = malloc<StringListStruct>();
     pStrList.ref.list = ppList;

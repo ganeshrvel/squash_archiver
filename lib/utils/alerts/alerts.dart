@@ -1,10 +1,10 @@
 import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/widgets.dart';
-import 'package:squash_archiver/utils/utils/functs.dart';
 import 'package:injectable/injectable.dart';
 import 'package:squash_archiver/common/helpers/flushbar_helper.dart';
 import 'package:squash_archiver/utils/alerts/alerts_helper.dart';
 import 'package:squash_archiver/utils/alerts/alerts_model.dart';
+import 'package:squash_archiver/utils/utils/functs.dart';
 
 @LazySingleton()
 class Alerts {

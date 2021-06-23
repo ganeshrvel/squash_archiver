@@ -1,8 +1,8 @@
+import 'package:after_layout/after_layout.dart';
 import 'package:flutter/material.dart';
 import 'package:squash_archiver/common/di/di.dart';
-import 'package:after_layout/after_layout.dart';
-import 'package:squash_archiver/utils/alerts/alerts_model.dart';
 import 'package:squash_archiver/utils/alerts/alerts.dart';
+import 'package:squash_archiver/utils/alerts/alerts_model.dart';
 import 'package:squash_archiver/utils/log/log.dart';
 
 abstract class SfWidget<S extends StatefulWidget> extends State<S>

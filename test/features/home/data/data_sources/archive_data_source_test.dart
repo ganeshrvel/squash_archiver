@@ -90,11 +90,11 @@ Future<void> main() async {
         // confirm that the [cachedListArchiveResult] cache is empty
         expect(_archiveDataSource.cachedListArchiveResult, equals(null));
 
-        final _result = await (_archiveDataSource.listFiles(
+        final _result = await _archiveDataSource.listFiles(
           listArchiveRequest: _request,
-        ) as FutureOr<DC<Exception, List<FileListingResponse>>>);
+        );
 
-        expect(_result.hasError, equals(false));
+        expect(_result!.hasError, equals(false));
         expect(_result.hasData, equals(true));
 
         expect(_result.data!.length, equals(1));
@@ -132,11 +132,11 @@ Future<void> main() async {
 
         _expectCachedFileList(archiveDataSource: _archiveDataSource);
 
-        final _result = await (_archiveDataSource.listFiles(
+        final _result = await _archiveDataSource.listFiles(
           listArchiveRequest: _request,
-        ) as FutureOr<DC<Exception, List<FileListingResponse>>>);
+        );
 
-        expect(_result.hasError, equals(false));
+        expect(_result!.hasError, equals(false));
         expect(_result.hasData, equals(true));
 
         expect(_result.data!.length, equals(1));
@@ -172,11 +172,11 @@ Future<void> main() async {
 
         _expectCachedFileList(archiveDataSource: _archiveDataSource);
 
-        final _result = await (_archiveDataSource.listFiles(
+        final _result = await _archiveDataSource.listFiles(
           listArchiveRequest: _request,
-        ) as FutureOr<DC<Exception, List<FileListingResponse>>>);
+        );
 
-        expect(_result.hasError, equals(false));
+        expect(_result!.hasError, equals(false));
         expect(_result.hasData, equals(true));
 
         expect(_result.data!.length, equals(4));
@@ -217,11 +217,11 @@ Future<void> main() async {
 
         _expectCachedFileList(archiveDataSource: _archiveDataSource);
 
-        final _result = await (_archiveDataSource.listFiles(
+        final _result = await _archiveDataSource.listFiles(
           listArchiveRequest: _request,
-        ) as FutureOr<DC<Exception, List<FileListingResponse>>>);
+        );
 
-        expect(_result.hasError, equals(false));
+        expect(_result!.hasError, equals(false));
         expect(_result.hasData, equals(true));
 
         expect(_result.data!.length, equals(4));
@@ -262,11 +262,11 @@ Future<void> main() async {
 
         _expectCachedFileList(archiveDataSource: _archiveDataSource);
 
-        final _result = await (_archiveDataSource.listFiles(
+        final _result = await _archiveDataSource.listFiles(
           listArchiveRequest: _request,
-        ) as FutureOr<DC<Exception, List<FileListingResponse>>>);
+        );
 
-        expect(_result.hasError, equals(false));
+        expect(_result!.hasError, equals(false));
         expect(_result.hasData, equals(true));
 
         expect(_result.data!.length, equals(4));
@@ -308,11 +308,11 @@ Future<void> main() async {
 
         _expectCachedFileList(archiveDataSource: _archiveDataSource);
 
-        final _result = await (_archiveDataSource.listFiles(
+        final _result = await _archiveDataSource.listFiles(
           listArchiveRequest: _request,
-        ) as FutureOr<DC<Exception, List<FileListingResponse>>>);
+        );
 
-        expect(_result.hasError, equals(false));
+        expect(_result!.hasError, equals(false));
         expect(_result.hasData, equals(true));
 
         expect(_result.data!.length, equals(4));
@@ -353,11 +353,11 @@ Future<void> main() async {
 
         _expectCachedFileList(archiveDataSource: _archiveDataSource);
 
-        final _result = await (_archiveDataSource.listFiles(
+        final _result = await _archiveDataSource.listFiles(
           listArchiveRequest: _request,
-        ) as FutureOr<DC<Exception, List<FileListingResponse>>>);
+        );
 
-        expect(_result.hasError, equals(false));
+        expect(_result!.hasError, equals(false));
         expect(_result.hasData, equals(true));
 
         expect(_result.data!.length, equals(4));
@@ -396,11 +396,11 @@ Future<void> main() async {
 
         _expectCachedFileList(archiveDataSource: _archiveDataSource);
 
-        final _result = await (_archiveDataSource.listFiles(
+        final _result = await _archiveDataSource.listFiles(
           listArchiveRequest: _request,
-        ) as FutureOr<DC<Exception, List<FileListingResponse>>>);
+        );
 
-        expect(_result.hasError, equals(false));
+        expect(_result!.hasError, equals(false));
         expect(_result.hasData, equals(true));
 
         expect(_result.data!.length, equals(4));
@@ -439,11 +439,11 @@ Future<void> main() async {
 
         _expectCachedFileList(archiveDataSource: _archiveDataSource);
 
-        final _result = await (_archiveDataSource.listFiles(
+        final _result = await _archiveDataSource.listFiles(
           listArchiveRequest: _request,
-        ) as FutureOr<DC<Exception, List<FileListingResponse>>>);
+        );
 
-        expect(_result.hasError, equals(false));
+        expect(_result!.hasError, equals(false));
         expect(_result.hasData, equals(true));
 
         expect(_result.data!.length, equals(1));
@@ -484,11 +484,11 @@ Future<void> main() async {
 
         _expectCachedFileList(archiveDataSource: _archiveDataSource);
 
-        final _result = await (_archiveDataSource.listFiles(
+        final _result = await _archiveDataSource.listFiles(
           listArchiveRequest: _request,
-        ) as FutureOr<DC<Exception, List<FileListingResponse>>>);
+        );
 
-        expect(_result.hasError, equals(true));
+        expect(_result!.hasError, equals(true));
         expect(_result.hasData, equals(false));
 
         expect(_result.data?.length ?? 0, equals(0));
@@ -517,11 +517,11 @@ Future<void> main() async {
         // confirm that the [cachedListArchiveResult] cache is empty
         expect(_archiveDataSource.cachedListArchiveResult, equals(null));
 
-        final _result = await (_archiveDataSource.listFiles(
+        final _result = await _archiveDataSource.listFiles(
           listArchiveRequest: _request,
-        ) as FutureOr<DC<Exception, List<FileListingResponse>>>);
+        );
 
-        expect(_result.hasError, equals(false));
+        expect(_result!.hasError, equals(false));
         expect(_result.hasData, equals(true));
 
         expect(_result.data!.length, equals(1));
@@ -559,11 +559,11 @@ Future<void> main() async {
 
         _expectCachedFileList(archiveDataSource: _archiveDataSource);
 
-        final _result = await (_archiveDataSource.listFiles(
+        final _result = await _archiveDataSource.listFiles(
           listArchiveRequest: _request,
-        ) as FutureOr<DC<Exception, List<FileListingResponse>>>);
+        );
 
-        expect(_result.hasError, equals(false));
+        expect(_result!.hasError, equals(false));
         expect(_result.hasData, equals(true));
 
         expect(_result.data!.length, equals(1));
@@ -603,11 +603,11 @@ Future<void> main() async {
 
         _expectCachedFileList(archiveDataSource: _archiveDataSource);
 
-        final _result = await (_archiveDataSource.listFiles(
+        final _result = await _archiveDataSource.listFiles(
           listArchiveRequest: _request,
-        ) as FutureOr<DC<Exception, List<FileListingResponse>>>);
+        );
 
-        expect(_result.hasError, equals(false));
+        expect(_result!.hasError, equals(false));
         expect(_result.hasData, equals(true));
 
         expect(_result.data!.length, equals(1));
@@ -684,11 +684,11 @@ Future<void> main() async {
 
         _expectCachedFileList(archiveDataSource: _archiveDataSource);
 
-        final _result = await (_archiveDataSource.listFiles(
+        final _result = await _archiveDataSource.listFiles(
           listArchiveRequest: _request,
-        ) as FutureOr<DC<Exception, List<FileListingResponse>>>);
+        );
 
-        expect(_result.hasError, equals(false));
+        expect(_result!.hasError, equals(false));
         expect(_result.hasData, equals(true));
 
         expect(_result.data!.length, equals(1));

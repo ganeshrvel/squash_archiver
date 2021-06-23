@@ -1,7 +1,7 @@
 import 'package:flutter/widgets.dart';
-import 'package:squash_archiver/constants/env.dart';
 import 'package:injectable/injectable.dart';
 import 'package:sentry/sentry.dart';
+import 'package:squash_archiver/constants/env.dart';
 import 'package:squash_archiver/utils/device_details/device_details.dart';
 
 @LazySingleton()

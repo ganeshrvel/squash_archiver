@@ -1,9 +1,9 @@
 import 'dart:io';
 
+import 'package:path/path.dart' as path;
 import 'package:squash_archiver/constants/app_default_values.dart';
 import 'package:squash_archiver/constants/app_files.dart';
 import 'package:squash_archiver/utils/utils/functs.dart';
-import 'package:path/path.dart' as path;
 
 String getFileName(String pathName) {
   if (isNullOrEmpty(pathName)) {

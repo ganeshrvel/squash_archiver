@@ -1,8 +1,8 @@
 import 'dart:io';
 
 import 'package:flutter/foundation.dart' as foundation;
-import 'package:squash_archiver/common/di/di.dart';
 import 'package:injectable/injectable.dart';
+import 'package:squash_archiver/common/di/di.dart';
 
 @LazySingleton()
 class Env {

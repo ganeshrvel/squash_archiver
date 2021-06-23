@@ -10,16 +10,16 @@ import 'package:squash_archiver/common/themes/colors.dart';
 import 'package:squash_archiver/common/themes/theme_helper.dart';
 import 'package:squash_archiver/constants/app_default_values.dart';
 import 'package:squash_archiver/constants/sizes.dart';
-import 'package:squash_archiver/features/home/data/enums/file_explorer_source.dart';
 import 'package:squash_archiver/features/app/data/models/keyboard_modifier_intent.dart';
+import 'package:squash_archiver/features/home/data/enums/file_explorer_source.dart';
 import 'package:squash_archiver/features/home/data/models/file_listing_request.dart';
 import 'package:squash_archiver/features/home/ui/pages/file_explorer_keyboard_modifiers_store.dart';
 import 'package:squash_archiver/features/home/ui/pages/file_explorer_screen_store.dart';
 import 'package:squash_archiver/features/home/ui/widgets/file_explorer_pane.dart';
 import 'package:squash_archiver/features/home/ui/widgets/file_explorer_password_overlay.dart';
+import 'package:squash_archiver/features/home/ui/widgets/file_explorer_sidebar.dart';
 import 'package:squash_archiver/features/home/ui/widgets/file_explorer_table_header.dart';
 import 'package:squash_archiver/features/home/ui/widgets/file_explorer_toolbar.dart';
-import 'package:squash_archiver/features/home/ui/widgets/file_explorer_sidebar.dart';
 import 'package:squash_archiver/utils/utils/functs.dart';
 import 'package:squash_archiver/utils/utils/store_helper.dart';
 import 'package:squash_archiver/widget_extends/sf_widget.dart';
@@ -41,28 +41,35 @@ class FileExplorerScreen extends StatefulWidget {
 }
 
 class _FileExplorerScreenState extends SfWidget<FileExplorerScreen> {
-  late final FileExplorerScreenStore _fileExplorerScreenStore;
+  late final FileExplorerScreenStore _fileExplorerScreenStore =
+      FileExplorerScreenStore();
 
   late final FileExplorerKeyboardModifiersStore
-      _fileExplorerKeyboardModifiersStore;
+      _fileExplorerKeyboardModifiersStore =
+      FileExplorerKeyboardModifiersStore();
+
+  late final ScrollController _scrollController = ScrollController();
+
+  late final FocusNode _fileExplorerFocusNode = FocusNode();
+
+  late final ShortcutManager _shortcutManager = ShortcutManager();
 
   late final List<ReactionDisposer> _disposers;
-
-  late final ScrollController _scrollController;
-
-  late final FocusNode _fileExplorerFocusNode;
-
-  late final ShortcutManager _shortcutManager;
 
   ThemePalette get _palette => getPalette(context);
 
   @override
   void initState() {
-    _fileExplorerScreenStore = FileExplorerScreenStore();
-    _fileExplorerKeyboardModifiersStore = FileExplorerKeyboardModifiersStore();
-    _scrollController = ScrollController();
-    _fileExplorerFocusNode = FocusNode();
-    _shortcutManager = ShortcutManager();
+    _disposers = [
+      reaction(
+        (_) => _fileExplorerScreenStore.fileContainersException,
+        (Exception? fileContainersException) {
+          if (isNull(fileContainersException)) {
+            return;
+          }
+        },
+      ),
+    ];
 
     super.initState();
   }
@@ -84,17 +91,6 @@ class _FileExplorerScreenState extends SfWidget<FileExplorerScreen> {
 
   @override
   void didChangeDependencies() {
-    _disposers = [
-      reaction(
-        (_) => _fileExplorerScreenStore.fileContainersException,
-        (Exception? fileContainersException) {
-          if (isNull(fileContainersException)) {
-            return;
-          }
-        },
-      ),
-    ];
-
     super.didChangeDependencies();
   }
 
@@ -244,10 +240,10 @@ class _FileExplorerScreenState extends SfWidget<FileExplorerScreen> {
   Widget _buildBody() {
     return MultiProvider(
       providers: [
-        Provider<FileExplorerScreenStore?>(
+        Provider<FileExplorerScreenStore>(
           create: (_) => _fileExplorerScreenStore,
         ),
-        Provider<FileExplorerKeyboardModifiersStore?>(
+        Provider<FileExplorerKeyboardModifiersStore>(
           create: (_) => _fileExplorerKeyboardModifiersStore,
         ),
       ],

@@ -1,9 +1,8 @@
 import 'package:archiver_ffi/archiver_ffi.dart';
-
+import 'package:dartx/dartx.dart';
 import 'package:squash_archiver/constants/app_default_values.dart';
 import 'package:squash_archiver/features/home/data/enums/file_explorer_entities_sort_by.dart';
 import 'package:squash_archiver/utils/utils/functs.dart';
-import 'package:dartx/dartx.dart';
 
 List<FileInfo> sortFileExplorerEntities({
   required List<FileInfo> files,

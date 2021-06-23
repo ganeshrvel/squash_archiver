@@ -30,8 +30,8 @@ abstract class _FileExplorerScreenStoreBase with Store {
       ObservableList<FileListingResponse>();
 
   @observable
-  ObservableFuture<DC<Exception, List<FileListingResponse>>>
-      fileContainersFuture = ObservableFuture(Future.value());
+  ObservableFuture<DC<Exception, List<FileListingResponse>>>?
+      fileContainersFuture;
 
   /// [Exception] from [_fetchFiles]
   @observable
@@ -277,7 +277,7 @@ abstract class _FileExplorerScreenStoreBase with Store {
 
     final _data = await fileContainersFuture;
 
-    _data.pick(
+    _data!.pick(
       onError: (error) async {
         /// set [requestPassword] if the [error] is [PasswordRequiredException]
         if (error is PasswordRequiredException) {

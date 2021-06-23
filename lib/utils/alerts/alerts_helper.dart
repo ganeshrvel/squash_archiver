@@ -1,9 +1,8 @@
 import 'package:flutter/widgets.dart';
-import 'package:squash_archiver/utils/error_handling/handle_exception.dart';
 import 'package:injectable/injectable.dart';
-
 import 'package:squash_archiver/services/crashes_service.dart';
 import 'package:squash_archiver/utils/alerts/alerts_model.dart';
+import 'package:squash_archiver/utils/error_handling/handle_exception.dart';
 import 'package:squash_archiver/utils/log/log.dart';
 
 @LazySingleton()

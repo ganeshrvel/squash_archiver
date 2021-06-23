@@ -1,18 +1,17 @@
 ///
 /// This is an app wide store
 ///
-
 import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
-import 'package:squash_archiver/common/exceptions/cache_exception.dart';
-import 'package:squash_archiver/features/app/data/models/language_model.dart';
 import 'package:mobx/mobx.dart';
+import 'package:squash_archiver/common/exceptions/cache_exception.dart';
 import 'package:squash_archiver/common/l10n/l10n_helpers.dart';
-import 'package:squash_archiver/features/app/data/models/theme_model.dart';
 import 'package:squash_archiver/common/themes/theme_helper.dart';
 import 'package:squash_archiver/features/app/data/controllers/app_controller.dart';
+import 'package:squash_archiver/features/app/data/models/language_model.dart';
+import 'package:squash_archiver/features/app/data/models/theme_model.dart';
 import 'package:squash_archiver/utils/log/log.dart';
 
 part 'app_store.g.dart';
@@ -147,8 +146,8 @@ abstract class _AppStoreBase with Store {
 
   @action
   Future<void> toggleAppTheme() async {
-    final _currentAppTheme = await (getAppTheme() as FutureOr<ThemeModel>);
-    final _nextAppTheme = _currentAppTheme.mode == ThemeMode.dark
+    final _currentAppTheme = await getAppTheme();
+    final _nextAppTheme = _currentAppTheme?.mode == ThemeMode.dark
         ? const ThemeModel(mode: ThemeMode.light)
         : const ThemeModel(mode: ThemeMode.dark);
 

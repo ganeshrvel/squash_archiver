@@ -100,7 +100,7 @@ mixin _$FileExplorerScreenStore on _FileExplorerScreenStoreBase, Store {
       Atom(name: '_FileExplorerScreenStoreBase.fileContainersFuture');
 
   @override
-  ObservableFuture<DC<Exception, List<FileListingResponse>>>
+  ObservableFuture<DC<Exception, List<FileListingResponse>>>?
       get fileContainersFuture {
     _$fileContainersFutureAtom.reportRead();
     return super.fileContainersFuture;
@@ -108,7 +108,7 @@ mixin _$FileExplorerScreenStore on _FileExplorerScreenStoreBase, Store {
 
   @override
   set fileContainersFuture(
-      ObservableFuture<DC<Exception, List<FileListingResponse>>> value) {
+      ObservableFuture<DC<Exception, List<FileListingResponse>>>? value) {
     _$fileContainersFutureAtom.reportWrite(value, super.fileContainersFuture,
         () {
       super.fileContainersFuture = value;

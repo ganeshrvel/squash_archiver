@@ -1,22 +1,22 @@
 import 'package:dio/dio.dart';
+import 'package:injectable/injectable.dart';
+import 'package:pretty_dio_logger/pretty_dio_logger.dart';
+import 'package:squash_archiver/common/api_client/api_errors/bad_network_api_error.dart';
+import 'package:squash_archiver/common/api_client/api_errors/internal_server_api_error.dart';
 import 'package:squash_archiver/common/api_client/api_errors/network_404_api_error.dart';
+import 'package:squash_archiver/common/api_client/api_errors/unauthorized_api_error.dart';
+import 'package:squash_archiver/common/api_client/interceptors/bad_network_error_interceptor.dart';
+import 'package:squash_archiver/common/api_client/interceptors/header_interceptor.dart';
+import 'package:squash_archiver/common/api_client/interceptors/internal_server_error_interceptor.dart';
 import 'package:squash_archiver/common/api_client/interceptors/network_404_error_interceptor.dart';
+import 'package:squash_archiver/common/api_client/interceptors/unauthorized_interceptor.dart';
 import 'package:squash_archiver/common/exceptions/bad_network_exception.dart';
 import 'package:squash_archiver/common/exceptions/dio_exception.dart';
 import 'package:squash_archiver/common/exceptions/internal_server_exception.dart';
 import 'package:squash_archiver/common/exceptions/network_404_exception.dart';
 import 'package:squash_archiver/common/exceptions/user_unauthenticated_exception.dart';
-import 'package:squash_archiver/utils/error_handling/handle_exception.dart';
-import 'package:injectable/injectable.dart';
-import 'package:squash_archiver/common/api_client/api_errors/bad_network_api_error.dart';
-import 'package:squash_archiver/common/api_client/api_errors/internal_server_api_error.dart';
-import 'package:squash_archiver/common/api_client/api_errors/unauthorized_api_error.dart';
-import 'package:squash_archiver/common/api_client/interceptors/header_interceptor.dart';
-import 'package:squash_archiver/common/api_client/interceptors/bad_network_error_interceptor.dart';
-import 'package:squash_archiver/common/api_client/interceptors/internal_server_error_interceptor.dart';
-import 'package:squash_archiver/common/api_client/interceptors/unauthorized_interceptor.dart';
 import 'package:squash_archiver/constants/env.dart';
-import 'package:pretty_dio_logger/pretty_dio_logger.dart';
+import 'package:squash_archiver/utils/error_handling/handle_exception.dart';
 import 'package:squash_archiver/utils/utils/api.dart';
 
 enum _allowedDioMethods {

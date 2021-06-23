@@ -2,8 +2,8 @@ import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:flutter/material.dart';
 import 'package:squash_archiver/constants/image_paths.dart';
 import 'package:squash_archiver/constants/strings.dart';
-import 'package:squash_archiver/widget_extends/sf_widget.dart';
 import 'package:squash_archiver/features/splash/ui/widgets/splash_loading.dart';
+import 'package:squash_archiver/widget_extends/sf_widget.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);

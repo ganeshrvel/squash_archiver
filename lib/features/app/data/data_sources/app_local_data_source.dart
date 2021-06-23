@@ -1,13 +1,13 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:squash_archiver/common/exceptions/cache_exception.dart';
-import 'package:squash_archiver/features/app/data/models/language_model.dart';
-import 'package:injectable/injectable.dart';
 import 'package:data_channel/data_channel.dart';
-import 'package:squash_archiver/features/app/data/models/theme_model.dart';
-import 'package:squash_archiver/constants/shared_preferences_keys.dart';
+import 'package:injectable/injectable.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:squash_archiver/common/exceptions/cache_exception.dart';
+import 'package:squash_archiver/constants/shared_preferences_keys.dart';
+import 'package:squash_archiver/features/app/data/models/language_model.dart';
+import 'package:squash_archiver/features/app/data/models/theme_model.dart';
 
 @LazySingleton()
 class AppLocalDataSource {

@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -5,8 +6,7 @@ import 'package:flutter_portal/flutter_portal.dart';
 import 'package:squash_archiver/common/di/di.dart';
 import 'package:squash_archiver/common/l10n/l10n.dart';
 import 'package:squash_archiver/common/l10n/l10n_helpers.dart';
-import 'package:squash_archiver/common/router/router.gr.dart' as router_gen;
-import 'package:squash_archiver/common/router/router_auth_guard.dart';
+import 'package:squash_archiver/common/router/root_router.dart';
 import 'package:squash_archiver/common/themes/theme_helper.dart';
 import 'package:squash_archiver/constants/env.dart';
 import 'package:squash_archiver/constants/strings.dart';
@@ -16,10 +16,6 @@ import 'package:squash_archiver/widgets/text/textography.dart';
 
 class AppScreen extends StatelessWidget {
   final AppStore _appStore = getIt<AppStore>();
-
-  final _appRouter = router_gen.AppRouter(
-    routerAuthGuard: RouterAuthGuard(),
-  );
 
   void setErrorBuilder() {
     ErrorWidget.builder = (FlutterErrorDetails errorDetails) {
@@ -67,7 +63,11 @@ class AppScreen extends StatelessWidget {
             ),
             supportedLocales: supportedL10nLanguages
                 .map(
-                    (language) => Locale(language.locale, language.countryCode))
+                  (language) => Locale(
+                    language.locale,
+                    language.countryCode,
+                  ),
+                )
                 .toList(),
             localizationsDelegates: [
               L10n.delegate,
@@ -87,8 +87,11 @@ class AppScreen extends StatelessWidget {
                 orElse: () => supportedLocales.first,
               );
             },
-            routerDelegate: _appRouter.delegate(),
-            routeInformationParser: _appRouter.defaultRouteParser(),
+            routeInformationParser: rootRouter.defaultRouteParser(),
+            routerDelegate: AutoRouterDelegate(
+              rootRouter,
+              navigatorObservers: () => [AutoRouteObserver()],
+            ),
           ),
         );
       },

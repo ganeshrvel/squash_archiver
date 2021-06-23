@@ -4,9 +4,7 @@ import 'package:squash_archiver/widgets/app_bar/app_bar_title.dart';
 import 'package:squash_archiver/widgets/text/textography.dart';
 
 class PageNotFoundScreen extends StatelessWidget {
-  final String routeName;
-
-  const PageNotFoundScreen(this.routeName);
+  const PageNotFoundScreen();
 
   @override
   Widget build(BuildContext context) {

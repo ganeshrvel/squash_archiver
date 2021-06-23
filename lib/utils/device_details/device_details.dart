@@ -1,10 +1,10 @@
 import 'dart:async';
-
 import 'dart:io';
-import 'package:flutter/services.dart';
+
 import 'package:device_info/device_info.dart';
-import 'package:squash_archiver/utils/log/log.dart';
+import 'package:flutter/services.dart';
 import 'package:injectable/injectable.dart';
+import 'package:squash_archiver/utils/log/log.dart';
 
 /// noted issue: https://github.com/flutter/flutter/issues/20761#issuecomment-493434578
 ///

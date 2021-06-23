@@ -7,12 +7,9 @@ import 'package:injectable/injectable.dart';
 import 'package:mobx/mobx.dart';
 import 'package:squash_archiver/common/di/di.dart' show getIt, getItInit;
 import 'package:squash_archiver/constants/env.dart';
-import 'package:squash_archiver/constants/service_keys.dart';
 import 'package:squash_archiver/features/app/ui/pages/app_screen.dart';
 import 'package:squash_archiver/utils/device_details/app_meta_info.dart';
 import 'package:squash_archiver/utils/log/log.dart';
-import 'package:sentry_flutter/sentry_flutter.dart';
-import 'package:squash_archiver/utils/utils/strings.dart';
 
 Future<void> _logFlutterOnError(FlutterErrorDetails details) async {
   Zone.current.handleUncaughtError(details.exception, details.stack!);
@@ -34,7 +31,10 @@ Future<void> main() async {
   await getItInit(env: Environment.dev);
   final _appMetaInfo = getIt<AppMetaInfo>();
   await _appMetaInfo.init();
-  //
+
+  print('todo new builder.yaml');
+  //todo new builder.yaml
+  //todo add sentry
   // await SentryFlutter.init(
   //   (options) {
   //     options

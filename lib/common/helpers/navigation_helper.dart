@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/widgets.dart';
+import 'package:squash_archiver/common/router/root_router.dart';
 import 'package:squash_archiver/common/router/router.gr.dart';
 
 bool? isCurrentScreen(BuildContext? context) {
@@ -20,92 +21,69 @@ String? getCurrentScreen(BuildContext? context) {
 
 Future<T?> navigateToRoute<T extends Object>(
   BuildContext? context,
-  String routeName, {
-  Object? routeArgs,
+  PageRouteInfo route, {
   bool? skipSameRouteCheck,
 }) async {
   final _skipSameRouteCheck = skipSameRouteCheck ?? true;
 
-  if (!_skipSameRouteCheck && getCurrentScreen(context) == routeName) {
+  if (!_skipSameRouteCheck && getCurrentScreen(context) == route.routeName) {
     return null;
   }
 
-  if (routeName == FileExplorerScreenRoute.name) {
+  if (route.routeName == FileExplorerScreenRoute.name) {
     var _routeArgs = const FileExplorerScreenRouteArgs();
 
-    if (routeArgs is FileExplorerScreenRouteArgs) {
-      _routeArgs = routeArgs;
+    if (route.args is FileExplorerScreenRouteArgs) {
+      _routeArgs = route.args as FileExplorerScreenRouteArgs;
     }
 
     return navigateToFileExplorerScreen<T>(routeArgs: _routeArgs);
   }
 
-  if (routeArgs != null) {
-    return ExtendedNavigator?.root?.push<T>(
-      routeName,
-      arguments: routeArgs,
-    );
-  }
-  return ExtendedNavigator?.root?.push<T>(routeName);
+  return rootRouter.push(route);
 }
 
 Future<T?> navigateToRouteAndReplace<T extends Object>(
-  String routeName, {
-  Object? routeArgs,
-}) async {
-  if (routeName == FileExplorerScreenRoute.name) {
+  PageRouteInfo route,
+) async {
+  if (route.routeName == FileExplorerScreenRoute.name) {
     var _routeArgs = const FileExplorerScreenRouteArgs();
 
-    if (routeArgs is FileExplorerScreenRouteArgs) {
-      _routeArgs = routeArgs;
+    if (route.args is FileExplorerScreenRouteArgs) {
+      _routeArgs = route.args as FileExplorerScreenRouteArgs;
     }
 
     return navigateToFileExplorerScreen<T>(routeArgs: _routeArgs);
   }
 
-  if (routeArgs != null) {
-    return ExtendedNavigator?.root?.replace(
-      routeName,
-      arguments: routeArgs,
-    );
-  }
-
-  return ExtendedNavigator?.root?.replace(
-    routeName,
+  return rootRouter.replace(
+    route,
   );
 }
 
 Future<T?> navigateToRouteAndRemoveUntil<T extends Object>(
-  String routeName, {
-  Object? routeArgs,
-}) async {
-  if (routeArgs != null) {
-    return ExtendedNavigator?.root?.pushAndRemoveUntil<T>(
-      routeName,
-      (final route) => false,
-      arguments: routeArgs,
-    );
-  }
-
-  return ExtendedNavigator?.root?.pushAndRemoveUntil<T>(
-    routeName,
-    (final route) => false,
+  PageRouteInfo route,
+) async {
+  return rootRouter.pushAndPopUntil<T>(
+    route,
+    predicate: (r) => false,
   );
 }
 
-void popCurrentRoute<T extends Object>({T? result}) {
-  return ExtendedNavigator?.root?.pop<T>(result);
+Future<bool> popCurrentRoute<T extends Object>({T? result}) async {
+  return rootRouter.pop<T>(result);
 }
 
 bool canPopCurrentRoute<T>() {
-  return ExtendedNavigator?.root?.canPop() ?? false;
+  return rootRouter.canPopSelfOrChildren;
 }
 
 Future<T?> navigateToFileExplorerScreen<T extends Object>({
   required FileExplorerScreenRouteArgs routeArgs,
 }) async {
   return navigateToRouteAndRemoveUntil<T>(
-    FileExplorerScreenRoute.name,
-    routeArgs: routeArgs,
+    FileExplorerScreenRoute(
+      dummy: routeArgs.dummy,
+    ),
   );
 }
