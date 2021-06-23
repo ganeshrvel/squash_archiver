@@ -9,6 +9,18 @@ class ArchiverException implements Exception {
   }
 }
 
+class FfiException implements ArchiverException {
+  @override
+  final String error;
+
+  FfiException(this.error);
+
+  @override
+  String toString() {
+    return error;
+  }
+}
+
 class FileNotFoundException implements ArchiverException {
   @override
   final String error;
