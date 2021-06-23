@@ -33,17 +33,18 @@ Future<void> main() async {
   // register all dependecy injection
   await getItInit(env: Environment.dev);
   final _appMetaInfo = getIt<AppMetaInfo>();
-
-  await SentryFlutter.init(
-    (options) {
-      options
-        ..dsn = ServiceKeys.SENTRY_DSN
-        ..environment = enumToString(env.config.environment)
-        ..release = _appMetaInfo.release
-        ..attachStacktrace = true
-        ..useNativeBreadcrumbTracking();
-    },
-  );
+  await _appMetaInfo.init();
+  //
+  // await SentryFlutter.init(
+  //   (options) {
+  //     options
+  //       ..dsn = ServiceKeys.SENTRY_DSN
+  //       ..environment = enumToString(env.config.environment)
+  //       ..release = _appMetaInfo.release
+  //       ..attachStacktrace = true
+  //       ..useNativeBreadcrumbTracking();
+  //   },
+  // );
 
   // todo add firebase
   // await Firebase.initializeApp();

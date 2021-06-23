@@ -1,4 +1,4 @@
-import 'package:flushbar/flushbar.dart';
+import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/widgets.dart';
 import 'package:squash_archiver/utils/utils/functs.dart';
 import 'package:injectable/injectable.dart';
@@ -125,7 +125,7 @@ class Alerts {
     _flushbarList.add(_activeAlertItem);
 
     return _flushbarInstance
-      ..onStatusChanged = (FlushbarStatus status) {
+      ..onStatusChanged = (FlushbarStatus? status) {
         switch (status) {
           case FlushbarStatus.DISMISSED:
             {
@@ -139,6 +139,9 @@ class Alerts {
           case FlushbarStatus.IS_APPEARING:
             break;
           case FlushbarStatus.IS_HIDING:
+            break;
+
+          default:
             break;
         }
       }
