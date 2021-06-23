@@ -197,3 +197,10 @@ func FreeUnpackFilesMemory(ptrAddr int64) {
 
 // Unused
 func main() {}
+
+// TODO symlink and hardlink
+// TODO delete file(s)
+// todo fix windows archive files
+// todo search file(s)
+// todo test archive
+// todo single file compressors (gz, tar, bz...) .
