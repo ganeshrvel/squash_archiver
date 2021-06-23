@@ -1,4 +1,3 @@
-
 import 'package:squash_archiver/utils/utils/error.dart';
 
 class Network404Exception implements Exception {
@@ -18,7 +17,7 @@ class Network404Exception implements Exception {
   String toString() {
     final _errorBody = getErrorBody({
       'API URL': apiUrl,
-      'Status Code': (statusCode ).toString(),
+      'Status Code': (statusCode).toString(),
       'Error': errorMessage,
     });
 

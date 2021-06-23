@@ -25,8 +25,7 @@ class ActionBarButton extends StatelessWidget {
     this.iconColor,
     this.onPressed,
     this.iconPadding,
-  })  :
-        super(key: key);
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

@@ -47,6 +47,31 @@ class SquashArchiverLib {
   late final _dart_CloseNativeDartPort _CloseNativeDartPort =
       _CloseNativeDartPort_ptr.asFunction<_dart_CloseNativeDartPort>();
 
+  void TestFFI(
+    int port,
+    ffi.Pointer<ffi.Int8> filename,
+    ffi.Pointer<ffi.Int8> password,
+    ffi.Pointer<ffi.Int8> orderBy,
+    ffi.Pointer<ffi.Int8> orderDir,
+    ffi.Pointer<ffi.Int8> listDirectoryPath,
+    int gitIgnorePatternPtrAddr,
+    int recursive,
+  ) {
+    return _TestFFI(
+      port,
+      filename,
+      password,
+      orderBy,
+      orderDir,
+      listDirectoryPath,
+      gitIgnorePatternPtrAddr,
+      recursive,
+    );
+  }
+
+  late final _TestFFI_ptr = _lookup<ffi.NativeFunction<_c_TestFFI>>('TestFFI');
+  late final _dart_TestFFI _TestFFI = _TestFFI_ptr.asFunction<_dart_TestFFI>();
+
   void ListArchive(
     int port,
     ffi.Pointer<ffi.Int8> filename,
@@ -201,23 +226,79 @@ class __darwin_pthread_handler_rec extends ffi.Struct {
   external ffi.Pointer<__darwin_pthread_handler_rec> __next;
 }
 
-class _opaque_pthread_attr_t extends ffi.Opaque {}
+class _opaque_pthread_attr_t extends ffi.Struct {
+  @ffi.Int64()
+  external int __sig;
 
-class _opaque_pthread_cond_t extends ffi.Opaque {}
+  @ffi.Array.multi([56])
+  external ffi.Array<ffi.Int8> __opaque;
+}
 
-class _opaque_pthread_condattr_t extends ffi.Opaque {}
+class _opaque_pthread_cond_t extends ffi.Struct {
+  @ffi.Int64()
+  external int __sig;
 
-class _opaque_pthread_mutex_t extends ffi.Opaque {}
+  @ffi.Array.multi([40])
+  external ffi.Array<ffi.Int8> __opaque;
+}
 
-class _opaque_pthread_mutexattr_t extends ffi.Opaque {}
+class _opaque_pthread_condattr_t extends ffi.Struct {
+  @ffi.Int64()
+  external int __sig;
 
-class _opaque_pthread_once_t extends ffi.Opaque {}
+  @ffi.Array.multi([8])
+  external ffi.Array<ffi.Int8> __opaque;
+}
 
-class _opaque_pthread_rwlock_t extends ffi.Opaque {}
+class _opaque_pthread_mutex_t extends ffi.Struct {
+  @ffi.Int64()
+  external int __sig;
 
-class _opaque_pthread_rwlockattr_t extends ffi.Opaque {}
+  @ffi.Array.multi([56])
+  external ffi.Array<ffi.Int8> __opaque;
+}
 
-class _opaque_pthread_t extends ffi.Opaque {}
+class _opaque_pthread_mutexattr_t extends ffi.Struct {
+  @ffi.Int64()
+  external int __sig;
+
+  @ffi.Array.multi([8])
+  external ffi.Array<ffi.Int8> __opaque;
+}
+
+class _opaque_pthread_once_t extends ffi.Struct {
+  @ffi.Int64()
+  external int __sig;
+
+  @ffi.Array.multi([8])
+  external ffi.Array<ffi.Int8> __opaque;
+}
+
+class _opaque_pthread_rwlock_t extends ffi.Struct {
+  @ffi.Int64()
+  external int __sig;
+
+  @ffi.Array.multi([192])
+  external ffi.Array<ffi.Int8> __opaque;
+}
+
+class _opaque_pthread_rwlockattr_t extends ffi.Struct {
+  @ffi.Int64()
+  external int __sig;
+
+  @ffi.Array.multi([16])
+  external ffi.Array<ffi.Int8> __opaque;
+}
+
+class _opaque_pthread_t extends ffi.Struct {
+  @ffi.Int64()
+  external int __sig;
+
+  external ffi.Pointer<__darwin_pthread_handler_rec> __cleanup_stack;
+
+  @ffi.Array.multi([8176])
+  external ffi.Array<ffi.Int8> __opaque;
+}
 
 class _GoString_ extends ffi.Struct {
   external ffi.Pointer<ffi.Int8> p;
@@ -324,6 +405,28 @@ typedef _c_CloseNativeDartPort = ffi.Uint8 Function(
 
 typedef _dart_CloseNativeDartPort = int Function(
   int port,
+);
+
+typedef _c_TestFFI = ffi.Void Function(
+  ffi.Int64 port,
+  ffi.Pointer<ffi.Int8> filename,
+  ffi.Pointer<ffi.Int8> password,
+  ffi.Pointer<ffi.Int8> orderBy,
+  ffi.Pointer<ffi.Int8> orderDir,
+  ffi.Pointer<ffi.Int8> listDirectoryPath,
+  ffi.Int64 gitIgnorePatternPtrAddr,
+  ffi.Uint8 recursive,
+);
+
+typedef _dart_TestFFI = void Function(
+  int port,
+  ffi.Pointer<ffi.Int8> filename,
+  ffi.Pointer<ffi.Int8> password,
+  ffi.Pointer<ffi.Int8> orderBy,
+  ffi.Pointer<ffi.Int8> orderDir,
+  ffi.Pointer<ffi.Int8> listDirectoryPath,
+  int gitIgnorePatternPtrAddr,
+  int recursive,
 );
 
 typedef _c_ListArchive = ffi.Void Function(

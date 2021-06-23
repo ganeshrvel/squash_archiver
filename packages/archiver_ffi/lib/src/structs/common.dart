@@ -12,10 +12,13 @@ class StringListStruct extends Struct {
     List<String> arr,
     List<Pointer<NativeType>> ptrList,
   ) {
-    final pUtf = arr.map(Utf8.toUtf8).toList();
+    final pUtf = arr.map((e) => e.toNativeUtf8()).toList();
 
+    //todo
+    print('fix the memory bytes');
+    print('make sure to free the mmry');
     // ignore: omit_local_variable_types
-    final Pointer<Pointer<Utf8>> ppList = allocate(count: arr.length);
+    final Pointer<Pointer<Utf8>> ppList = malloc.allocate(0);
 
     for (var i = 0; i < arr.length; i++) {
       ppList[i] = pUtf[i];
@@ -24,11 +27,16 @@ class StringListStruct extends Struct {
     ptrList.add(ppList);
     ptrList.addAll(pUtf);
 
-    final pStrList = allocate<StringListStruct>().ref;
-    pStrList.list = ppList;
-    pStrList.size = arr.length;
+    //todo
+    print('fix the memory bytes');
+    print('make sure to free the mmry');
+    final pStrList = malloc.allocate<StringListStruct>(0);
+    pStrList.ref.list = ppList;
+    pStrList.ref.size = arr.length;
 
-    return pStrList.addressOf;
+    ptrList.add(pStrList);
+
+    return pStrList;
   }
 }
 
@@ -41,7 +49,7 @@ class ResultErrorStruct extends Struct {
     Pointer<Utf8> error,
     Pointer<Utf8> errorType,
   ) =>
-      allocate<ResultErrorStruct>().ref
+      malloc<ResultErrorStruct>().ref
         ..errorType = errorType
         ..error = error;
 }

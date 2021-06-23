@@ -1,4 +1,3 @@
-
 import 'package:squash_archiver/utils/utils/error.dart';
 
 class InternalServerException implements Exception {

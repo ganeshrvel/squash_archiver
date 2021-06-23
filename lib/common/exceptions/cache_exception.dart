@@ -1,6 +1,5 @@
 import 'package:squash_archiver/utils/utils/error.dart';
 
-
 class CacheException implements Exception {
   final Exception error;
   final StackTrace stackTrace;

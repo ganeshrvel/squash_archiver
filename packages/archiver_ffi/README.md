@@ -15,7 +15,10 @@ brew install llvm
 
 To generate the bindings
 ```shell
-pub run ffigen:setup -I/usr/local/opt/llvm/include -L/usr/local/opt/llvm/lib
+dart run ffigen
+
+# if it doesnt work then run:
+# pub run ffigen:setup -I/usr/local/opt/llvm/include -L/usr/local/opt/llvm/lib
 
 pub run ffigen
 ```

@@ -33,7 +33,7 @@ class ArchiveFileInfoStruct extends Struct {
     Pointer<Utf8> parentPath,
     Pointer<Utf8> extension,
   ) =>
-      allocate<ArchiveFileInfoStruct>().ref
+      malloc<ArchiveFileInfoStruct>().ref
         ..mode = mode
         ..size = size
         ..isDir = isDir
@@ -57,7 +57,7 @@ class ArchiveFileInfoResultStruct extends Struct {
     int totalFiles,
     Pointer<ResultErrorStruct> error,
   ) =>
-      allocate<ArchiveFileInfoResultStruct>().ref
+      malloc<ArchiveFileInfoResultStruct>().ref
         ..files = files
         ..totalFiles = totalFiles
         ..error = error;

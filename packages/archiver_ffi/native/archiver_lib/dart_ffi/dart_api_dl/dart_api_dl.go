@@ -176,7 +176,7 @@ func GetStringList(stringListPtrAddr int64) []string {
 	return goSlice
 }
 
-// List the archive
+// SendArchiveListing - List the archive
 func SendArchiveListing(port int64, err error, result *[]onearchiver.ArchiveFileInfo) {
 	//var dartObj C.Dart_CObject
 	//dartObj._type = C.Dart_CObject_kTypedData
@@ -233,7 +233,7 @@ func FreeListArchiveMemory(ptrAddr int64) {
 	C.ClearListArchiveMemory(C.int64_t(ptrAddr))
 }
 
-// Check if the archive is encrypted
+// SendIsArchiveEncrypted - Check if the archive is encrypted
 func SendIsArchiveEncrypted(port int64, err error, result *onearchiver.EncryptedArchiveInfo) {
 	var dartObj C.Dart_CObject
 	dartObj._type = C.Dart_CObject_kInt64
@@ -260,7 +260,7 @@ func FreeIsArchiveEncryptedMemory(ptrAddr int64) {
 	C.ClearIsArchiveEncryptedMemory(C.int64_t(ptrAddr))
 }
 
-// Pack files
+// SendPackFiles - Pack files
 func SendPackFiles(port int64, err error, pInfo *onearchiver.ProgressInfo, packingEnded bool) {
 	var dartObj C.Dart_CObject
 	dartObj._type = C.Dart_CObject_kInt64
@@ -290,7 +290,7 @@ func FreePackFilesMemory(ptrAddr int64) {
 	C.ClearPackFilesMemory(C.int64_t(ptrAddr))
 }
 
-// Unpack files
+// SendUnpackFiles - Unpack files
 func SendUnpackFiles(port int64, err error, pInfo *onearchiver.ProgressInfo, packingEnded bool) {
 	var dartObj C.Dart_CObject
 	dartObj._type = C.Dart_CObject_kInt64

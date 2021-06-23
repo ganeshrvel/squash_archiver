@@ -1,6 +1,5 @@
 import 'dart:io';
 
-
 import 'package:squash_archiver/constants/app_default_values.dart';
 import 'package:squash_archiver/constants/app_files.dart';
 import 'package:squash_archiver/utils/utils/functs.dart';

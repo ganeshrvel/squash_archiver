@@ -1,5 +1,3 @@
-
-
 class RouteRedirectModel {
   String routeName;
   Object? arguments;

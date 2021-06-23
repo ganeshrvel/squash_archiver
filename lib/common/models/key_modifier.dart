@@ -1,7 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/services.dart';
 
-
 /// Key modifier action type enum
 enum KeyModifierActionType {
   /// select all activated
@@ -35,7 +34,7 @@ class KeyModifier extends Equatable {
     required this.keys,
     required this.actionType,
     required this.label,
-  }) ;
+  });
 
   @override
   List<Object> get props => [

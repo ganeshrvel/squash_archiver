@@ -1,6 +1,5 @@
 import 'package:equatable/equatable.dart';
 
-
 class TruncatedString extends Equatable {
   final String original;
   final String firstChunk;

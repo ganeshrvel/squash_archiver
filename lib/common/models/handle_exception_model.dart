@@ -1,5 +1,3 @@
-
-
 class HandleExceptionModel {
   final StackTrace? stackTrace;
   final String? body;

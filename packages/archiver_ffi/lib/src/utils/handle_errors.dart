@@ -3,13 +3,15 @@ import 'dart:ffi';
 import 'package:archiver_ffi/src/exceptions/exceptions.dart';
 import 'package:archiver_ffi/src/structs/common.dart';
 import 'package:data_channel/data_channel.dart';
+import 'package:ffi/ffi.dart';
+
 
 DC<ArchiverException, T> handleError<T>(Pointer<ResultErrorStruct> errorPtr,
     {T? data}) {
   ArchiverException _exception;
 
-  final error = errorPtr.ref.error.ref.toString();
-  final errorType = errorPtr.ref.errorType.ref.toString();
+  final error = errorPtr.ref.error.toDartString();
+  final errorType = errorPtr.ref.errorType.toDartString();
 
   switch (errorType) {
     case 'ErrorFileNotFound':

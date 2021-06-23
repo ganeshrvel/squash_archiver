@@ -14,7 +14,6 @@ import 'package:squash_archiver/utils/log/log.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:squash_archiver/utils/utils/strings.dart';
 
-
 Future<void> _logFlutterOnError(FlutterErrorDetails details) async {
   Zone.current.handleUncaughtError(details.exception, details.stack!);
 
@@ -36,7 +35,7 @@ Future<void> main() async {
   final _appMetaInfo = getIt<AppMetaInfo>();
 
   await SentryFlutter.init(
-        (options) {
+    (options) {
       options
         ..dsn = ServiceKeys.SENTRY_DSN
         ..environment = enumToString(env.config.environment)
@@ -45,7 +44,6 @@ Future<void> main() async {
         ..useNativeBreadcrumbTracking();
     },
   );
-
 
   // todo add firebase
   // await Firebase.initializeApp();

@@ -22,8 +22,7 @@ class ProgressOverlay extends StatelessWidget {
     required this.visible,
     this.value,
     this.loadingText,
-  })  :
-        super(key: key);
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

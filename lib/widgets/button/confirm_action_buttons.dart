@@ -19,8 +19,7 @@ class ConfirmActionButtons extends StatelessWidget {
     required this.onOk,
     required this.onCancel,
     required this.shouldPopOnButtonClick,
-  })  :
-        super(key: key);
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

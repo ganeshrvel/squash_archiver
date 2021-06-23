@@ -12,7 +12,6 @@ import 'package:squash_archiver/constants/errors.dart';
 import 'package:squash_archiver/services/crashes_service.dart';
 import 'package:squash_archiver/utils/log/log.dart';
 
-
 final CrashesService _crashesService = getIt<CrashesService>();
 
 HandleExceptionModel handleException(

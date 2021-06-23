@@ -1,7 +1,5 @@
 import 'dart:ui';
 
-
-
 /// Theme palette model
 class ThemePalette {
   final Color accentColor;

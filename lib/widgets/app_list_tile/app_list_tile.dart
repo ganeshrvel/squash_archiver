@@ -16,8 +16,7 @@ class AppListTile extends StatelessWidget {
     required this.icon,
     required this.onTap,
     required this.label,
-  })  :
-        super(key: key);
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

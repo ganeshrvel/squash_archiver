@@ -1,6 +1,5 @@
 import 'package:flutter/widgets.dart';
 
-
 enum AlertsTypes {
   ERROR,
   WARNING,
