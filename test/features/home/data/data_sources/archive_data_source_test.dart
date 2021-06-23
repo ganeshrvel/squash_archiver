@@ -1,14 +1,12 @@
 import 'dart:async';
 
 import 'package:archiver_ffi/archiver_ffi.dart';
-import 'package:data_channel/data_channel.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:injectable/injectable.dart' show Environment;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:squash_archiver/common/di/di.dart';
 import 'package:squash_archiver/features/home/data/data_sources/archive_data_source.dart';
-import 'package:squash_archiver/features/home/data/models/file_listing_response.dart';
 
 import '../../../../support/test_utils.dart';
 
@@ -646,12 +644,12 @@ Future<void> main() async {
 
         _expectCachedFileList(archiveDataSource: _archiveDataSource);
 
-        final _result = await (_archiveDataSource.listFiles(
+        final _result = await _archiveDataSource.listFiles(
           listArchiveRequest: _request,
           invalidateCache: true,
-        ) as FutureOr<DC<Exception, List<FileListingResponse>>>);
+        );
 
-        expect(_result.hasError, equals(false));
+        expect(_result!.hasError, equals(false));
         expect(_result.hasData, equals(true));
 
         expect(_result.data?.length ?? 0, equals(1));
