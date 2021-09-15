@@ -6,12 +6,10 @@ part of 'theme_model.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-ThemeModel _$ThemeModelFromJson(Map<String, dynamic> json) {
-  return ThemeModel(
-    mode: _$enumDecode(_$ThemeModeEnumMap, json['mode']),
-    brightness: (json['brightness'] as num?)?.toDouble(),
-  );
-}
+ThemeModel _$ThemeModelFromJson(Map<String, dynamic> json) => ThemeModel(
+      mode: _$enumDecode(_$ThemeModeEnumMap, json['mode']),
+      brightness: (json['brightness'] as num?)?.toDouble(),
+    );
 
 Map<String, dynamic> _$ThemeModelToJson(ThemeModel instance) =>
     <String, dynamic>{

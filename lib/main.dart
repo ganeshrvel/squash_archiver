@@ -57,19 +57,19 @@ Future<void> main() async {
 
   HttpClient.enableTimelineLogging = env.config.enableHttpTimelineLogging;
 
-  runZonedGuarded(() {
-    runApp(
-      AppScreen(),
-    );
-  }, (Object error, StackTrace stackTrace) {
-    // Whenever an error occurs, call the `_reportError` function. This sends
-    // Dart errors to the dev console or Sentry depending on the environment.
-    log.error(
-      title: 'An error was captured by main.runZonedGuarded',
-      error: error,
-      stackTrace: stackTrace,
-    );
-  });
+  // runZonedGuarded(() {
+  //   runApp(
+  //     AppScreen(),
+  //   );
+  // }, (Object error, StackTrace stackTrace) {
+  //   // Whenever an error occurs, call the `_reportError` function. This sends
+  //   // Dart errors to the dev console or Sentry depending on the environment.
+  //   log.error(
+  //     title: 'An error was captured by main.runZonedGuarded',
+  //     error: error,
+  //     stackTrace: stackTrace,
+  //   );
+  // });
 
   mainContext.onReactionError((_, rxn) {
     log.error(

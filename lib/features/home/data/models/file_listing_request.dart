@@ -38,7 +38,8 @@ class FileListingRequest extends Equatable {
     this.archiveFilepath = archiveFilepath ?? '';
     this.password = password ?? '';
     this.orderBy = orderBy ?? AppDefaultValues.DEFAULT_FILE_EXPLORER_ORDER_BY;
-    this.orderDir = orderDir ?? AppDefaultValues.DEFAULT_FILE_EXPLORER_ORDER_DIR;
+    this.orderDir =
+        orderDir ?? AppDefaultValues.DEFAULT_FILE_EXPLORER_ORDER_DIR;
     this.gitIgnorePattern = gitIgnorePattern ?? [];
     this.source = source ?? FileExplorerSource.LOCAL;
 

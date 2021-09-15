@@ -48,10 +48,14 @@ class _SplashScreenState extends SfWidget<SplashScreen> {
   }
 
   Widget _buildSplashScreen(BuildContext context) {
-    return SplashLoading(
-      logoPath: ImagePaths.APP_LOGO,
-      appName: Strings.APP_NAME.toUpperCase(),
-    );
+    return Container();
+
+    print('todo');
+
+    // return SplashLoading(
+    //   logoPath: ImagePaths.APP_LOGO,
+    //   appName: Strings.APP_NAME.toUpperCase(),
+    //` );
   }
 
   @override
