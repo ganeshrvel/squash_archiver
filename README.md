@@ -6,7 +6,7 @@
 - Repo URL: [https://github.com/ganeshrvel/squash_archiver](https://github.com/ganeshrvel/squash_archiver/ "https://github.com/ganeshrvel/squash_archiver")
 - Contacts: ganeshrvel@outlook.com
 
-The UI is built using Flutter. The app heavily relies on Go language for file compression and decompression
+The UI is built using Flutter. The app relies heavily on [Go language](https://github.com/ganeshrvel/squash_archiver/tree/master/packages/archiver_ffi, "GO FFI") for file compression and decompression
 
 
 ## Requirements
