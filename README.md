@@ -1,8 +1,7 @@
 # Squash Archiver [WIP] | Archiver apps for macOS, Windows and Linux. 
 
 - Author: [Ganesh Rathinavel](https://www.linkedin.com/in/ganeshrvel "Ganesh Rathinavel")
-- License: [MIT](https://github.com/ganeshrvel/openmtp/blob/master/LICENSE "MIT")
-- System Requirements: macOS 10.11 or higher
+- License: [MIT](https://github.com/ganeshrvel/squash_archiver/blob/master/LICENSE "MIT")
 - Repo URL: [https://github.com/ganeshrvel/squash_archiver](https://github.com/ganeshrvel/squash_archiver/ "https://github.com/ganeshrvel/squash_archiver")
 - Contacts: ganeshrvel@outlook.com
 
