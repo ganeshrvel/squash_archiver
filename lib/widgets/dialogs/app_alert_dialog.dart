@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
+import 'package:macos_ui/macos_ui.dart';
 import 'package:squash_archiver/utils/utils/functs.dart';
-import 'package:squash_archiver/widgets/button/button.dart';
-import 'package:squash_archiver/widgets/dialogs/app_dialog.dart';
+import 'package:squash_archiver/widget_extends/material.dart';
+import 'package:squash_archiver/widgets/text/textography.dart';
 
 class AppAlertDialog extends AlertDialog {
   static void show(
@@ -15,35 +15,36 @@ class AppAlertDialog extends AlertDialog {
     bool? barrierDismissible,
   }) {
     final _barrierDismissible = barrierDismissible ?? true;
+    final _content = content ?? 'Info';
+    final _iconData = iconData ?? CupertinoIcons.info;
 
-    showDialog(
+    showMacosAlertDialog(
       context: context,
       barrierDismissible: _barrierDismissible,
       builder: (BuildContext context) {
-        return AppDialog(
-          title: title,
-          body: content,
-          iconData: iconData,
-          size: DialogSize.sm,
-          actionContainer: Row(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Expanded(
-                child: Button(
-                  text: okText ?? 'Ok',
-                  onPressed: () {
-                    if (isNotNull(onOk)) {
-                      onOk!();
-                    }
+        return MacosAlertDialog(
+          horizontalActions: true,
+          title: isNotNullOrEmpty(title)
+              ? Textography(title!)
+              : const SizedBox.shrink(),
+          appIcon: MacosIcon(_iconData),
+          message: Textography(
+            _content,
+            textAlign: TextAlign.center,
+          ),
+          primaryButton: PushButton(
+            onPressed: () {
+              if (isNotNull(onOk)) {
+                onOk!();
+              }
 
-                    Navigator.of(context).pop();
-                  },
-                  buttonType: ButtonType.FLAT,
-                  disableAutoBoxConstraints: true,
-                ),
-              ),
-            ],
+              Navigator.of(context).pop();
+            },
+            controlSize: ControlSize.large,
+            child: Textography(
+              okText ?? 'Ok',
+              preventAutoTextStyling: true,
+            ),
           ),
         );
       },

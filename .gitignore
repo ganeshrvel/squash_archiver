@@ -31,7 +31,7 @@
 /build/
 
 # Web related
-lib/generated_plugin_registrant.dart
+lib__old/generated_plugin_registrant.dart
 
 # Exceptions to above rules.
 !/packages/flutter_tools/test/data/dart_dependencies_test/**/.packages
@@ -47,3 +47,4 @@ android/key.properties
 .android
 !vendors/.gitkeep
 mocks_build
+__component__

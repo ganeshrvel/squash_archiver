@@ -1,15 +1,11 @@
-import 'dart:ui';
-
-import 'package:flutter/material.dart';
-import 'package:squash_archiver/common/models/theme_palette.dart';
-import 'package:squash_archiver/common/themes/theme_helper.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:squash_archiver/features/home/data/models/file_listing_request.dart';
 import 'package:squash_archiver/features/home/data/models/password_request.dart';
 import 'package:squash_archiver/widget_extends/sf_widget.dart';
 import 'package:squash_archiver/widgets/button/confirm_action_buttons.dart';
 import 'package:squash_archiver/widgets/overlays/app_overlay.dart';
 import 'package:squash_archiver/widgets/text/textography.dart';
-import 'package:squash_archiver/widgets/text_field/text_field_regular_input.dart';
+import 'package:squash_archiver/widgets/text_field/text_field_password_input.dart';
 
 class FileExplorerPasswordOverlay extends StatefulWidget {
   /// should overlay be visible
@@ -21,6 +17,9 @@ class FileExplorerPasswordOverlay extends StatefulWidget {
   /// [bool] true if the password was invalid
   final bool invalidPassword;
 
+  /// [String] placeholder value for the text input
+  final String? placeholder;
+
   /// On tapping ok
   final Function({
     required FileListingRequest fileListingRequest,
@@ -30,14 +29,18 @@ class FileExplorerPasswordOverlay extends StatefulWidget {
   /// On tapping cancel
   final Function() onCancel;
 
+  final ScrollController scrollController;
+
   const FileExplorerPasswordOverlay({
-    Key? key,
+    super.key,
     required this.visible,
     required this.invalidPassword,
     required this.passwordRequest,
     required this.onOk,
     required this.onCancel,
-  }) : super(key: key);
+    required this.scrollController,
+    this.placeholder = 'Password',
+  });
 
   @override
   _FileExplorerPasswordOverlayState createState() =>
@@ -46,15 +49,16 @@ class FileExplorerPasswordOverlay extends StatefulWidget {
 
 class _FileExplorerPasswordOverlayState
     extends SfWidget<FileExplorerPasswordOverlay> {
-  TextEditingController? _passwordTextController;
+  late final TextEditingController _passwordTextController =
+      TextEditingController();
+
+  ScrollController get _scrollController => widget.scrollController;
 
   bool get _visible => widget.visible;
 
   bool get _invalidPassword => widget.invalidPassword;
 
   PasswordRequest get _passwordRequest => widget.passwordRequest;
-
-  ThemePalette get _palette => getPalette(context);
 
   FileListingRequest get _fileListingRequest =>
       widget.passwordRequest.fileListingRequest;
@@ -68,14 +72,12 @@ class _FileExplorerPasswordOverlayState
 
   @override
   void initState() {
-    _passwordTextController ??= TextEditingController();
-
     super.initState();
   }
 
   @override
   void dispose() {
-    _passwordTextController!.dispose();
+    _passwordTextController.dispose();
 
     super.dispose();
   }
@@ -89,7 +91,7 @@ class _FileExplorerPasswordOverlayState
       actionContainer: ConfirmActionButtons(
         onOk: () {
           _onOk(
-            password: _passwordTextController!.text,
+            password: _passwordTextController.text,
             fileListingRequest: _fileListingRequest,
           );
         },
@@ -97,19 +99,32 @@ class _FileExplorerPasswordOverlayState
         shouldPopOnButtonClick: false,
       ),
       content: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Textography(
-            'Enter password for "${_fileListingRequest.filename}"',
-            color: _palette.captionColor,
-            variant: TextVariant.small1,
-            fontWeight: FontWeight.bold,
+          Align(
+            alignment: Alignment.centerLeft,
+            child: Textography(
+              'Enter password for "${_fileListingRequest.filename}"',
+              maxLines: 3,
+              overflow: TextOverflow.ellipsis,
+              variant: TextVariant.Headline,
+              textAlign: TextAlign.start,
+            ),
           ),
-          TextFieldRegularInput(
+          const SizedBox(
+            height: 15,
+          ),
+          TextFieldPasswordInput(
             onChanged: (value) {},
-            controller: _passwordTextController!,
-            hintText: 'Password',
+            controller: _passwordTextController,
+            placeholder: widget.placeholder,
             errorText: _errorText,
+            scrollController: _scrollController,
+            onSubmitted: (value) {
+              _onOk(
+                password: value,
+                fileListingRequest: _fileListingRequest,
+              );
+            },
           ),
         ],
       ),

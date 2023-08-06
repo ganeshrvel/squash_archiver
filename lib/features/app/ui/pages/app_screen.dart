@@ -1,100 +1,70 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_portal/flutter_portal.dart';
+import 'package:macos_ui/macos_ui.dart';
 import 'package:squash_archiver/common/di/di.dart';
-import 'package:squash_archiver/common/l10n/l10n.dart';
-import 'package:squash_archiver/common/l10n/l10n_helpers.dart';
 import 'package:squash_archiver/common/router/root_router.dart';
-import 'package:squash_archiver/common/themes/theme_helper.dart';
 import 'package:squash_archiver/constants/env.dart';
 import 'package:squash_archiver/constants/strings.dart';
+import 'package:squash_archiver/features/app/ui/pages/error_boundary_screen.dart';
 import 'package:squash_archiver/features/app/ui/store/app_store.dart';
-import 'package:squash_archiver/widgets/common_widget/custom_scroll_behavior.dart';
-import 'package:squash_archiver/widgets/text/textography.dart';
 
 class AppScreen extends StatelessWidget {
   final AppStore _appStore = getIt<AppStore>();
 
-  void setErrorBuilder() {
-    ErrorWidget.builder = (FlutterErrorDetails errorDetails) {
-      // @todo add oops something went wrong screen
-      return const Scaffold(
-        body: Center(
-          child: Textography(
-            'Oops.. Some error occured.',
-            variant: TextVariant.body1,
-          ),
-        ),
-      );
-    };
-  }
-
   @override
   Widget build(BuildContext context) {
-    return Observer(
-      builder: (context) {
-        if (!_appStore.isAppSettingsLoaded) {
-          return Center(
-            child: Container(),
-          );
-        }
+    return CupertinoApp.router(
+      debugShowCheckedModeBanner: env.config.debugShowCheckedModeBanner,
+      builder: (context, nativeNavigator) {
+        return Observer(
+          builder: (context) {
+            final _windowState = _appStore.windowState;
 
-        return Portal(
-          child: MaterialApp.router(
-            debugShowCheckedModeBanner: env.config.debugShowCheckedModeBanner,
-            debugShowMaterialGrid: env.config.debugShowMaterialGrid,
-            builder: (context, nativeNavigator) {
-              setErrorBuilder();
+            var lightTheme = MacosThemeData.light();
+            var darkTheme = MacosThemeData.dark();
 
-              return ScrollConfiguration(
-                behavior: const ScrollBehavior(),
-                child: CustomScrollBehavior(
-                  child: nativeNavigator!,
-                ),
+            if (_windowState == WindowState.Blurred) {
+              lightTheme = lightTheme.copyWith(
+                primaryColor: const Color.fromRGBO(170, 201, 239, 1),
               );
-            },
-            title: Strings.APP_NAME,
-            theme: getAppThemeData(_appStore.theme!.mode),
-            locale: Locale(
-              _appStore.language!.locale,
-              _appStore.language!.countryCode,
-            ),
-            supportedLocales: supportedL10nLanguages
-                .map(
-                  (language) => Locale(
-                    language.locale,
-                    language.countryCode,
+              darkTheme = darkTheme.copyWith(
+                primaryColor: const Color.fromRGBO(70, 70, 70, 1),
+              );
+            }
+            return MacosApp(
+              title: Strings.APP_NAME,
+              theme: lightTheme,
+              darkTheme: darkTheme,
+              themeMode: _appStore.theme!.mode,
+              debugShowCheckedModeBanner: env.config.debugShowCheckedModeBanner,
+              builder: (context, __) {
+                if (!_appStore.isAppSettingsLoaded) {
+                  return Center(
+                    child: Container(),
+                  );
+                }
+
+                return Portal(
+                  child: Builder(
+                    builder: (context) {
+                      setErrorBuilder();
+
+                      return nativeNavigator ?? Container();
+                    },
                   ),
-                )
-                .toList(),
-            localizationsDelegates: [
-              L10n.delegate,
-              GlobalMaterialLocalizations.delegate,
-              GlobalWidgetsLocalizations.delegate,
-              GlobalCupertinoLocalizations.delegate,
-            ],
-            localeResolutionCallback: (locale, supportedLocales) {
-              if (locale == null) {
-                return supportedLocales.first;
-              }
-
-              // Check if the current device locale is supported
-              return supportedLocales.firstWhere(
-                (supportedLocale) =>
-                    supportedLocale.languageCode == locale.languageCode,
-                orElse: () => supportedLocales.first,
-              );
-            },
-            routeInformationParser: rootRouter.defaultRouteParser(),
-            routerDelegate: AutoRouterDelegate(
-              rootRouter,
-              navigatorObservers: () => [AutoRouteObserver()],
-            ),
-          ),
+                );
+              },
+            );
+          },
         );
       },
+      routeInformationParser: rootRouter.defaultRouteParser(),
+      routerDelegate: AutoRouterDelegate(
+        rootRouter,
+        navigatorObservers: () => [AutoRouteObserver()],
+      ),
     );
   }
 }

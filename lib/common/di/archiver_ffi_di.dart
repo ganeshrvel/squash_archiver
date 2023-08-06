@@ -1,6 +1,6 @@
 import 'package:archiver_ffi/archiver_ffi.dart';
 import 'package:injectable/injectable.dart';
-import 'package:squash_archiver/utils/utils/files.dart';
+import 'package:squash_archiver/helpers/files_helper.dart';
 
 @module
 abstract class ArchiverFfiDi {

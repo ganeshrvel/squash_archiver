@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
 
-class InternalServerApiError extends DioError {
+class InternalServerApiError extends DioException {
   final String apiUrl;
 
   @override
@@ -9,7 +9,7 @@ class InternalServerApiError extends DioError {
   final String errorMessage;
   final int statusCode;
 
-  final DioError dioError;
+  final DioException dioError;
 
   InternalServerApiError({
     required this.apiUrl,

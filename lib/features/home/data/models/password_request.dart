@@ -1,4 +1,4 @@
-import 'file_listing_request.dart';
+import 'package:squash_archiver/features/home/data/models/file_listing_request.dart';
 
 /// Model for password request
 class PasswordRequest {

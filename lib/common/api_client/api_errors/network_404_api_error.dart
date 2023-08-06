@@ -1,11 +1,11 @@
 import 'package:dio/dio.dart';
 
-class Network404Error extends DioError {
+class Network404Error extends DioException {
   final String errorMessage;
   final String apiUrl;
   final int statusCode;
 
-  final DioError dioError;
+  final DioException dioError;
 
   Network404Error({
     required this.errorMessage,

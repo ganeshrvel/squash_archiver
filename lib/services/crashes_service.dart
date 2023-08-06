@@ -25,8 +25,12 @@ class CrashesService {
     }
 
     Sentry.configureScope((scope) async {
-      scope.setTag('deviceId', await _deviceDetails.deviceId);
-      // ..setTag('app.version', _appMetaInfo.release);
+      final deviceId = (await _deviceDetails.operatingSystem).deviceId;
+
+      if (deviceId != null) {
+        scope.setTag('deviceId', deviceId);
+        // ..setTag('app.version', _appMetaInfo.release);
+      }
     });
 
     Sentry.captureException(

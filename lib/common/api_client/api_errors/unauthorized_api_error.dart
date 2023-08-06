@@ -1,10 +1,10 @@
 import 'package:dio/dio.dart';
 
-class UnauthorizedApiError extends DioError {
+class UnauthorizedApiError extends DioException {
   final String apiUrl;
   final int statusCode;
 
-  final DioError dioError;
+  final DioException dioError;
 
   UnauthorizedApiError({
     required this.apiUrl,

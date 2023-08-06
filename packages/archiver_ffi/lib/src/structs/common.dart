@@ -2,13 +2,13 @@ import 'dart:ffi';
 
 import 'package:ffi/ffi.dart';
 
-class StringListStruct extends Struct {
-  Pointer<Pointer<Utf8>>? list;
+final class StringListStruct extends Struct {
+  external Pointer<Pointer<Utf8>> list;
 
   @Int64()
-  int? size;
+  external int size;
 
-  Pointer<StringListStruct> fromList(
+  static Pointer<StringListStruct> fromList(
     List<String> arr,
     List<Pointer<NativeType>> ptrList,
   ) {
@@ -34,7 +34,7 @@ class StringListStruct extends Struct {
   }
 }
 
-class ResultErrorStruct extends Struct {
+final class ResultErrorStruct extends Struct {
   external Pointer<Utf8> errorType;
 
   external Pointer<Utf8> error;

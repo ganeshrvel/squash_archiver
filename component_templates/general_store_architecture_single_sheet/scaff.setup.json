@@ -1,0 +1,18 @@
+{
+  "mappedVariables": {
+	"feature_file_name": "file_explorer_toolbar_leading",
+	"FeatureNameUpper": "FileExplorerToolbarLeading",
+	"featureNameLower": "fileExplorerToolbarLeading",
+	"screen_file_name": "file_explorer_toolbar_leading",
+	"ScreenClassName": "FileExplorerToolbarLeading",
+	"screenClassNameLower": "fileExplorerToolbarLeading",
+	"MobxParamUpper": "FileExplorerToolbarLeadingData",
+	"mobxParam": "fileExplorerToolbarLeadingData",
+	"methodName": "getFileExplorerToolbarLeadingData",
+	"model_file_name": "file_explorer_toolbar_leading",
+	"ModelClassName": "FileExplorerToolbarLeadingData",
+	"apiEndpoint": "/"
+  }
+}
+
+

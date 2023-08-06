@@ -1,0 +1,18 @@
+{
+  "mappedVariables": {
+	"feature_file_name": "macos_table",
+	"FeatureNameUpper": "MacosTable",
+	"featureNameLower": "macosTable",
+	"screen_file_name": "macos_table",
+	"ScreenClassName": "MacosTable",
+	"screenClassNameLower": "macosTable",
+	"MobxParamUpper": "MacosTableData",
+	"mobxParam": "macosTableData",
+	"methodName": "getMacosTableData",
+	"model_file_name": "macos_table",
+	"ModelClassName": "MacosTableData",
+	"apiEndpoint": "/"
+  }
+}
+
+

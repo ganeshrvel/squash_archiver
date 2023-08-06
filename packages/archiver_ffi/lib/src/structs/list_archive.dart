@@ -3,7 +3,7 @@ import 'dart:ffi';
 import 'package:archiver_ffi/src/structs/common.dart';
 import 'package:ffi/ffi.dart';
 
-class ArchiveFileInfoStruct extends Struct {
+final class ArchiveFileInfoStruct extends Struct {
   @Uint32()
   external int mode;
 
@@ -44,7 +44,7 @@ class ArchiveFileInfoStruct extends Struct {
         ..extension = extension;
 }
 
-class ArchiveFileInfoResultStruct extends Struct {
+final class ArchiveFileInfoResultStruct extends Struct {
   external Pointer<Pointer<ArchiveFileInfoStruct>> files;
 
   @Uint64()

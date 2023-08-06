@@ -1,9 +1,9 @@
 import 'package:after_layout/after_layout.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:squash_archiver/common/di/di.dart';
-import 'package:squash_archiver/utils/alerts/alerts.dart';
-import 'package:squash_archiver/utils/alerts/alerts_model.dart';
 import 'package:squash_archiver/utils/log/log.dart';
+import 'package:squash_archiver/widgets/alerts/alerts.dart';
+import 'package:squash_archiver/widgets/alerts/alerts_model.dart';
 
 abstract class SfWidget<S extends StatefulWidget> extends State<S>
     with AfterLayoutMixin<S> {
@@ -22,7 +22,7 @@ abstract class SfWidget<S extends StatefulWidget> extends State<S>
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    WidgetsBinding.instance!.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       onWidgetUpdate();
     });
   }

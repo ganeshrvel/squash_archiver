@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
 
-String getApiUrl(DioError dioError) {
+String getApiUrl(DioException dioError) {
   return (dioError.response?.requestOptions.uri ?? '').toString();
 }

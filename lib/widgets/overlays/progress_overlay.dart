@@ -1,11 +1,13 @@
-import 'dart:ui';
-
-import 'package:flutter/material.dart';
-import 'package:squash_archiver/common/themes/theme_helper.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:macos_ui/macos_ui.dart';
 import 'package:squash_archiver/utils/utils/functs.dart';
 import 'package:squash_archiver/widgets/overlays/app_overlay.dart';
-import 'package:squash_archiver/widgets/progress/progress_bar.dart';
 import 'package:squash_archiver/widgets/text/textography.dart';
+
+enum ProgressType {
+  Circular,
+  Linear,
+}
 
 class ProgressOverlay extends StatelessWidget {
   /// should overlay be visible
@@ -17,32 +19,49 @@ class ProgressOverlay extends StatelessWidget {
   /// loading text
   final String? loadingText;
 
-  const ProgressOverlay({
-    Key? key,
+  /// progress loader type
+  final ProgressType? type;
+
+  ProgressOverlay({
+    super.key,
     required this.visible,
     this.value,
     this.loadingText,
-  }) : super(key: key);
+    this.type,
+  }) {
+    if (type == ProgressType.Linear) {
+      assert(value != null, "'value' cannot be null when 'type' is Linear");
+    }
+  }
+
+  Widget _buildProgress() {
+    return switch (type) {
+      null || ProgressType.Circular => ProgressCircle(value: value),
+      ProgressType.Linear => ProgressBar(
+          value: value ?? 0,
+        ),
+    };
+  }
 
   @override
   Widget build(BuildContext context) {
-    final _palette = getPalette(context);
-
     return AppOverlay(
       visible: visible,
+      hideDialogBackground: true,
       content: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
+          _buildProgress(),
           if (isNotNullOrEmpty(loadingText))
-            Textography(
-              loadingText,
-              color: _palette.captionColor,
-              variant: TextVariant.small1,
-              fontWeight: FontWeight.bold,
+            Padding(
+              padding: const EdgeInsets.only(top: 10),
+              child: Textography(
+                loadingText!,
+                typographyVariant: TypographyVariant.Tertiary,
+                variant: TextVariant.Caption2,
+                fontWeight: MacosFontWeight.bold,
+              ),
             ),
-          ProgressBar(
-            value: value,
-          ),
         ],
       ),
     );

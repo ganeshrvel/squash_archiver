@@ -5,11 +5,12 @@ import 'package:dartx/dartx.dart';
 import 'package:data_channel/data_channel.dart';
 import 'package:injectable/injectable.dart';
 import 'package:path/path.dart' as path;
+import 'package:squash_archiver/helpers/files_helper.dart';
 import 'package:squash_archiver/constants/app_default_values.dart';
 import 'package:squash_archiver/features/home/data/helpers/helpers.dart';
 import 'package:squash_archiver/features/home/data/models/file_listing_request.dart';
 import 'package:squash_archiver/features/home/data/models/file_listing_response.dart';
-import 'package:squash_archiver/utils/utils/files.dart';
+import 'package:squash_archiver/utils/utils/hash.dart';
 
 @LazySingleton()
 class LocalDataSource {
@@ -57,7 +58,15 @@ class LocalDataSource {
 
       final _fileListingResponse = sortFileExplorerEntities(
         files: _fileList,
-      ).map((file) => FileListingResponse(file: file)).toList();
+      )
+          .mapIndexed(
+            (index, file) => FileListingResponse(
+              index: index,
+              file: file,
+              uniqueId: getXxh3(file.fullPath).toString(),
+            ),
+          )
+          .toList();
 
       return DC.data(_fileListingResponse);
     } on Exception catch (e) {

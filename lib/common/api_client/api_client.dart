@@ -32,8 +32,8 @@ class ApiClient {
 
   ApiClient(this.dio) {
     dio.options.baseUrl = env.config.apiBaseUrl!;
-    dio.options.connectTimeout = const Duration(seconds: 30).inMilliseconds;
-    dio.options.receiveTimeout = const Duration(seconds: 30).inMilliseconds;
+    dio.options.connectTimeout = const Duration(seconds: 30);
+    dio.options.receiveTimeout = const Duration(seconds: 30);
 
     // maintain the order in which the intercepts are added
     // DONOT change the order of intercepts
@@ -169,8 +169,8 @@ class ApiClient {
       );
     } on UnauthorizedApiError {
       _exception = UserUnauthenticatedException();
-    } on DioError catch (dioError) {
-      _exception = DioException(
+    } on DioException catch (dioError) {
+      _exception = DioClientException(
         error: dioError,
         stackTrace: StackTrace.current,
         apiUrl: getApiUrl(dioError),

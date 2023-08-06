@@ -1,12 +1,12 @@
 import 'package:squash_archiver/utils/utils/error.dart';
 
-class DioException implements Exception {
+class DioClientException implements Exception {
   final Exception error;
   final String apiUrl;
   final StackTrace stackTrace;
   final int statusCode;
 
-  DioException({
+  DioClientException({
     required this.error,
     required this.apiUrl,
     required this.stackTrace,

@@ -71,12 +71,30 @@ import (
 	void ClearListArchiveMemory(int64_t ptrAddr) {
 		ArcFileInfoResult *pResult = (struct ArcFileInfoResult *) ptrAddr;
 
-		for (int i = 0; i < pResult->totalFiles; i++) {
-			free(&pResult->files[i]->mode);
+		if (pResult == NULL) {
+			return;
 		}
 
-		free(&pResult->files);
-		free(&pResult);
+		if (pResult->error != NULL) {
+			free(pResult->error->error);
+			free(pResult->error->errorType);
+			free(pResult->error);
+		}
+
+		if (pResult->files != NULL) {
+			for (uint64_t i = 0; i < pResult->totalFiles; i++) {
+				if (pResult->files[i] != NULL) {
+					free(pResult->files[i]->modTime);
+					free(pResult->files[i]->name);
+					free(pResult->files[i]->fullPath);
+					free(pResult->files[i]->parentPath);
+					free(pResult->files[i]->extension);
+					free(pResult->files[i]);
+				}
+			}
+		}
+
+		free(pResult);
 	}
 
 	// Is encrypted
@@ -95,8 +113,17 @@ import (
 	void ClearIsArchiveEncryptedMemory(int64_t ptrAddr) {
 		EncryptedArchiveInfoResult *pResult = (struct EncryptedArchiveInfoResult *) ptrAddr;
 
-		free(&pResult->isEncrypted);
-		free(&pResult);
+		if (pResult == NULL) {
+			return;
+		}
+
+		if (pResult->error != NULL) {
+			free(pResult->error->error);
+			free(pResult->error->errorType);
+			free (pResult->error);
+		}
+
+		free(pResult);
 	}
 
 	// Pack files
@@ -119,8 +146,18 @@ import (
 	void ClearPackFilesMemory(int64_t ptrAddr) {
 		PackFilesResult *pResult = (struct PackFilesResult *) ptrAddr;
 
-		free(&pResult->startTime);
-		free(&pResult);
+		if (pResult == NULL) {
+			return;
+		}
+
+		if (pResult->error != NULL) {
+			free(pResult->error->error);
+			free(pResult->error->errorType);
+			free(pResult->error);
+		}
+
+		free(pResult->startTime);
+		free(pResult);
 	}
 
 	// Unpack files
@@ -143,8 +180,18 @@ import (
 	void ClearUnpackFilesMemory(int64_t ptrAddr) {
 		UnpackFilesResult *pResult = (struct UnpackFilesResult *) ptrAddr;
 
-		free(&pResult->startTime);
-		free(&pResult);
+		if (pResult == NULL) {
+			return;
+		}
+
+		if (pResult->error != NULL) {
+			free(pResult->error->error);
+			free(pResult->error->errorType);
+			free(pResult->error);
+		}
+
+		free(pResult->startTime);
+		free(pResult);
 	}
 */
 import "C"
@@ -178,16 +225,6 @@ func GetStringList(stringListPtrAddr int64) []string {
 
 // SendArchiveListing - List the archive
 func SendArchiveListing(port int64, err error, result *[]onearchiver.ArchiveFileInfo) {
-	//var dartObj C.Dart_CObject
-	//dartObj._type = C.Dart_CObject_kTypedData
-
-	// Parse errors
-	var ei C.struct_ErrorInfo
-	if err != nil {
-		ei.error = C.CString(err.Error())
-		ei.errorType = C.CString(processErrors(err, TaskListArchive))
-	}
-
 	var aiList []*C.struct_ArcFileInfo
 
 	for _, item := range *result {
@@ -222,7 +259,14 @@ func SendArchiveListing(port int64, err error, result *[]onearchiver.ArchiveFile
 	}
 
 	air.totalFiles = C.uint64_t(aiListLen)
-	air.error = &ei
+
+	if err != nil {
+		ei := (*C.struct_ErrorInfo)(C.malloc(C.sizeof_struct_ErrorInfo))
+
+		ei.error = C.CString(err.Error())
+		ei.errorType = C.CString(processErrors(err, TaskListArchive))
+		air.error = ei
+	}
 
 	ptrAddr := C.GetArcFileInfoResultAddr(air)
 
@@ -235,21 +279,19 @@ func FreeListArchiveMemory(ptrAddr int64) {
 
 // SendIsArchiveEncrypted - Check if the archive is encrypted
 func SendIsArchiveEncrypted(port int64, err error, result *onearchiver.EncryptedArchiveInfo) {
-	var dartObj C.Dart_CObject
-	dartObj._type = C.Dart_CObject_kInt64
-
 	// Parse errors
-	var ei C.struct_ErrorInfo
-	if err != nil {
-		ei.error = C.CString(err.Error())
-		ei.errorType = C.CString(processErrors(err, TaskIsArchiveEncrypted))
-	}
-
 	eai := (*C.struct_EncryptedArchiveInfoResult)(C.malloc(C.sizeof_struct_EncryptedArchiveInfoResult))
 
 	eai.isEncrypted = C.bool(result.IsEncrypted)
 	eai.isValidPassword = C.bool(result.IsValidPassword)
-	eai.error = &ei
+
+	if err != nil {
+		ei := (*C.struct_ErrorInfo)(C.malloc(C.sizeof_struct_ErrorInfo))
+
+		ei.error = C.CString(err.Error())
+		ei.errorType = C.CString(processErrors(err, TaskIsArchiveEncrypted))
+		eai.error = ei
+	}
 
 	ptrAddr := C.GetEncryptedArchiveResultAddr(eai)
 
@@ -262,16 +304,6 @@ func FreeIsArchiveEncryptedMemory(ptrAddr int64) {
 
 // SendPackFiles - Pack files
 func SendPackFiles(port int64, err error, pInfo *onearchiver.ProgressInfo, packingEnded bool) {
-	var dartObj C.Dart_CObject
-	dartObj._type = C.Dart_CObject_kInt64
-
-	// Parse errors
-	var ei C.struct_ErrorInfo
-	if err != nil {
-		ei.error = C.CString(err.Error())
-		ei.errorType = C.CString(processErrors(err, TaskPackFiles))
-	}
-
 	pf := (*C.struct_PackFilesResult)(C.malloc(C.sizeof_struct_PackFilesResult))
 	pf.startTime = C.CString(pInfo.StartTime.Format(DateTimeFormat))
 	pf.currentFilename = C.CString(pInfo.CurrentFilename)
@@ -279,7 +311,14 @@ func SendPackFiles(port int64, err error, pInfo *onearchiver.ProgressInfo, packi
 	pf.totalFiles = C.uint64_t(pInfo.TotalFiles)
 	pf.progressPercentage = C.double(pInfo.ProgressPercentage)
 	pf.ended = C.bool(packingEnded)
-	pf.error = &ei
+
+	if err != nil {
+		ei := (*C.struct_ErrorInfo)(C.malloc(C.sizeof_struct_ErrorInfo))
+
+		ei.error = C.CString(err.Error())
+		ei.errorType = C.CString(processErrors(err, TaskPackFiles))
+		pf.error = ei
+	}
 
 	ptrAddr := C.GetPackFilesResultAddr(pf)
 
@@ -292,16 +331,6 @@ func FreePackFilesMemory(ptrAddr int64) {
 
 // SendUnpackFiles - Unpack files
 func SendUnpackFiles(port int64, err error, pInfo *onearchiver.ProgressInfo, packingEnded bool) {
-	var dartObj C.Dart_CObject
-	dartObj._type = C.Dart_CObject_kInt64
-
-	// Parse errors
-	var ei C.struct_ErrorInfo
-	if err != nil {
-		ei.error = C.CString(err.Error())
-		ei.errorType = C.CString(processErrors(err, TaskUnpackFiles))
-	}
-
 	pf := (*C.struct_UnpackFilesResult)(C.malloc(C.sizeof_struct_UnpackFilesResult))
 	pf.startTime = C.CString(pInfo.StartTime.Format(DateTimeFormat))
 	pf.currentFilename = C.CString(pInfo.CurrentFilename)
@@ -309,7 +338,14 @@ func SendUnpackFiles(port int64, err error, pInfo *onearchiver.ProgressInfo, pac
 	pf.totalFiles = C.uint64_t(pInfo.TotalFiles)
 	pf.progressPercentage = C.double(pInfo.ProgressPercentage)
 	pf.ended = C.bool(packingEnded)
-	pf.error = &ei
+
+	if err != nil {
+		ei := (*C.struct_ErrorInfo)(C.malloc(C.sizeof_struct_ErrorInfo))
+
+		ei.error = C.CString(err.Error())
+		ei.errorType = C.CString(processErrors(err, TaskUnpackFiles))
+		pf.error = ei
+	}
 
 	ptrAddr := C.GetUnpackFilesResultAddr(pf)
 

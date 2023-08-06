@@ -1,17 +1,18 @@
 import 'package:archiver_ffi/archiver_ffi.dart';
+import 'package:collection/collection.dart';
 import 'package:data_channel/data_channel.dart';
 import 'package:flutter/foundation.dart';
 import 'package:injectable/injectable.dart';
-
 import 'package:squash_archiver/common/exceptions/task_in_progress_exception.dart';
+import 'package:squash_archiver/helpers/files_helper.dart';
 import 'package:squash_archiver/constants/app_default_values.dart';
 import 'package:squash_archiver/constants/env.dart';
 import 'package:squash_archiver/features/home/data/helpers/helpers.dart';
 import 'package:squash_archiver/features/home/data/models/archive_data_source_listing_request.dart';
 import 'package:squash_archiver/features/home/data/models/file_listing_response.dart';
 import 'package:squash_archiver/utils/compute_in_background.dart';
-import 'package:squash_archiver/utils/utils/files.dart';
 import 'package:squash_archiver/utils/utils/functs.dart';
+import 'package:squash_archiver/utils/utils/hash.dart';
 
 @LazySingleton()
 class ArchiveDataSource {
@@ -149,7 +150,15 @@ class ArchiveDataSource {
 
     return sortFileExplorerEntities(
       files: _fileListResult,
-    ).map((file) => FileListingResponse(file: file)).toList();
+    )
+        .mapIndexed(
+          (index, file) => FileListingResponse(
+            index: index,
+            file: file,
+            uniqueId: getXxh3(file.fullPath).toString(),
+          ),
+        )
+        .toList();
   }
 
   bool _fetchFromFfi(ListArchive params) {

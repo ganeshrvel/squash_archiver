@@ -67,7 +67,7 @@ HandleExceptionModel handleException(
     _body = exception.errorMessage;
     _stackTrace = exception.stackTrace;
     _exception = exception;
-  } else if (exception is DioException) {
+  } else if (exception is DioClientException) {
     _body = Errors.DIO_EXCEPTION_MESSAGE;
     _stackTrace = exception.stackTrace;
     _exception = exception;

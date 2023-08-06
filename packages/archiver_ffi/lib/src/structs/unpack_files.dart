@@ -3,7 +3,7 @@ import 'dart:ffi';
 import 'package:archiver_ffi/src/structs/common.dart';
 import 'package:ffi/ffi.dart';
 
-class UnpackFilesStruct extends Struct {
+final class UnpackFilesStruct extends Struct {
   external Pointer<Utf8> startTime;
 
   external Pointer<Utf8> currentFilename;

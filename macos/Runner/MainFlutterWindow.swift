@@ -1,32 +1,15 @@
 import Cocoa
 import FlutterMacOS
-import Sparkle
 
 class MainFlutterWindow: NSWindow {
-    var SUFeedURL: String? {
-        return Bundle.main.object(forInfoDictionaryKey: "SUFeedURL") as? String
-    }
+  override func awakeFromNib() {
+    let flutterViewController = FlutterViewController()
+    let windowFrame = self.frame
+    self.contentViewController = flutterViewController
+    self.setFrame(windowFrame, display: true)
 
-    @IBAction func checkForUpdates(_ sender: Any) {
-        if SUFeedURL != nil {
-            let updater = SUUpdater.shared()
-            updater?.feedURL = URL(string: SUFeedURL!)
-            updater?.checkForUpdates(self)
-        }
-    }
+    RegisterGeneratedPlugins(registry: flutterViewController)
 
-    override func awakeFromNib() {
-        let flutterViewController = FlutterViewController.init()
-        let windowFrame = self.frame
-        self.contentViewController = flutterViewController
-        self.setFrame(windowFrame, display: true)
-
-        // Transparent view
-        self.isOpaque = false
-        self.backgroundColor = .clear
-
-        RegisterGeneratedPlugins(registry: flutterViewController)
-
-        super.awakeFromNib()
-    }
+    super.awakeFromNib()
+  }
 }

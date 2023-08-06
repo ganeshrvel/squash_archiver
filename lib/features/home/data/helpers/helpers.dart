@@ -51,7 +51,7 @@ List<FileInfo> sortFiles({
   required OrderBy? orderBy,
   required OrderDir? orderDir,
 }) {
-  if (orderDir == OrderDir.none) {
+  if (orderDir == OrderDir.none || orderDir == null) {
     return files;
   }
 

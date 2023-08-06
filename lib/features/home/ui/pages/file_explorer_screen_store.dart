@@ -3,16 +3,16 @@ import 'dart:async';
 import 'package:archiver_ffi/archiver_ffi.dart';
 import 'package:data_channel/data_channel.dart';
 import 'package:flutter/foundation.dart';
-
 import 'package:mobx/mobx.dart';
 import 'package:squash_archiver/common/di/di.dart';
+import 'package:squash_archiver/helpers/files_helper.dart';
 import 'package:squash_archiver/features/home/data/controllers/file_explorer_controller.dart';
 import 'package:squash_archiver/features/home/data/enums/file_explorer_source.dart';
 import 'package:squash_archiver/features/home/data/models/file_listing_request.dart';
 import 'package:squash_archiver/features/home/data/models/file_listing_response.dart';
 import 'package:squash_archiver/features/home/data/models/password_request.dart';
-import 'package:squash_archiver/utils/utils/files.dart';
 import 'package:squash_archiver/utils/utils/functs.dart';
+import 'package:squash_archiver/utils/utils/list.dart';
 import 'package:squash_archiver/utils/utils/store_helper.dart';
 
 part 'file_explorer_screen_store.g.dart';
@@ -52,14 +52,8 @@ abstract class _FileExplorerScreenStoreBase with Store {
   Map<String, FileListingResponse> selectedFiles =
       ObservableMap<String, FileListingResponse>();
 
-  @computed
-  FileListingRequest get fileListingSource {
-    if (isNullOrEmpty(fileListingSourceStack)) {
-      return FileListingRequest(path: '');
-    }
-
-    return fileListingSourceStack.last;
-  }
+  @observable
+  FileListingRequest fileListingSource = FileListingRequest(path: '');
 
   @computed
   bool get fileListingInProgress {
@@ -108,6 +102,14 @@ abstract class _FileExplorerScreenStoreBase with Store {
   @computed
   FileExplorerSource? get source {
     return fileListingSource.source;
+  }
+
+  @action
+  void setFileListingSourceStack(List<FileListingRequest> value) {
+    fileListingSourceStack = value;
+
+    fileListingSource =
+        fileListingSourceStack.getLastOrNull() ?? FileListingRequest(path: '');
   }
 
   /// Adding a new [FileExplorerSource] will first add the request to the [fileListingSourceStack]
@@ -165,7 +167,7 @@ abstract class _FileExplorerScreenStoreBase with Store {
       final _fileListingSourceStackTemp = fileListingSourceStack;
       _fileListingSourceStackTemp.clear();
 
-      fileListingSourceStack = _fileListingSourceStackTemp;
+      setFileListingSourceStack(_fileListingSourceStackTemp);
     }
 
     _addToFileListingRequestStack(_request);
@@ -177,19 +179,28 @@ abstract class _FileExplorerScreenStoreBase with Store {
   }
 
   @action
-  Future<void> refreshFiles({bool invalidateCache = false}) async {
-    return _fetchFiles(invalidateCache: invalidateCache);
+  Future<void> refreshFiles({
+    bool invalidateCache = false,
+    bool clearSelectedFiles = true,
+  }) async {
+    return _fetchFiles(
+      invalidateCache: invalidateCache,
+      clearSelectedFiles: clearSelectedFiles,
+    );
   }
 
   /// update the last item in the stack
   @action
-  Future<void> _updateFileListingRequest(FileListingRequest request) async {
+  Future<void> _updateFileListingRequest(
+    FileListingRequest request, {
+    bool clearSelectedFiles = true,
+  }) async {
     final _fileListingSourceStackTemp = fileListingSourceStack;
     _fileListingSourceStackTemp.last = request;
 
-    fileListingSourceStack = _fileListingSourceStackTemp;
+    setFileListingSourceStack(_fileListingSourceStackTemp);
 
-    return refreshFiles();
+    return refreshFiles(clearSelectedFiles: clearSelectedFiles);
   }
 
   /// set the current path
@@ -205,12 +216,14 @@ abstract class _FileExplorerScreenStoreBase with Store {
   Future<void> setOrderDirOrderBy({
     required OrderDir? orderDir,
     required OrderBy? orderBy,
+    bool clearSelectedFiles = false,
   }) async {
     return _updateFileListingRequest(
       fileListingSource.copyWith(
         orderDir: orderDir ?? this.orderDir,
         orderBy: orderBy ?? this.orderBy,
       ),
+      clearSelectedFiles: clearSelectedFiles,
     );
   }
 
@@ -239,7 +252,7 @@ abstract class _FileExplorerScreenStoreBase with Store {
       final _fileListingSourceStackTemp = fileListingSourceStack;
       _fileListingSourceStackTemp.removeLast();
 
-      fileListingSourceStack = _fileListingSourceStackTemp;
+      setFileListingSourceStack(_fileListingSourceStackTemp);
 
       return refreshFiles(invalidateCache: true);
     }
@@ -259,14 +272,19 @@ abstract class _FileExplorerScreenStoreBase with Store {
 
     /// should pop the [fileListingSourceStack] stack on error.
     bool? popStackOnError,
+
+    /// should clear the [selectedFiles]
+    bool clearSelectedFiles = true,
   }) async {
     final c = Completer();
 
     final _popStackOnError = popStackOnError ?? false;
     fileContainersException = null;
 
-    /// reset the selected files on directory/path/refresh
-    resetSelectedFiles();
+    if (clearSelectedFiles) {
+      /// reset the selected files on directory/path/refresh
+      resetSelectedFiles();
+    }
 
     fileContainersFuture = ObservableFuture(
       _fileExplorerController.listFiles(
@@ -332,7 +350,7 @@ abstract class _FileExplorerScreenStoreBase with Store {
   /// set the [fileListingSourceStack]
   @action
   void _setFileListingRequestStack(FileListingRequest value) {
-    fileListingSourceStack = [value];
+    setFileListingSourceStack([value]);
   }
 
   /// add an item to the [fileListingSourceStack]
@@ -349,37 +367,7 @@ abstract class _FileExplorerScreenStoreBase with Store {
     final _fileListingSourceStackTemp = fileListingSourceStack;
     _fileListingSourceStackTemp.add(value);
 
-    fileListingSourceStack = _fileListingSourceStackTemp;
-  }
-
-  /// set files in the explorer window
-  /// if [appendToList] is false then only one file will be selected
-  /// if [appendToList] is true then multiple file selection is allowed
-  /// todo write tests
-  @action
-  void setSelectedFile(
-    FileListingResponse fileContainer, {
-    bool appendToList = false,
-  }) {
-    final _uniqueId = fileContainer.uniqueId;
-
-    var _selectedFiles = selectedFiles;
-
-    /// if [appendToList] is true then multiple file selection is allowed
-    if (appendToList) {
-      /// if [selectedFiles] list contains the incoming file then remove it
-      if (isNotNull(_selectedFiles[_uniqueId])) {
-        _selectedFiles.remove(_uniqueId);
-      } else {
-        /// if [selectedFiles] list does not contain the incoming file then add it
-        _selectedFiles.putIfAbsent(_uniqueId, () => fileContainer);
-      }
-    } else {
-      /// if [appendToList] is false then only one file will be selected
-      _selectedFiles = {_uniqueId: fileContainer};
-    }
-
-    selectedFiles = _selectedFiles;
+    setFileListingSourceStack(_fileListingSourceStackTemp);
   }
 
   /// select all files in the explorer window
@@ -387,13 +375,35 @@ abstract class _FileExplorerScreenStoreBase with Store {
   @action
   void selectAllFiles() {
     final _filesMap = {
-      for (var fileContainer in fileContainers)
+      for (final fileContainer in fileContainers)
         fileContainer.uniqueId: fileContainer
     };
 
     selectedFiles = {
       ..._filesMap,
     };
+  }
+
+  /// set selected files in the explorer window
+  ///   /// todo write tests
+  @action
+  void setSelectedFiles(
+    Map<String, FileListingResponse> value,
+  ) {
+    selectedFiles = value;
+  }
+
+  /// get selected files in the explorer window
+  @action
+  Map<String, FileListingResponse> getSelectedFiles() {
+    return selectedFiles;
+  }
+
+  /// check if the file is selected
+  ///   /// todo write tests
+  @action
+  bool isFileSelected(String uniqueKey) {
+    return selectedFiles.containsKey(uniqueKey);
   }
 
   /// reselect selected files in the explorer window

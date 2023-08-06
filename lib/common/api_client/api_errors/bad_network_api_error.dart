@@ -1,9 +1,9 @@
 import 'package:dio/dio.dart';
 
-class BadNetworkApiError extends DioError {
+class BadNetworkApiError extends DioException {
   final String apiUrl;
   final int? statusCode;
-  final DioError dioError;
+  final DioException dioError;
 
   BadNetworkApiError({
     required this.apiUrl,

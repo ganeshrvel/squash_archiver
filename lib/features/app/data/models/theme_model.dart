@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:squash_archiver/widget_extends/material.dart';
 
 part 'theme_model.g.dart';
 

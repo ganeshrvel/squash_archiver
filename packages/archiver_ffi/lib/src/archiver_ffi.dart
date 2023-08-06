@@ -67,6 +67,7 @@ class ArchiverFfi {
     );
     final _recursive = toFfiBool(params.recursive!);
 
+
     _squashArchiverLib.ListArchive(
       _nativePort,
       _filename,
@@ -91,7 +92,7 @@ class ArchiverFfi {
 
       DC<ArchiverException, ListArchiveResult> _dc;
 
-      if (_error.ref.error.address != 0) {
+      if (_error.address != 0) {
         _dc = handleError<ListArchiveResult>(_error);
       } else {
         final filesPtr = _result.ref.files;
@@ -174,7 +175,7 @@ class ArchiverFfi {
 
       DC<ArchiverException, IsArchiveEncryptedResult> _dc;
 
-      if (_error.ref.error.address != 0) {
+      if (_error.address != 0) {
         _dc = handleError<IsArchiveEncryptedResult>(_error);
       } else {
         final _isEncrypted = _result.ref.isEncrypted;
@@ -255,7 +256,7 @@ class ArchiverFfi {
       final _ended = fromFfiBool(_result.ref.ended);
 
       final _error = _result.ref.error;
-      if (_error.ref.error.address != 0) {
+      if (_error.address != 0) {
         _dc = handleError<PackFilesResult>(_error);
       } else {
         const _packFilesResult = PackFilesResult(success: true);
@@ -345,7 +346,7 @@ class ArchiverFfi {
       final _ended = fromFfiBool(_result.ref.ended);
 
       final _error = _result.ref.error;
-      if (_error.ref.error.address != 0) {
+      if (_error.address != 0) {
         _dc = handleError<UnpackFilesResult>(_error);
       } else {
         const _unpackFilesResult = UnpackFilesResult(success: true);

@@ -6,16 +6,9 @@ part of 'file_explorer_screen_store.dart';
 // StoreGenerator
 // **************************************************************************
 
-// ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
+// ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
 mixin _$FileExplorerScreenStore on _FileExplorerScreenStoreBase, Store {
-  Computed<FileListingRequest>? _$fileListingSourceComputed;
-
-  @override
-  FileListingRequest get fileListingSource => (_$fileListingSourceComputed ??=
-          Computed<FileListingRequest>(() => super.fileListingSource,
-              name: '_FileExplorerScreenStoreBase.fileListingSource'))
-      .value;
   Computed<bool>? _$fileListingInProgressComputed;
 
   @override
@@ -80,8 +73,8 @@ mixin _$FileExplorerScreenStore on _FileExplorerScreenStoreBase, Store {
               name: '_FileExplorerScreenStoreBase.source'))
           .value;
 
-  final _$fileContainersAtom =
-      Atom(name: '_FileExplorerScreenStoreBase.fileContainers');
+  late final _$fileContainersAtom = Atom(
+      name: '_FileExplorerScreenStoreBase.fileContainers', context: context);
 
   @override
   List<FileListingResponse> get fileContainers {
@@ -96,8 +89,9 @@ mixin _$FileExplorerScreenStore on _FileExplorerScreenStoreBase, Store {
     });
   }
 
-  final _$fileContainersFutureAtom =
-      Atom(name: '_FileExplorerScreenStoreBase.fileContainersFuture');
+  late final _$fileContainersFutureAtom = Atom(
+      name: '_FileExplorerScreenStoreBase.fileContainersFuture',
+      context: context);
 
   @override
   ObservableFuture<DC<Exception, List<FileListingResponse>>>?
@@ -115,8 +109,9 @@ mixin _$FileExplorerScreenStore on _FileExplorerScreenStoreBase, Store {
     });
   }
 
-  final _$fileContainersExceptionAtom =
-      Atom(name: '_FileExplorerScreenStoreBase.fileContainersException');
+  late final _$fileContainersExceptionAtom = Atom(
+      name: '_FileExplorerScreenStoreBase.fileContainersException',
+      context: context);
 
   @override
   Exception? get fileContainersException {
@@ -132,8 +127,9 @@ mixin _$FileExplorerScreenStore on _FileExplorerScreenStoreBase, Store {
     });
   }
 
-  final _$fileListingSourceStackAtom =
-      Atom(name: '_FileExplorerScreenStoreBase.fileListingSourceStack');
+  late final _$fileListingSourceStackAtom = Atom(
+      name: '_FileExplorerScreenStoreBase.fileListingSourceStack',
+      context: context);
 
   @override
   List<FileListingRequest> get fileListingSourceStack {
@@ -149,8 +145,8 @@ mixin _$FileExplorerScreenStore on _FileExplorerScreenStoreBase, Store {
     });
   }
 
-  final _$requestPasswordAtom =
-      Atom(name: '_FileExplorerScreenStoreBase.requestPassword');
+  late final _$requestPasswordAtom = Atom(
+      name: '_FileExplorerScreenStoreBase.requestPassword', context: context);
 
   @override
   PasswordRequest? get requestPassword {
@@ -165,8 +161,8 @@ mixin _$FileExplorerScreenStore on _FileExplorerScreenStoreBase, Store {
     });
   }
 
-  final _$selectedFilesAtom =
-      Atom(name: '_FileExplorerScreenStoreBase.selectedFiles');
+  late final _$selectedFilesAtom = Atom(
+      name: '_FileExplorerScreenStoreBase.selectedFiles', context: context);
 
   @override
   Map<String, FileListingResponse> get selectedFiles {
@@ -181,8 +177,25 @@ mixin _$FileExplorerScreenStore on _FileExplorerScreenStoreBase, Store {
     });
   }
 
-  final _$navigateToSourceAsyncAction =
-      AsyncAction('_FileExplorerScreenStoreBase.navigateToSource');
+  late final _$fileListingSourceAtom = Atom(
+      name: '_FileExplorerScreenStoreBase.fileListingSource', context: context);
+
+  @override
+  FileListingRequest get fileListingSource {
+    _$fileListingSourceAtom.reportRead();
+    return super.fileListingSource;
+  }
+
+  @override
+  set fileListingSource(FileListingRequest value) {
+    _$fileListingSourceAtom.reportWrite(value, super.fileListingSource, () {
+      super.fileListingSource = value;
+    });
+  }
+
+  late final _$navigateToSourceAsyncAction = AsyncAction(
+      '_FileExplorerScreenStoreBase.navigateToSource',
+      context: context);
 
   @override
   Future<void> navigateToSource(
@@ -205,52 +218,66 @@ mixin _$FileExplorerScreenStore on _FileExplorerScreenStoreBase, Store {
         gitIgnorePattern: gitIgnorePattern));
   }
 
-  final _$refreshFilesAsyncAction =
-      AsyncAction('_FileExplorerScreenStoreBase.refreshFiles');
+  late final _$refreshFilesAsyncAction = AsyncAction(
+      '_FileExplorerScreenStoreBase.refreshFiles',
+      context: context);
 
   @override
-  Future<void> refreshFiles({bool invalidateCache = false}) {
-    return _$refreshFilesAsyncAction
-        .run(() => super.refreshFiles(invalidateCache: invalidateCache));
+  Future<void> refreshFiles(
+      {bool invalidateCache = false, bool clearSelectedFiles = true}) {
+    return _$refreshFilesAsyncAction.run(() => super.refreshFiles(
+        invalidateCache: invalidateCache,
+        clearSelectedFiles: clearSelectedFiles));
   }
 
-  final _$_updateFileListingRequestAsyncAction =
-      AsyncAction('_FileExplorerScreenStoreBase._updateFileListingRequest');
+  late final _$_updateFileListingRequestAsyncAction = AsyncAction(
+      '_FileExplorerScreenStoreBase._updateFileListingRequest',
+      context: context);
 
   @override
-  Future<void> _updateFileListingRequest(FileListingRequest request) {
-    return _$_updateFileListingRequestAsyncAction
-        .run(() => super._updateFileListingRequest(request));
+  Future<void> _updateFileListingRequest(FileListingRequest request,
+      {bool clearSelectedFiles = true}) {
+    return _$_updateFileListingRequestAsyncAction.run(() => super
+        ._updateFileListingRequest(request,
+            clearSelectedFiles: clearSelectedFiles));
   }
 
-  final _$setCurrentPathAsyncAction =
-      AsyncAction('_FileExplorerScreenStoreBase.setCurrentPath');
+  late final _$setCurrentPathAsyncAction = AsyncAction(
+      '_FileExplorerScreenStoreBase.setCurrentPath',
+      context: context);
 
   @override
   Future<void> setCurrentPath(String value) {
     return _$setCurrentPathAsyncAction.run(() => super.setCurrentPath(value));
   }
 
-  final _$setOrderDirOrderByAsyncAction =
-      AsyncAction('_FileExplorerScreenStoreBase.setOrderDirOrderBy');
+  late final _$setOrderDirOrderByAsyncAction = AsyncAction(
+      '_FileExplorerScreenStoreBase.setOrderDirOrderBy',
+      context: context);
 
   @override
   Future<void> setOrderDirOrderBy(
-      {required OrderDir? orderDir, required OrderBy? orderBy}) {
-    return _$setOrderDirOrderByAsyncAction.run(
-        () => super.setOrderDirOrderBy(orderDir: orderDir, orderBy: orderBy));
+      {required OrderDir? orderDir,
+      required OrderBy? orderBy,
+      bool clearSelectedFiles = false}) {
+    return _$setOrderDirOrderByAsyncAction.run(() => super.setOrderDirOrderBy(
+        orderDir: orderDir,
+        orderBy: orderBy,
+        clearSelectedFiles: clearSelectedFiles));
   }
 
-  final _$gotoPrevDirectoryAsyncAction =
-      AsyncAction('_FileExplorerScreenStoreBase.gotoPrevDirectory');
+  late final _$gotoPrevDirectoryAsyncAction = AsyncAction(
+      '_FileExplorerScreenStoreBase.gotoPrevDirectory',
+      context: context);
 
   @override
   Future<void> gotoPrevDirectory() {
     return _$gotoPrevDirectoryAsyncAction.run(() => super.gotoPrevDirectory());
   }
 
-  final _$_popFileListingSourceStackAsyncAction =
-      AsyncAction('_FileExplorerScreenStoreBase._popFileListingSourceStack');
+  late final _$_popFileListingSourceStackAsyncAction = AsyncAction(
+      '_FileExplorerScreenStoreBase._popFileListingSourceStack',
+      context: context);
 
   @override
   Future<void> _popFileListingSourceStack() {
@@ -258,18 +285,34 @@ mixin _$FileExplorerScreenStore on _FileExplorerScreenStoreBase, Store {
         .run(() => super._popFileListingSourceStack());
   }
 
-  final _$_fetchFilesAsyncAction =
-      AsyncAction('_FileExplorerScreenStoreBase._fetchFiles');
+  late final _$_fetchFilesAsyncAction =
+      AsyncAction('_FileExplorerScreenStoreBase._fetchFiles', context: context);
 
   @override
   Future<void> _fetchFiles(
-      {bool invalidateCache = false, bool? popStackOnError}) {
+      {bool invalidateCache = false,
+      bool? popStackOnError,
+      bool clearSelectedFiles = true}) {
     return _$_fetchFilesAsyncAction.run(() => super._fetchFiles(
-        invalidateCache: invalidateCache, popStackOnError: popStackOnError));
+        invalidateCache: invalidateCache,
+        popStackOnError: popStackOnError,
+        clearSelectedFiles: clearSelectedFiles));
   }
 
-  final _$_FileExplorerScreenStoreBaseActionController =
-      ActionController(name: '_FileExplorerScreenStoreBase');
+  late final _$_FileExplorerScreenStoreBaseActionController =
+      ActionController(name: '_FileExplorerScreenStoreBase', context: context);
+
+  @override
+  void setFileListingSourceStack(List<FileListingRequest> value) {
+    final _$actionInfo =
+        _$_FileExplorerScreenStoreBaseActionController.startAction(
+            name: '_FileExplorerScreenStoreBase.setFileListingSourceStack');
+    try {
+      return super.setFileListingSourceStack(value);
+    } finally {
+      _$_FileExplorerScreenStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
 
   @override
   void _setFileListingRequestStack(FileListingRequest value) {
@@ -296,23 +339,44 @@ mixin _$FileExplorerScreenStore on _FileExplorerScreenStoreBase, Store {
   }
 
   @override
-  void setSelectedFile(FileListingResponse fileContainer,
-      {bool appendToList = false}) {
+  void selectAllFiles() {
     final _$actionInfo = _$_FileExplorerScreenStoreBaseActionController
-        .startAction(name: '_FileExplorerScreenStoreBase.setSelectedFile');
+        .startAction(name: '_FileExplorerScreenStoreBase.selectAllFiles');
     try {
-      return super.setSelectedFile(fileContainer, appendToList: appendToList);
+      return super.selectAllFiles();
     } finally {
       _$_FileExplorerScreenStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  void selectAllFiles() {
+  void setSelectedFiles(Map<String, FileListingResponse> value) {
     final _$actionInfo = _$_FileExplorerScreenStoreBaseActionController
-        .startAction(name: '_FileExplorerScreenStoreBase.selectAllFiles');
+        .startAction(name: '_FileExplorerScreenStoreBase.setSelectedFiles');
     try {
-      return super.selectAllFiles();
+      return super.setSelectedFiles(value);
+    } finally {
+      _$_FileExplorerScreenStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  Map<String, FileListingResponse> getSelectedFiles() {
+    final _$actionInfo = _$_FileExplorerScreenStoreBaseActionController
+        .startAction(name: '_FileExplorerScreenStoreBase.getSelectedFiles');
+    try {
+      return super.getSelectedFiles();
+    } finally {
+      _$_FileExplorerScreenStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  bool isFileSelected(String uniqueKey) {
+    final _$actionInfo = _$_FileExplorerScreenStoreBaseActionController
+        .startAction(name: '_FileExplorerScreenStoreBase.isFileSelected');
+    try {
+      return super.isFileSelected(uniqueKey);
     } finally {
       _$_FileExplorerScreenStoreBaseActionController.endAction(_$actionInfo);
     }
