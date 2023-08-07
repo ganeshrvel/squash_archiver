@@ -109,8 +109,6 @@ dependencies:
       url: https://github.com/ganeshrvel/another-flushbar.git
       ref: 61f894d95ec270dce47969b9284f9d887979efaa
 
-  scrollable_positioned_list_extended: ^0.3.9
-
 dev_dependencies:
   flutter_test:
     sdk: flutter

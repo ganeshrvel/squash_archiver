@@ -1,10 +1,10 @@
 import 'package:archiver_ffi/archiver_ffi.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mobx/mobx.dart';
-import 'package:scrollable_positioned_list_extended/scrollable_positioned_list_extended.dart';
 import 'package:squash_archiver/features/home/data/models/file_listing_response.dart';
 import 'package:squash_archiver/features/home/ui/pages/file_explorer_screen_store.dart';
 import 'package:squash_archiver/features/home/ui/widgets/file_explorer_table/file_explorer_table_datasource_store.dart';
@@ -13,12 +13,15 @@ import 'package:squash_archiver/features/home/ui/widgets/file_explorer_table/fil
 import 'package:squash_archiver/features/home/ui/widgets/file_explorer_table/models/file_explorer_table_row_entity.dart';
 import 'package:squash_archiver/features/home/ui/widgets/file_explorer_table/models/file_explorer_table_selection.dart';
 import 'package:squash_archiver/helpers/keyboard_activators.dart';
-import 'package:squash_archiver/utils/log/log.dart';
 import 'package:squash_archiver/utils/utils/math.dart';
 import 'package:squash_archiver/utils/utils/store_helper.dart';
 import 'package:squash_archiver/widget_extends/sf_widget.dart';
 
 enum _NavigationDirection { DOWN, UP }
+
+typedef RowRendererProps = ({
+  GlobalKey globalKey,
+});
 
 /// A scrollable data table with sorting and selection.
 class FileExplorerTable extends StatefulWidget {
@@ -94,11 +97,9 @@ class _FileExplorerTableState extends SfWidget<FileExplorerTable> {
   ScrollController get _fileExplorerScaffoldScrollController =>
       widget.fileExplorerScaffoldScrollController;
 
-  late final ItemScrollController _itemScrollController =
-      ItemScrollController();
+  late final ScrollController _scrollController = ScrollController();
 
-  late final ItemPositionsListener _itemPositionsListener =
-      ItemPositionsListener.create();
+  final Map<String, RowRendererProps> _rowRendererMap = {};
 
   _NavigationDirection _navigationDirection = _NavigationDirection.DOWN;
 
@@ -112,10 +113,8 @@ class _FileExplorerTableState extends SfWidget<FileExplorerTable> {
             (_) {
               if (mounted &&
                   _fileExplorerTableDataSourceStore.rows.isNotEmpty &&
-                  _itemScrollController.isAttached) {
-                _itemScrollController.jumpTo(
-                  index: 0,
-                );
+                  _scrollController.hasClients) {
+                _scrollController.jumpTo(0);
               }
             },
           );
@@ -129,6 +128,7 @@ class _FileExplorerTableState extends SfWidget<FileExplorerTable> {
   @override
   void dispose() {
     disposeStore(_disposers);
+    _scrollController.dispose();
     _focusNode.dispose();
     super.dispose();
   }
@@ -172,23 +172,36 @@ class _FileExplorerTableState extends SfWidget<FileExplorerTable> {
   }
 
   void _scrollToRow({
-    required int index,
+    required FileListingResponse row,
+    required _NavigationDirection direction,
   }) {
-    var isIndexVisible = false;
-    for (final itemPosition in _itemPositionsListener.itemPositions.value) {
-      if (itemPosition.index == index) {
-        if (itemPosition.itemLeadingEdge < 1 &&
-            itemPosition.itemTrailingEdge < 1) {
-          isIndexVisible = true;
-          break;
-        }
-      }
+    final rowRendererProps = _rowRendererMap[row.uniqueId];
+    if (rowRendererProps == null) {
+      return;
     }
 
-    if (!isIndexVisible) {
-      _itemScrollController.getAutoScrollController?.scrollToIndex(
-        index,
-        duration: const Duration(milliseconds: 1),
+    final globalKey = rowRendererProps.globalKey;
+    final currentContext = globalKey.currentContext;
+    if (currentContext == null) {
+      return;
+    }
+
+    final renderObject = currentContext.findRenderObject();
+    if (renderObject == null) {
+      return;
+    }
+
+    final viewport = RenderAbstractViewport.of(renderObject);
+    final offsetToRevealBottom = viewport.getOffsetToReveal(renderObject, 1.0);
+    final offsetToRevealTop = viewport.getOffsetToReveal(renderObject, 0.0);
+
+    if (offsetToRevealBottom.offset > _scrollController.position.pixels ||
+        _scrollController.position.pixels > offsetToRevealTop.offset) {
+      _scrollController.position.ensureVisible(
+        renderObject,
+        alignmentPolicy: direction == _NavigationDirection.DOWN
+            ? ScrollPositionAlignmentPolicy.keepVisibleAtEnd
+            : ScrollPositionAlignmentPolicy.keepVisibleAtStart,
       );
     }
   }
@@ -228,7 +241,8 @@ class _FileExplorerTableState extends SfWidget<FileExplorerTable> {
     );
 
     _scrollToRow(
-      index: nextRowToNavigateTo.value.index,
+      row: nextRowToNavigateTo.value,
+      direction: _NavigationDirection.DOWN,
     );
   }
 
@@ -276,7 +290,8 @@ class _FileExplorerTableState extends SfWidget<FileExplorerTable> {
     );
 
     _scrollToRow(
-      index: nextRowToNavigateTo.value.index,
+      row: nextRowToNavigateTo.value,
+      direction: _NavigationDirection.UP,
     );
   }
 
@@ -287,6 +302,16 @@ class _FileExplorerTableState extends SfWidget<FileExplorerTable> {
     _onDoubleTap(
       row: row,
     );
+  }
+
+  GlobalKey _getGlobalKey({required String rowKey}) {
+    if (_rowRendererMap[rowKey] != null) {
+      return _rowRendererMap[rowKey]!.globalKey;
+    }
+    final _globalKey = GlobalKey();
+    _rowRendererMap[rowKey] = (globalKey: _globalKey);
+
+    return _globalKey;
   }
 
   void _processTaps({
@@ -497,12 +522,11 @@ class _FileExplorerTableState extends SfWidget<FileExplorerTable> {
                   final selectedRows =
                       _fileExplorerTableDataSourceStore.selectedRows;
 
-                  return ScrollablePositionedList.builder(
+                  return ListView.builder(
                     padding: const EdgeInsets.only(top: 5),
-                    initialScrollIndex: 0,
-                    itemPositionsListener: _itemPositionsListener,
-                    itemScrollController: _itemScrollController,
+                    controller: _scrollController,
                     itemCount: _fileExplorerTableDataSourceStore.rowCount,
+                    itemExtent: _rowHeight,
                     itemBuilder: (context, index) {
                       final rowValueGroup =
                           _fileExplorerTableDataSourceStore.getRowValueGroup(
@@ -510,7 +534,9 @@ class _FileExplorerTableState extends SfWidget<FileExplorerTable> {
                       );
 
                       return FileExplorerTableRow(
-                        key: Key(rowValueGroup.row.rowKey),
+                        key: _getGlobalKey(
+                          rowKey: rowValueGroup.row.rowKey,
+                        ),
                         index: index,
                         rowHeight: _rowHeight,
                         columnWidths: columnWidths,

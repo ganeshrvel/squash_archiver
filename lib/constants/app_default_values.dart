@@ -1,6 +1,6 @@
 import 'package:archiver_ffi/archiver_ffi.dart';
-import 'package:squash_archiver/helpers/files_helper.dart';
 import 'package:squash_archiver/features/home/data/enums/file_explorer_entities_sort_by.dart';
+import 'package:squash_archiver/helpers/files_helper.dart';
 
 class AppDefaultValues {
   AppDefaultValues._();

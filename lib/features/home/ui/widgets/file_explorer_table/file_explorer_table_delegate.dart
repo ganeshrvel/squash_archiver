@@ -2,7 +2,6 @@ import 'package:archiver_ffi/archiver_ffi.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:macos_ui/macos_ui.dart';
-import 'package:squash_archiver/helpers/provider_helpers.dart';
 import 'package:squash_archiver/features/home/data/enums/file_explorer_source.dart';
 import 'package:squash_archiver/features/home/data/models/file_listing_response.dart';
 import 'package:squash_archiver/features/home/ui/pages/file_explorer_screen_store.dart';
@@ -10,6 +9,7 @@ import 'package:squash_archiver/features/home/ui/widgets/file_explorer_table/fil
 import 'package:squash_archiver/features/home/ui/widgets/file_explorer_table/file_explorer_table_column_definition_store.dart';
 import 'package:squash_archiver/features/home/ui/widgets/file_explorer_table/file_explorer_table_datasource_store.dart';
 import 'package:squash_archiver/features/home/ui/widgets/file_explorer_table/models/file_explorer_table_row_entity.dart';
+import 'package:squash_archiver/helpers/provider_helpers.dart';
 import 'package:squash_archiver/utils/utils/functs.dart';
 import 'package:squash_archiver/widget_extends/sf_widget.dart';
 import 'package:squash_archiver/widgets/text/text_middle_ellipsis.dart';
