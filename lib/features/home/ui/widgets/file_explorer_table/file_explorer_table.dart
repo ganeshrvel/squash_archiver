@@ -1,6 +1,5 @@
 import 'package:archiver_ffi/archiver_ffi.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -99,9 +98,7 @@ class _FileExplorerTableState extends SfWidget<FileExplorerTable> {
 
   late final ScrollController _scrollController = ScrollController();
 
-  final Map<String, RowRendererProps> _rowRendererMap = {};
-
-  _NavigationDirection _navigationDirection = _NavigationDirection.DOWN;
+  _NavigationDirection _multipleNavigationDirection = _NavigationDirection.DOWN;
 
   @override
   void initState() {
@@ -163,59 +160,139 @@ class _FileExplorerTableState extends SfWidget<FileExplorerTable> {
       appendRowSelection: appendRowSelection,
       toggleSelection: true,
     );
+
+    _multipleNavigationDirection = _NavigationDirection.DOWN;
   }
 
-  void _handleOnArrowDownShiftKeyPress() {
-    //todo fix the toggling of the selected keys on shift down
+  ({int firstFullyVisibleIndex, int lastFullyVisibleIndex}) _findVisibleRows() {
+    final firstVisibleIndex = (_scrollController.offset / _rowHeight).floor();
+    final lastVisibleIndex = ((_scrollController.offset +
+                _scrollController.position.viewportDimension) /
+            _rowHeight)
+        .ceil();
 
-    _handleOnArrowDownKeyPress(appendRowSelection: true);
+    var firstFullyVisibleIndex = firstVisibleIndex;
+    var lastFullyVisibleIndex = lastVisibleIndex - 1;
+
+    // Find the first fully visible index
+    for (var idx = firstVisibleIndex; idx <= lastVisibleIndex; idx++) {
+      final itemPosition = idx * _rowHeight;
+      final itemBottom = itemPosition + _rowHeight;
+      final viewportTop = _scrollController.offset;
+      final viewportBottom = _scrollController.offset +
+          _scrollController.position.viewportDimension;
+
+      if (itemPosition >= viewportTop && itemBottom <= viewportBottom) {
+        firstFullyVisibleIndex = idx;
+        break;
+      }
+    }
+
+    // Find the last fully visible index
+    for (var idx = lastVisibleIndex - 1; idx >= firstVisibleIndex; idx--) {
+      final itemPosition = idx * _rowHeight;
+      final itemBottom = itemPosition + _rowHeight;
+      final viewportTop = _scrollController.offset;
+      final viewportBottom = _scrollController.offset +
+          _scrollController.position.viewportDimension;
+
+      if (itemPosition >= viewportTop && itemBottom <= viewportBottom) {
+        lastFullyVisibleIndex = idx;
+        break;
+      }
+    }
+
+    return (
+      firstFullyVisibleIndex: firstFullyVisibleIndex,
+      lastFullyVisibleIndex: lastFullyVisibleIndex,
+    );
   }
 
   void _scrollToRow({
     required FileListingResponse row,
     required _NavigationDirection direction,
   }) {
-    final rowRendererProps = _rowRendererMap[row.uniqueId];
-    if (rowRendererProps == null) {
-      return;
-    }
+    final (
+      firstFullyVisibleIndex: firstFullyVisibleIndex,
+      lastFullyVisibleIndex: lastFullyVisibleIndex
+    ) = _findVisibleRows();
 
-    final globalKey = rowRendererProps.globalKey;
-    final currentContext = globalKey.currentContext;
-    if (currentContext == null) {
-      return;
-    }
+    if (!isWithinRange(
+      value: row.index,
+      min: firstFullyVisibleIndex,
+      max: lastFullyVisibleIndex - 1,
+      inclusiveOfMax: true,
+    )) {
+      double offset;
+      if (direction == _NavigationDirection.DOWN) {
+        offset = (row.index + 2) * _rowHeight -
+            _scrollController.position.viewportDimension;
+      } else {
+        offset = row.index * _rowHeight;
+      }
 
-    final renderObject = currentContext.findRenderObject();
-    if (renderObject == null) {
-      return;
-    }
-
-    final viewport = RenderAbstractViewport.of(renderObject);
-    final offsetToRevealBottom = viewport.getOffsetToReveal(renderObject, 1.0);
-    final offsetToRevealTop = viewport.getOffsetToReveal(renderObject, 0.0);
-
-    if (offsetToRevealBottom.offset > _scrollController.position.pixels ||
-        _scrollController.position.pixels > offsetToRevealTop.offset) {
-      _scrollController.position.ensureVisible(
-        renderObject,
-        alignmentPolicy: direction == _NavigationDirection.DOWN
-            ? ScrollPositionAlignmentPolicy.keepVisibleAtEnd
-            : ScrollPositionAlignmentPolicy.keepVisibleAtStart,
+      final refinedOffset = coerceIn<double>(
+        value: offset,
+        min: 0,
+        max: _scrollController.position.maxScrollExtent,
       );
+
+      _scrollController.jumpTo(refinedOffset);
     }
   }
 
-  void _handleOnArrowDownKeyPress({bool appendRowSelection = false}) {
+  void _handleOnArrowDownShiftKeyPress() {
+    _handleOnArrowDownKeyPress(
+      appendRowSelection: true,
+      isShiftKeyPressed: true,
+    );
+  }
+
+  void _handleOnArrowDownKeyPress({
+    bool appendRowSelection = false,
+    bool isShiftKeyPressed = false,
+  }) {
     if (_fileExplorerTableDataSourceStore.rows.isEmpty) {
       return;
     }
 
+    var toggleSelection = false;
+    var nextRowIndex = 0;
     final lastSelectedRow = _fileExplorerTableDataSourceStore.lastSelectedRow;
 
-    var nextRowIndex = 0;
-    if (lastSelectedRow != null) {
-      nextRowIndex = lastSelectedRow.second.index + 1;
+    if (isShiftKeyPressed &&
+        _multipleNavigationDirection != _NavigationDirection.DOWN) {
+      nextRowIndex = 0;
+      if (lastSelectedRow != null) {
+        nextRowIndex = lastSelectedRow.second.index;
+        toggleSelection = true;
+      }
+
+      final rowGroup = _fileExplorerTableDataSourceStore.getRowValueGroup(
+        nextRowIndex,
+      );
+
+      if (rowGroup.nextRow != null) {
+        if (!rowGroup.nextRow!.isSelected()) {
+          _multipleNavigationDirection = _NavigationDirection.DOWN;
+
+          nextRowIndex = nextRowIndex + 1;
+          toggleSelection = false;
+        }
+      } else {
+        return;
+      }
+    } else {
+      nextRowIndex = 0;
+      if (lastSelectedRow != null) {
+        nextRowIndex = lastSelectedRow.second.index + 1;
+      }
+
+      _multipleNavigationDirection = _NavigationDirection.DOWN;
+
+      // else {
+      // //todo when the pivot hits selected rows, it cannot toggle thus cannot proceed navigation
+      // }
     }
 
     final nextIndexToNavigateTo = coerceIn(
@@ -225,6 +302,7 @@ class _FileExplorerTableState extends SfWidget<FileExplorerTable> {
     );
     final nextRow =
         _fileExplorerTableDataSourceStore.rows[nextIndexToNavigateTo];
+
     final nextRowToNavigateTo = FileExplorerTableRowEntity(
       isSelected: () => _fileExplorerTableDataSourceStore.isRowSelected(
         nextRow.uniqueId,
@@ -236,7 +314,7 @@ class _FileExplorerTableState extends SfWidget<FileExplorerTable> {
     _select(
       index: nextRowToNavigateTo.value.index,
       rows: [nextRowToNavigateTo],
-      toggleSelection: false,
+      toggleSelection: toggleSelection,
       appendRowSelection: appendRowSelection,
     );
 
@@ -247,50 +325,87 @@ class _FileExplorerTableState extends SfWidget<FileExplorerTable> {
   }
 
   void _handleOnArrowUpShiftKeyPress() {
-    //todo fix the toggling of the selected keys on shift up
-    _handleOnArrowUpKeyPress(appendRowSelection: true);
+    _handleOnArrowUpKeyPress(
+      appendRowSelection: true,
+      isShiftKeyPressed: true,
+    );
   }
 
   void _handleOnArrowUpMetaKeyPress() {
     _fileExplorerScreenStore.gotoPrevDirectory();
   }
 
-  void _handleOnArrowUpKeyPress({bool appendRowSelection = false}) {
+  void _handleOnArrowUpKeyPress({
+    bool appendRowSelection = false,
+    bool isShiftKeyPressed = false,
+  }) {
     if (_fileExplorerTableDataSourceStore.rows.isEmpty) {
       return;
     }
 
+    var toggleSelection = false;
+    var prevRowIndex = 0;
     final lastSelectedRow = _fileExplorerTableDataSourceStore.lastSelectedRow;
 
-    var nextRowIndex = _fileExplorerTableDataSourceStore.rows.length - 1;
-    if (lastSelectedRow != null) {
-      nextRowIndex = lastSelectedRow.second.index - 1;
+    if (isShiftKeyPressed &&
+        _multipleNavigationDirection != _NavigationDirection.UP) {
+      prevRowIndex = _fileExplorerTableDataSourceStore.rows.length - 1;
+      if (lastSelectedRow != null) {
+        prevRowIndex = lastSelectedRow.second.index;
+        toggleSelection = true;
+      }
+
+      final rowGroup = _fileExplorerTableDataSourceStore.getRowValueGroup(
+        prevRowIndex,
+      );
+
+      if (rowGroup.prevRow != null) {
+        if (!rowGroup.prevRow!.isSelected()) {
+          _multipleNavigationDirection = _NavigationDirection.UP;
+
+          prevRowIndex = prevRowIndex - 1;
+          toggleSelection = false;
+        }
+      } else {
+        return;
+      }
+    } else {
+      prevRowIndex = 0;
+      if (lastSelectedRow != null) {
+        prevRowIndex = lastSelectedRow.second.index - 1;
+      }
+
+      _multipleNavigationDirection = _NavigationDirection.UP;
+
+      // else {
+      // //todo when the pivot hits selected rows, it cannot toggle thus cannot proceed navigation
+      // }
     }
 
-    final nextIndexToNavigateTo = coerceIn(
-      value: nextRowIndex,
+    final prevIndexToNavigateTo = coerceIn(
+      value: prevRowIndex,
       min: 0,
       max: _fileExplorerTableDataSourceStore.rows.length - 1,
     );
-    final nextRow =
-        _fileExplorerTableDataSourceStore.rows[nextIndexToNavigateTo];
-    final nextRowToNavigateTo = FileExplorerTableRowEntity(
+    final prevRow =
+        _fileExplorerTableDataSourceStore.rows[prevIndexToNavigateTo];
+    final prevRowToNavigateTo = FileExplorerTableRowEntity(
       isSelected: () => _fileExplorerTableDataSourceStore.isRowSelected(
-        nextRow.uniqueId,
+        prevRow.uniqueId,
       ),
-      value: nextRow,
-      rowKey: nextRow.uniqueId,
+      value: prevRow,
+      rowKey: prevRow.uniqueId,
     );
 
     _select(
-      index: nextRowToNavigateTo.value.index,
-      rows: [nextRowToNavigateTo],
-      toggleSelection: false,
+      index: prevRowToNavigateTo.value.index,
+      rows: [prevRowToNavigateTo],
+      toggleSelection: toggleSelection,
       appendRowSelection: appendRowSelection,
     );
 
     _scrollToRow(
-      row: nextRowToNavigateTo.value,
+      row: prevRowToNavigateTo.value,
       direction: _NavigationDirection.UP,
     );
   }
@@ -302,16 +417,8 @@ class _FileExplorerTableState extends SfWidget<FileExplorerTable> {
     _onDoubleTap(
       row: row,
     );
-  }
 
-  GlobalKey _getGlobalKey({required String rowKey}) {
-    if (_rowRendererMap[rowKey] != null) {
-      return _rowRendererMap[rowKey]!.globalKey;
-    }
-    final _globalKey = GlobalKey();
-    _rowRendererMap[rowKey] = (globalKey: _globalKey);
-
-    return _globalKey;
+    _multipleNavigationDirection = _NavigationDirection.DOWN;
   }
 
   void _processTaps({
@@ -431,6 +538,8 @@ class _FileExplorerTableState extends SfWidget<FileExplorerTable> {
     _onTap(
       selectedRows: _fileExplorerTableDataSourceStore.selectedRows,
     );
+
+    _multipleNavigationDirection = _NavigationDirection.DOWN;
   }
 
   void _handleOnKeyAMetaPress() {
@@ -439,6 +548,8 @@ class _FileExplorerTableState extends SfWidget<FileExplorerTable> {
     _onTap(
       selectedRows: _fileExplorerTableDataSourceStore.selectedRows,
     );
+
+    _multipleNavigationDirection = _NavigationDirection.UP;
   }
 
   void _initializeShortcutsActivator(VoidCallback cb) {
@@ -534,9 +645,7 @@ class _FileExplorerTableState extends SfWidget<FileExplorerTable> {
                       );
 
                       return FileExplorerTableRow(
-                        key: _getGlobalKey(
-                          rowKey: rowValueGroup.row.rowKey,
-                        ),
+                        key: ValueKey(rowValueGroup.row.rowKey),
                         index: index,
                         rowHeight: _rowHeight,
                         columnWidths: columnWidths,
