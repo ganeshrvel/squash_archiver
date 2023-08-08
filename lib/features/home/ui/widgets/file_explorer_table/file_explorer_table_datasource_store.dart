@@ -85,6 +85,10 @@ abstract class _FileExplorerTableDataSourceStoreBase with Store {
       if (toggleSelection && selectedRows.containsKey(row.rowKey)) {
         selectedRows.remove(row.rowKey);
       } else {
+        if (selectedRows.containsKey(row.rowKey)) {
+          selectedRows.remove(row.rowKey);
+        }
+
         selectedRows[row.rowKey] = row.value;
       }
     });

@@ -12,6 +12,8 @@ import 'package:squash_archiver/features/home/ui/widgets/file_explorer_table/fil
 import 'package:squash_archiver/features/home/ui/widgets/file_explorer_table/models/file_explorer_table_row_entity.dart';
 import 'package:squash_archiver/features/home/ui/widgets/file_explorer_table/models/file_explorer_table_selection.dart';
 import 'package:squash_archiver/helpers/keyboard_activators.dart';
+import 'package:squash_archiver/utils/utils/functs.dart';
+import 'package:squash_archiver/utils/utils/list.dart';
 import 'package:squash_archiver/utils/utils/math.dart';
 import 'package:squash_archiver/utils/utils/store_helper.dart';
 import 'package:squash_archiver/widget_extends/sf_widget.dart';
@@ -132,7 +134,6 @@ class _FileExplorerTableState extends SfWidget<FileExplorerTable> {
 
   void _select({
     required List<FileExplorerTableRowEntity> rows,
-    required int index,
     bool appendRowSelection = false,
     bool toggleSelection = true,
   }) {
@@ -151,12 +152,10 @@ class _FileExplorerTableState extends SfWidget<FileExplorerTable> {
 
   void _handleSingleTap({
     required FileExplorerTableRowEntity row,
-    required int index,
     required bool appendRowSelection,
   }) {
     _select(
       rows: [row],
-      index: index,
       appendRowSelection: appendRowSelection,
       toggleSelection: true,
     );
@@ -164,13 +163,18 @@ class _FileExplorerTableState extends SfWidget<FileExplorerTable> {
     _multipleNavigationDirection = _NavigationDirection.DOWN;
   }
 
+  /// This function finds the indices of the first and last fully visible rows within the viewport.
+  /// It calculates these indices based on the current scroll position and row height.
+  /// Returns a record containing the firstFullyVisibleIndex and lastFullyVisibleIndex.
   ({int firstFullyVisibleIndex, int lastFullyVisibleIndex}) _findVisibleRows() {
+    // Calculate the index of the first and last partially visible rows
     final firstVisibleIndex = (_scrollController.offset / _rowHeight).floor();
     final lastVisibleIndex = ((_scrollController.offset +
                 _scrollController.position.viewportDimension) /
             _rowHeight)
         .ceil();
 
+    // Initialize with partially visible indices
     var firstFullyVisibleIndex = firstVisibleIndex;
     var lastFullyVisibleIndex = lastVisibleIndex - 1;
 
@@ -208,15 +212,20 @@ class _FileExplorerTableState extends SfWidget<FileExplorerTable> {
     );
   }
 
+  /// Scroll to the specified row ensuring it is fully visible within the viewport.
+  /// Adjusts the scroll offset based on the navigation direction and row index.
+  /// If the row is not fully visible, the scroll offset is adjusted for better user experience.
   void _scrollToRow({
     required FileListingResponse row,
     required _NavigationDirection direction,
   }) {
+    // Find the indices of the first and last fully visible rows within the viewport
     final (
       firstFullyVisibleIndex: firstFullyVisibleIndex,
       lastFullyVisibleIndex: lastFullyVisibleIndex
     ) = _findVisibleRows();
 
+    // Check if the row is fully visible within the viewport
     if (!isWithinRange(
       value: row.index,
       min: firstFullyVisibleIndex,
@@ -225,18 +234,22 @@ class _FileExplorerTableState extends SfWidget<FileExplorerTable> {
     )) {
       double offset;
       if (direction == _NavigationDirection.DOWN) {
+        // Calculate the offset for scrolling down while preserving highlighting
         offset = (row.index + 2) * _rowHeight -
             _scrollController.position.viewportDimension;
       } else {
-        offset = row.index * _rowHeight;
+        // Calculate the offset for scrolling up while preserving highlighting
+        offset = (row.index * _rowHeight) - (_rowHeight - 2);
       }
 
+      // Refine the offset within the valid range
       final refinedOffset = coerceIn<double>(
         value: offset,
         min: 0,
         max: _scrollController.position.maxScrollExtent,
       );
 
+      // Jump to the refined offset to ensure the row is fully visible
       _scrollController.jumpTo(refinedOffset);
     }
   }
@@ -248,80 +261,214 @@ class _FileExplorerTableState extends SfWidget<FileExplorerTable> {
     );
   }
 
+  /// Retrieves a list of rows from the previous selected group relative to the
+  /// [prevRowToNavigateTo] row.
+  /// If the row immediately preceding [prevRowToNavigateTo] is selected, this function
+  /// will merge the selection block and include all rows from that group.
+  List<FileExplorerTableRowEntity> _getRowsInPrevSelectedGroup({
+    required FileExplorerTableRowEntity prevRowToNavigateTo,
+  }) {
+    // Initialize a list to store rows from the previous selected group
+    final rowsInPrevSelectedGroup = <FileExplorerTableRowEntity>[];
+
+    // Retrieve the row immediately preceding [prevRowToNavigateTo]
+    final prevToPrevRow = _fileExplorerTableDataSourceStore.rows
+        .at(prevRowToNavigateTo.value.index - 1);
+
+    // Check if the previous-to-previous row is selected
+    if (prevToPrevRow != null &&
+        _fileExplorerTableDataSourceStore
+                .selectedRows[prevToPrevRow.uniqueId] !=
+            null) {
+      // Iterate from the previous-to-previous row upwards, looking for the top selected row
+      for (var idx = prevToPrevRow.index; idx >= 0; idx--) {
+        final _uniqueId = _fileExplorerTableDataSourceStore.rows[idx].uniqueId;
+
+        // If a selected row is encountered, add it to the rowsInPrevSelectedGroup list
+        if (_fileExplorerTableDataSourceStore.selectedRows[_uniqueId] == null) {
+          break; // Stop when a non-selected row is encountered
+        }
+
+        // Create a new instance of FileExplorerTableRowEntity with isSelected set to true,
+        // using the row data from the data source store
+        rowsInPrevSelectedGroup.add(
+          FileExplorerTableRowEntity(
+            isSelected: () => true,
+            value: _fileExplorerTableDataSourceStore.rows[idx],
+            rowKey: _uniqueId,
+          ),
+        );
+      }
+    }
+
+    // Return the list of rows from the previous selected group
+    return rowsInPrevSelectedGroup;
+  }
+
+  /// Retrieves a list of rows from the next selected group relative to the
+  /// [nextRowToNavigateTo] row.
+  /// If the row immediately following [nextRowToNavigateTo] is selected, this function
+  /// will merge the selection block and include all rows from that group.
+  List<FileExplorerTableRowEntity> _getRowsInNextSelectedGroup({
+    required FileExplorerTableRowEntity nextRowToNavigateTo,
+  }) {
+    // Initialize a list to store rows from the next selected group
+    final rowsInNextSelectedGroup = <FileExplorerTableRowEntity>[];
+
+    // Retrieve the row immediately following [nextRowToNavigateTo]
+    final nextToNextRow = _fileExplorerTableDataSourceStore.rows
+        .at(nextRowToNavigateTo.value.index + 1);
+
+    // Check if the next-to-next row is selected
+    if (nextToNextRow != null &&
+        _fileExplorerTableDataSourceStore
+                .selectedRows[nextToNextRow.uniqueId] !=
+            null) {
+      // Iterate from the next-to-next row downwards, looking for the bottom selected row
+      for (var idx = nextToNextRow.index;
+          idx < _fileExplorerTableDataSourceStore.rows.length - 1;
+          idx++) {
+        final _uniqueId = _fileExplorerTableDataSourceStore.rows[idx].uniqueId;
+
+        // If a selected row is encountered, add it to the rowsInNextSelectedGroup list
+        if (_fileExplorerTableDataSourceStore.selectedRows[_uniqueId] == null) {
+          break; // Stop when a non-selected row is encountered
+        }
+
+        // Create a new instance of FileExplorerTableRowEntity with isSelected set to true,
+        // using the row data from the data source store
+        rowsInNextSelectedGroup.add(
+          FileExplorerTableRowEntity(
+            isSelected: () => true,
+            value: _fileExplorerTableDataSourceStore.rows[idx],
+            rowKey: _uniqueId,
+          ),
+        );
+      }
+    }
+
+    // Return the list of rows from the next selected group
+    return rowsInNextSelectedGroup;
+  }
+
+  /// Handles the behavior when the down arrow key is pressed.
+  /// It adjusts row selection, navigation, and scrolling based on keyboard input.
   void _handleOnArrowDownKeyPress({
     bool appendRowSelection = false,
     bool isShiftKeyPressed = false,
   }) {
+    // If there are no rows, return without performing any action
     if (_fileExplorerTableDataSourceStore.rows.isEmpty) {
       return;
     }
 
+    // Initialize variables for handling row selection and navigation
     var toggleSelection = false;
-    var nextRowIndex = 0;
     final lastSelectedRow = _fileExplorerTableDataSourceStore.lastSelectedRow;
+    var rowsInNextSelectedGroup = <FileExplorerTableRowEntity>[];
+    FileExplorerTableRowEntity nextRowToNavigateTo;
 
     if (isShiftKeyPressed &&
         _multipleNavigationDirection != _NavigationDirection.DOWN) {
-      nextRowIndex = 0;
+      // Handling shift key behavior and direction change
+      // Toggle the row to navigate to if shift key is pressed and direction changes
+      var nextRowIndex = 0;
       if (lastSelectedRow != null) {
         nextRowIndex = lastSelectedRow.second.index;
         toggleSelection = true;
       }
 
+      // Retrieve the row group for the next index to navigate to
       final rowGroup = _fileExplorerTableDataSourceStore.getRowValueGroup(
         nextRowIndex,
       );
 
       if (rowGroup.nextRow != null) {
+        // Reverse navigation direction if the next row is not selected
         if (!rowGroup.nextRow!.isSelected()) {
           _multipleNavigationDirection = _NavigationDirection.DOWN;
-
           nextRowIndex = nextRowIndex + 1;
           toggleSelection = false;
         }
       } else {
-        return;
+        return; // Return if the row to navigate to is null
       }
+
+      // Calculate the next index to navigate to and retrieve the corresponding row
+      final nextIndexToNavigateTo = coerceIn(
+        value: nextRowIndex,
+        min: 0,
+        max: _fileExplorerTableDataSourceStore.rows.length - 1,
+      );
+      final nextRow =
+          _fileExplorerTableDataSourceStore.rows[nextIndexToNavigateTo];
+
+      // Create a FileExplorerTableRowEntity instance for the next row to navigate to
+      nextRowToNavigateTo = FileExplorerTableRowEntity(
+        isSelected: () => _fileExplorerTableDataSourceStore.isRowSelected(
+          nextRow.uniqueId,
+        ),
+        value: nextRow,
+        rowKey: nextRow.uniqueId,
+      );
     } else {
-      nextRowIndex = 0;
+      var nextRowIndex = 0;
+      // If the last selected row is not null, calculate the next index to navigate to
       if (lastSelectedRow != null) {
-        nextRowIndex = lastSelectedRow.second.index + 1;
+        nextRowIndex = coerceIn(
+          value: lastSelectedRow.second.index + 1,
+          min: 0,
+          max: _fileExplorerTableDataSourceStore.rows.length - 1,
+        );
       }
+
+      // Retrieve the row for the calculated next index to navigate to
+      final nextRow = _fileExplorerTableDataSourceStore.rows[nextRowIndex];
+      nextRowToNavigateTo = FileExplorerTableRowEntity(
+        isSelected: () => _fileExplorerTableDataSourceStore.isRowSelected(
+          nextRow.uniqueId,
+        ),
+        value: nextRow,
+        rowKey: nextRow.uniqueId,
+      );
+
+      // Retrieve rows in the next selected group for better navigation
+      rowsInNextSelectedGroup = _getRowsInNextSelectedGroup(
+        nextRowToNavigateTo: nextRowToNavigateTo,
+      );
 
       _multipleNavigationDirection = _NavigationDirection.DOWN;
-
-      // else {
-      // //todo when the pivot hits selected rows, it cannot toggle thus cannot proceed navigation
-      // }
     }
 
-    final nextIndexToNavigateTo = coerceIn(
-      value: nextRowIndex,
-      min: 0,
-      max: _fileExplorerTableDataSourceStore.rows.length - 1,
-    );
-    final nextRow =
-        _fileExplorerTableDataSourceStore.rows[nextIndexToNavigateTo];
+    // Select rows and adjust scrolling based on the calculated information
+    if (isNotNullOrEmpty(rowsInNextSelectedGroup)) {
+      _select(
+        rows: [
+          nextRowToNavigateTo,
+          ...rowsInNextSelectedGroup,
+        ],
+        toggleSelection: false,
+        appendRowSelection: appendRowSelection,
+      );
 
-    final nextRowToNavigateTo = FileExplorerTableRowEntity(
-      isSelected: () => _fileExplorerTableDataSourceStore.isRowSelected(
-        nextRow.uniqueId,
-      ),
-      value: nextRow,
-      rowKey: nextRow.uniqueId,
-    );
+      _scrollToRow(
+        row: rowsInNextSelectedGroup.getLastOrNull()!.value,
+        direction: _NavigationDirection.DOWN,
+      );
+    } else {
+      _select(
+        rows: [
+          nextRowToNavigateTo,
+        ],
+        toggleSelection: toggleSelection,
+        appendRowSelection: appendRowSelection,
+      );
 
-    _select(
-      index: nextRowToNavigateTo.value.index,
-      rows: [nextRowToNavigateTo],
-      toggleSelection: toggleSelection,
-      appendRowSelection: appendRowSelection,
-    );
-
-    _scrollToRow(
-      row: nextRowToNavigateTo.value,
-      direction: _NavigationDirection.DOWN,
-    );
+      _scrollToRow(
+        row: nextRowToNavigateTo.value,
+        direction: _NavigationDirection.DOWN,
+      );
+    }
   }
 
   void _handleOnArrowUpShiftKeyPress() {
@@ -331,83 +478,126 @@ class _FileExplorerTableState extends SfWidget<FileExplorerTable> {
     );
   }
 
-  void _handleOnArrowUpMetaKeyPress() {
-    _fileExplorerScreenStore.gotoPrevDirectory();
-  }
-
+  /// Handles the behavior when the up arrow key is pressed.
+  /// It adjusts row selection, navigation, and scrolling based on keyboard input.
   void _handleOnArrowUpKeyPress({
     bool appendRowSelection = false,
     bool isShiftKeyPressed = false,
   }) {
+    // If there are no rows, return without performing any action
     if (_fileExplorerTableDataSourceStore.rows.isEmpty) {
       return;
     }
 
+    // Initialize variables for handling row selection and navigation
     var toggleSelection = false;
-    var prevRowIndex = 0;
     final lastSelectedRow = _fileExplorerTableDataSourceStore.lastSelectedRow;
+    var rowsInPrevSelectedGroup = <FileExplorerTableRowEntity>[];
+    FileExplorerTableRowEntity prevRowToNavigateTo;
 
     if (isShiftKeyPressed &&
         _multipleNavigationDirection != _NavigationDirection.UP) {
-      prevRowIndex = _fileExplorerTableDataSourceStore.rows.length - 1;
+      // Handling shift key behavior and direction change
+      // Toggle the row to navigate to if shift key is pressed and direction changes
+      var prevRowIndex = _fileExplorerTableDataSourceStore.rows.length - 1;
       if (lastSelectedRow != null) {
         prevRowIndex = lastSelectedRow.second.index;
         toggleSelection = true;
       }
 
+      // Retrieve the row group for the previous index to navigate to
       final rowGroup = _fileExplorerTableDataSourceStore.getRowValueGroup(
         prevRowIndex,
       );
 
       if (rowGroup.prevRow != null) {
+        // Reverse navigation direction if the previous row is not selected
         if (!rowGroup.prevRow!.isSelected()) {
           _multipleNavigationDirection = _NavigationDirection.UP;
-
           prevRowIndex = prevRowIndex - 1;
           toggleSelection = false;
         }
       } else {
-        return;
+        return; // Return if the row to navigate to is null
       }
+
+      // Calculate the previous index to navigate to and retrieve the corresponding row
+      final prevIndexToNavigateTo = coerceIn(
+        value: prevRowIndex,
+        min: 0,
+        max: _fileExplorerTableDataSourceStore.rows.length - 1,
+      );
+      final prevRow =
+          _fileExplorerTableDataSourceStore.rows[prevIndexToNavigateTo];
+      prevRowToNavigateTo = FileExplorerTableRowEntity(
+        isSelected: () => _fileExplorerTableDataSourceStore.isRowSelected(
+          prevRow.uniqueId,
+        ),
+        value: prevRow,
+        rowKey: prevRow.uniqueId,
+      );
     } else {
-      prevRowIndex = 0;
+      var prevRowIndex = 0;
+      // If the last selected row is not null, calculate the previous index to navigate to
       if (lastSelectedRow != null) {
-        prevRowIndex = lastSelectedRow.second.index - 1;
+        prevRowIndex = coerceIn(
+          value: lastSelectedRow.second.index - 1,
+          min: 0,
+          max: _fileExplorerTableDataSourceStore.rows.length - 1,
+        );
       }
+
+      // Retrieve the row for the calculated previous index to navigate to
+      final prevRow = _fileExplorerTableDataSourceStore.rows[prevRowIndex];
+      prevRowToNavigateTo = FileExplorerTableRowEntity(
+        isSelected: () => _fileExplorerTableDataSourceStore.isRowSelected(
+          prevRow.uniqueId,
+        ),
+        value: prevRow,
+        rowKey: prevRow.uniqueId,
+      );
+
+      // Retrieve rows in the previous selected group for better navigation
+      rowsInPrevSelectedGroup = _getRowsInPrevSelectedGroup(
+        prevRowToNavigateTo: prevRowToNavigateTo,
+      );
 
       _multipleNavigationDirection = _NavigationDirection.UP;
-
-      // else {
-      // //todo when the pivot hits selected rows, it cannot toggle thus cannot proceed navigation
-      // }
     }
 
-    final prevIndexToNavigateTo = coerceIn(
-      value: prevRowIndex,
-      min: 0,
-      max: _fileExplorerTableDataSourceStore.rows.length - 1,
-    );
-    final prevRow =
-        _fileExplorerTableDataSourceStore.rows[prevIndexToNavigateTo];
-    final prevRowToNavigateTo = FileExplorerTableRowEntity(
-      isSelected: () => _fileExplorerTableDataSourceStore.isRowSelected(
-        prevRow.uniqueId,
-      ),
-      value: prevRow,
-      rowKey: prevRow.uniqueId,
-    );
+    // Select rows and adjust scrolling based on the calculated information
+    if (isNotNullOrEmpty(rowsInPrevSelectedGroup)) {
+      _select(
+        rows: [
+          prevRowToNavigateTo,
+          ...rowsInPrevSelectedGroup,
+        ],
+        toggleSelection: false,
+        appendRowSelection: appendRowSelection,
+      );
 
-    _select(
-      index: prevRowToNavigateTo.value.index,
-      rows: [prevRowToNavigateTo],
-      toggleSelection: toggleSelection,
-      appendRowSelection: appendRowSelection,
-    );
+      _scrollToRow(
+        row: rowsInPrevSelectedGroup.getLastOrNull()!.value,
+        direction: _NavigationDirection.UP,
+      );
+    } else {
+      _select(
+        rows: [
+          prevRowToNavigateTo,
+        ],
+        toggleSelection: toggleSelection,
+        appendRowSelection: appendRowSelection,
+      );
 
-    _scrollToRow(
-      row: prevRowToNavigateTo.value,
-      direction: _NavigationDirection.UP,
-    );
+      _scrollToRow(
+        row: prevRowToNavigateTo.value,
+        direction: _NavigationDirection.UP,
+      );
+    }
+  }
+
+  void _handleOnArrowUpMetaKeyPress() {
+    _fileExplorerScreenStore.gotoPrevDirectory();
   }
 
   void _handleOnDoubleTap({
@@ -421,33 +611,35 @@ class _FileExplorerTableState extends SfWidget<FileExplorerTable> {
     _multipleNavigationDirection = _NavigationDirection.DOWN;
   }
 
+  /// Processes tap events on a row, handling selection and navigation based on keyboard modifiers.
   void _processTaps({
     required FileExplorerTableRowEntity row,
     required int index,
   }) {
+    // Check if Meta (Command) and Shift keys are pressed
     final isMetaPressed = KeyboardActivators.isMetaPressed();
     final isShiftPressed = KeyboardActivators.isShiftPressed();
 
     if (isMetaPressed && isShiftPressed) {
+      // Handle tap with both Meta and Shift keys pressed
       _handleSingleTap(
         row: row,
-        index: index,
         appendRowSelection: true,
       );
     } else if (isMetaPressed) {
+      // Handle tap with only Meta key pressed
       _handleSingleTap(
         row: row,
-        index: index,
         appendRowSelection: true,
       );
     } else if (isShiftPressed) {
+      // Handle tap with only Shift key pressed
       final lastSelectedRow = _fileExplorerTableDataSourceStore.lastSelectedRow;
-
+      // Calculate the range of rows to select
       var prevRowIndex = 0;
       if (lastSelectedRow != null) {
         prevRowIndex = lastSelectedRow.second.index;
       }
-
       var rangeStart = prevRowIndex;
       var rangeEnd = coerceIn(
         value: index + 1,
@@ -455,7 +647,7 @@ class _FileExplorerTableState extends SfWidget<FileExplorerTable> {
         max: _fileExplorerTableDataSourceStore.rows.length,
       );
 
-      /// when a row with lower index or the same index is clicked then swap out the start and end indices
+      // Swap start and end indices if necessary
       if (rangeStart >= rangeEnd) {
         final tempRangeStart = rangeStart;
         rangeStart = coerceIn(
@@ -466,15 +658,14 @@ class _FileExplorerTableState extends SfWidget<FileExplorerTable> {
         rangeEnd = tempRangeStart;
       }
 
+      // Generate and select rows within the specified range
       final _lastSelectedRowRange = _fileExplorerTableDataSourceStore.rows
           .getRange(
             rangeStart,
             rangeEnd,
           )
           .toList();
-
       _select(
-        index: prevRowIndex,
         rows: List.generate(
           _lastSelectedRowRange.length,
           (index) => FileExplorerTableRowEntity(
@@ -489,18 +680,20 @@ class _FileExplorerTableState extends SfWidget<FileExplorerTable> {
         appendRowSelection: true,
       );
     } else {
+      // Handle tap with no modifier keys pressed
       _handleSingleTap(
         row: row,
-        index: index,
         appendRowSelection: false,
       );
     }
   }
 
+  /// Initializes the tap event, processing selection and navigation.
   void _initializeTap({
     required FileExplorerTableRowEntity row,
     required int index,
   }) {
+    // Update the state with tap processing and call onTap callback
     setState(() {
       _processTaps(
         index: index,
@@ -512,11 +705,13 @@ class _FileExplorerTableState extends SfWidget<FileExplorerTable> {
     );
   }
 
+  /// Handles behavior when the Enter key is pressed, navigating to the selected row.
   void _handleOnEnterKeyPress() {
+    // Get the last selected row and navigate to the next row
     final lastSelectedRow = _fileExplorerTableDataSourceStore.lastSelectedRow;
 
     if (lastSelectedRow == null) {
-      return;
+      return; // Return if no row is selected
     }
 
     final nextRowToNavigateTo = FileExplorerTableRowEntity(
@@ -549,7 +744,7 @@ class _FileExplorerTableState extends SfWidget<FileExplorerTable> {
       selectedRows: _fileExplorerTableDataSourceStore.selectedRows,
     );
 
-    _multipleNavigationDirection = _NavigationDirection.UP;
+    _multipleNavigationDirection = _NavigationDirection.DOWN;
   }
 
   void _initializeShortcutsActivator(VoidCallback cb) {
