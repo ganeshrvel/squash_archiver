@@ -1,9 +1,9 @@
-import 'package:flutter/material.dart';
-import 'package:squash_archiver/common/di/di.dart';
 import 'package:after_layout/after_layout.dart';
-import 'package:squash_archiver/utils/alerts/alerts_model.dart';
-import 'package:squash_archiver/utils/alerts/alerts.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:squash_archiver/common/di/di.dart';
 import 'package:squash_archiver/utils/log/log.dart';
+import 'package:squash_archiver/widgets/alerts/alerts.dart';
+import 'package:squash_archiver/widgets/alerts/alerts_model.dart';
 
 abstract class SfWidget<S extends StatefulWidget> extends State<S>
     with AfterLayoutMixin<S> {
@@ -45,7 +45,7 @@ abstract class SfWidget<S extends StatefulWidget> extends State<S>
   void throwException(
     BuildContext context,
     Exception exception, {
-    StackTrace stackTrace,
+    StackTrace? stackTrace,
   }) {
     _alerts.setException(
       context,
@@ -59,11 +59,11 @@ abstract class SfWidget<S extends StatefulWidget> extends State<S>
   void throwAlert(
     BuildContext context,
     String message, {
-    String title,
-    AlertsTypes type,
-    AlertsPopupTypes popupType,
-    StackTrace stackTrace,
-    Duration duration,
+    String? title,
+    AlertsTypes? type,
+    AlertsPopupTypes? popupType,
+    StackTrace? stackTrace,
+    Duration? duration,
   }) {
     _alerts.setAlert(
       context,
@@ -80,10 +80,10 @@ abstract class SfWidget<S extends StatefulWidget> extends State<S>
   @mustCallSuper
   void logError(
     dynamic message, {
-    String title,
-    BuildContext context,
-    StackTrace stackTrace,
-    bool reportCrash,
+    String? title,
+    BuildContext? context,
+    StackTrace? stackTrace,
+    bool? reportCrash,
   }) {
     final _reportCrash = reportCrash ?? true;
 

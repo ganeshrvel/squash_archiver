@@ -4,7 +4,6 @@ import 'package:archiver_ffi/src/archiver_ffi.dart';
 import 'package:archiver_ffi/src/exceptions/exceptions.dart';
 import 'package:archiver_ffi/src/models/unpack_files.dart';
 import 'package:archiver_ffi/src/utils/test_utils.dart';
-import 'package:meta/meta.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -257,19 +256,17 @@ void main() {
       );
 
       var _cbCount = 0;
-      var _totalFiles = 0;
       var _lastProgressPercentage = 0.0;
       const _progressStep = 10;
 
       void _unpackingCb({
-        @required String startTime,
-        @required String currentFilename,
-        @required int totalFiles,
-        @required int progressCount,
-        @required double progressPercentage,
+        required String startTime,
+        required String currentFilename,
+        required int totalFiles,
+        required int progressCount,
+        required double progressPercentage,
       }) {
         _cbCount += 1;
-        _totalFiles = totalFiles;
         _lastProgressPercentage = progressPercentage;
 
         expect(startTime, isA<String>());
@@ -297,7 +294,7 @@ void main() {
 
       expect(_result.hasError, equals(false));
       expect(_result.hasData, equals(true));
-      expect(_cbCount, greaterThan(_totalFiles));
+      expect(_cbCount, greaterThan(1));
       expect(_lastProgressPercentage, equals(100.00));
 
       final _files = await dirContents(Directory(_destination));

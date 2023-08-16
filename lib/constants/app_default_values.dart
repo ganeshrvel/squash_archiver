@@ -1,13 +1,13 @@
 import 'package:archiver_ffi/archiver_ffi.dart';
 import 'package:squash_archiver/features/home/data/enums/file_explorer_entities_sort_by.dart';
-import 'package:squash_archiver/utils/utils/files.dart';
+import 'package:squash_archiver/helpers/files_helper.dart';
 
 class AppDefaultValues {
   AppDefaultValues._();
 
-  static const String DEFAULT_DATE_TIME_FORMAT = 'dd-MMM-yyyy, hh:mm a';
+  static const String DEFAULT_DATE_TIME_FORMAT = 'MMM dd, yyyy - hh:mm a';
 
-  static final String DEFAULT_FILE_EXPLORER_DIRECTORY = homeDirectory();
+  static final String? DEFAULT_FILE_EXPLORER_DIRECTORY = homeDirectory();
 
   static const OrderBy DEFAULT_FILE_EXPLORER_ORDER_BY = OrderBy.name;
 
@@ -23,6 +23,7 @@ class AppDefaultValues {
 
   /// supported archive extensions
   static const Map<String, String> SUPPORTED_ARCHIVE_EXTENSIONS = {
+    // todo update 7zip, 7z and tar.zlib and zlib
     'zip': 'zip',
     'tar': 'tar',
     'tar.br': 'tar.br',
@@ -33,6 +34,14 @@ class AppDefaultValues {
     'tar.xz': 'tar.xz',
     'tar.zst': 'tar.zst',
     'rar': 'rar',
+    'xz': 'xz',
+    'sz': 'sz',
+    'lz4': 'lz4',
+    'bz2': 'bz2',
+    'br': 'br',
+    'gz': 'gz',
+    'gzip': 'gzip',
+    'bzip2': 'bzip2',
   };
 
   // this is used for parsing file extensions

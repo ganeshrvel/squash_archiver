@@ -3,24 +3,24 @@ import 'dart:ffi';
 import 'package:archiver_ffi/src/structs/common.dart';
 import 'package:ffi/ffi.dart';
 
-class PackFilesStruct extends Struct {
-  Pointer<Utf8> startTime;
+final class PackFilesStruct extends Struct {
+  external Pointer<Utf8> startTime;
 
-  Pointer<Utf8> currentFilename;
+  external Pointer<Utf8> currentFilename;
 
   @Uint32()
-  int totalFiles;
+  external int totalFiles;
 
   @Uint64()
-  int progressCount;
+  external int progressCount;
 
   @Double()
-  double progressPercentage;
+  external double progressPercentage;
 
   @Int8()
-  int ended;
+  external int ended;
 
-  Pointer<ResultErrorStruct> error;
+  external Pointer<ResultErrorStruct> error;
 
   factory PackFilesStruct.allocate(
     Pointer<Utf8> startTime,
@@ -31,7 +31,7 @@ class PackFilesStruct extends Struct {
     int ended,
     Pointer<ResultErrorStruct> error,
   ) =>
-      allocate<PackFilesStruct>().ref
+      malloc<PackFilesStruct>().ref
         ..startTime = startTime
         ..currentFilename = currentFilename
         ..totalFiles = totalFiles

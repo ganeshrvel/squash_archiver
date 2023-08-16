@@ -1,12 +1,13 @@
-import 'package:back_button_interceptor/back_button_interceptor.dart';
-import 'package:flutter/material.dart';
-import 'package:squash_archiver/constants/image_paths.dart';
-import 'package:squash_archiver/constants/strings.dart';
+import 'package:auto_route/auto_route.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:macos_ui/macos_ui.dart';
+import 'package:squash_archiver/helpers/navigation_helper.dart';
+import 'package:squash_archiver/common/router/app_router.gr.dart';
 import 'package:squash_archiver/widget_extends/sf_widget.dart';
-import 'package:squash_archiver/features/splash/ui/widgets/splash_loading.dart';
 
+@RoutePage(name: 'SplashScreenRoute')
 class SplashScreen extends StatefulWidget {
-  const SplashScreen({Key key}) : super(key: key);
+  const SplashScreen({super.key});
 
   @override
   State<StatefulWidget> createState() => _SplashScreenState();
@@ -15,18 +16,7 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends SfWidget<SplashScreen> {
   @override
   void initState() {
-    init();
-
     super.initState();
-  }
-
-  void init() {
-    BackButtonInterceptor.add(_handleBackButtonInterceptor);
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
   }
 
   @override
@@ -36,28 +26,27 @@ class _SplashScreenState extends SfWidget<SplashScreen> {
 
   @override
   Future<void> onInitApp() async {
+    navigateToFileExplorerScreen(
+      routeArgs: const FileExplorerScreenRouteArgs(),
+    );
+
     return super.onInitApp();
   }
 
-  bool _handleBackButtonInterceptor(
-    bool stopDefaultButtonEvent,
-    RouteInfo routeInfo,
-  ) {
-    // allow back button
-    return false;
-  }
-
   Widget _buildSplashScreen(BuildContext context) {
-    return SplashLoading(
-      logoPath: ImagePaths.APP_LOGO,
-      appName: Strings.APP_NAME.toUpperCase(),
-    );
+    return const ProgressCircle();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: _buildSplashScreen(context),
+    return MacosScaffold(
+      children: [
+        ContentArea(
+          builder: (context, scrollController) {
+            return Center(child: _buildSplashScreen(context));
+          },
+        ),
+      ],
     );
   }
 }

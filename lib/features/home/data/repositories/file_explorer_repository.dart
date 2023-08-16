@@ -1,7 +1,9 @@
+import 'dart:async';
+
 import 'package:archiver_ffi/archiver_ffi.dart';
 import 'package:data_channel/data_channel.dart';
 import 'package:injectable/injectable.dart';
-import 'package:meta/meta.dart';
+
 import 'package:squash_archiver/features/home/data/data_sources/archive_data_source.dart';
 import 'package:squash_archiver/features/home/data/data_sources/local_data_source.dart';
 import 'package:squash_archiver/features/home/data/enums/file_explorer_source.dart';
@@ -9,7 +11,7 @@ import 'package:squash_archiver/features/home/data/models/file_listing_request.d
 import 'package:squash_archiver/features/home/data/models/file_listing_response.dart';
 import 'package:squash_archiver/utils/error_handling/handle_exception.dart';
 
-@lazySingleton
+@LazySingleton()
 class FileExplorerRepository {
   final LocalDataSource _localDataSource;
   final ArchiveDataSource _archiveDataSource;
@@ -20,8 +22,8 @@ class FileExplorerRepository {
   );
 
   Future<DC<Exception, List<FileListingResponse>>> listFiles({
-    @required FileListingRequest request,
-    @required bool invalidateCache,
+    required FileListingRequest request,
+    bool invalidateCache = false,
   }) async {
     switch (request.source) {
       case FileExplorerSource.ARCHIVE:
@@ -40,7 +42,7 @@ class FileExplorerRepository {
             invalidateCache: invalidateCache,
           );
 
-          if (_result.hasError) {
+          if (_result!.hasError) {
             handleException(
               _result.error,
               allowLogging: true,
@@ -54,8 +56,6 @@ class FileExplorerRepository {
 
           return DC.error(e);
         }
-
-        break;
 
       case FileExplorerSource.LOCAL:
       default:
@@ -76,8 +76,6 @@ class FileExplorerRepository {
 
           return DC.error(e);
         }
-
-        break;
     }
   }
 }

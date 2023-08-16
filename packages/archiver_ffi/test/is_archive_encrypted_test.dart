@@ -56,8 +56,8 @@ void main() {
       final _result = await _archiverFfi.isArchiveEncrypted(_param);
 
       // test the first item in the files list
-      expect(_result.data.isEncrypted, equals(false));
-      expect(_result.data.isValidPassword, equals(false));
+      expect(_result.data!.isEncrypted, equals(false));
+      expect(_result.data!.isValidPassword, equals(false));
     });
 
     test('encrypted file | should not throw an error', () async {
@@ -68,8 +68,8 @@ void main() {
       final _result = await _archiverFfi.isArchiveEncrypted(_param);
 
       // test the first item in the files list
-      expect(_result.data.isEncrypted, equals(true));
-      expect(_result.data.isValidPassword, equals(false));
+      expect(_result.data!.isEncrypted, equals(true));
+      expect(_result.data!.isValidPassword, equals(false));
     });
 
     test('encrypted file | invalid password | should not throw an error',
@@ -82,8 +82,8 @@ void main() {
       final _result = await _archiverFfi.isArchiveEncrypted(_param);
 
       // test the first item in the files list
-      expect(_result.data.isEncrypted, equals(true));
-      expect(_result.data.isValidPassword, equals(false));
+      expect(_result.data!.isEncrypted, equals(true));
+      expect(_result.data!.isValidPassword, equals(false));
     });
 
     test('encrypted file | valid password | should not throw an error',
@@ -96,8 +96,8 @@ void main() {
       final _result = await _archiverFfi.isArchiveEncrypted(_param);
 
       // test the first item in the files list
-      expect(_result.data.isEncrypted, equals(true));
-      expect(_result.data.isValidPassword, equals(true));
+      expect(_result.data!.isEncrypted, equals(true));
+      expect(_result.data!.isValidPassword, equals(true));
     });
 
     test('encrypted rar file | valid password | should not throw an error',
@@ -110,8 +110,8 @@ void main() {
       final _result = await _archiverFfi.isArchiveEncrypted(_param);
 
       // test the first item in the files list
-      expect(_result.data.isEncrypted, equals(true));
-      expect(_result.data.isValidPassword, equals(true));
+      expect(_result.data!.isEncrypted, equals(true));
+      expect(_result.data!.isValidPassword, equals(true));
     });
   });
 }

@@ -1,5 +1,4 @@
 import 'package:equatable/equatable.dart';
-import 'package:meta/meta.dart';
 
 class TruncatedString extends Equatable {
   final String original;
@@ -7,9 +6,9 @@ class TruncatedString extends Equatable {
   final String lastChunk;
 
   const TruncatedString({
-    @required this.original,
-    @required this.firstChunk,
-    @required this.lastChunk,
+    required this.original,
+    required this.firstChunk,
+    required this.lastChunk,
   });
 
   @override

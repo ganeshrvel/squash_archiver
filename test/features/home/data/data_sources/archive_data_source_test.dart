@@ -29,7 +29,7 @@ const _cachedElapsedTime = 3;
 int _testListArchiveCacheResultResetCount = 0;
 
 // check for the execution time to confirm that results were fetched from the cache
-void _expectCachedResults({@required int listArchiveCacheResultResetCount}) {
+void _expectCachedResults({required int listArchiveCacheResultResetCount}) {
   expect(
     _testListArchiveCacheResultResetCount,
     equals(listArchiveCacheResultResetCount),
@@ -37,7 +37,7 @@ void _expectCachedResults({@required int listArchiveCacheResultResetCount}) {
 }
 
 // check for the execution time to confirm that the results were NOT fetched from the cache
-void _expectNonCachedResults({@required int listArchiveCacheResultResetCount}) {
+void _expectNonCachedResults({required int listArchiveCacheResultResetCount}) {
   _testListArchiveCacheResultResetCount =
       _testListArchiveCacheResultResetCount + 1;
 
@@ -48,12 +48,12 @@ void _expectNonCachedResults({@required int listArchiveCacheResultResetCount}) {
 }
 
 //check if the [cachedListArchiveResult] cache was (re)initialized
-void _expectCachedFileList({@required ArchiveDataSource archiveDataSource}) {
+void _expectCachedFileList({required ArchiveDataSource archiveDataSource}) {
   expect(
-    archiveDataSource.cachedListArchiveResult.totalFiles,
+    archiveDataSource.cachedListArchiveResult!.totalFiles,
     equals(10),
   );
-  final _fileList = archiveDataSource.cachedListArchiveResult.files
+  final _fileList = archiveDataSource.cachedListArchiveResult!.files
       .map((e) => e.fullPath)
       .toList();
   _fileList.sort((a, b) => a.compareTo(b));
@@ -64,7 +64,7 @@ void _expectCachedFileList({@required ArchiveDataSource archiveDataSource}) {
 Future<void> main() async {
   TestWidgetsFlutterBinding.ensureInitialized();
   SharedPreferences.setMockInitialValues({});
-  await getItInit(Environment.test);
+  await getItInit(env: Environment.test);
 
   setUpAll(() async {});
 
@@ -92,16 +92,16 @@ Future<void> main() async {
           listArchiveRequest: _request,
         );
 
-        expect(_result.hasError, equals(false));
+        expect(_result!.hasError, equals(false));
         expect(_result.hasData, equals(true));
 
-        expect(_result.data.length, equals(1));
-        expect(_result.data[0].file.fullPath, equals('mock_dir1/'));
-        expect(_result.data[0].isSupported, equals(false));
-        expect(_result.data[0].prettyFileSize, equals(''));
-        expect(_result.data[0].prettyFileSize, isA<String>());
-        expect(_result.data[0].prettyDate, isA<String>());
-        expect(_result.data[0].prettyDate, contains('2020'));
+        expect(_result.data!.length, equals(1));
+        expect(_result.data![0].file.fullPath, equals('mock_dir1/'));
+        expect(_result.data![0].isSupported, equals(false));
+        expect(_result.data![0].prettyFileSize, equals(''));
+        expect(_result.data![0].prettyFileSize, isA<String>());
+        expect(_result.data![0].prettyDate, isA<String>());
+        expect(_result.data![0].prettyDate, contains('2020'));
 
         //check if the [cachedListArchiveParams] cache was initialized
         expect(_archiveDataSource.cachedListArchiveParams, equals(_request));
@@ -134,11 +134,11 @@ Future<void> main() async {
           listArchiveRequest: _request,
         );
 
-        expect(_result.hasError, equals(false));
+        expect(_result!.hasError, equals(false));
         expect(_result.hasData, equals(true));
 
-        expect(_result.data.length, equals(1));
-        expect(_result.data[0].file.fullPath, equals('mock_dir1/'));
+        expect(_result.data!.length, equals(1));
+        expect(_result.data![0].file.fullPath, equals('mock_dir1/'));
 
         //check if the [cachedListArchiveParams] cache was reinitialized
         expect(_archiveDataSource.cachedListArchiveParams, equals(_request));
@@ -174,11 +174,11 @@ Future<void> main() async {
           listArchiveRequest: _request,
         );
 
-        expect(_result.hasError, equals(false));
+        expect(_result!.hasError, equals(false));
         expect(_result.hasData, equals(true));
 
-        expect(_result.data.length, equals(4));
-        expect(_result.data[0].file.fullPath, equals('mock_dir1/1/'));
+        expect(_result.data!.length, equals(4));
+        expect(_result.data![0].file.fullPath, equals('mock_dir1/1/'));
 
         //check if the [cachedListArchiveParams] cache was reinitialized
         expect(
@@ -219,11 +219,11 @@ Future<void> main() async {
           listArchiveRequest: _request,
         );
 
-        expect(_result.hasError, equals(false));
+        expect(_result!.hasError, equals(false));
         expect(_result.hasData, equals(true));
 
-        expect(_result.data.length, equals(4));
-        expect(_result.data[0].file.fullPath, equals('mock_dir1/1/'));
+        expect(_result.data!.length, equals(4));
+        expect(_result.data![0].file.fullPath, equals('mock_dir1/1/'));
 
         //check if the [cachedListArchiveParams] cache was reinitialized
         expect(
@@ -264,11 +264,11 @@ Future<void> main() async {
           listArchiveRequest: _request,
         );
 
-        expect(_result.hasError, equals(false));
+        expect(_result!.hasError, equals(false));
         expect(_result.hasData, equals(true));
 
-        expect(_result.data.length, equals(4));
-        expect(_result.data[0].file.fullPath, equals('mock_dir1/3/'));
+        expect(_result.data!.length, equals(4));
+        expect(_result.data![0].file.fullPath, equals('mock_dir1/3/'));
 
         //check if the [cachedListArchiveParams] cache was reinitialized
         expect(
@@ -310,11 +310,11 @@ Future<void> main() async {
           listArchiveRequest: _request,
         );
 
-        expect(_result.hasError, equals(false));
+        expect(_result!.hasError, equals(false));
         expect(_result.hasData, equals(true));
 
-        expect(_result.data.length, equals(4));
-        expect(_result.data[0].file.fullPath, equals('mock_dir1/3/'));
+        expect(_result.data!.length, equals(4));
+        expect(_result.data![0].file.fullPath, equals('mock_dir1/3/'));
 
         //check if the [cachedListArchiveParams] cache was reinitialized
         expect(
@@ -355,11 +355,11 @@ Future<void> main() async {
           listArchiveRequest: _request,
         );
 
-        expect(_result.hasError, equals(false));
+        expect(_result!.hasError, equals(false));
         expect(_result.hasData, equals(true));
 
-        expect(_result.data.length, equals(4));
-        expect(_result.data[0].file.fullPath, equals('mock_dir1/3/'));
+        expect(_result.data!.length, equals(4));
+        expect(_result.data![0].file.fullPath, equals('mock_dir1/3/'));
 
         //check if the [cachedListArchiveParams] cache was reinitialized
         expect(
@@ -398,11 +398,11 @@ Future<void> main() async {
           listArchiveRequest: _request,
         );
 
-        expect(_result.hasError, equals(false));
+        expect(_result!.hasError, equals(false));
         expect(_result.hasData, equals(true));
 
-        expect(_result.data.length, equals(4));
-        expect(_result.data[0].file.fullPath, equals('mock_dir1/3/'));
+        expect(_result.data!.length, equals(4));
+        expect(_result.data![0].file.fullPath, equals('mock_dir1/3/'));
 
         //check if the [cachedListArchiveParams] cache was reinitialized
         expect(
@@ -441,11 +441,11 @@ Future<void> main() async {
           listArchiveRequest: _request,
         );
 
-        expect(_result.hasError, equals(false));
+        expect(_result!.hasError, equals(false));
         expect(_result.hasData, equals(true));
 
-        expect(_result.data.length, equals(1));
-        expect(_result.data[0].file.fullPath, equals('mock_dir1/'));
+        expect(_result.data!.length, equals(1));
+        expect(_result.data![0].file.fullPath, equals('mock_dir1/'));
 
         //check if the [cachedListArchiveParams] cache was reinitialized
         expect(
@@ -486,7 +486,7 @@ Future<void> main() async {
           listArchiveRequest: _request,
         );
 
-        expect(_result.hasError, equals(true));
+        expect(_result!.hasError, equals(true));
         expect(_result.hasData, equals(false));
 
         expect(_result.data?.length ?? 0, equals(0));
@@ -519,11 +519,11 @@ Future<void> main() async {
           listArchiveRequest: _request,
         );
 
-        expect(_result.hasError, equals(false));
+        expect(_result!.hasError, equals(false));
         expect(_result.hasData, equals(true));
 
-        expect(_result.data.length, equals(1));
-        expect(_result.data[0].file.fullPath, equals('mock_dir1/'));
+        expect(_result.data!.length, equals(1));
+        expect(_result.data![0].file.fullPath, equals('mock_dir1/'));
 
         //check if the [cachedListArchiveParams] cache was initialized
         expect(_archiveDataSource.cachedListArchiveParams, equals(_request));
@@ -561,11 +561,11 @@ Future<void> main() async {
           listArchiveRequest: _request,
         );
 
-        expect(_result.hasError, equals(false));
+        expect(_result!.hasError, equals(false));
         expect(_result.hasData, equals(true));
 
-        expect(_result.data.length, equals(1));
-        expect(_result.data[0].file.fullPath, equals('mock_dir1/'));
+        expect(_result.data!.length, equals(1));
+        expect(_result.data![0].file.fullPath, equals('mock_dir1/'));
 
         //check if the [cachedListArchiveParams] cache was reinitialized
         expect(
@@ -605,11 +605,11 @@ Future<void> main() async {
           listArchiveRequest: _request,
         );
 
-        expect(_result.hasError, equals(false));
+        expect(_result!.hasError, equals(false));
         expect(_result.hasData, equals(true));
 
-        expect(_result.data.length, equals(1));
-        expect(_result.data[0].file.fullPath, equals('mock_dir1/'));
+        expect(_result.data!.length, equals(1));
+        expect(_result.data![0].file.fullPath, equals('mock_dir1/'));
 
         //check if the [cachedListArchiveParams] cache was reinitialized
         expect(
@@ -649,7 +649,7 @@ Future<void> main() async {
           invalidateCache: true,
         );
 
-        expect(_result.hasError, equals(false));
+        expect(_result!.hasError, equals(false));
         expect(_result.hasData, equals(true));
 
         expect(_result.data?.length ?? 0, equals(1));
@@ -686,11 +686,11 @@ Future<void> main() async {
           listArchiveRequest: _request,
         );
 
-        expect(_result.hasError, equals(false));
+        expect(_result!.hasError, equals(false));
         expect(_result.hasData, equals(true));
 
-        expect(_result.data.length, equals(1));
-        expect(_result.data[0].file.fullPath, equals('mock_dir1/'));
+        expect(_result.data!.length, equals(1));
+        expect(_result.data![0].file.fullPath, equals('mock_dir1/'));
 
         //check if the [cachedListArchiveParams] cache was reinitialized
         expect(

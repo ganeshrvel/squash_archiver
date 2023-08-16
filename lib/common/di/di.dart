@@ -1,25 +1,20 @@
 import 'package:get_it/get_it.dart';
 import 'package:injectable/injectable.dart';
+
 import 'package:squash_archiver/common/di/di.config.dart';
 
 final GetIt getIt = GetIt.instance;
 
 @InjectableInit(
-  preferRelativeImports: false,
+  asExtension: true,
+  initializerName: 'init',
 )
-Future<void> getItInit(String environment) => $initGetIt(
-      getIt,
-      environment: environment,
-    );
-
-void resetGetIt<T>({
-  Object instance,
-  String instanceName,
-  void Function(T) disposingFunction,
+Future<GetIt> getItInit({
+  String? env,
+  EnvironmentFilter? environmentFilter,
 }) {
-  getIt.resetLazySingleton<T>(
-    instance: instance,
-    instanceName: instanceName,
-    disposingFunction: disposingFunction,
+  return getIt.init(
+    environmentFilter: environmentFilter,
+    environment: env,
   );
 }

@@ -44,6 +44,7 @@ analyzer:
     await_only_futures: error
     prefer_typing_uninitialized_variables: error
     deprecated_member_use: error
+    no_leading_underscores_for_local_identifiers: ignore
 
   exclude:
     - "vendors/**"

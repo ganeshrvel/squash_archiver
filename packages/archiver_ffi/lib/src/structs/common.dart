@@ -2,45 +2,48 @@ import 'dart:ffi';
 
 import 'package:ffi/ffi.dart';
 
-class StringListStruct extends Struct {
-  Pointer<Pointer<Utf8>> list;
+final class StringListStruct extends Struct {
+  external Pointer<Pointer<Utf8>> list;
 
   @Int64()
-  int size;
+  external int size;
 
-  Pointer<StringListStruct> fromList(
+  static Pointer<StringListStruct> fromList(
     List<String> arr,
     List<Pointer<NativeType>> ptrList,
   ) {
-    final pUtf = arr.map(Utf8.toUtf8).toList();
+    final pUtfList = arr.map((e) => e.toNativeUtf8()).toList();
 
     // ignore: omit_local_variable_types
-    final Pointer<Pointer<Utf8>> ppList = allocate(count: arr.length);
+    final Pointer<Pointer<Utf8>> ppList = malloc();
 
     for (var i = 0; i < arr.length; i++) {
-      ppList[i] = pUtf[i];
+      ppList[i] = pUtfList[i];
     }
 
     ptrList.add(ppList);
-    ptrList.addAll(pUtf);
+    ptrList.addAll(pUtfList);
 
-    final pStrList = allocate<StringListStruct>().ref;
-    pStrList.list = ppList;
-    pStrList.size = arr.length;
+    final pStrList = malloc<StringListStruct>();
+    pStrList.ref.list = ppList;
+    pStrList.ref.size = arr.length;
 
-    return pStrList.addressOf;
+    ptrList.add(pStrList);
+
+    return pStrList;
   }
 }
 
-class ResultErrorStruct extends Struct {
-  Pointer<Utf8> errorType;
-  Pointer<Utf8> error;
+final class ResultErrorStruct extends Struct {
+  external Pointer<Utf8> errorType;
+
+  external Pointer<Utf8> error;
 
   factory ResultErrorStruct.allocate(
     Pointer<Utf8> error,
     Pointer<Utf8> errorType,
   ) =>
-      allocate<ResultErrorStruct>().ref
+      malloc<ResultErrorStruct>().ref
         ..errorType = errorType
         ..error = error;
 }

@@ -1,18 +1,22 @@
 import 'package:archiver_ffi/src/utils/functs.dart';
 import 'package:equatable/equatable.dart';
-import 'package:meta/meta.dart';
 
 // ignore: must_be_immutable
 class UnpackFiles extends Equatable {
+  /// path to the archive file
   final String filename;
+
   final String destination;
-  String password;
-  List<String> gitIgnorePattern;
-  List<String> fileList;
+
+  String? password;
+
+  List<String>? gitIgnorePattern;
+
+  List<String>? fileList;
 
   UnpackFiles({
-    @required this.filename,
-    @required this.destination,
+    required this.filename,
+    required this.destination,
     this.password,
     this.gitIgnorePattern,
     this.fileList,
@@ -39,7 +43,7 @@ class UnpackFiles extends Equatable {
   }
 
   @override
-  List<Object> get props => [
+  List<Object?> get props => [
         filename,
         password,
         gitIgnorePattern,
@@ -63,11 +67,11 @@ class UnpackFilesResult extends Equatable {
   final bool success;
 
   const UnpackFilesResult({
-    @required this.success,
+    required this.success,
   });
 
   UnpackFilesResult copyWith({
-    bool success,
+    bool? success,
   }) {
     return UnpackFilesResult(
       success: success ?? this.success,

@@ -1,10 +1,11 @@
 import 'package:flutter/widgets.dart';
+import 'package:macos_ui/macos_ui.dart';
 import 'package:squash_archiver/utils/utils/functs.dart';
 import 'package:squash_archiver/widgets/button/button.dart';
 
 class ConfirmActionButtons extends StatelessWidget {
-  final String okText;
-  final String cancelText;
+  final String? okText;
+  final String? cancelText;
   final VoidCallback onOk;
   final VoidCallback onCancel;
 
@@ -13,16 +14,13 @@ class ConfirmActionButtons extends StatelessWidget {
   final bool shouldPopOnButtonClick;
 
   const ConfirmActionButtons({
-    Key key,
+    super.key,
     this.okText,
     this.cancelText,
-    @required this.onOk,
-    @required this.onCancel,
-    @required this.shouldPopOnButtonClick,
-  })  : assert(onOk != null),
-        assert(onCancel != null),
-        assert(shouldPopOnButtonClick != null),
-        super(key: key);
+    required this.onOk,
+    required this.onCancel,
+    required this.shouldPopOnButtonClick,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -33,6 +31,7 @@ class ConfirmActionButtons extends StatelessWidget {
         Expanded(
           child: Button(
             text: cancelText ?? 'Cancel',
+            controlSize: ControlSize.large,
             onPressed: () {
               if (isNotNull(onCancel)) {
                 onCancel();
@@ -42,9 +41,7 @@ class ConfirmActionButtons extends StatelessWidget {
                 Navigator.of(context).pop();
               }
             },
-            buttonType: ButtonType.FLAT,
-            buttonColor: ButtonColorType.WHITE,
-            disableAutoBoxConstraints: true,
+            type: ButtonType.Push,
           ),
         ),
         const SizedBox(
@@ -52,6 +49,7 @@ class ConfirmActionButtons extends StatelessWidget {
         ),
         Expanded(
           child: Button(
+            controlSize: ControlSize.large,
             text: okText ?? 'Ok',
             onPressed: () {
               if (isNotNull(onOk)) {
@@ -62,8 +60,7 @@ class ConfirmActionButtons extends StatelessWidget {
                 Navigator.of(context).pop();
               }
             },
-            buttonType: ButtonType.FLAT,
-            disableAutoBoxConstraints: true,
+            secondary: false,
           ),
         ),
       ],

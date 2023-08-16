@@ -1,5 +1,4 @@
 import 'package:equatable/equatable.dart';
-import 'package:meta/meta.dart';
 
 class FileInfo extends Equatable {
   final int mode;
@@ -12,6 +11,8 @@ class FileInfo extends Equatable {
 
   final String name;
 
+  final String kind;
+
   final String fullPath;
 
   final String parentPath;
@@ -19,25 +20,27 @@ class FileInfo extends Equatable {
   final String extension;
 
   const FileInfo({
-    @required this.mode,
-    @required this.size,
-    @required this.isDir,
-    @required this.modTime,
-    @required this.name,
-    @required this.fullPath,
-    @required this.parentPath,
-    @required this.extension,
+    required this.mode,
+    required this.size,
+    required this.isDir,
+    required this.modTime,
+    required this.name,
+    required this.kind,
+    required this.fullPath,
+    required this.parentPath,
+    required this.extension,
   });
 
   FileInfo copyWith({
-    int mode,
-    int size,
-    bool isDir,
-    String modTime,
-    String name,
-    String fullPath,
-    String parentPath,
-    String extension,
+    int? mode,
+    int? size,
+    bool? isDir,
+    String? modTime,
+    String? name,
+    String? kind,
+    String? fullPath,
+    String? parentPath,
+    String? extension,
   }) {
     return FileInfo(
       fullPath: fullPath ?? this.fullPath,
@@ -46,6 +49,7 @@ class FileInfo extends Equatable {
       mode: mode ?? this.mode,
       isDir: isDir ?? this.isDir,
       name: name ?? this.name,
+      kind: kind ?? this.kind,
       parentPath: parentPath ?? this.parentPath,
       extension: extension ?? this.extension,
     );
@@ -58,6 +62,7 @@ class FileInfo extends Equatable {
         isDir,
         modTime,
         name,
+        kind,
         fullPath,
         parentPath,
         extension,
@@ -73,6 +78,7 @@ class FileInfo extends Equatable {
         isDir: $isDir,
         modTime: $modTime,
         name: $name,
+        kind: $kind,
         fullPath: $fullPath,
         parentPath: $parentPath,
         extension: $extension,

@@ -1,12 +1,12 @@
 import 'package:flutter/foundation.dart' show debugPrint;
 import 'package:injectable/injectable.dart';
 import 'package:logger/logger.dart';
-import 'package:meta/meta.dart';
+
 import 'package:squash_archiver/common/di/di.dart';
 import 'package:squash_archiver/constants/env.dart';
 import 'package:squash_archiver/services/crashes_service.dart';
 
-@lazySingleton
+@LazySingleton()
 class Log {
   final Logger _logger;
   final CrashesService _crashesService;
@@ -14,10 +14,10 @@ class Log {
   Log(this._logger, this._crashesService);
 
   void _doReport({
-    String title,
+    String? title,
     dynamic error,
-    StackTrace stackTrace,
-    bool report,
+    StackTrace? stackTrace,
+    bool? report,
   }) {
     final _doReport = report ?? true;
 
@@ -35,10 +35,10 @@ class Log {
 
   /// Log a message at level [Level.verbose].
   void verbose({
-    String title,
+    String? title,
     dynamic error,
-    StackTrace stackTrace,
-    bool report,
+    StackTrace? stackTrace,
+    bool? report,
   }) {
     _doReport(
       title: title,
@@ -56,10 +56,10 @@ class Log {
 
   /// Log a message at level [Level.debug].
   void debug({
-    String title,
+    String? title,
     dynamic error,
-    StackTrace stackTrace,
-    bool report,
+    StackTrace? stackTrace,
+    bool? report,
   }) {
     _doReport(
       title: title,
@@ -77,10 +77,10 @@ class Log {
 
   /// Log a message at level [Level.info].
   void info({
-    String title,
+    String? title,
     dynamic error,
-    StackTrace stackTrace,
-    bool report,
+    StackTrace? stackTrace,
+    bool? report,
   }) {
     _doReport(
       title: title,
@@ -98,10 +98,10 @@ class Log {
 
   /// Log a message at level [Level.warning].
   void warn({
-    String title,
+    String? title,
     dynamic error,
-    StackTrace stackTrace,
-    bool report,
+    StackTrace? stackTrace,
+    bool? report,
   }) {
     _doReport(
       title: title,
@@ -119,10 +119,10 @@ class Log {
 
   /// Log a message at level [Level.error].
   void error({
-    @required String title,
-    @required dynamic error,
-    StackTrace stackTrace,
-    bool report,
+    required String? title,
+    required dynamic error,
+    StackTrace? stackTrace,
+    bool? report,
   }) {
     _doReport(
       title: title,
@@ -140,10 +140,10 @@ class Log {
 
   /// Log a message at level [Level.wtf].
   void wtf({
-    @required String title,
+    required String title,
     dynamic error,
-    StackTrace stackTrace,
-    bool report,
+    StackTrace? stackTrace,
+    bool? report,
   }) {
     _doReport(
       title: title,

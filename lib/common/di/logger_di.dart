@@ -3,13 +3,13 @@ import 'package:logger/logger.dart';
 
 @module
 abstract class LoggerDi {
-  @lazySingleton
+  @LazySingleton()
   Logger get logger => Logger(
         filter: null,
         printer: PrettyPrinter(
-          methodCount: 10,
+          methodCount: 25,
           // number of method calls to be displayed
-          errorMethodCount: 8,
+          errorMethodCount: 25,
           // width of the output
           colors: true,
           // Colorful log messages

@@ -11,20 +11,19 @@ import 'package:squash_archiver/common/models/handle_exception_model.dart';
 import 'package:squash_archiver/constants/errors.dart';
 import 'package:squash_archiver/services/crashes_service.dart';
 import 'package:squash_archiver/utils/log/log.dart';
-import 'package:meta/meta.dart';
 
-final _crashesService = getIt<CrashesService>();
+final CrashesService _crashesService = getIt<CrashesService>();
 
 HandleExceptionModel handleException(
-  Exception exception, {
-  @required bool allowLogging,
-  @required StackTrace stackTrace,
+  Exception? exception, {
+  required bool allowLogging,
+  required StackTrace? stackTrace,
 }) {
   var _reportCrash = true;
   var _stackTrace = stackTrace;
   var _exception = exception;
-  var _allowLogging = allowLogging ?? true;
-  String _body;
+  var _allowLogging = allowLogging;
+  String? _body;
   if (exception is TaskInProgressException) {
     _body = Errors.TASK_IN_PROGRESS_MESSAGE;
     _exception = exception;
@@ -68,7 +67,7 @@ HandleExceptionModel handleException(
     _body = exception.errorMessage;
     _stackTrace = exception.stackTrace;
     _exception = exception;
-  } else if (exception is DioException) {
+  } else if (exception is DioClientException) {
     _body = Errors.DIO_EXCEPTION_MESSAGE;
     _stackTrace = exception.stackTrace;
     _exception = exception;

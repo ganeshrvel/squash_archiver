@@ -1,92 +1,100 @@
-import 'package:flutter/material.dart';
-import 'package:squash_archiver/common/themes/theme_helper.dart';
+import 'package:flutter/cupertino.dart' hide OverlayVisibilityMode;
+import 'package:macos_ui/macos_ui.dart';
 import 'package:squash_archiver/utils/utils/functs.dart';
+import 'package:squash_archiver/widgets/text/textography.dart';
 
 class TextFieldRegularInput extends StatelessWidget {
-  final int maxLength;
-  final int minLines;
+  final ScrollController scrollController;
+  final int? maxLength;
+  final int? minLines;
   final int maxLines;
   final bool disabled;
   final bool autofocus;
+  final FocusNode? focusNode;
   final TextEditingController controller;
   final ValueChanged<String> onChanged;
-  final String errorText;
-  final String hintText;
-  final String labelText;
-  final String prefixText;
-  final IconData prefixIcon;
-  final TextInputType keyboardType;
+  final ValueChanged<String>? onSubmitted;
+  final String? errorText;
+  final String? placeholder;
+  final Widget? suffix;
+  final IconData? prefixIcon;
+  final TextInputType? keyboardType;
+  final bool obscureText;
+  final bool autocorrect;
+  final bool enableSuggestions;
 
   const TextFieldRegularInput({
-    Key key,
-    @required this.onChanged,
-    @required this.controller,
+    super.key,
+    required this.onChanged,
+    required this.scrollController,
+    required this.controller,
+    this.onSubmitted,
     this.maxLength,
     this.disabled = false,
     this.errorText,
-    this.hintText,
-    this.prefixText,
-    this.labelText,
+    this.placeholder,
+    this.suffix,
+    this.focusNode,
     this.autofocus = false,
     this.minLines,
     this.maxLines = 1,
     this.keyboardType,
     this.prefixIcon,
-  })  : assert(controller != null),
-        super(key: key);
+    this.obscureText = false,
+    this.autocorrect = false,
+    this.enableSuggestions = false,
+  });
 
   @override
   Widget build(BuildContext context) {
-    final _palette = getPalette(context);
+    return Column(
+      children: [
+        MacosTextField(
+          scrollController: scrollController,
+          suffix: suffix,
+          prefix: isNotNull(prefixIcon) ? MacosIcon(prefixIcon) : null,
+          placeholder: placeholder,
+          enabled: !disabled,
+          maxLines: maxLines,
+          minLines: minLines,
+          maxLength: maxLength,
+          keyboardType: keyboardType,
+          autofocus: autofocus,
+          focusNode: focusNode,
+          controller: controller,
+          obscureText: obscureText,
+          autocorrect: autocorrect,
+          enableSuggestions: enableSuggestions,
+          smartDashesType: SmartDashesType.disabled,
+          smartQuotesType: SmartQuotesType.disabled,
+          textInputAction: TextInputAction.go,
+          onSubmitted: (value) {
+            if (onSubmitted != null) {
+              onSubmitted?.call(value);
+            }
+          },
+          onChanged: (String value) {
+            if (isNotNull(maxLength) && value.length > maxLength!) {
+              return;
+            }
 
-    return TextField(
-      style: const TextStyle(
-        fontSize: 16.0,
-      ),
-      decoration: InputDecoration(
-        prefixText: prefixText,
-        hintText: hintText,
-        labelText: labelText,
-        hintStyle: const TextStyle(
-          fontSize: 16.0,
+            if (isNotNull(onChanged)) {
+              onChanged(value);
+            }
+          },
         ),
-        prefixStyle: const TextStyle(
-          fontSize: 16.0,
+        const SizedBox(
+          height: 5,
         ),
-        labelStyle: const TextStyle(
-          fontSize: 16.0,
+        Align(
+          alignment: Alignment.centerLeft,
+          child: Textography(
+            errorText ?? '',
+            textAlign: TextAlign.left,
+            color: MacosColors.systemRedColor,
+          ),
         ),
-        errorStyle: const TextStyle(
-          fontSize: 13.0,
-        ),
-        prefixIcon: isNotNull(prefixIcon)
-            ? Icon(
-                prefixIcon,
-                color: _palette.textColor,
-                size: 20,
-              )
-            : null,
-        fillColor: _palette.secondaryColor,
-        counterText: '',
-        errorText: errorText,
-      ),
-      autofocus: autofocus,
-      controller: controller,
-      onChanged: (String value) {
-        if (isNotNull(maxLength) && value.length > maxLength) {
-          return;
-        }
-
-        if (isNotNull(onChanged)) {
-          onChanged(value);
-        }
-      },
-      enabled: !disabled,
-      maxLines: maxLines,
-      minLines: minLines,
-      maxLength: maxLength,
-      keyboardType: keyboardType,
-      cursorColor: _palette.textColor,
+      ],
     );
   }
 }

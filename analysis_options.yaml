@@ -10,8 +10,8 @@ linter:
     - prefer_typing_uninitialized_variables
 
 analyzer:
-  strong-mode:
-    implicit-casts: false
+#  strong-mode:
+#    implicit-casts: false
 
   errors:
     sort_pub_dependencies: ignore
@@ -26,7 +26,7 @@ analyzer:
     missing_required_param: error
     parameter_assignments: error
     prefer_const_constructors: error
-    unused_import: error
+    unused_import: warning
     sort_constructors_first: warning
     unused_field: warning
     unused_element: ignore
@@ -44,6 +44,8 @@ analyzer:
     await_only_futures: error
     prefer_typing_uninitialized_variables: error
     deprecated_member_use: error
+    no_leading_underscores_for_local_identifiers: ignore
+    unnecessary_breaks: ignore
 
   exclude:
     - "vendors/**"
@@ -53,3 +55,4 @@ analyzer:
     - "lib/common/router/router.gr.dart"
     - "component_templates/**"
     - "packages/**"
+    - "lib/common/di/di.config.dart"

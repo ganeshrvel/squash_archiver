@@ -8,23 +8,22 @@ int toFfiBool(bool value) {
   return value ? 1 : 0;
 }
 
-Pointer<Int8> toFfiString(String value, List<Pointer<NativeType>> ptrList) {
-  final _value = Utf8.toUtf8(value);
-  final _ptr = _value.cast<Int8>();
+Pointer<Char> toFfiString(String value, List<Pointer<NativeType>> ptrList) {
+  final _value = value.toNativeUtf8();
+  final _ptr = _value.cast<Char>();
 
-  ptrList.add(_ptr);
+  ptrList.add(_value);
 
   return _ptr;
 }
 
-Pointer<StringListStruct> toFfiStringList(
-    List<String> values, List<Pointer<NativeType>> ptrList) {
-  final pStrList = allocate<StringListStruct>().ref;
-  final _ptr = pStrList.fromList(values, ptrList);
+int toFfiStringList(
+  List<String> values,
+  List<Pointer<NativeType>> ptrList,
+) {
+  final _ptr = StringListStruct.fromList(values, ptrList);
 
-  ptrList.add(_ptr);
-
-  return _ptr;
+  return _ptr.address;
 }
 
 bool fromFfiBool(int value) {

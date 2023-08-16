@@ -1,0 +1,16 @@
+{
+  "mappedVariables": {
+	"feature_file_name": "app_review",
+	"FeatureNameUpper": "AppReview",
+	"featureNameLower": "appReview",
+	"screen_file_name": "app_review_screen",
+	"ScreenClassName": "AppReviewScreen",
+	"screenClassNameLower": "appReviewScreen",
+	"mobxParam": "userFeedbackData",
+	"MobxParamUpper": "UserFeedbackData",
+	"methodName": "createUserFeedback",
+	"model_file_name": "post_user_feedback",
+	"ModelClassName": "PostUserFeedback",
+	"apiEndpoint": "/user/feedback/"
+  }
+}

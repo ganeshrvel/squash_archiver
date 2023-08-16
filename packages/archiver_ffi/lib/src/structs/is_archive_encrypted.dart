@@ -3,21 +3,21 @@ import 'dart:ffi';
 import 'package:archiver_ffi/src/structs/common.dart';
 import 'package:ffi/ffi.dart';
 
-class IsArchiveEncryptedResultStruct extends Struct {
+final class IsArchiveEncryptedResultStruct extends Struct {
   @Int8()
-  int isEncrypted;
+  external int isEncrypted;
 
   @Int8()
-  int isValidPassword;
+  external int isValidPassword;
 
-  Pointer<ResultErrorStruct> error;
+  external Pointer<ResultErrorStruct> error;
 
   factory IsArchiveEncryptedResultStruct.allocate(
     int isEncrypted,
     int isValidPassword,
     Pointer<ResultErrorStruct> error,
   ) =>
-      allocate<IsArchiveEncryptedResultStruct>().ref
+      malloc<IsArchiveEncryptedResultStruct>().ref
         ..isEncrypted = isEncrypted
         ..isValidPassword = isValidPassword
         ..error = error;

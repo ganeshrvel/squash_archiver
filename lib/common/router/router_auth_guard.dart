@@ -1,12 +1,8 @@
 import 'package:auto_route/auto_route.dart';
 
-class RouterAuthGuard extends RouteGuard {
+class RouterAuthGuard extends AutoRouteGuard {
   @override
-  Future<bool> canNavigate(
-    ExtendedNavigatorState navigator,
-    String routeName,
-    Object arguments,
-  ) async {
-    return true;
+  void onNavigation(NavigationResolver resolver, StackRouter router) {
+    resolver.next(true);
   }
 }

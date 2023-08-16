@@ -1,87 +1,49 @@
-import 'package:flutter/material.dart';
-import 'package:squash_archiver/utils/utils/functs.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:macos_ui/macos_ui.dart';
 
-/// headline1: Font size 24.0
-///
-/// headline3: Font size 22.0
-///
-/// headline6: Font size 20.0
-///
-/// subtitle1: Font size 16.0
-///
-/// subtitle2: Font size 18.0
-///
-/// body1: Font size 16.0
-///
-/// body2: Font size 13.0
-///
-/// body3: Font size 14.0
-///
-/// caption: Font size 12.0
-///
-/// small1: Font size 11.0
-///
-/// small2: Font size 10.0
-///
-///  button: Font size 16.0
-///
 enum TextVariant {
-  /// Font size 24.0
-  headline1,
+  LargeTitle,
+  Title1,
+  Title2,
+  Title3,
+  Headline,
+  Body,
+  Callout,
+  Subheadline,
+  Footnote,
+  Caption1,
+  Caption2,
+}
 
-  /// Font size 22.0
-  headline3,
-
-  /// Font size 20.0
-  headline6,
-
-  /// Font size 16.0
-  subtitle1,
-
-  /// Font size 18.0
-  subtitle2,
-
-  /// Font size 16.0
-  body1,
-
-  /// Font size 13.0
-  body2,
-
-  /// Font size 14.0
-  body3,
-
-  /// Font size 12.0
-  caption,
-
-  /// Font size 11.0
-  small1,
-
-  /// Font size 10.0
-  small2,
-
-  /// Font size 15.0
-  button,
-
-  ///
-  none
+enum TypographyVariant {
+  Primary,
+  Secondary,
+  Tertiary,
 }
 
 class Textography extends StatelessWidget {
   final String text;
-  final TextVariant variant;
-  final Color color;
-  final Color backgroundColor;
-  final TextAlign textAlign;
-  final FontWeight fontWeight;
-  final double fontSize;
-  final TextDecoration decoration;
+  final TextVariant? variant;
+  final TypographyVariant? typographyVariant;
+  final Color? color;
+  final Color? backgroundColor;
+  final TextAlign? textAlign;
+  final MacosFontWeight? fontWeight;
+  final double? fontSize;
+  final TextDecoration? decoration;
   final bool capitalize;
-  final TextOverflow overflow;
+  final bool emphasized;
+  final TextOverflow? overflow;
+  final bool? preventAutoTextStyling;
+  final int? maxLines;
+  final TextDirection? textDirection;
+  final TextStyle? textStyle;
 
   const Textography(
     this.text, {
-    Key key,
+    super.key,
     this.variant,
+    this.typographyVariant,
     this.color,
     this.textAlign,
     this.fontWeight,
@@ -89,95 +51,104 @@ class Textography extends StatelessWidget {
     this.backgroundColor,
     this.fontSize,
     this.capitalize = false,
+    this.emphasized = false,
     this.overflow,
-  }) : super(key: key);
+    this.preventAutoTextStyling = false,
+    this.maxLines,
+    this.textDirection,
+    this.textStyle,
+  });
+
+  TypographyVariant get _typographyVariant =>
+      typographyVariant ?? TypographyVariant.Primary;
+
+  bool get _preventAutoTextStyling => preventAutoTextStyling ?? false;
+
+  // Define the function to get the style for each TextVariant
+  TextStyle _getTextStyleForVariant({required BuildContext context}) {
+    final typography = MacosTypography.of(context);
+    switch (variant) {
+      case TextVariant.LargeTitle:
+        return typography.largeTitle.copyWith(
+            fontWeight:
+                emphasized ? MacosFontWeight.w700 : MacosFontWeight.normal);
+      case TextVariant.Title1:
+        return typography.title1.copyWith(
+            fontWeight:
+                emphasized ? MacosFontWeight.w700 : MacosFontWeight.normal);
+      case TextVariant.Title2:
+        return typography.title2.copyWith(
+            fontWeight:
+                emphasized ? MacosFontWeight.w700 : MacosFontWeight.normal);
+      case TextVariant.Title3:
+        return typography.title3.copyWith(
+            fontWeight:
+                emphasized ? MacosFontWeight.w600 : MacosFontWeight.normal);
+      case TextVariant.Headline:
+        return typography.headline.copyWith(
+            fontWeight:
+                emphasized ? MacosFontWeight.w860 : MacosFontWeight.normal);
+      case TextVariant.Body:
+      case null:
+        return typography.body.copyWith(
+            fontWeight:
+                emphasized ? MacosFontWeight.w590 : MacosFontWeight.normal);
+      case TextVariant.Callout:
+        return typography.callout.copyWith(
+            fontWeight:
+                emphasized ? MacosFontWeight.w590 : MacosFontWeight.normal);
+      case TextVariant.Subheadline:
+        return typography.subheadline.copyWith(
+            fontWeight:
+                emphasized ? MacosFontWeight.w590 : MacosFontWeight.normal);
+      case TextVariant.Footnote:
+        return typography.footnote.copyWith(
+            fontWeight:
+                emphasized ? MacosFontWeight.w590 : MacosFontWeight.normal);
+      case TextVariant.Caption1:
+        return typography.caption1.copyWith(
+            fontWeight:
+                emphasized ? MacosFontWeight.w510 : MacosFontWeight.normal);
+      case TextVariant.Caption2:
+        return typography.caption2.copyWith(
+            fontWeight:
+                emphasized ? MacosFontWeight.w590 : MacosFontWeight.normal);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    final _variant = variant ?? TextVariant.body1;
-    var _fontWeight = FontWeight.normal;
-    var _child = text ?? '';
-    double _fontSize;
-
-    const _corrector = 1;
-
-    switch (_variant) {
-      case TextVariant.headline1:
-        _fontWeight = FontWeight.w800;
-        _fontSize = 24.0;
-        break;
-      case TextVariant.headline3:
-        _fontWeight = FontWeight.bold;
-        _fontSize = 22.0;
-        break;
-      case TextVariant.headline6:
-        _fontWeight = FontWeight.w800;
-        _fontSize = 20.0;
-        break;
-      case TextVariant.subtitle1:
-        _fontWeight = FontWeight.w800;
-        _fontSize = 16.0;
-        break;
-      case TextVariant.subtitle2:
-        _fontWeight = FontWeight.normal;
-        _fontSize = 18.0;
-        break;
-      case TextVariant.caption:
-        _fontWeight = FontWeight.w700;
-        _fontSize = 12.0;
-        break;
-      case TextVariant.small1:
-        _fontWeight = FontWeight.w500;
-        _fontSize = 11.0;
-        break;
-      case TextVariant.small2:
-        _fontWeight = FontWeight.w500;
-        _fontSize = 12.0;
-        break;
-      case TextVariant.button:
-        _fontWeight = FontWeight.w900;
-        _fontSize = 15.0;
-        break;
-      case TextVariant.body2:
-        _fontWeight = FontWeight.normal;
-        _fontSize = 13.0;
-        break;
-      case TextVariant.body3:
-        _fontWeight = FontWeight.normal;
-        _fontSize = 14.0;
-        break;
-      case TextVariant.body1:
-        _fontWeight = FontWeight.normal;
-        _fontSize = 16.0;
-        break;
-      case TextVariant.none:
-      default:
-        _fontWeight = null;
-        _fontSize = null;
-        break;
+    if (textStyle != null && variant != null) {
+      throw "When 'textStyle' is available, 'variant' should be null";
     }
 
-    if ((capitalize ?? false) && isNotNullOrEmpty(_child)) {
-      _child = _child.toUpperCase();
+    var _text = text;
+    if (capitalize) {
+      _text = _text.toUpperCase();
     }
 
-    var _correctedFontWeight = fontSize ?? _fontSize;
+    var customTextStyle = textStyle;
 
-    if (isNotNull(_correctedFontWeight)) {
-      _correctedFontWeight += _corrector;
+    if (!_preventAutoTextStyling && textStyle == null) {
+      customTextStyle = _getTextStyleForVariant(context: context);
+    }
+
+    if (customTextStyle != null) {
+      customTextStyle = customTextStyle.copyWith(
+        fontSize: fontSize ?? customTextStyle.fontSize,
+        color: color ?? customTextStyle.color,
+        fontWeight: fontWeight ?? customTextStyle.fontWeight,
+        decoration: decoration ?? customTextStyle.decoration,
+      );
     }
 
     return Text(
-      _child,
-      style: TextStyle(
-        fontSize: fontSize ?? _fontSize,
-        fontWeight: fontWeight ?? _fontWeight,
-        color: color,
-        backgroundColor: backgroundColor,
-        decoration: decoration,
-      ),
+      text,
+      style: customTextStyle,
       textAlign: textAlign,
       overflow: overflow,
+      maxLines: maxLines,
+      textDirection: textDirection,
     );
   }
 }

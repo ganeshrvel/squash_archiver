@@ -1,9 +1,9 @@
 import 'package:archiver_ffi/src/models/archive_file_info.dart';
 import 'package:archiver_ffi/src/utils/functs.dart';
 import 'package:equatable/equatable.dart';
-import 'package:meta/meta.dart';
 
 enum OrderBy {
+  kind,
   size,
   modTime,
   name,
@@ -19,15 +19,15 @@ enum OrderDir {
 // ignore: must_be_immutable
 class ListArchive extends Equatable {
   final String filename;
-  String password;
-  OrderBy orderBy;
-  OrderDir orderDir;
-  String listDirectoryPath;
-  List<String> gitIgnorePattern;
-  bool recursive;
+  String? password;
+  OrderBy? orderBy;
+  OrderDir? orderDir;
+  String? listDirectoryPath;
+  List<String>? gitIgnorePattern;
+  bool? recursive;
 
   ListArchive({
-    @required this.filename,
+    required this.filename,
     this.password,
     this.orderBy,
     this.orderDir,
@@ -65,13 +65,13 @@ class ListArchive extends Equatable {
   }
 
   ListArchive copyWith({
-    String filename,
-    String password,
-    OrderBy orderBy,
-    OrderDir orderDir,
-    String listDirectoryPath,
-    List<String> gitIgnorePattern,
-    bool recursive,
+    String? filename,
+    String? password,
+    OrderBy? orderBy,
+    OrderDir? orderDir,
+    String? listDirectoryPath,
+    List<String>? gitIgnorePattern,
+    bool? recursive,
   }) {
     return ListArchive(
       filename: filename ?? this.filename,
@@ -85,7 +85,7 @@ class ListArchive extends Equatable {
   }
 
   @override
-  List<Object> get props => [
+  List<Object?> get props => [
         filename,
         password,
         orderBy,
@@ -117,13 +117,13 @@ class ListArchiveResult extends Equatable {
   final int totalFiles;
 
   const ListArchiveResult({
-    @required this.files,
-    @required this.totalFiles,
+    required this.files,
+    required this.totalFiles,
   });
 
   ListArchiveResult copyWith({
-    List<FileInfo> files,
-    int totalFiles,
+    List<FileInfo>? files,
+    int? totalFiles,
   }) {
     return ListArchiveResult(
       files: files ?? this.files,

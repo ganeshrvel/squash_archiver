@@ -31,6 +31,8 @@ void main() {
           listEquals(
             _supportedArchiveExtns,
             [
+              // todo update 7zip, 7z and tar.zlib and zlib
+
               'zip',
               'tar',
               'tar.br',
@@ -41,6 +43,14 @@ void main() {
               'tar.xz',
               'tar.zst',
               'rar',
+              'xz',
+              'sz',
+              'lz4',
+              'bz2',
+              'br',
+              'gz',
+              'gzip',
+              'bzip2',
             ],
           ),
           equals(true));

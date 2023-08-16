@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:meta/meta.dart';
+
 import 'package:squash_archiver/common/models/truncated_string.dart';
 import 'package:squash_archiver/utils/utils/strings.dart';
 
@@ -9,9 +9,9 @@ class _TestFixDirSlash {
   final String processedPath;
 
   _TestFixDirSlash({
-    @required this.isDir,
-    @required this.fullPath,
-    @required this.processedPath,
+    required this.isDir,
+    required this.fullPath,
+    required this.processedPath,
   });
 }
 

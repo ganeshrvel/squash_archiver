@@ -1,6 +1,4 @@
-import 'package:meta/meta.dart';
-
-import 'file_listing_request.dart';
+import 'package:squash_archiver/features/home/data/models/file_listing_request.dart';
 
 /// Model for password request
 class PasswordRequest {
@@ -11,8 +9,7 @@ class PasswordRequest {
   final bool invalidPassword;
 
   PasswordRequest({
-    @required this.fileListingRequest,
-    @required this.invalidPassword,
-  })  : assert(fileListingRequest != null),
-        assert(invalidPassword != null);
+    required this.fileListingRequest,
+    required this.invalidPassword,
+  });
 }

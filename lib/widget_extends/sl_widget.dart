@@ -1,7 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:squash_archiver/common/di/di.dart';
-import 'package:squash_archiver/utils/alerts/alerts_model.dart';
-import 'package:squash_archiver/utils/alerts/alerts.dart';
+import 'package:squash_archiver/widgets/alerts/alerts.dart';
+import 'package:squash_archiver/widgets/alerts/alerts_model.dart';
 
 abstract class SlWidget<S extends StatelessWidget> {
   Alerts get _alerts => getIt<Alerts>();
@@ -11,7 +11,7 @@ abstract class SlWidget<S extends StatelessWidget> {
   void throwException(
     BuildContext context,
     Exception exception, {
-    StackTrace stackTrace,
+    StackTrace? stackTrace,
   }) =>
       _alerts.setException(
         context,
@@ -24,11 +24,11 @@ abstract class SlWidget<S extends StatelessWidget> {
   void throwAlert(
     BuildContext context,
     String message, {
-    String title,
-    AlertsTypes type,
-    AlertsPopupTypes popupType,
-    StackTrace stackTrace,
-    Duration duration,
+    String? title,
+    AlertsTypes? type,
+    AlertsPopupTypes? popupType,
+    StackTrace? stackTrace,
+    Duration? duration,
   }) =>
       _alerts.setAlert(
         context,

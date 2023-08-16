@@ -1,9 +1,15 @@
-import 'package:package_info/package_info.dart';
+import 'package:injectable/injectable.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
+@lazySingleton
 class AppMetaInfo {
-  final PackageInfo _packageInfo;
+  late PackageInfo _packageInfo;
 
-  AppMetaInfo(this._packageInfo);
+  AppMetaInfo();
+
+  Future<void> init() async {
+    _packageInfo = await PackageInfo.fromPlatform();
+  }
 
   // this is the build number of the app
   int get appVersionCode {
@@ -13,5 +19,9 @@ class AppMetaInfo {
   // this is the app version
   String get appVersion {
     return _packageInfo.version;
+  }
+
+  String get release {
+    return '${appVersion}+${appVersionCode}';
   }
 }

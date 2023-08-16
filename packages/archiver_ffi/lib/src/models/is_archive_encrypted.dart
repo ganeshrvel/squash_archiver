@@ -1,14 +1,13 @@
 import 'package:archiver_ffi/src/utils/functs.dart';
 import 'package:equatable/equatable.dart';
-import 'package:meta/meta.dart';
 
 // ignore: must_be_immutable
 class IsArchiveEncrypted extends Equatable {
   final String filename;
-  String password;
+  String? password;
 
   IsArchiveEncrypted({
-    @required this.filename,
+    required this.filename,
     this.password,
   }) {
     if (isNullOrEmpty(filename)) {
@@ -21,7 +20,7 @@ class IsArchiveEncrypted extends Equatable {
   }
 
   @override
-  List<Object> get props => [
+  List<Object?> get props => [
         filename,
         password,
       ];
@@ -42,13 +41,13 @@ class IsArchiveEncryptedResult extends Equatable {
   final bool isValidPassword;
 
   const IsArchiveEncryptedResult({
-    @required this.isEncrypted,
-    @required this.isValidPassword,
+    required this.isEncrypted,
+    required this.isValidPassword,
   });
 
   IsArchiveEncryptedResult copyWith({
-    bool isEncrypted,
-    bool isValidPassword,
+    bool? isEncrypted,
+    bool? isValidPassword,
   }) {
     return IsArchiveEncryptedResult(
       isEncrypted: isEncrypted ?? this.isEncrypted,

@@ -10,20 +10,22 @@ class BadNetworkErrorInterceptor extends Interceptor {
   final NetworkInfo _networkInfo = getIt<NetworkInfo>();
 
   @override
-  Future onError(DioError error) async {
+  Future onError(DioException error, ErrorInterceptorHandler handler) async {
     final _apiUrl = getApiUrl(error);
 
     if (error is SocketException) {
       return BadNetworkApiError(
         apiUrl: _apiUrl,
-        statusCode: error.response.statusCode,
+        statusCode: error.response!.statusCode,
+        dioError: error,
       );
     }
 
     if (error.response == null && !await _networkInfo.isConnected) {
       return BadNetworkApiError(
         apiUrl: _apiUrl,
-        statusCode: error?.response?.statusCode ?? 0,
+        statusCode: error.response?.statusCode ?? 0,
+        dioError: error,
       );
     }
 

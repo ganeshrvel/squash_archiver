@@ -10,12 +10,17 @@ MacOS:
 ```shell
 brew install llvm
 
-pub run ffigen:setup -I/usr/local/opt/llvm/include -L/usr/local/opt/llvm/lib
+
 ```
 
 To generate the bindings
 ```shell
-  pub run ffigen
+dart run ffigen
+
+# if it doesnt work then run:
+# pub run ffigen:setup -I/usr/local/opt/llvm/include -L/usr/local/opt/llvm/lib
+
+pub run ffigen
 ```
 
 To run

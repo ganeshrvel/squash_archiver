@@ -1,6 +1,6 @@
 Compile:
 ```shell script
-go build -v -o build/archiver_lib.dylib -buildmode=c-shared main.go
+go build -v -o build/archiver_lib.dylib -buildmode=c-shared
 ```
 
 
@@ -9,7 +9,7 @@ Open Xcode on macOS folder in the flutter project root
 1. Open native/archiver_lib on finder
 1. Drag the `archiver_lib.dylib` into the `Runner` targets in the left-hand side explorer. (just above GoogleService-Info.plist which is inside Runner tree)
 2. Click on Runner which is in the left-hand side tree
-3. Click on the `Build Phase` tab
+3. Click on the `Build Phases` tab
 4. Under `Copy Bundle Resources` click `+` and select `archiver_lib.dylib` and add it
 5. Under `Link Binary with Libraries` drag and drop `archiver_lib.dylib` from the `Runner` tree
 6. Make sure that `Status` is selected as `optional` under `Link Binary with Libraries`
@@ -25,6 +25,7 @@ CGO_ENABLED=1 GOOS=darwin go build -v -o squash_archiver_lib.dylib -buildmode=c-
 ```
 
 
+(Not required):
 Install Go mholt package (https://github.com/mholt/archiver/issues/195)
 ```shell script
 cd $GOPATH

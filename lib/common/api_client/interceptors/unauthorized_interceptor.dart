@@ -4,13 +4,14 @@ import 'package:squash_archiver/utils/utils/api.dart';
 
 class UnauthorizedInterceptor extends Interceptor {
   @override
-  Future onError(DioError error) async {
+  Future onError(DioException error, ErrorInterceptorHandler handler) async {
     if (error.response?.statusCode == 401) {
       final _apiUrl = getApiUrl(error);
 
       return UnauthorizedApiError(
         apiUrl: _apiUrl,
-        statusCode: error?.response?.statusCode ?? 0,
+        statusCode: error.response?.statusCode ?? 0,
+        dioError: error,
       );
     }
 
