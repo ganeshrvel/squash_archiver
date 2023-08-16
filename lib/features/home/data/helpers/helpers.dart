@@ -46,6 +46,18 @@ List<FileInfo> sortFileExplorerEntities({
   }
 }
 
+List<FileInfo> sortByName({
+  required List<FileInfo> files,
+  required OrderBy? orderBy,
+  required OrderDir? orderDir,
+}) {
+  if (orderDir == OrderDir.asc) {
+    return files.sortedBy((file) => file.name.toLowerCase());
+  }
+
+  return files.sortedByDescending((file) => file.name.toLowerCase());
+}
+
 List<FileInfo> sortFiles({
   required List<FileInfo> files,
   required OrderBy? orderBy,
@@ -70,12 +82,22 @@ List<FileInfo> sortFiles({
 
       return files.sortedByDescending((file) => file.modTime);
 
-    case OrderBy.name:
-    default:
+    case OrderBy.kind:
       if (orderDir == OrderDir.asc) {
-        return files.sortedBy((file) => file.name.toLowerCase());
+        return files.sortedBy((file) => file.kind.toLowerCase());
       }
 
-      return files.sortedByDescending((file) => file.name.toLowerCase());
+      return files.sortedByDescending((file) => file.kind.toLowerCase());
+
+    case OrderBy.fullPath:
+      throw UnimplementedError("Unimplemented 'fullPath' sorting");
+
+    case OrderBy.name:
+    case null:
+      return sortByName(
+        orderBy: orderBy,
+        orderDir: orderDir,
+        files: files,
+      );
   }
 }

@@ -1,6 +1,6 @@
 Compile:
 ```shell script
-go build -v -o build/archiver_lib.dylib -buildmode=c-shared main.go
+go build -v -o build/archiver_lib.dylib -buildmode=c-shared
 ```
 
 
@@ -25,6 +25,7 @@ CGO_ENABLED=1 GOOS=darwin go build -v -o squash_archiver_lib.dylib -buildmode=c-
 ```
 
 
+(Not required):
 Install Go mholt package (https://github.com/mholt/archiver/issues/195)
 ```shell script
 cd $GOPATH

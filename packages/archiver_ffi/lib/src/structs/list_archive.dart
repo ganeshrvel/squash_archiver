@@ -23,6 +23,8 @@ final class ArchiveFileInfoStruct extends Struct {
 
   external Pointer<Utf8> extension;
 
+  external Pointer<Utf8> kind;
+
   factory ArchiveFileInfoStruct.allocate(
     int mode,
     int size,
@@ -32,6 +34,7 @@ final class ArchiveFileInfoStruct extends Struct {
     Pointer<Utf8> fullPath,
     Pointer<Utf8> parentPath,
     Pointer<Utf8> extension,
+    Pointer<Utf8> kind,
   ) =>
       malloc<ArchiveFileInfoStruct>().ref
         ..mode = mode
@@ -41,6 +44,7 @@ final class ArchiveFileInfoStruct extends Struct {
         ..name = name
         ..fullPath = fullPath
         ..parentPath = parentPath
+        ..kind = kind
         ..extension = extension;
 }
 

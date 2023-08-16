@@ -4,15 +4,18 @@ import 'package:data_channel/data_channel.dart';
 import 'package:flutter/foundation.dart';
 import 'package:injectable/injectable.dart';
 import 'package:squash_archiver/common/exceptions/task_in_progress_exception.dart';
-import 'package:squash_archiver/helpers/files_helper.dart';
 import 'package:squash_archiver/constants/app_default_values.dart';
 import 'package:squash_archiver/constants/env.dart';
 import 'package:squash_archiver/features/home/data/helpers/helpers.dart';
 import 'package:squash_archiver/features/home/data/models/archive_data_source_listing_request.dart';
 import 'package:squash_archiver/features/home/data/models/file_listing_response.dart';
+import 'package:squash_archiver/helpers/files_helper.dart';
 import 'package:squash_archiver/utils/compute_in_background.dart';
 import 'package:squash_archiver/utils/utils/functs.dart';
 import 'package:squash_archiver/utils/utils/hash.dart';
+
+// todo compressed files like: zst xz sz lz4 bz2 br gz ; does not have really real file info for listing. for these files handle that case. sometime if file size is 0, show it as unknown maybe.
+// todo the compress files output might need a destination full file path. do not depend on the archive_ffi
 
 @LazySingleton()
 class ArchiveDataSource {

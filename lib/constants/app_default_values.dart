@@ -23,6 +23,7 @@ class AppDefaultValues {
 
   /// supported archive extensions
   static const Map<String, String> SUPPORTED_ARCHIVE_EXTENSIONS = {
+    // todo update 7zip, 7z and tar.zlib and zlib
     'zip': 'zip',
     'tar': 'tar',
     'tar.br': 'tar.br',
@@ -33,6 +34,14 @@ class AppDefaultValues {
     'tar.xz': 'tar.xz',
     'tar.zst': 'tar.zst',
     'rar': 'rar',
+    'xz': 'xz',
+    'sz': 'sz',
+    'lz4': 'lz4',
+    'bz2': 'bz2',
+    'br': 'br',
+    'gz': 'gz',
+    'gzip': 'gzip',
+    'bzip2': 'bzip2',
   };
 
   // this is used for parsing file extensions

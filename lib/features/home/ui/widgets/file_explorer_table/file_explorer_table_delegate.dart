@@ -151,8 +151,7 @@ class _FileExplorerTableDelegateState
           },
         ),
         FileExplorerTableColumnDefinitionStore(
-          // sorting of the column 'Kind' is disabled
-          columnSortIdentifier: null,
+          columnSortIdentifier: OrderBy.kind,
           label: 'Kind',
           width: const FixedColumnWidth(150),
           cellBuilder: (ctx, row) {

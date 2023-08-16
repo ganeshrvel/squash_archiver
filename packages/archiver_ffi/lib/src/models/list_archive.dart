@@ -3,6 +3,7 @@ import 'package:archiver_ffi/src/utils/functs.dart';
 import 'package:equatable/equatable.dart';
 
 enum OrderBy {
+  kind,
   size,
   modTime,
   name,

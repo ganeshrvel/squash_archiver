@@ -2,18 +2,15 @@ import 'package:archiver_ffi/archiver_ffi.dart';
 import 'package:equatable/equatable.dart';
 
 import 'package:squash_archiver/helpers/archive_helper.dart';
-import 'package:squash_archiver/common/models/truncated_string.dart';
 import 'package:squash_archiver/utils/utils/date.dart';
-import 'package:squash_archiver/utils/utils/file_type_info.dart';
 import 'package:squash_archiver/utils/utils/filesizes.dart';
-import 'package:squash_archiver/utils/utils/strings.dart';
 
 class FileListingResponse extends Equatable {
   /// file index
   final int index;
 
   /// Unique id to be used as a map key.
-  /// This is basically md5 hash of the file's fullPath
+  /// This is basically a unique hash of the file's fullPath
   final String uniqueId;
 
   /// file information object
@@ -34,16 +31,7 @@ class FileListingResponse extends Equatable {
   /// human readable string representing the date
   String get prettyDate => appDateFormatFromString(file.modTime);
 
-  /// Truncated filename
-  TruncatedString get truncatedFilename => truncatedString(text: file.name);
-
-  String get kind {
-    if (file.isDir) {
-      return 'Folder';
-    }
-
-    return FileTypeInfo[file.extension] ?? 'Unknown';
-  }
+  String get kind => file.kind;
 
   @override
   List<Object> get props => [
@@ -51,8 +39,8 @@ class FileListingResponse extends Equatable {
         isArchiveSupported,
         prettyFileSize,
         prettyDate,
-        truncatedFilename,
         uniqueId,
         index,
+        kind,
       ];
 }

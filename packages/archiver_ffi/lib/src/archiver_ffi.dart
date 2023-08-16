@@ -112,6 +112,7 @@ class ArchiverFfi {
             fullPath: _value.ref.fullPath.toDartString(),
             parentPath: _value.ref.parentPath.toDartString(),
             extension: _value.ref.extension.toDartString(),
+            kind: _value.ref.kind.toDartString(),
           );
 
           _files.add(_file);

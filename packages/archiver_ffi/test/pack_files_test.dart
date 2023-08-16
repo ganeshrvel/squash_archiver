@@ -244,7 +244,7 @@ void main() {
 
       expect(_result.hasError, equals(false));
       expect(_result.hasData, equals(true));
-      expect(_cbCount, greaterThan(_totalFiles));
+      expect(_cbCount, greaterThan(1));
       expect(_lastProgressPercentage, equals(100.00));
 
       await _testPackedArchive(

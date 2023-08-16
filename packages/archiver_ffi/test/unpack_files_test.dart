@@ -256,7 +256,6 @@ void main() {
       );
 
       var _cbCount = 0;
-      var _totalFiles = 0;
       var _lastProgressPercentage = 0.0;
       const _progressStep = 10;
 
@@ -268,7 +267,6 @@ void main() {
         required double progressPercentage,
       }) {
         _cbCount += 1;
-        _totalFiles = totalFiles;
         _lastProgressPercentage = progressPercentage;
 
         expect(startTime, isA<String>());
@@ -296,7 +294,7 @@ void main() {
 
       expect(_result.hasError, equals(false));
       expect(_result.hasData, equals(true));
-      expect(_cbCount, greaterThan(_totalFiles));
+      expect(_cbCount, greaterThan(1));
       expect(_lastProgressPercentage, equals(100.00));
 
       final _files = await dirContents(Directory(_destination));

@@ -11,6 +11,8 @@ class FileInfo extends Equatable {
 
   final String name;
 
+  final String kind;
+
   final String fullPath;
 
   final String parentPath;
@@ -23,6 +25,7 @@ class FileInfo extends Equatable {
     required this.isDir,
     required this.modTime,
     required this.name,
+    required this.kind,
     required this.fullPath,
     required this.parentPath,
     required this.extension,
@@ -34,6 +37,7 @@ class FileInfo extends Equatable {
     bool? isDir,
     String? modTime,
     String? name,
+    String? kind,
     String? fullPath,
     String? parentPath,
     String? extension,
@@ -45,6 +49,7 @@ class FileInfo extends Equatable {
       mode: mode ?? this.mode,
       isDir: isDir ?? this.isDir,
       name: name ?? this.name,
+      kind: kind ?? this.kind,
       parentPath: parentPath ?? this.parentPath,
       extension: extension ?? this.extension,
     );
@@ -57,6 +62,7 @@ class FileInfo extends Equatable {
         isDir,
         modTime,
         name,
+        kind,
         fullPath,
         parentPath,
         extension,
@@ -72,6 +78,7 @@ class FileInfo extends Equatable {
         isDir: $isDir,
         modTime: $modTime,
         name: $name,
+        kind: $kind,
         fullPath: $fullPath,
         parentPath: $parentPath,
         extension: $extension,

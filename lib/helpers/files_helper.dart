@@ -122,6 +122,8 @@ List<FileSystemEntity> listDirectory(Directory dir, {bool? recursive}) {
   for (final file in _contents) {
     if (file is File) {
       _files.add(file);
+    } else if (file is Link) {
+      _files.add(file);
     } else if (file is Directory) {
       _files.add(file);
     }
